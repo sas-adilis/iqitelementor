@@ -1,0 +1,13 @@
+// widgets/_menu-anchor.scss
+
+body.elementor-page {
+  .elementor-widget-menu-anchor {
+    margin-bottom: 0;
+  }
+}
+
+.elementor-editor-active {
+  .elementor-menu-anchor {
+    height: 25px;
+  }
+}

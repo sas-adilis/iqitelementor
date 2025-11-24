@@ -1,0 +1,17 @@
+// widgets/_search.scss
+
+.elementor-search {
+  display: inline-block;
+  width: 100%;
+
+  .form-search-control {
+    border: none;
+  }
+
+  .search-btn {
+    transition: color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out,
+    box-shadow 0.15s ease-in-out;
+  }
+}

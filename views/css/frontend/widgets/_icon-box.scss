@@ -1,0 +1,76 @@
+// widgets/_icon-box.scss
+
+.elementor-widget-icon-box {
+  .elementor-icon-box-wrapper {
+    text-align: center;
+  }
+
+  .elementor-icon-box-title {
+    a {
+      color: inherit;
+    }
+  }
+
+  .elementor-icon-box-description {
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    &.elementor-position-left,
+    &.elementor-position-right {
+      .elementor-icon-box-wrapper {
+        display: flex;
+      }
+
+      .elementor-icon-box-icon {
+        flex: 0 0 auto;
+      }
+    }
+
+    &.elementor-position-right {
+      .elementor-icon-box-wrapper {
+        text-align: right;
+        flex-direction: row-reverse;
+      }
+    }
+
+    &.elementor-position-left {
+      .elementor-icon-box-wrapper {
+        text-align: left;
+        flex-direction: row;
+      }
+    }
+
+    &.elementor-position-top {
+      .elementor-icon-box-img {
+        margin: auto;
+      }
+    }
+
+    &.elementor-vertical-align-top {
+      .elementor-icon-box-wrapper {
+        align-items: flex-start;
+      }
+    }
+
+    &.elementor-vertical-align-middle {
+      .elementor-icon-box-wrapper {
+        align-items: center;
+      }
+    }
+
+    &.elementor-vertical-align-bottom {
+      .elementor-icon-box-wrapper {
+        align-items: flex-end;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    .elementor-icon-box-icon {
+      margin-left: auto !important;
+      margin-right: auto !important;
+      margin-bottom: 15px;
+    }
+  }
+}

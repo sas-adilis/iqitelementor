@@ -1,0 +1,45 @@
+// widgets/_button.scss
+
+.elementor-button {
+  display: inline-block;
+  text-align: center;
+  transition: all 0.5s;
+
+  &.elementor-size-small {
+    font-size: 13px;
+    padding: 10px 20px;
+  }
+
+  &.elementor-size-medium {
+    font-size: 15px;
+  }
+
+  &.elementor-size-large {
+    font-size: 16px;
+    padding: 15px 30px;
+  }
+
+  &.elementor-size-xl {
+    font-size: 18px;
+    padding: 20px 40px;
+  }
+
+  &.elementor-size-xxl {
+    font-size: 20px;
+    padding: 25px 50px;
+  }
+
+  .elementor-align-icon-right {
+    float: right;
+    margin-left: 5px;
+  }
+
+  .elementor-align-icon-left {
+    float: left;
+    margin-right: 5px;
+  }
+
+  .elementor-button-text {
+    display: inline-block;
+  }
+}

@@ -1,0 +1,13 @@
+// widgets/_image.scss
+
+.elementor-widget-image {
+  .elementor-image {
+    img {
+      vertical-align: middle;
+    }
+
+    &.elementor-image-shape-circle {
+      border-radius: 50%;
+    }
+  }
+}

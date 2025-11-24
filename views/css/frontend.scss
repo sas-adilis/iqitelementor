@@ -1,0 +1,33 @@
+// modules/iqitelementor/views/scss/frontend.scss
+
+// Base / layout
+@import "frontend/base/core";
+@import "frontend/layout/layout";
+
+// Widgets
+@import "frontend/widgets/button";
+//@import "frontend/widgets/banner";
+@import "frontend/widgets/call-to-action";
+@import "frontend/widgets/divider";
+@import "frontend/widgets/heading";
+@import "frontend/widgets/image";
+//@import "widgets/image-gallery";
+//@import "widgets/instagram";
+@import "frontend/widgets/counter";
+//@import "widgets/alert";
+//@import "widgets/progress";
+//@import "widgets/accordion";
+//@import "widgets/toggle";
+@import "frontend/widgets/icon";
+@import "frontend/widgets/icon-list";
+@import "frontend/widgets/video";
+@import "frontend/widgets/image-carousel";
+@import "frontend/widgets/image-hotspots";
+@import "frontend/widgets/image-box";
+@import "frontend/widgets/icon-box";
+//@import "widgets/testimonial";
+//@import "widgets/social-icons";
+@import "frontend/widgets/menu-anchor";
+@import "frontend/widgets/newsletter";
+@import "frontend/widgets/brands";
+//@import "widgets/search";

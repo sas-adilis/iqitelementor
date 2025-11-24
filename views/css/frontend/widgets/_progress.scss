@@ -1,0 +1,70 @@
+// widgets/_progress.scss
+
+.elementor-widget-progress {
+  text-align: left;
+}
+
+.elementor-progress-wrapper {
+  position: relative;
+  background-color: #eeeeee;
+  color: #ffffff;
+  height: 30px;
+  line-height: 30px;
+  border-radius: 2px;
+
+  @media (max-width: 767px) {
+    height: 25px;
+    line-height: 25px;
+  }
+}
+
+.elementor-progress-bar {
+  display: flex;
+  background-color: #818a91;
+  width: 0;
+  font-size: 11px;
+  border-radius: 2px;
+  transition: width 1s ease-in-out;
+}
+
+.elementor-progress-text {
+  flex-grow: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 15px;
+
+  @media (max-width: 767px) {
+    padding-left: 10px;
+  }
+}
+
+.elementor-progress-percentage {
+  padding-right: 15px;
+}
+
+.elementor-widget-progress {
+  .elementor-progress-wrapper {
+    &.progress-info .elementor-progress-bar {
+      background-color: #5bc0de;
+    }
+
+    &.progress-success .elementor-progress-bar {
+      background-color: #5cb85c;
+    }
+
+    &.progress-warning .elementor-progress-bar {
+      background-color: #f0ad4e;
+    }
+
+    &.progress-danger .elementor-progress-bar {
+      background-color: #d9534f;
+    }
+  }
+}
+
+.elementor-progress {
+  .elementor-title {
+    display: block;
+  }
+}

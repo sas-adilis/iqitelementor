@@ -1,0 +1,7 @@
+config.xml
+config_*.xml
+/vendor/*
+!vendor/autoload.php
+!vendor/composer
+composer.lock
+.php_cs.cache

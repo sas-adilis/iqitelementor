@@ -1,0 +1,66 @@
+// widgets/_instagram.scss
+
+.elementor-widget-instagram {
+  min-height: 30px;
+}
+
+.elementor-instagram {
+  margin: 0;
+
+  .il-item {
+    padding: 0;
+
+    a {
+      overflow: hidden;
+      width: 100%;
+
+      &:focus {
+        outline: 0;
+      }
+    }
+
+    .il-item-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+  }
+
+  .il-photo__img {
+    width: 100%;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  .il-photo__meta {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    visibility: hidden;
+    text-align: center;
+    transition: all 0.5s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .il-photo__comments,
+  .il-photo__likes {
+    display: inline-block;
+    margin: 0 5px;
+  }
+
+  .il-item-inner:hover {
+    .il-photo__meta {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

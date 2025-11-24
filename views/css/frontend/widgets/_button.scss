@@ -1,0 +1,10 @@
+// widgets/_button.scss
+.elementor-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &.elementor-align-icon-right {
+    flex-direction: row-reverse;
+  }
+}

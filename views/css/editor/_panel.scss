@@ -1,0 +1,808 @@
+body.elementor-editor-active #elementor-panel {
+  left: 0;
+}
+
+body.elementor-editor-preview #elementor-panel {
+  left: -280px;
+}
+
+body.elementor-editor-preview #elementor-panel > .ui-resizable-e, body.elementor-editor-preview #elementor-panel > .ui-resizable-w {
+  display: none;
+}
+
+#elementor-preview:not(.ui-resizable-resizing), #elementor-panel:not(.ui-resizable-resizing) {
+  -webkit-transition: left 0.5s, width 0.5s;
+  transition: left 0.5s, width 0.5s;
+}
+
+.elementor-button-success, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button {
+  color: $color-fff;
+}
+
+.elementor-button-success[disabled], #elementor-panel #elementor-panel-footer-save.elementor-save-active [disabled].elementor-button {
+  background-color: $color-c2cbd2;
+}
+
+.elementor-button-success:not([disabled]), #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]) {
+  background-color: #38B54A;
+}
+
+.elementor-button-success:not([disabled]):hover, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]):hover {
+  opacity: 0.85;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.elementor-button-success:not([disabled]):active, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]):active {
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+#elementor-panel {
+  font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
+  font-size: 13px;
+  background-color: $color-e6e9ec;
+  position: fixed;
+  width: 280px;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  overflow: visible;
+}
+
+#elementor-panel ::selection {
+  background: #5bc0de;
+  color: $color-fff;
+}
+
+#elementor-panel a {
+  color: $color-9b0a46;
+  -webkit-transition: none;
+  transition: none;
+}
+
+#elementor-panel a:visited {
+  color: inherit;
+}
+
+#elementor-panel h6 {
+  font-size: 100%;
+  font-weight: normal;
+}
+
+#elementor-panel acronym {
+  border: 0;
+  font-variant: normal;
+}
+
+#elementor-panel sup {
+  vertical-align: text-top;
+}
+
+#elementor-panel sub {
+  vertical-align: text-bottom;
+}
+
+#elementor-panel img {
+  max-width: 100%;
+  height: auto;
+  border: 0;
+}
+
+#elementor-panel ::-moz-focus-inner {
+  padding: 0;
+  border: 0;
+}
+
+#elementor-panel :focus {
+  outline: 0;
+}
+
+#elementor-panel > .ui-resizable-e, #elementor-panel > .ui-resizable-w {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 7px;
+  right: -5px;
+  cursor: ew-resize;
+}
+
+#elementor-panel #elementor-panel-inner {
+  position: relative;
+  height: 100%;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+#elementor-panel .elementor-panel-container {
+  clear: both;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+#elementor-panel .elementor-panel-heading {
+  display: table;
+  table-layout: fixed;
+  height: 40px;
+  padding: 0 20px;
+  width: 100%;
+  border-bottom: 1px solid $color-e6e9ec;
+  cursor: pointer;
+}
+
+#elementor-panel .elementor-panel-heading:not(.elementor-open) .elementor-panel-heading-toggle .fa:before {
+  content: "\f0da";
+}
+
+#elementor-panel .elementor-panel-heading.elementor-open .elementor-panel-heading-toggle .fa:before {
+  content: "\f0d7";
+}
+
+#elementor-panel .elementor-panel-heading > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#elementor-panel .elementor-panel-heading-toggle {
+  width: 20px;
+  color: $color-495157;
+}
+
+#elementor-panel .elementor-panel-heading-title {
+  color: $color-495157;
+  font-weight: bold;
+}
+
+#elementor-panel .elementor-panel-box {
+  margin-top: 10px;
+  background-color: $color-fff;
+}
+
+#elementor-panel .elementor-panel-box-content {
+  padding: 20px 20px 10px;
+}
+
+#elementor-panel .select2-container {
+  width: 100% !important;
+}
+
+#elementor-panel .select2-container:not(.select2-container--open):not(.select2-container--focus) .select2-selection--single {
+  border-color: $color-d5dadf;
+}
+
+#elementor-panel .select2-container.select2-container--open .select2-selection--single, #elementor-panel .select2-container.select2-container--focus .select2-selection--single {
+  border-color: $color-a4afb7;
+}
+
+#elementor-panel .select2-selection--single {
+  height: 27px;
+}
+
+#elementor-panel .select2-selection__rendered {
+  line-height: 27px;
+}
+
+#elementor-panel .select2-selection__arrow {
+  height: 27px;
+  top: 0;
+}
+
+#elementor-panel .panel-alert {
+  padding: 15px;
+  border-left: 5px solid transparent;
+  position: relative;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: left;
+}
+
+#elementor-panel .panel-alert.panel-alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bcdff1;
+}
+
+#elementor-panel .panel-alert.panel-alert-success {
+  color: #3c763d;
+  background-color: #dff0d8;
+  border-color: #cae6be;
+}
+
+#elementor-panel .panel-alert.panel-alert-warning {
+  color: #8a6d3b;
+  background-color: #fcf8e3;
+  border-color: #f9f0c3;
+}
+
+#elementor-panel .panel-alert.panel-alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #e8c4c4;
+}
+
+#elementor-panel #elementor-panel-header {
+  display: table;
+  height: 40px;
+  width: 100%;
+  background-color: $color-9b0a46;
+  color: $color-fff;
+}
+
+#elementor-panel #elementor-panel-header > * {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+#elementor-panel .elementor-header-button {
+  width: 40px;
+}
+
+#elementor-panel .elementor-header-button .elementor-icon {
+  cursor: pointer;
+  display: block;
+  font-size: 19px;
+  height: 40px;
+  line-height: 40px;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+#elementor-panel .elementor-header-button .elementor-icon:hover {
+  color: $color-d5dadf;
+}
+
+#elementor-panel #elementor-panel-header-title {
+  font-size: 15px;
+}
+
+#elementor-panel #elementor-panel-header-title img {
+  width: 66px;
+}
+
+#elementor-panel #elementor-panel-elements-search-area {
+  padding: 10px 10px 0;
+}
+
+#elementor-panel #elementor-panel-elements {
+  overflow: hidden;
+  padding: 5px;
+}
+
+#elementor-panel .elementor-element-wrapper {
+  float: left;
+  width: 50%;
+  padding: 5px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+#elementor-panel .elementor-element {
+  border-radius: 3px;
+  background-color: $color-fff;
+  cursor: move;
+}
+
+#elementor-panel .elementor-element:hover {
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+#elementor-panel .elementor-element:hover .icon, #elementor-panel .elementor-element:hover .title {
+  color: $color-9b0a46;
+}
+
+#elementor-panel .elementor-element .icon {
+  font-size: 28px;
+  padding-top: 15px;
+  color: $color-556068;
+}
+
+#elementor-panel .elementor-element .elementor-element-title-wrapper {
+  display: table;
+  width: 100%;
+}
+
+#elementor-panel .elementor-element .title {
+  font-size: 11px;
+  color: $color-556068;
+  display: table-cell;
+  vertical-align: middle;
+  height: 40px;
+}
+
+#elementor-panel #elementor-panel-elements-languageselector-wrapper {
+  position: relative;
+  width: 100%;
+  background-image: -webkit-gradient(linear, left top, left bottom, from($color-f3f3f3), to($color-fff));
+  background-image: linear-gradient(180deg, $color-f3f3f3, $color-fff);
+  font-size: 11px;
+  padding: 5px 15px 5px 15px;
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2px;
+  line-height: 23px;
+}
+
+#elementor-panel #elementor-panel-elements-languageselector-wrapper select {
+  max-width: 75px;
+}
+
+#elementor-panel #elementor-panel-elements-language-import {
+  display: inline-block;
+}
+
+#elementor-panel #elementor-panel-elements-language-import > span {
+  font-size: 12px;
+  cursor: pointer;
+  padding: 7px;
+}
+
+#elementor-panel #elementor-panel-elements-language-import .elementor-panel-elements-language-close {
+  display: none;
+}
+
+#elementor-panel #elementor-panel-elements-language-import-list {
+  display: none;
+  position: absolute;
+  width: 100%;
+  background: $color-556068;
+  left: 0;
+  z-index: 2;
+  padding: 5px 15px;
+  color: $color-d5dadf;
+}
+
+#elementor-panel #elementor-panel-elements-language-import-list ul {
+  margin: 5px 0;
+}
+
+#elementor-panel #elementor-panel-elements-language-import-list li {
+  background-color: $color-495157;
+  width: 100%;
+  padding: 2px 10px;
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+
+#elementor-panel #elementor-panel-elements-language-import-list a {
+  display: block;
+  color: $color-d5dadf;
+}
+
+#elementor-panel #elementor-panel-elements-language-import.elementor-open .elementor-panel-elements-language-clone {
+  display: none;
+}
+
+#elementor-panel #elementor-panel-elements-language-import.elementor-open .elementor-panel-elements-language-close {
+  display: inline;
+}
+
+#elementor-panel #elementor-panel-elements-language-import.elementor-open > #elementor-panel-elements-language-import-list {
+  display: block;
+}
+
+#elementor-panel #elementor-panel-elements-search-wrapper {
+  position: relative;
+}
+
+#elementor-panel #elementor-panel-elements-search-wrapper .fa {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  color: $color-a4afb7;
+  -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+}
+
+#elementor-panel #elementor-panel-elements-search-input {
+  width: 100%;
+  background-color: $color-fff;
+  font-size: 13px;
+  padding: 12px 42px 12px 15px;
+  font-style: italic;
+  color: $color-a4afb7;
+  border: none;
+  border-radius: 4px;
+}
+
+#elementor-panel .elementor-panel-category:first-child .panel-elements-category-title {
+  padding-top: 14px;
+}
+
+#elementor-panel .panel-elements-category-title {
+  padding: 7px 10px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+#elementor-panel .panel-elements-category-items {
+  overflow: hidden;
+  padding: 5px;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-title {
+  padding: 10px 20px;
+  margin-top: 10px;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-buttons {
+  padding-left: 20px;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 40px;
+  background-color: $color-fff;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-button-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-save {
+  text-align: center;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-save .elementor-button {
+  padding: 6px 18px;
+  text-transform: uppercase;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-reset .elementor-button, #elementor-panel .elementor-panel-scheme .elementor-panel-scheme-discard .elementor-button {
+  color: $color-a4afb7;
+  background: none;
+}
+
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-reset .fa, #elementor-panel .elementor-panel-scheme .elementor-panel-scheme-discard .fa {
+  margin-right: 3px;
+}
+
+#elementor-panel #elementor-panel-scheme-color .elementor-panel-scheme-items {
+  position: relative;
+}
+
+#elementor-panel #elementor-panel-scheme-color .elementor-panel-scheme-item {
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+#elementor-panel #elementor-panel-scheme-color .elementor-panel-scheme-item:not(:nth-child(4n)) {
+  margin-right: 13px;
+}
+
+#elementor-panel #elementor-panel-scheme-color .wp-picker-container.wp-picker-active {
+  -webkit-transform: translateY(-37px);
+          transform: translateY(-37px);
+}
+
+#elementor-panel #elementor-panel-scheme-color .wp-picker-container.wp-picker-active .wp-color-result {
+  margin-right: 7px;
+}
+
+#elementor-panel .elementor-panel-scheme-color-title {
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 10px;
+  color: $color-c2cbd2;
+  font-size: 8px;
+}
+
+#elementor-panel .elementor-panel-scheme-typography-item {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+#elementor-panel .elementor-panel-scheme-typography-item > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#elementor-panel .elementor-panel-scheme-typography-item-value select, #elementor-panel .elementor-panel-scheme-typography-item-value input {
+  width: 100%;
+}
+
+#elementor-panel .elementor-panel-scheme-item .elementor-panel-heading:not(.elementor-open) + .elementor-panel-scheme-typography-items {
+  display: none;
+}
+
+#elementor-panel .elementor-panel-scheme-color-system-scheme {
+  margin-bottom: 10px;
+}
+
+#elementor-panel .elementor-panel-scheme-color-system-scheme .elementor-title {
+  font-size: 11px;
+  color: $color-a4afb7;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+#elementor-panel .elementor-panel-scheme-color-system-items {
+  -webkit-transition: border 0.5s;
+  transition: border 0.5s;
+  overflow: hidden;
+  padding: 3px;
+  border-radius: 3px;
+  border: 1px solid $color-d5dadf;
+  cursor: pointer;
+}
+
+#elementor-panel .elementor-panel-scheme-color-system-items:hover {
+  border: 1px solid $color-a4afb7;
+}
+
+#elementor-panel .elementor-panel-scheme-color-system-item {
+  float: left;
+  height: 20px;
+  width: 25%;
+}
+
+#elementor-panel #elementor-panel-schemes-disabled {
+  padding: 20px;
+}
+
+#elementor-panel #elementor-panel-schemes-disabled a {
+  color: $color-9b0a46;
+  cursor: pointer;
+}
+
+#elementor-panel #elementor-panel-schemes-disabled a:hover {
+  text-decoration: underline;
+}
+
+#elementor-panel #elementor-panel-content-wrapper {
+  position: absolute;
+  bottom: 40px;
+  top: 40px;
+  left: 0;
+  width: 100%;
+}
+
+#elementor-panel #elementor-panel-page-menu {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+#elementor-panel .elementor-panel-menu-item {
+  display: table;
+  width: 100%;
+  height: 50px;
+  cursor: pointer;
+  margin-bottom: 1px;
+}
+
+#elementor-panel .elementor-panel-menu-item:not(:hover) {
+  background-color: $color-fff;
+}
+
+#elementor-panel .elementor-panel-menu-item > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#elementor-panel .elementor-panel-menu-item-icon {
+  text-align: center;
+  width: 55px;
+}
+
+#elementor-panel .elementor-panel-menu-item-title {
+  font-weight: 500;
+}
+
+#elementor-panel .elementor-panel-menu-item-title > span {
+  color: $color-39b54a;
+}
+
+#elementor-panel .wp-picker-container.wp-picker-active {
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  background-color: $color-fff;
+  border: solid $color-fff;
+  border-width: 0 17px 0 12px;
+  padding-top: 10px;
+}
+
+#elementor-panel .wp-picker-container.wp-picker-active .wp-color-result {
+  float: right;
+}
+
+#elementor-panel .wp-picker-container.wp-picker-active .wp-picker-input-wrap {
+  padding-left: 10px;
+  float: left;
+}
+
+#elementor-panel .wp-picker-container + .wp-picker-container {
+  margin-right: 5px;
+}
+
+#elementor-panel .wp-picker-container .iris-picker {
+  border: none;
+}
+
+#elementor-panel .wp-color-result {
+  margin: 0;
+  width: 35px;
+  height: 25px;
+  box-shadow: inset 0 0 0 3px white;
+  transition: border 0.5s;
+  padding: 0;
+  border-radius: 3px;
+  border: 1px solid $color-d5dadf;
+}
+
+#elementor-panel .wp-color-result:after {
+  content: none;
+}
+
+#elementor-panel .wp-color-result:hover {
+  border: 1px solid $color-a4afb7;
+}
+
+#elementor-panel .wp-color-result:focus, #elementor-panel .wp-color-result:active {
+  outline: 0;
+}
+
+#elementor-panel .wp-picker-clear {
+  height: 24px;
+  width: 48px;
+  padding: 0;
+  background-color: $color-d5dadf;
+  border-radius: 0 3px 3px 0;
+  margin: 0;
+}
+
+#elementor-panel .wp-color-picker {
+  float: left;
+  width: 100px;
+  border-radius: 3px 0 0 3px;
+  line-height: 1;
+}
+
+#elementor-panel .wp-picker-holder * {
+  box-sizing: content-box;
+}
+
+#elementor-panel .wp-picker-open ~ .wp-picker-holder {
+  clear: both;
+  margin-bottom: 15px;
+}
+
+#elementor-panel #elementor-panel-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40px;
+  background-color: $color-495157;
+}
+
+#elementor-panel #elementor-panel-footer-tools {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+#elementor-panel .elementor-panel-footer-tool {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  cursor: pointer;
+  color: $color-a4afb7;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+}
+
+#elementor-panel .elementor-panel-footer-tool.elementor-open {
+  color: $color-fff;
+}
+
+#elementor-panel .elementor-panel-footer-tool:not(.elementor-open):hover {
+  color: $color-d5dadf;
+}
+
+#elementor-panel .elementor-panel-footer-tool:not(.elementor-open) .elementor-panel-footer-sub-menu-wrapper {
+  display: none;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-wrapper {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  background-color: $color-556068;
+  padding: 10px;
+  box-shadow: -2px -5px 8px rgba(0, 0, 0, 0.1);
+  cursor: default;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu {
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item {
+  background-color: $color-495157;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  cursor: pointer;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item:not(:last-child) {
+  margin-bottom: 1px;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item[data-device-mode=mobile-landscape] .fa-mobile {
+  -webkit-transform: rotate(-90deg);
+          transform: rotate(-90deg);
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item.active {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item > * {
+  display: table-cell;
+  height: 40px;
+  vertical-align: middle;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item .elementor-icon {
+  width: 40px;
+  color: $color-a4afb7;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item .elementor-title {
+  text-align: left;
+  color: $color-d5dadf;
+}
+
+#elementor-panel .elementor-panel-footer-sub-menu-item .elementor-description {
+  width: 95px;
+  text-align: left;
+  font-size: 11px;
+  font-style: italic;
+  color: $color-a4afb7;
+}
+
+#elementor-panel #elementor-panel-footer-help-title {
+  text-align: left;
+  padding: 10px 0;
+  color: $color-d5dadf;
+}
+
+#elementor-panel #elementor-panel-footer-save {
+  width: 90px;
+  padding: 0 10px;
+}
+
+#elementor-panel #elementor-panel-footer-save .elementor-button {
+  font-size: 11px;
+  text-transform: uppercase;
+  width: 100%;
+  height: 26px;
+  background-color: $color-556068;
+  color: $color-a4afb7;
+}
+
+#elementor-panel #elementor-panel-footer-publish .elementor-icon, #elementor-panel #elementor-panel-footer-publish .elementor-title {
+  color: $color-39b54a;
+}
+
+#elementor-panel #elementor-panel-footer-discard .elementor-icon, #elementor-panel #elementor-panel-footer-discard .elementor-title {
+  color: $color-b01b1b;
+}
+
+#elementor-template-library-modal .elementor-button-success, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-button {
+  text-transform: uppercase;
+}
+
+#elementor-template-library-modal .elementor-button-success .elementor-button-title, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button .elementor-button-title, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-button .elementor-button-title {
+  padding-left: 8px;
+}

@@ -23,7 +23,6 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
-
 {if $options.elementor}
     {$content nofilter}
 {else}

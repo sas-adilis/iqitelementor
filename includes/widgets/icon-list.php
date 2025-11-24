@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -148,15 +149,15 @@ class Widget_Icon_list extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'selectors' => [
@@ -226,57 +227,57 @@ class Widget_Icon_list extends Widget_Base
     protected function render($instance = [])
     {
         ?>
-		<ul class="elementor-icon-list-items">
-			<?php foreach ($instance['icon_list'] as $item) { ?>
-				<li class="elementor-icon-list-item" >
-					<?php
+        <ul class="elementor-icon-list-items">
+            <?php foreach ($instance['icon_list'] as $item) { ?>
+                <li class="elementor-icon-list-item">
+                    <?php
                     if (!empty($item['link']['url'])) {
                         $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
 
                         echo '<a href="' . $item['link']['url'] . '"' . $target . '>';
                     }
 
-			    if ($item['icon']) { ?>
-						<span class="elementor-icon-list-icon">
+                    if ($item['icon']) { ?>
+                        <span class="elementor-icon-list-icon">
 							<i class="<?php echo \IqitElementorWpHelper::esc_attr($item['icon']); ?>"></i>
 						</span>
-					<?php } ?>
-					<span class="elementor-icon-list-text"><?php echo $item['text']; ?></span>
-					<?php
-			    if (!empty($item['link']['url'])) {
-			        echo '</a>';
-			    }
-			    ?>
-				</li>
-				<?php
-			} ?>
-		</ul>
-		<?php
+                    <?php } ?>
+                    <span class="elementor-icon-list-text"><?php echo $item['text']; ?></span>
+                    <?php
+                    if (!empty($item['link']['url'])) {
+                        echo '</a>';
+                    }
+                    ?>
+                </li>
+                <?php
+            } ?>
+        </ul>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<ul class="elementor-icon-list-items">
-			<#
-			if ( settings.icon_list ) {
-				_.each( settings.icon_list, function( item ) { #>
-					<li class="elementor-icon-list-item">
-						<# if ( item.link && item.link.url ) { #>
-							<a href="{{ item.link.url }}">
-						<# } #>
-						<span class="elementor-icon-list-icon">
+        <ul class="elementor-icon-list-items">
+            <#
+            if ( settings.icon_list ) {
+            _.each( settings.icon_list, function( item ) { #>
+            <li class="elementor-icon-list-item">
+                <# if ( item.link && item.link.url ) { #>
+                <a href="{{ item.link.url }}">
+                    <# } #>
+                    <span class="elementor-icon-list-icon">
 							<i class="{{ item.icon }}"></i>
 						</span>
-						<span class="elementor-icon-list-text">{{{ item.text }}}</span>
-						<# if ( item.link && item.link.url ) { #>
-							</a>
-						<# } #>
-					</li>
-				<#
-				} );
-			} #>
-		</ul>
-		<?php
+                    <span class="elementor-icon-list-text">{{{ item.text }}}</span>
+                    <# if ( item.link && item.link.url ) { #>
+                </a>
+                <# } #>
+            </li>
+            <#
+            } );
+            } #>
+        </ul>
+        <?php
     }
 }

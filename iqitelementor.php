@@ -10,6 +10,7 @@
  *
  * You can not resell or redistribute this software.
  */
+
 use Elementor\PluginElementor;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 
@@ -109,8 +110,7 @@ class IqitElementor extends Module implements WidgetInterface
             && $this->registerHook('actionProductAdd')
             && $this->installTab()
             && $this->installSQL()
-            && $this->installFixtures()
-        ;
+            && $this->installFixtures();
     }
 
     public function isUsingNewTranslationSystem()
@@ -156,7 +156,7 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function hookDisplayBackOfficeHeader($params)
     {
-        $instagramExpDate = (int) Configuration::get('iqit_elementor_inst_token_exp');
+        $instagramExpDate = (int)Configuration::get('iqit_elementor_inst_token_exp');
 
         if ($instagramExpDate) {
             $date = strtotime(date('Y-m-d H:i:s'));
@@ -180,7 +180,7 @@ class IqitElementor extends Module implements WidgetInterface
 
         $onlyElementor = [];
         $justElementorCategory = false;
-        $idLang = (int) $this->context->language->id;
+        $idLang = (int)$this->context->language->id;
         $newContent = 0;
         $contentType = 'default';
 
@@ -202,7 +202,7 @@ class IqitElementor extends Module implements WidgetInterface
                     return;
                 }
 
-                $idPage = (int) $request->attributes->get('cmsPageId');
+                $idPage = (int)$request->attributes->get('cmsPageId');
                 $pageType = 'cms';
 
                 if ($idPage) {
@@ -225,7 +225,7 @@ class IqitElementor extends Module implements WidgetInterface
                     }
                 }
             } elseif ($this->context->controller->controller_name == 'AdminSimpleBlogPosts') {
-                $idPage = (int) Tools::getValue('id_simpleblog_post');
+                $idPage = (int)Tools::getValue('id_simpleblog_post');
                 $pageType = 'blog';
 
                 if ($idPage) {
@@ -248,7 +248,7 @@ class IqitElementor extends Module implements WidgetInterface
                     }
                 }
             } elseif ($this->context->controller->controller_name == 'AdminYbcBlogPost') {
-                $idPage = (int) Tools::getValue('id_post');
+                $idPage = (int)Tools::getValue('id_post');
                 $pageType = 'ybcblog';
 
                 if ($idPage) {
@@ -278,10 +278,10 @@ class IqitElementor extends Module implements WidgetInterface
                     return;
                 }
 
-                $idPage = (int) $request->attributes->get('categoryId');
+                $idPage = (int)$request->attributes->get('categoryId');
                 $pageType = 'category';
 
-                $justElementorCategory = (bool) IqitElementorCategory::isJustElementor($idPage);
+                $justElementorCategory = (bool)IqitElementorCategory::isJustElementor($idPage);
             } elseif ($this->context->controller->controller_name == 'AdminManufacturers') {
                 global $kernel;
 
@@ -289,7 +289,7 @@ class IqitElementor extends Module implements WidgetInterface
                 if (!isset($request->attributes)) {
                     return;
                 }
-                $idPage = (int) $request->attributes->get('manufacturerId');
+                $idPage = (int)$request->attributes->get('manufacturerId');
 
                 $contentType = 'brand';
                 $pageType = 'content';
@@ -302,16 +302,16 @@ class IqitElementor extends Module implements WidgetInterface
                     return;
                 }
 
-                $idPage = (int) $request->attributes->get('id');
+                $idPage = (int)$request->attributes->get('id');
                 if (!$idPage) {
-                    $idPage = (int) $request->attributes->get('productId');
+                    $idPage = (int)$request->attributes->get('productId');
                 }
                 $pageType = 'product';
             }
 
             if (!$idPage) {
                 if ($newContent) {
-                    $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int) $this->context->language->id;
+                    $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int)$this->context->language->id;
                 } else {
                     $url = '';
                 }
@@ -319,7 +319,7 @@ class IqitElementor extends Module implements WidgetInterface
                     'urlElementor' => $url,
                 ]);
             } else {
-                $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int) $this->context->language->id;
+                $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int)$this->context->language->id;
 
                 $this->context->smarty->assign([
                     'urlElementor' => $url,
@@ -351,32 +351,38 @@ class IqitElementor extends Module implements WidgetInterface
     {
         //   $this->context->controller->requireAssets(array('font-awesome'));
         $this->registerCssFiles();
-        // $this->registerJSFiles();
+        $this->registerJSFiles();
 
         Media::addJsDef(
             ['elementorFrontendConfig' => [
                 'isEditMode' => '',
                 'stretchedSectionContainer' => '',
                 'instagramToken' => Configuration::get('iqit_elementor_inst_token'),
-                'is_rtl' => (bool) $this->context->language->is_rtl,
+                'is_rtl' => (bool)$this->context->language->is_rtl,
                 'ajax_csfr_token_url' => $this->context->link->getModuleLink($this->name, 'Actions', ['process' => 'handleCsfrToken', 'ajax' => 1], true),
             ]]);
     }
 
     public function registerCssFiles()
     {
-        // $this->context->controller->registerStylesheet('modules-' . $this->name . '-eicons', 'modules/' . $this->name . '/views/lib/eicons/css/elementor-icons.min.css', ['media' => 'all', 'priority' => 150]);
-        // if ($this->context->language->is_rtl) {
-        //    $this->context->controller->registerStylesheet('modules-' . $this->name . '-style', 'modules/' . $this->name . '/views/css/frontend-rtl.min.css', ['media' => 'all', 'priority' => 150]);
-        // } else {
-        $this->context->controller->registerStylesheet('modules-' . $this->name . '-style', 'modules/' . $this->name . '/views/css/frontend.css', ['media' => 'all', 'priority' => 150]);
-        // }
+        // Core Elementor frontend styles
+        $this->context->controller->registerStylesheet(
+            'modules-' . $this->name . '-style',
+            'modules/' . $this->name . '/views/css/frontend.css',
+            [
+                'media' => 'all',
+                'priority' => 150,
+            ]
+        );
+
     }
 
     public function registerJSFiles()
     {
-        $this->context->controller->registerJavascript('modules' . $this->name . '-instagram', 'modules/' . $this->name . '/views/lib/instagram-lite-master/instagramLite.min.js', ['position' => 'bottom', 'priority' => 150]);
-        $this->context->controller->registerJavascript('modules' . $this->name . '-jquery-numerator', 'modules/' . $this->name . '/views/lib/jquery-numerator/jquery-numerator.min.js', ['position' => 'bottom', 'priority' => 150]);
+        //$this->context->controller->registerJavascript('modules' . $this->name . '-instagram', 'modules/' . $this->name . '/views/lib/instagram-lite-master/instagramLite.min.js', ['position' => 'bottom', 'priority' => 150]);
+        //$this->context->controller->registerJavascript('modules' . $this->name . '-jquery-numerator', 'modules/' . $this->name . '/views/lib/jquery-numerator/jquery-numerator.min.js', ['position' => 'bottom', 'priority' => 150]);
+
+
         $this->context->controller->registerJavascript('modules' . $this->name . '-script', 'modules/' . $this->name . '/views/js/frontend.js', ['position' => 'bottom', 'priority' => 150]);
     }
 
@@ -390,7 +396,7 @@ class IqitElementor extends Module implements WidgetInterface
         foreach (Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = 'IqitElementorEditor';
         }
-        $tab->id_parent = (int) Tab::getIdFromClassName('AdminParentThemes');
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminParentThemes');
         $tab->module = $this->name;
         $tab->add();
 
@@ -402,7 +408,7 @@ class IqitElementor extends Module implements WidgetInterface
         foreach (Language::getLanguages(true) as $lang) {
             $tab->name[$lang['id_lang']] = 'IqitElementor - Page builder';
         }
-        $tab->id_parent = (int) Tab::getIdFromClassName('AdminParentThemes');
+        $tab->id_parent = (int)Tab::getIdFromClassName('AdminParentThemes');
         $tab->module = $this->name;
         $tab->add();
         $parentId = $tab->id;
@@ -436,25 +442,25 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function uninstallTab()
     {
-        $id_tab = (int) Tab::getIdFromClassName('IqitElementorEditor');
+        $id_tab = (int)Tab::getIdFromClassName('IqitElementorEditor');
         if ($id_tab) {
             $tab = new Tab($id_tab);
             $tab->delete();
         }
 
-        $id_tab = (int) Tab::getIdFromClassName('AdminIqitElementor');
+        $id_tab = (int)Tab::getIdFromClassName('AdminIqitElementor');
         if ($id_tab) {
             $tab = new Tab($id_tab);
             $tab->delete();
         }
 
-        $id_tab = (int) Tab::getIdFromClassName('AdminIqitElementorContent');
+        $id_tab = (int)Tab::getIdFromClassName('AdminIqitElementorContent');
         if ($id_tab) {
             $tab = new Tab($id_tab);
             $tab->delete();
         }
 
-        $id_tab = (int) Tab::getIdFromClassName('AdminParentIqitElementor');
+        $id_tab = (int)Tab::getIdFromClassName('AdminParentIqitElementor');
         if ($id_tab) {
             $tab = new Tab($id_tab);
             $tab->delete();
@@ -471,7 +477,7 @@ class IqitElementor extends Module implements WidgetInterface
         $shops = Shop::getShopsCollection();
         foreach ($shops as $shop) {
             $layout = new IqitElementorLanding();
-            $layout->id_shop = (int) $shop->id;
+            $layout->id_shop = (int)$shop->id;
             $layout->title = 'Homepaga layout #1';
             $layout->data = $templateSource->data;
             $layout->add();
@@ -589,25 +595,25 @@ class IqitElementor extends Module implements WidgetInterface
         if (preg_match('/^displayHome\d*$/', $hookName)) {
             $cacheId = 'iqitelementor|' . $hookName;
         } elseif (preg_match('/^displayCMSDisputeInformation\d*$/', $hookName)) {
-            $cmsId = (int) $configuration['smarty']->tpl_vars['cms']->value['id'];
+            $cmsId = (int)$configuration['smarty']->tpl_vars['cms']->value['id'];
             $templateFile = 'generated_content_cms.tpl';
             $cacheId = 'iqitelementor|' . $hookName . '|' . $cmsId;
         } elseif (preg_match('/^displayProductElementor\d*$/', $hookName)) {
-            $productId = (int) $configuration['smarty']->tpl_vars['product']->value['id'];
+            $productId = (int)$configuration['smarty']->tpl_vars['product']->value['id'];
             $cacheId = 'iqitelementor|' . $hookName . '|' . $productId;
         } elseif (preg_match('/^displayCategoryElementor\d*$/', $hookName)) {
-            $categoryId = (int) $configuration['smarty']->tpl_vars['category']->value['id'];
+            $categoryId = (int)$configuration['smarty']->tpl_vars['category']->value['id'];
             $cacheId = 'iqitelementor|' . $hookName . '|' . $categoryId;
         } elseif (preg_match('/^displayBlogElementor\d*$/', $hookName)) {
-            $blogId = (int) $configuration['smarty']->tpl_vars['post']->value->id_simpleblog_post;
+            $blogId = (int)$configuration['smarty']->tpl_vars['post']->value->id_simpleblog_post;
             $templateFile = 'generated_content_cms.tpl';
             $cacheId = 'iqitelementor|' . $hookName . '|' . $blogId;
         } elseif (preg_match('/^displayYbcBlogElementor\d*$/', $hookName)) {
-            $blogId = (int) $configuration['smarty']->tpl_vars['blog_post']->value['id_post'];
+            $blogId = (int)$configuration['smarty']->tpl_vars['blog_post']->value['id_post'];
             $templateFile = 'generated_content_cms.tpl';
             $cacheId = 'iqitelementor|' . $hookName . '|' . $blogId;
         } elseif (preg_match('/^displayManufacturerElementor\d*$/', $hookName)) {
-            $manfuacturerId = (int) $configuration['manufacturerId'];
+            $manfuacturerId = (int)$configuration['manufacturerId'];
             $templateFile = 'generated_content_cms.tpl';
             $cacheId = 'iqitelementor|' . $hookName . '|' . $manfuacturerId;
         } elseif (preg_match('/^display.*$/', $hookName)) {
@@ -639,12 +645,12 @@ class IqitElementor extends Module implements WidgetInterface
         $options = [];
 
         if (preg_match('/^displayHome\d*$/', $hookName)) {
-            $layoutId = (int) Configuration::get('iqit_homepage_layout');
+            $layoutId = (int)Configuration::get('iqit_homepage_layout');
             $layout = new IqitElementorLanding($layoutId, $this->context->language->id);
 
             if (Validate::isLoadedObject($layout)) {
                 ob_start();
-                PluginElementor::instance()->get_frontend((array) json_decode($layout->data, true));
+                PluginElementor::instance()->get_frontend((array)json_decode($layout->data, true));
                 $content = ob_get_clean();
             }
         } elseif (preg_match('/^displayCMSDisputeInformation\d*$/', $hookName)) {
@@ -655,7 +661,7 @@ class IqitElementor extends Module implements WidgetInterface
 
             if (json_last_error() == JSON_ERROR_NONE) {
                 ob_start();
-                PluginElementor::instance()->get_frontend((array) $content);
+                PluginElementor::instance()->get_frontend((array)$content);
                 $options['elementor'] = true;
                 $content = ob_get_clean();
             } else {
@@ -663,8 +669,8 @@ class IqitElementor extends Module implements WidgetInterface
                 $content = $cmsContent;
             }
         } elseif (preg_match('/^displayProductElementor\d*$/', $hookName)) {
-            $productId = (int) $configuration['smarty']->tpl_vars['product']->value['id'];
-            $id_shop = (int) $this->context->shop->id;
+            $productId = (int)$configuration['smarty']->tpl_vars['product']->value['id'];
+            $id_shop = (int)$this->context->shop->id;
             $id = IqitElementorProduct::getIdByProduct($productId, $id_shop);
 
             if ($id) {
@@ -672,13 +678,13 @@ class IqitElementor extends Module implements WidgetInterface
 
                 if (Validate::isLoadedObject($layout)) {
                     ob_start();
-                    PluginElementor::instance()->get_frontend((array) json_decode($layout->data, true));
+                    PluginElementor::instance()->get_frontend((array)json_decode($layout->data, true));
                     $content = ob_get_clean();
                 }
             }
         } elseif (preg_match('/^displayCategoryElementor\d*$/', $hookName)) {
-            $categoryId = (int) $configuration['smarty']->tpl_vars['category']->value['id'];
-            $id_shop = (int) $this->context->shop->id;
+            $categoryId = (int)$configuration['smarty']->tpl_vars['category']->value['id'];
+            $id_shop = (int)$this->context->shop->id;
             $id = IqitElementorCategory::getIdByCategory($categoryId, $id_shop);
 
             if ($id) {
@@ -686,7 +692,7 @@ class IqitElementor extends Module implements WidgetInterface
 
                 if (Validate::isLoadedObject($layout)) {
                     ob_start();
-                    PluginElementor::instance()->get_frontend((array) json_decode($layout->data, true));
+                    PluginElementor::instance()->get_frontend((array)json_decode($layout->data, true));
                     $content = ob_get_clean();
                 }
             }
@@ -699,7 +705,7 @@ class IqitElementor extends Module implements WidgetInterface
 
             if (json_last_error() == JSON_ERROR_NONE) {
                 ob_start();
-                PluginElementor::instance()->get_frontend((array) $content);
+                PluginElementor::instance()->get_frontend((array)$content);
                 $options['elementor'] = true;
                 $content = ob_get_clean();
             } else {
@@ -715,7 +721,7 @@ class IqitElementor extends Module implements WidgetInterface
 
             if (json_last_error() == JSON_ERROR_NONE) {
                 ob_start();
-                PluginElementor::instance()->get_frontend((array) $content);
+                PluginElementor::instance()->get_frontend((array)$content);
                 $options['elementor'] = true;
                 $content = ob_get_clean();
             } else {
@@ -724,9 +730,9 @@ class IqitElementor extends Module implements WidgetInterface
             }
         } elseif (preg_match('/^displayManufacturerElementor\d*$/', $hookName)) {
             $options['elementor'] = false;
-            $manfuacturerId = (int) $configuration['manufacturerId'];
-            $id_shop = (int) $this->context->shop->id;
-            $hookId = (int) Hook::getIdByName($hookName);
+            $manfuacturerId = (int)$configuration['manufacturerId'];
+            $id_shop = (int)$this->context->shop->id;
+            $hookId = (int)Hook::getIdByName($hookName);
             $id = IqitElementorContent::getIdByObjectAndHook($hookId, $manfuacturerId, $id_shop);
 
             if ($id) {
@@ -734,7 +740,7 @@ class IqitElementor extends Module implements WidgetInterface
 
                 if (Validate::isLoadedObject($layout)) {
                     ob_start();
-                    PluginElementor::instance()->get_frontend((array) json_decode($layout->data, true));
+                    PluginElementor::instance()->get_frontend((array)json_decode($layout->data, true));
                     $content = ob_get_clean();
                 }
             }
@@ -743,10 +749,10 @@ class IqitElementor extends Module implements WidgetInterface
             $contents = IqitElementorContent::getByHook($id_hook);
             if (is_array($contents)) {
                 foreach ($contents as $contentId) {
-                    $layout = new IqitElementorContent((int) $contentId['id_elementor'], $this->context->language->id);
+                    $layout = new IqitElementorContent((int)$contentId['id_elementor'], $this->context->language->id);
                     if (Validate::isLoadedObject($layout)) {
                         ob_start();
-                        PluginElementor::instance()->get_frontend((array) json_decode($layout->data, true));
+                        PluginElementor::instance()->get_frontend((array)json_decode($layout->data, true));
                         $content .= ob_get_clean();
                     }
                 }
@@ -762,14 +768,14 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function checkEnvironment()
     {
-        $cookie = new Cookie('psAdmin', '', (int) Configuration::get('PS_COOKIE_LIFETIME_BO'));
+        $cookie = new Cookie('psAdmin', '', (int)Configuration::get('PS_COOKIE_LIFETIME_BO'));
 
         return isset($cookie->id_employee) && isset($cookie->passwd) && Employee::checkPassword($cookie->id_employee, $cookie->passwd);
     }
 
     public function getFrontEditorToken()
     {
-        return Tools::hash($this->name . (is_object(Context::getContext()->employee) ? (int) Context::getContext()->employee->id
+        return Tools::hash($this->name . (is_object(Context::getContext()->employee) ? (int)Context::getContext()->employee->id
                 : Tools::getValue('id_employee')));
     }
 
@@ -831,20 +837,20 @@ class IqitElementor extends Module implements WidgetInterface
     public function clearProductCache($idProduct)
     {
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cacheId = 'iqitelementor|displayProductElementor|' . (int) $idProduct;
+        $cacheId = 'iqitelementor|displayProductElementor|' . (int)$idProduct;
         $this->_clearCache($templateFile, $cacheId);
     }
 
     public function clearCategoryCache($idCategory)
     {
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cacheId = 'iqitelementor|displayCategoryElementor|' . (int) $idCategory;
+        $cacheId = 'iqitelementor|displayCategoryElementor|' . (int)$idCategory;
         $this->_clearCache($templateFile, $cacheId);
     }
 
     public function clearYbcBlogCache($idPost)
     {
-        $cacheId = 'iqitelementor|displayYbcBlogElementor|' . (int) $idPost;
+        $cacheId = 'iqitelementor|displayYbcBlogElementor|' . (int)$idPost;
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
         $this->_clearCache($templateFile, $cacheId);
     }
@@ -852,38 +858,38 @@ class IqitElementor extends Module implements WidgetInterface
     public function hookActionObjectCmsDeleteAfter($params)
     {
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cmsId = (int) $params['object']->id_cms;
+        $cmsId = (int)$params['object']->id_cms;
         $cacheId = 'iqitelementor|displayCMSDisputeInformation|' . $cmsId;
         $this->_clearCache($templateFile, $cacheId);
     }
 
     public function hookActionObjectCmsUpdateAfter($params)
     {
-        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER_TMP');
+        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER_TMP');
         Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
 
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
-        $cmsId = (int) $params['object']->id_cms;
+        $cmsId = (int)$params['object']->id_cms;
         $cacheId = 'iqitelementor|displayCMSDisputeInformation|' . $cmsId;
         $this->_clearCache($templateFile, $cacheId);
     }
 
     public function hookActionObjectYbc_blog_post_classUpdateBefore($params)
     {
-        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER');
+        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER');
         Configuration::updateValue('PS_USE_HTMLPURIFIER_TMP', $pur);
         Configuration::updateValue('PS_USE_HTMLPURIFIER', 0);
     }
 
     public function hookActionObjectYbc_blog_post_classUpdateAfter($params)
     {
-        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER_TMP');
+        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER_TMP');
         Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
     }
 
     public function hookIsJustElementor($params)
     {
-        return IqitElementorCategory::isJustElementor((int) $params['categoryId']);
+        return IqitElementorCategory::isJustElementor((int)$params['categoryId']);
     }
 
     public function hookActionObjectSimpleBlogPostUpdateAfter($params)
@@ -893,7 +899,7 @@ class IqitElementor extends Module implements WidgetInterface
         }
 
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
-        $postId = (int) $params['object']->id_simpleblog_post;
+        $postId = (int)$params['object']->id_simpleblog_post;
         $cacheId = 'iqitelementor|displayBlogElementor|' . $postId;
         $this->_clearCache($templateFile, $cacheId);
     }
@@ -907,7 +913,7 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function hookActionObjectCmsUpdateBefore($params)
     {
-        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER');
+        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER');
         Configuration::updateValue('PS_USE_HTMLPURIFIER_TMP', $pur);
         Configuration::updateValue('PS_USE_HTMLPURIFIER', 0);
     }
@@ -917,7 +923,7 @@ class IqitElementor extends Module implements WidgetInterface
         if (!isset($params['object']->id)) {
             return;
         }
-        $this->clearProductCache((int) $params['object']->id);
+        $this->clearProductCache((int)$params['object']->id);
 
         IqitElementorProduct::deleteElement($params['object']->id);
 
@@ -970,7 +976,7 @@ class IqitElementor extends Module implements WidgetInterface
         if (!isset($params['object']->id)) {
             return;
         }
-        $this->clearCategoryCache((int) $params['object']->id);
+        $this->clearCategoryCache((int)$params['object']->id);
 
         IqitElementorCategory::deleteElement($params['object']->id);
     }
@@ -985,8 +991,8 @@ class IqitElementor extends Module implements WidgetInterface
     public function hookActionProductAdd($params)
     {
         if (isset($params['id_product_old'])) {
-            $idProductOld = (int) $params['id_product_old'];
-            $idProduct = (int) $params['id_product'];
+            $idProductOld = (int)$params['id_product_old'];
+            $idProduct = (int)$params['id_product'];
 
             $id = IqitElementorProduct::getIdByProduct($idProductOld);
 

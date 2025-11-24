@@ -111,15 +111,15 @@ class IqitElementorWidget_Newsletter
                 'options' => [
                     'left' => [
                         'title' => IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => '',
@@ -147,15 +147,15 @@ class IqitElementorWidget_Newsletter
                 'options' => [
                     'left' => [
                         'title' => IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => '',

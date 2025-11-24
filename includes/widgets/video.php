@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -198,15 +199,15 @@ class Widget_Video extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -550,8 +551,8 @@ class Widget_Video extends Widget_Base
             <?php if ($instance['in_modal'] === 'yes') { ?>
 
                 <button class="elementor-video-open-modal" data-bs-toggle="modal"
-                     data-bs-target="#elementor-video-modal-<?php echo isset($instance['id_widget_instance']) ? $instance['id_widget_instance'] : '';
-                ?>">
+                        data-bs-target="#elementor-video-modal-<?php echo isset($instance['id_widget_instance']) ? $instance['id_widget_instance'] : '';
+                        ?>">
                     <i class="fa fa-play-circle"></i>
                 </button>
 
@@ -575,22 +576,22 @@ class Widget_Video extends Widget_Base
 
 
             <?php } else { ?>
-            <div class="elementor-video-wrapper">
-                <?php
-                echo $video_html;
+                <div class="elementor-video-wrapper">
+                    <?php
+                    echo $video_html;
 
-                if ($this->has_image_overlay()) { ?>
-                    <div class="elementor-custom-embed-image-overlay" style="background-image: url(<?php echo $this->_current_instance['image_overlay']['url']; ?>);">
-                        <?php if ('yes' === $this->_current_instance['show_play_icon']) { ?>
-                            <div class="elementor-custom-embed-play">
-                                <i class="fa fa-play-circle"></i>
-                            </div>
-                        <?php } ?>
-                    </div>
-                <?php } ?>
-            </div>
-        <?php }
-            }
+                    if ($this->has_image_overlay()) { ?>
+                        <div class="elementor-custom-embed-image-overlay" style="background-image: url(<?php echo $this->_current_instance['image_overlay']['url']; ?>);">
+                            <?php if ('yes' === $this->_current_instance['show_play_icon']) { ?>
+                                <div class="elementor-custom-embed-play">
+                                    <i class="fa fa-play-circle"></i>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    <?php } ?>
+                </div>
+            <?php }
+        }
     }
 
     protected function getHostedVideoHtml($url, $settings, $wdth = 320, $hth = 320)

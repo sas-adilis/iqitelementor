@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -24,7 +25,7 @@ class Group_Control_Background extends Group_Control_Base
         $available_types = [
             'classic' => [
                 'title' => \IqitElementorWpHelper::_x('Classic', 'Background Control', 'elementor'),
-                'icon' => 'paint-brush',
+                'icon' => 'fa fa-paint-brush',
             ],
             'gradient' => [
                 'title' => \IqitElementorWpHelper::_x('Gradient', 'Background Control', 'elementor'),
@@ -32,14 +33,14 @@ class Group_Control_Background extends Group_Control_Base
             ],
             'video' => [
                 'title' => \IqitElementorWpHelper::_x('Background Video', 'Background Control', 'elementor'),
-                'icon' => 'video-camera',
+                'icon' => 'fa fa-video-camera',
             ],
         ];
 
         $choose_types = [
             'none' => [
                 'title' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
-                'icon' => 'ban',
+                'icon' => 'fa fa-ban',
             ],
         ];
 
@@ -274,15 +275,15 @@ class Group_Control_Background extends Group_Control_Base
 
         $controls['video_type']
             = [
-                'label' => \IqitElementorWpHelper::__('Video Type', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'section' => 'section_video',
-                'default' => 'youtube',
-                'options' => [
-                    'youtube' => \IqitElementorWpHelper::__('YouTube', 'elementor'),
-                    'hosted' => \IqitElementorWpHelper::__('HTML5 Video', 'elementor'),
-                ],
-            ];
+            'label' => \IqitElementorWpHelper::__('Video Type', 'elementor'),
+            'type' => Controls_Manager::SELECT,
+            'section' => 'section_video',
+            'default' => 'youtube',
+            'options' => [
+                'youtube' => \IqitElementorWpHelper::__('YouTube', 'elementor'),
+                'hosted' => \IqitElementorWpHelper::__('HTML5 Video', 'elementor'),
+            ],
+        ];
 
         $controls['video_link'] = [
             'label' => \IqitElementorWpHelper::_x('Video Link', 'Background Control', 'elementor'),

@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -114,15 +115,15 @@ class Widget_Divider extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => '',
@@ -167,18 +168,18 @@ class Widget_Divider extends Widget_Base
     protected function render($instance = [])
     {
         ?>
-		<div class="elementor-divider">
-			<span class="elementor-divider-separator"></span>
-		</div>
-		<?php
+        <div class="elementor-divider">
+            <span class="elementor-divider-separator"></span>
+        </div>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<div class="elementor-divider">
-			<span class="elementor-divider-separator"></span>
-		</div>
-		<?php
+        <div class="elementor-divider">
+            <span class="elementor-divider-separator"></span>
+        </div>
+        <?php
     }
 }

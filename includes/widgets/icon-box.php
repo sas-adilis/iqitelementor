@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -121,15 +122,15 @@ class Widget_Icon_box extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'top' => [
                         'title' => \IqitElementorWpHelper::__('Top', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'prefix_class' => 'elementor-position-',
@@ -392,19 +393,19 @@ class Widget_Icon_box extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                     'justify' => [
                         'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
-                        'icon' => 'align-justify',
+                        'icon' => 'fa fa-align-justify',
                     ],
                 ],
                 'section' => 'section_style_content',
@@ -553,40 +554,42 @@ class Widget_Icon_box extends Widget_Base
         $icon_attributes = $this->get_render_attribute_string('icon');
         $link_attributes = $this->get_render_attribute_string('link');
         ?>
-		<div class="elementor-icon-box-wrapper">
-			<div class="elementor-icon-box-icon">
-				<<?php echo implode(' ', [$icon_tag, $icon_attributes, $link_attributes]); ?>>
-					<i <?php echo $this->get_render_attribute_string('i'); ?>></i>
-				</<?php echo $icon_tag; ?>>
-			</div>
-			<div class="elementor-icon-box-content">
-				<<?php echo $instance['title_size']; ?> class="elementor-icon-box-title">
-					<<?php echo implode(' ', [$icon_tag, $link_attributes]); ?>><?php echo $instance['title_text']; ?></<?php echo $icon_tag; ?>>
-				</<?php echo $instance['title_size']; ?>>
-				<div class="elementor-icon-box-description"><?php echo $instance['description_text']; ?></div>
-			</div>
-		</div>
-		<?php
+        <div class="elementor-icon-box-wrapper">
+            <div class="elementor-icon-box-icon">
+                <<?php echo implode(' ', [$icon_tag, $icon_attributes, $link_attributes]); ?>>
+                <i <?php echo $this->get_render_attribute_string('i'); ?>></i>
+            </<?php echo $icon_tag; ?>>
+        </div>
+        <div class="elementor-icon-box-content">
+        <<?php echo $instance['title_size']; ?> class="elementor-icon-box-title">
+        <<?php echo implode(' ', [$icon_tag, $link_attributes]); ?>><?php echo $instance['title_text']; ?></<?php echo $icon_tag; ?>>
+        </<?php echo $instance['title_size']; ?>>
+        <div class="elementor-icon-box-description"><?php echo $instance['description_text']; ?></div>
+        </div>
+        </div>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<# var link = settings.link.url ? 'href="' + settings.link.url + '"' : '',
-				iconTag = link ? 'a' : 'span'; #>
-		<div class="elementor-icon-box-wrapper">
-			<div class="elementor-icon-box-icon">
-				<{{{ iconTag + ' ' + link }}} class="elementor-icon elementor-animation-{{ settings.hover_animation }}">
-					<i class="{{ settings.icon }}"></i>
-				</{{{ iconTag }}}>
-			</div>
-			<div class="elementor-icon-box-content">
-				<{{{ settings.title_size }}} class="elementor-icon-box-title">
-					<{{{ iconTag + ' ' + link }}}>{{{ settings.title_text }}}</{{{ iconTag }}}>
-				</{{{ settings.title_size }}}>
-				<div class="elementor-icon-box-description">{{{ settings.description_text }}}</div>
-			</div>
-		</div>
-		<?php
+        <# var link = settings.link.url ? 'href="' + settings.link.url + '"' : '',
+        iconTag = link ? 'a' : 'span'; #>
+        <div class="elementor-icon-box-wrapper">
+            <div class="elementor-icon-box-icon">
+                <{{{ iconTag + ' ' + link }}} class="elementor-icon elementor-animation-{{ settings.hover_animation }}">
+                <i class="{{ settings.icon }}"></i>
+            </
+            {{{ iconTag }}}>
+        </div>
+        <div class="elementor-icon-box-content">
+            <{{{ settings.title_size }}} class="elementor-icon-box-title">
+            <{{{ iconTag + ' ' + link }}}>{{{ settings.title_text }}}
+        </{{{ iconTag }}}>
+        </{{{ settings.title_size }}}>
+        <div class="elementor-icon-box-description">{{{ settings.description_text }}}</div>
+        </div>
+        </div>
+        <?php
     }
 }

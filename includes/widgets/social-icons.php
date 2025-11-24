@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -126,15 +127,15 @@ class Widget_Social_Icons extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -297,31 +298,31 @@ class Widget_Social_Icons extends Widget_Base
     protected function render($instance = [])
     {
         ?>
-		<div class="elementor-social-icons-wrapper">
-			<?php foreach ($instance['social_icon_list'] as $item) {
-			    $social = str_replace('fa-brands fa-', '', $item['social']);
-			    $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
-			    ?>
-				<a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo \IqitElementorWpHelper::esc_attr($social); ?>" href="<?php echo \IqitElementorWpHelper::esc_attr($item['link']['url']); ?>"<?php echo $target; ?>>
-					<i class="<?php echo $item['social']; ?>"></i>
-				</a>
-			<?php } ?>
-		</div>
-		<?php
+        <div class="elementor-social-icons-wrapper">
+            <?php foreach ($instance['social_icon_list'] as $item) {
+                $social = str_replace('fa-brands fa-', '', $item['social']);
+                $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+                ?>
+                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo \IqitElementorWpHelper::esc_attr($social); ?>" href="<?php echo \IqitElementorWpHelper::esc_attr($item['link']['url']); ?>"<?php echo $target; ?>>
+                    <i class="<?php echo $item['social']; ?>"></i>
+                </a>
+            <?php } ?>
+        </div>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<div class="elementor-social-icons-wrapper">
-			<# _.each( settings.social_icon_list, function( item ) {
-				var link = item.link ? item.link.url : '',
-					social = item.social.replace( 'fa-brands fa-', '' ); #>
-				<a class="elementor-icon elementor-social-icon elementor-social-icon-{{ social }}" href="{{ link }}">
-					<i class="{{ item.social }}"></i>
-				</a>
-			<# } ); #>
-		</div>
-		<?php
+        <div class="elementor-social-icons-wrapper">
+            <# _.each( settings.social_icon_list, function( item ) {
+            var link = item.link ? item.link.url : '',
+            social = item.social.replace( 'fa-brands fa-', '' ); #>
+            <a class="elementor-icon elementor-social-icon elementor-social-icon-{{ social }}" href="{{ link }}">
+                <i class="{{ item.social }}"></i>
+            </a>
+            <# } ); #>
+        </div>
+        <?php
     }
 }

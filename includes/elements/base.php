@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -272,6 +273,7 @@ abstract class Element_Base
             'default' => '',
             'type' => Controls_Manager::TEXT,
             'tab' => self::TAB_CONTENT,
+            'save_empty_value' => false
         ];
 
         $args['name'] = $id;
@@ -330,14 +332,14 @@ abstract class Element_Base
     public function get_style_controls()
     {
         return array_filter($this->get_controls(), function ($control) {
-            return  !empty($control['selectors']);
+            return !empty($control['selectors']);
         });
     }
 
     public function get_class_controls()
     {
         return array_filter($this->get_controls(), function ($control) {
-            return  isset($control['prefix_class']);
+            return isset($control['prefix_class']);
         });
     }
 
@@ -352,7 +354,7 @@ abstract class Element_Base
 
             $pure_condition_key = $condition_key_parts[1];
             $condition_sub_key = $condition_key_parts[2];
-            $is_negative_condition = (bool) $condition_key_parts[3];
+            $is_negative_condition = (bool)$condition_key_parts[3];
 
             $instance_value = $element_instance[$pure_condition_key];
 
@@ -388,7 +390,7 @@ abstract class Element_Base
             $this->_render_attributes[$element][$key] = [];
         }
 
-        $this->_render_attributes[$element][$key] = array_merge($this->_render_attributes[$element][$key], (array) $value);
+        $this->_render_attributes[$element][$key] = array_merge($this->_render_attributes[$element][$key], (array)$value);
     }
 
     public function get_render_attribute_string($element)

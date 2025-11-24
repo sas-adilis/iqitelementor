@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -107,15 +108,15 @@ class Widget_Testimonial extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
             ]
@@ -655,65 +656,67 @@ class Widget_Testimonial extends Widget_Base
         <div class="elementor-testimonial-carousel-wrapper swiper-overflow swiper-arrows-<?php echo $instance['arrows_position']; ?>">
             <div class="<?php echo implode(' ', $carousel_classes); ?> swiper swiper-container  <?php echo implode(' ', $cls_fix_classes); ?>" data-slider_options='<?php echo json_encode($swiper_options); ?>'>
                 <div class="swiper-wrapper">
-                <?php foreach ($instance['testimonials_list'] as $item) { ?>
-                    <div class="swiper-slide"><div class="swiper-slide-inner">
-                        <?php
-                        $has_image = false;
-                    if ('' !== $item['image']['url']) {
-                        $image_url = $item['image']['url'];
-                        $image_width = $item['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($item['image']['width']) . '"' : '';
-                        $image_height = $item['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($item['image']['height']) . '"' : '';
-                        $has_image = ' elementor-has-image';
-                    }
-                    ?>
+                    <?php foreach ($instance['testimonials_list'] as $item) { ?>
+                        <div class="swiper-slide">
+                            <div class="swiper-slide-inner">
+                                <?php
+                                $has_image = false;
+                                if ('' !== $item['image']['url']) {
+                                    $image_url = $item['image']['url'];
+                                    $image_width = $item['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($item['image']['width']) . '"' : '';
+                                    $image_height = $item['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($item['image']['height']) . '"' : '';
+                                    $has_image = ' elementor-has-image';
+                                }
+                                ?>
 
-                            <div class="elementor-testimonial-wrapper<?php echo $testimonial_alignment; ?>">
+                                <div class="elementor-testimonial-wrapper<?php echo $testimonial_alignment; ?>">
 
-                                <?php if (isset($image_url) && $instance['testimonial_image_position'] == 'top') { ?>
-                                <div class="elementor-testimonial-meta<?php if ($has_image) {
-                                    echo $has_image;
-                                } ?><?php echo $testimonial_image_position; ?>">
-                                    <div class="elementor-testimonial-image">
-                                        <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>" />
-                                    </div>
-                                </div>
-                                <?php } ?>
-
-                                <?php if (!empty($item['content'])) { ?>
-                                    <div class="elementor-testimonial-content">
-                                        <?php echo $this->parse_text_editor($item['content'], $item); ?>
-                                    </div>
-                                <?php } ?>
-
-                                <div class="elementor-testimonial-meta<?php if ($has_image) {
-                                    echo $has_image;
-                                } ?><?php echo $testimonial_image_position; ?>">
-                                    <div class="elementor-testimonial-meta-inner">
-                                        <?php if (isset($image_url) && $instance['testimonial_image_position'] == 'aside') { ?>
+                                    <?php if (isset($image_url) && $instance['testimonial_image_position'] == 'top') { ?>
+                                        <div class="elementor-testimonial-meta<?php if ($has_image) {
+                                            echo $has_image;
+                                        } ?><?php echo $testimonial_image_position; ?>">
                                             <div class="elementor-testimonial-image">
-                                                <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>" />
+                                                <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
                                             </div>
-                                        <?php } ?>
+                                        </div>
+                                    <?php } ?>
 
-                                        <div class="elementor-testimonial-details">
-                                            <?php if (!empty($item['name'])) { ?>
-                                                <div class="elementor-testimonial-name">
-                                                    <?php echo $item['name']; ?>
+                                    <?php if (!empty($item['content'])) { ?>
+                                        <div class="elementor-testimonial-content">
+                                            <?php echo $this->parse_text_editor($item['content'], $item); ?>
+                                        </div>
+                                    <?php } ?>
+
+                                    <div class="elementor-testimonial-meta<?php if ($has_image) {
+                                        echo $has_image;
+                                    } ?><?php echo $testimonial_image_position; ?>">
+                                        <div class="elementor-testimonial-meta-inner">
+                                            <?php if (isset($image_url) && $instance['testimonial_image_position'] == 'aside') { ?>
+                                                <div class="elementor-testimonial-image">
+                                                    <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
                                                 </div>
                                             <?php } ?>
 
-                                            <?php if (!empty($item['job'])) { ?>
-                                                <div class="elementor-testimonial-job">
-                                                    <?php echo $item['job']; ?>
-                                                </div>
-                                            <?php } ?>
+                                            <div class="elementor-testimonial-details">
+                                                <?php if (!empty($item['name'])) { ?>
+                                                    <div class="elementor-testimonial-name">
+                                                        <?php echo $item['name']; ?>
+                                                    </div>
+                                                <?php } ?>
+
+                                                <?php if (!empty($item['job'])) { ?>
+                                                    <div class="elementor-testimonial-job">
+                                                        <?php echo $item['job']; ?>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                    </div></div>
-                    <?php
-                } ?>
+                        </div>
+                        <?php
+                    } ?>
                 </div>
                 <?php if ($show_dots) { ?>
                     <div class="swiper-pagination elementor-swiper-pagination swiper-dots-outside"></div>

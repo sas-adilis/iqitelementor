@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -114,15 +115,15 @@ class Widget_Image_box extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'top' => [
                         'title' => \IqitElementorWpHelper::__('Top', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'prefix_class' => 'elementor-position-',
@@ -269,19 +270,19 @@ class Widget_Image_box extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                     'justify' => [
                         'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
-                        'icon' => 'align-justify',
+                        'icon' => 'fa fa-align-justify',
                     ],
                 ],
                 'section' => 'section_style_content',
@@ -480,38 +481,47 @@ class Widget_Image_box extends Widget_Base
     {
         ?>
         <#
-        var html = '<div class="elementor-image-box-wrapper">';
+        var html = '
+        <div class="elementor-image-box-wrapper">';
 
-        if ( settings.image.url ) {
-            var imageHtml = '<img src="' + settings.image.url + '"  loading="lazy" alt="' + settings.caption + '" class="elementor-animation-' + settings.hover_animation + '" />';
+            if ( settings.image.url ) {
+            var imageHtml = '<img src="' + settings.image.url + '" loading="lazy" alt="' + settings.caption + '" class="elementor-animation-' + settings.hover_animation + '"/>';
 
             if ( settings.link.url ) {
-                imageHtml = '<a href="' + settings.link.url + '">' + imageHtml + '</a>';
+            imageHtml = '<a href="' + settings.link.url + '">' + imageHtml + '</a>';
             }
 
-            html += '<figure class="elementor-image-box-img">' + imageHtml + '</figure>';
-        }
+            html += '
+            <figure class="elementor-image-box-img">' + imageHtml + '</figure>
+            ';
+            }
 
-        var hasContent = !! ( settings.title_text || settings.description_text );
+            var hasContent = !! ( settings.title_text || settings.description_text );
 
-        if ( hasContent ) {
-            html += '<div class="elementor-image-box-content">';
+            if ( hasContent ) {
+            html += '
+            <div class="elementor-image-box-content">';
 
-            if ( settings.title_text ) {
+                if ( settings.title_text ) {
                 var title_html = settings.title_text;
 
                 if ( settings.link.url ) {
-                    title_html = '<a href="' + settings.link.url + '">' + title_html + '</a>';
+                title_html = '<a href="' + settings.link.url + '">' + title_html + '</a>';
                 }
 
-                html += '<' + settings.title_size  + ' class="elementor-image-box-title">' + title_html + '</' + settings.title_size  + '>';
+                html += '<' + settings.title_size + ' class="elementor-image-box-title">' + title_html + '
+            </
+            ' + settings.title_size + '>';
             }
 
             if ( settings.description_text ) {
-                html += '<div class="elementor-image-box-description">' + settings.description_text + '</div>';
+            html += '
+            <div class="elementor-image-box-description">' + settings.description_text + '</div>
+            ';
             }
 
-            html += '</div>';
+            html += '
+        </div>';
         }
 
         html += '</div>';

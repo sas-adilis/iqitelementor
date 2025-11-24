@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -96,15 +97,15 @@ class Widget_Icon extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -334,24 +335,24 @@ class Widget_Icon extends Widget_Base
         }
 
         ?>
-		<div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
-			<<?php echo $icon_tag . ' ' . $this->get_render_attribute_string('icon-wrapper'); ?>>
-				<i <?php echo $this->get_render_attribute_string('icon'); ?>></i>
-			</<?php echo $icon_tag; ?>>
-		</div>
-		<?php
+    <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
+        <<?php echo $icon_tag . ' ' . $this->get_render_attribute_string('icon-wrapper'); ?>>
+        <i <?php echo $this->get_render_attribute_string('icon'); ?>></i>
+        </<?php echo $icon_tag; ?>>
+        </div>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<# var link = settings.link.url ? 'href="' + settings.link.url + '"' : '',
-				iconTag = link ? 'a' : 'div'; #>
-		<div class="elementor-icon-wrapper">
-			<{{{ iconTag }}} class="elementor-icon elementor-animation-{{ settings.hover_animation }}" {{{ link }}}>
-				<i class="{{ settings.icon }}"></i>
-			</{{{ iconTag }}}>
-		</div>
-		<?php
+        <# var link = settings.link.url ? 'href="' + settings.link.url + '"' : '',
+        iconTag = link ? 'a' : 'div'; #>
+        <div class="elementor-icon-wrapper">
+            <{{{ iconTag }}} class="elementor-icon elementor-animation-{{ settings.hover_animation }}" {{{ link }}}>
+            <i class="{{ settings.icon }}"></i>
+        </{{{ iconTag }}}>
+        </div>
+        <?php
     }
 }

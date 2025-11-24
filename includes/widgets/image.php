@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -67,15 +68,15 @@ class Widget_Image extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'default' => 'center',
@@ -277,35 +278,35 @@ class Widget_Image extends Widget_Base
     {
         ?>
         <# if ( '' !== settings.image.url ) { #>
-            <div class="elementor-image{{ settings.shape ? ' elementor-image-shape-' + settings.shape : '' }}">
-                <#
-                var imgClass = '', image_html = '',
-                    hasCaption = '' !== settings.caption,
-                    image_html = '';
+        <div class="elementor-image{{ settings.shape ? ' elementor-image-shape-' + settings.shape : '' }}">
+            <#
+            var imgClass = '', image_html = '',
+            hasCaption = '' !== settings.caption,
+            image_html = '';
 
-                if ( '' !== settings.hover_animation ) {
-                    imgClass = 'elementor-animation-' + settings.hover_animation;
-                }
+            if ( '' !== settings.hover_animation ) {
+            imgClass = 'elementor-animation-' + settings.hover_animation;
+            }
 
-                image_html = '<img src="' + settings.image.url + '"    ' + (settings.image.width ? 'width="' + settings.image.width + '" ' : '')  +  (settings.image.height ? 'height="' + settings.image.height + '" ' : '') + '    class="' + imgClass + '" alt="' + settings.caption + '" />';
+            image_html = '<img src="' + settings.image.url + '" ' + (settings.image.width ? 'width="' + settings.image.width + '" ' : '') + (settings.image.height ? 'height="' + settings.image.height + '" ' : '') + ' class="' + imgClass + '" alt="' + settings.caption + '" />';
 
-                var link_url;
-                if ( 'custom' === settings.link_to ) {
-                    link_url = settings.link.url;
-                }
-                
-                if ( 'file' === settings.link_to ) {
-                    link_url = settings.image.url;
-                }
-                
-                if ( link_url ) {
-                    image_html = '<a href="' + link_url + '">' + image_html + '</a>';
-                }
+            var link_url;
+            if ( 'custom' === settings.link_to ) {
+            link_url = settings.link.url;
+            }
+
+            if ( 'file' === settings.link_to ) {
+            link_url = settings.image.url;
+            }
+
+            if ( link_url ) {
+            image_html = '<a href="' + link_url + '">' + image_html + '</a>';
+            }
 
 
-                print( image_html );
-                #>
-            </div>
+            print( image_html );
+            #>
+        </div>
         <# } #>
         <?php
     }

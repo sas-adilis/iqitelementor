@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -154,15 +155,15 @@ class Element_Column extends Element_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'selectors' => [
@@ -355,67 +356,67 @@ class Element_Column extends Element_Base
     protected function render_settings()
     {
         ?>
-		<div class="elementor-element-overlay">
-			<div class="column-title"></div>
-			<div class="elementor-editor-element-settings elementor-editor-column-settings">
-				<ul class="elementor-editor-element-settings-list elementor-editor-column-settings-list">
-					<li class="elementor-editor-element-setting elementor-editor-element-trigger">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Column', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Column', 'elementor'); ?></a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate Column', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?></span>
-							<i class="fa fa-copy"></i>
-						</a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-add">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Add New Column', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Add', 'elementor'); ?></span>
-							<i class="fa fa-plus"></i>
-						</a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-remove">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Remove Column', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?></span>
-							<i class="fa fa-times"></i>
-						</a>
-					</li>
-				</ul>
-				<ul class="elementor-editor-element-settings-list  elementor-editor-section-settings-list">
-					<li class="elementor-editor-element-setting elementor-editor-element-trigger">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Section', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Section', 'elementor'); ?></a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate Section', 'elementor'); ?></span>
-							<i class="fa copy"></i>
-						</a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-save">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
-							<i class="fa fa-floppy-o"></i>
-						</a>
-					</li>
-					<li class="elementor-editor-element-setting elementor-editor-element-remove">
-						<a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
-							<span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>
-							<i class="fa fa-times"></i>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-		<?php
+        <div class="elementor-element-overlay">
+            <div class="column-title"></div>
+            <div class="elementor-editor-element-settings elementor-editor-column-settings">
+                <ul class="elementor-editor-element-settings-list elementor-editor-column-settings-list">
+                    <li class="elementor-editor-element-setting elementor-editor-element-trigger">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Column', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Column', 'elementor'); ?></a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?></span>
+                            <i class="fa fa-copy"></i>
+                        </a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-add">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Add New Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Add', 'elementor'); ?></span>
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-remove">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?></span>
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </li>
+                </ul>
+                <ul class="elementor-editor-element-settings-list  elementor-editor-section-settings-list">
+                    <li class="elementor-editor-element-setting elementor-editor-element-trigger">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Section', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Section', 'elementor'); ?></a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate Section', 'elementor'); ?></span>
+                            <i class="fa fa-copy"></i>
+                        </a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-save">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
+                            <i class="fa fa-floppy-o"></i>
+                        </a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-remove">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <?php
     }
 
     protected function content_template()
     {
         ?>
-		<div class="elementor-column-wrap">
-			<div class="elementor-widget-wrap"></div>
-		</div>
-		<?php
+        <div class="elementor-column-wrap">
+            <div class="elementor-widget-wrap"></div>
+        </div>
+        <?php
     }
 
     public function before_render($instance, $element_id, $element_data = [])
@@ -448,20 +449,20 @@ class Element_Column extends Element_Base
 
         $this->add_render_attribute('wrapper', 'data-element_type', $this->get_id());
         ?>
-		<div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
-			<div class="elementor-column-wrap<?php if (!empty($element_data['elements'])) {
-			    echo ' elementor-element-populated';
-			} ?>">
-				<div class="elementor-widget-wrap">
-		<?php
+        <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
+        <div class="elementor-column-wrap<?php if (!empty($element_data['elements'])) {
+        echo ' elementor-element-populated';
+    } ?>">
+        <div class="elementor-widget-wrap">
+        <?php
     }
 
     public function after_render($instance, $element_id, $element_data = [])
     {
         ?>
-				</div>
-			</div>
-		</div>
-		<?php
+        </div>
+        </div>
+        </div>
+        <?php
     }
 }

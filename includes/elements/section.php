@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -511,15 +512,15 @@ class Element_Section extends Element_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
                 'selectors' => [
@@ -756,7 +757,7 @@ class Element_Section extends Element_Base
     {
         ?>
         <div class="elementor-element-overlay"></div>
-    <?php
+        <?php
     }
 
     protected function content_template()
@@ -764,25 +765,25 @@ class Element_Section extends Element_Base
         ?>
         <# if ( 'video'===settings.background_background ) { var videoLink=settings.background_video_link; if ( videoLink ) { var videoID=elementor.helpers.getYoutubeIDFromURL( settings.background_video_link ); #>
 
-            <div class="elementor-background-video-container ">
-                <# if ( 'youtube'===settings.background_video_type ) { #>
-                    <# if ( videoID ) { #>
-                    <div class="elementor-background-video" data-video-id="{{ videoID }}"></div>
-                    <# } #>
-                <# } else { #>
-                        <video class="elementor-background-video" src="{{ settings.background_video_link_h.url }}" autoplay loop muted></video>
-                <# } #>
-            </div>
-            <# }#>
+        <div class="elementor-background-video-container ">
+            <# if ( 'youtube'===settings.background_video_type ) { #>
+            <# if ( videoID ) { #>
+            <div class="elementor-background-video" data-video-id="{{ videoID }}"></div>
+            <# } #>
+            <# } else { #>
+            <video class="elementor-background-video" src="{{ settings.background_video_link_h.url }}" autoplay loop muted></video>
+            <# } #>
+        </div>
+        <# }#>
 
 
-                <# } if ( -1 !==[ 'classic' , 'gradient' ].indexOf( settings.background_overlay_background ) ) { #>
-                    <div class="elementor-background-overlay"></div>
-                    <# } #>
-                        <div class="elementor-container elementor-column-gap-{{ settings.gap }}" <# if ( settings.get_render_attribute_string ) { #>{{{ settings.get_render_attribute_string( 'wrapper' ) }}} <# } #> >
-                                <div class="elementor-row <# if ( 'section-slidered' === settings.slider_section  ) { #> elementor-row-slidered-backend <# } #> "></div>
-                        </div>
-                    <?php
+        <# } if ( -1 !==[ 'classic' , 'gradient' ].indexOf( settings.background_overlay_background ) ) { #>
+        <div class="elementor-background-overlay"></div>
+        <# } #>
+        <div class="elementor-container elementor-column-gap-{{ settings.gap }}" <# if ( settings.get_render_attribute_string ) { #>{{{ settings.get_render_attribute_string( 'wrapper' ) }}} <# } #> >
+        <div class="elementor-row <# if ( 'section-slidered' === settings.slider_section  ) { #> elementor-row-slidered-backend <# } #> "></div>
+        </div>
+        <?php
     }
 
     public function before_render($instance, $element_id, $element_data = [])
@@ -828,81 +829,80 @@ class Element_Section extends Element_Base
 
         $this->add_render_attribute('wrapper', 'data-element_type', $this->get_id());
         ?>
-                        <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
-                            <?php
-                if ('video' === $instance['background_background']) {
-                    if ($instance['background_video_link']) {
-                        $video_id = UtilsElementor::get_youtube_id_from_url($instance['background_video_link']);
-                        ?>
-                                    <div class="elementor-background-video-container">
-                                        <?php if ('youtube' === $instance['background_video_type']) { ?>
-                                            <?php if ($video_id) { ?>
-                                                <div class="elementor-background-video-fallback elementor-hidden-desktop "></div>
-                                                <div class="elementor-background-video" data-video-id="<?php echo $video_id; ?>"></div>
-                                             <?php } ?>
-                                        <?php } else { ?>
-                                            <video class="elementor-background-video elementor-html5-video" src="<?php echo $instance['background_video_link_h']['url']; ?>" autoplay loop muted playsinline></video>
-                                        <?php } ?>
-                                    </div>
-                                <?php }
-                    }
+        <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
+        <?php
+        if ('video' === $instance['background_background']) {
+            if ($instance['background_video_link']) {
+                $video_id = UtilsElementor::get_youtube_id_from_url($instance['background_video_link']);
+                ?>
+                <div class="elementor-background-video-container">
+                    <?php if ('youtube' === $instance['background_video_type']) { ?>
+                        <?php if ($video_id) { ?>
+                            <div class="elementor-background-video-fallback elementor-hidden-desktop "></div>
+                            <div class="elementor-background-video" data-video-id="<?php echo $video_id; ?>"></div>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <video class="elementor-background-video elementor-html5-video" src="<?php echo $instance['background_video_link_h']['url']; ?>" autoplay loop muted playsinline></video>
+                    <?php } ?>
+                </div>
+            <?php }
+        }
 
         if (in_array($instance['background_overlay_background'], ['classic', 'gradient'])) { ?>
-                                <div class="elementor-background-overlay"></div>
-                            <?php } ?>
+            <div class="elementor-background-overlay"></div>
+        <?php } ?>
 
-                           
 
-                            <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorWpHelper::esc_attr($instance['gap']); ?>     <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper swiper-container elementor-swiper-section<?php } ?> "
-                                <?php if ('section-slidered' === $instance['slider_section']) { ?>  data-slider_options='<?php echo json_encode($swiper_options); ?>' <?php } ?>
-                                >
-                                <div class="elementor-row  <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper-wrapper<?php } ?>">
-                                <?php
+        <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorWpHelper::esc_attr($instance['gap']); ?>     <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper swiper-container elementor-swiper-section<?php } ?> "
+        <?php if ('section-slidered' === $instance['slider_section']) { ?>  data-slider_options='<?php echo json_encode($swiper_options); ?>' <?php } ?>
+        >
+        <div class="elementor-row  <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper-wrapper<?php } ?>">
+        <?php
     }
 
     public function after_render($instance, $element_id, $element_data = [])
     {
         ?>
-                                </div>
-                                
-                                <?php if ('section-slidered' === $instance['slider_section']) { ?> 
+        </div>
 
-                                    
-                                    <?php
+        <?php if ('section-slidered' === $instance['slider_section']) { ?>
 
-                $show_dots = in_array($instance['slider_section_navigation'], ['dots', 'both']);
-                                    $show_arrows = in_array($instance['slider_section_navigation'], ['arrows', 'both']);
 
-                                    if ($show_dots) { ?>
-                                          <div class="swiper-pagination elementor-section-pagination"></div>
+        <?php
 
-                                    <?php } ?>
+        $show_dots = in_array($instance['slider_section_navigation'], ['dots', 'both']);
+        $show_arrows = in_array($instance['slider_section_navigation'], ['arrows', 'both']);
 
-                                    <?php if ($show_arrows) { ?>
-                                        <div class="swiper-button-prev swiper-section-button"></div>
-                                        <div class="swiper-button-next swiper-section-button"></div>
-                                    <?php } ?>
+        if ($show_dots) { ?>
+            <div class="swiper-pagination elementor-section-pagination"></div>
 
-                                <?php } ?>
-                            </div>
-                        </div>
-                <?php
+        <?php } ?>
+
+        <?php if ($show_arrows) { ?>
+            <div class="swiper-button-prev swiper-section-button"></div>
+            <div class="swiper-button-next swiper-section-button"></div>
+        <?php } ?>
+
+    <?php } ?>
+        </div>
+        </div>
+        <?php
     }
 
     public function before_render_column($instance, $element_id, $element_data = [])
     {
         ?>
-                                <?php if ('section-slidered' === $instance['slider_section']) { ?><div class="swiper-slide"><?php } ?>
+        <?php if ('section-slidered' === $instance['slider_section']) { ?><div class="swiper-slide"><?php } ?>
 
-                            <?php
+        <?php
     }
 
     public function after_render_column($instance, $element_id, $element_data = [])
     {
         ?>
-                            <?php if ('section-slidered' === $instance['slider_section']) { ?></div><?php } ?>
- 
-                            <?php
+        <?php if ('section-slidered' === $instance['slider_section']) { ?></div><?php } ?>
+
+        <?php
 
     }
 }

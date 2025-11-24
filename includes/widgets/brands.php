@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('_PS_VERSION_')) {
@@ -86,9 +87,9 @@ class Widget_Brands extends Widget_Base
                 'SELECT m.*, ml.`description`, ml.`short_description` 
                 FROM `' . _DB_PREFIX_ . 'manufacturer` m 
                 LEFT JOIN `' . _DB_PREFIX_ . 'manufacturer_lang` ml ON (m.`id_manufacturer` = ml.`id_manufacturer` AND ml.`id_lang` = '
-                . (int) $this->context->language->id . ') 
+                . (int)$this->context->language->id . ') 
                 LEFT OUTER JOIN `' . _DB_PREFIX_ . 'manufacturer_shop` ms ON (m.`id_manufacturer` = ms.`id_manufacturer` 
-                AND ms.id_shop=' . (int) $this->context->shop->id . ') 
+                AND ms.id_shop=' . (int)$this->context->shop->id . ') 
                 WHERE m.`active` = 1 
                 ORDER BY ' . pSQL($orderBySql) . ' ' . pSQL($sortOrderSql)
             );
@@ -204,15 +205,15 @@ class Widget_Brands extends Widget_Base
                 'options' => [
                     'left' => [
                         'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                        'icon' => 'align-left',
+                        'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
                         'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                        'icon' => 'align-center',
+                        'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
                         'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                        'icon' => 'align-right',
+                        'icon' => 'fa fa-align-right',
                     ],
                 ],
             ]
@@ -320,7 +321,7 @@ class Widget_Brands extends Widget_Base
 
         if ($brandsType == 1) {
             foreach ($selectedBrands as $brandID) {
-                $brand = new \Manufacturer((int) $brandID);
+                $brand = new \Manufacturer((int)$brandID);
 
                 if (!Validate::isLoadedObject($brand)) {
                     continue;
@@ -333,7 +334,7 @@ class Widget_Brands extends Widget_Base
                 if ($fileExist) {
                     $brands[$brand->id]['name'] = $brand->name;
                     $brands[$brand->id]['link'] = \Context::getContext()->link->getManufacturerLink(
-                        (int) $brand->id,
+                        (int)$brand->id,
                         $brand->link_rewrite
                     );
                     $brands[$brand->id]['id'] = $brand->id;

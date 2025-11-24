@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('_PS_VERSION_')) {
@@ -47,6 +48,7 @@ trait IqitElementorButtonTrait
                     'placeholder' => \IqitElementorWpHelper::__('Click me', 'elementor'),
                     'section' => $sectionId,
                     'condition' => $condition,
+                    'save_empty_value' => true,
                 ]
             );
         }
@@ -76,19 +78,19 @@ trait IqitElementorButtonTrait
                     'options' => [
                         'left' => [
                             'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                            'icon' => 'align-left',
+                            'icon' => 'fa fa-align-left',
                         ],
                         'center' => [
                             'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
-                            'icon' => 'align-center',
+                            'icon' => 'fa fa-align-center',
                         ],
                         'right' => [
                             'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
-                            'icon' => 'align-right',
+                            'icon' => 'fa fa-align-right',
                         ],
                         'justify' => [
                             'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
-                            'icon' => 'align-justify',
+                            'icon' => 'fa fa-align-justify',
                         ],
                     ],
                     'prefix_class' => 'elementor%s-align-',
@@ -209,13 +211,13 @@ trait IqitElementorButtonTrait
         );
 
         $this->start_controls_tabs('button_colors_tabs', [
-            'tab'       => self::TAB_STYLE,
+            'tab' => self::TAB_STYLE,
             'section' => $sectionId,
             'condition' => $condition,
         ]);
         $this->start_controls_tab('button_colors_normal', [
             'label' => \IqitElementorWpHelper::__('Normal'),
-            'tab'       => self::TAB_STYLE,
+            'tab' => self::TAB_STYLE,
             'section' => $sectionId,
             'condition' => $condition,
         ]);
@@ -256,7 +258,7 @@ trait IqitElementorButtonTrait
         $this->end_controls_tab();
         $this->start_controls_tab('button_colors_hover', [
             'label' => \IqitElementorWpHelper::__('Hover'),
-            'tab'       => self::TAB_STYLE,
+            'tab' => self::TAB_STYLE,
             'section' => $sectionId,
             'condition' => $condition,
         ]);

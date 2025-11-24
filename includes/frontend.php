@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -56,11 +57,13 @@ class Frontend
 
         $column_obj->before_render($instance, $column_data['id'], $column_data);
 
-        foreach ($column_data['elements'] as $widget_data) {
-            if ('section' === $widget_data['elType']) {
-                $this->_print_section($widget_data);
-            } else {
-                $this->_print_widget($widget_data);
+        if (!empty($column_data['elements'])) {
+            foreach ($column_data['elements'] as $widget_data) {
+                if ('section' === $widget_data['elType']) {
+                    $this->_print_section($widget_data);
+                } else {
+                    $this->_print_widget($widget_data);
+                }
             }
         }
 
@@ -112,8 +115,8 @@ class Frontend
         }
 
         ?>
-		<style class="elementor-frontend-stylesheet"><?php echo $css_code; ?></style>
-		<?php
+        <style class="elementor-frontend-stylesheet"><?php echo $css_code; ?></style>
+        <?php
 
         // Enqueue used fonts
         if (!empty($this->_enqueue_google_fonts)) {
@@ -283,7 +286,7 @@ class Frontend
         }
 
         $control_obj = PluginElementor::instance()->controls_manager->get_control($control['type']);
-        $val = (string) $control_obj->get_style_value($placeholder, $value);
+        $val = (string)$control_obj->get_style_value($placeholder, $value);
 
         if ($control['name'] === 'background_image') {
             $val = \IqitElementorWpHelper::getImage($val);
@@ -314,12 +317,12 @@ class Frontend
     public function apply_builder_in_content()
     {
         ?>
-		<div class="elementor">
+        <div class="elementor">
             <?php foreach ($this->data as $section) { ?>
                 <?php $this->_print_section($section); ?>
             <?php } ?>
-		</div>
-		<?php
+        </div>
+        <?php
     }
 
     public function __construct($data)

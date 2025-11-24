@@ -1,4 +1,5 @@
 <?php
+
 use Elementor\PluginElementor;
 
 if (!defined('_PS_VERSION_')) {
@@ -15,6 +16,7 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
 
         // $this->requireAssets(['font-awesome']);
         $this->module->registerCssFiles();
+        $this->context->controller->registerStylesheet('modules-iqitelementor-editor-fontawesome', 'modules/' . $this->module->name . '/views/lib/font-awesome/css/font-awesome.min.css', ['media' => 'all', 'priority' => 150]);
         $this->context->controller->registerStylesheet('modules-iqitelementor-editor-preview', 'modules/' . $this->module->name . '/views/css/editor-preview.css', ['media' => 'all', 'priority' => 150]);
 
         if (Tools::getValue('template_id')) {
@@ -40,11 +42,11 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
         parent::initContent();
 
         if (Tools::getValue('template_id')) {
-            $templateId = (int) Tools::getValue('template_id');
+            $templateId = (int)Tools::getValue('template_id');
             $template = new IqitElementorTemplate($templateId);
 
             ob_start();
-            PluginElementor::instance()->get_frontend((array) json_decode($template->data, true));
+            PluginElementor::instance()->get_frontend((array)json_decode($template->data, true));
             $content = ob_get_clean();
             $this->context->smarty->assign([
                 'content' => $content,
@@ -64,7 +66,7 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
             $entity = 'category';
 
             $layout = $this->context->shop->theme->getLayoutRelativePathForPage($entity);
-            $content_only = (int) Tools::getValue('content_only');
+            $content_only = (int)Tools::getValue('content_only');
             if ($overridden_layout = Hook::exec(
                 'overrideLayoutTemplate',
                 [

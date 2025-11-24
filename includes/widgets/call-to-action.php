@@ -47,8 +47,7 @@ class Widget_Call_to_action extends Widget_Base
                 'placeholder' => 'http://your-link.com',
                 'default' => [
                     'url' => '#',
-                ],
-                'section'   => 'section_cta',
+                ]
             ]
         );
 
@@ -62,7 +61,6 @@ class Widget_Call_to_action extends Widget_Base
                     'button' => \IqitElementorWpHelper::__( 'Button Only', 'elementor' ),
                 ],
                 'default'   => 'button',
-                'section'   => 'section_cta',
                 'condition' => [
                     'button!'    => '',
                     'link[url]!' => '',
@@ -80,7 +78,6 @@ class Widget_Call_to_action extends Widget_Base
                     'cover'   => \IqitElementorWpHelper::__( 'Cover', 'elementor' ),
                 ],
                 'default' => 'classic',
-                'section' => 'section_cta',
                 'separator' => 'before',
             ]
         );
@@ -93,7 +90,6 @@ class Widget_Call_to_action extends Widget_Base
                 'default' => [
                     'url' => UtilsElementor::get_placeholder_image_src(),
                 ],
-                'section' => 'section_cta',
             ]
         );
 
@@ -112,12 +108,13 @@ class Widget_Call_to_action extends Widget_Base
                     'right' => ['title' => \IqitElementorWpHelper::__( 'Right', 'elementor' ), 'icon'  => 'eicon-h-align-right',],
                 ],
                 'default'     => 'left',
-                'prefix_class'=> 'elementor-cta-%s-layout-image-',
-                'section'     => 'section_cta',
+                'prefix_class'=> 'elementor-cta%s-layout-image-',
+                'condition' => [
+                    'skin' => 'classic',
+                    'bg_image[url]!' => '',
+                ],
             ]
         );
-
-
 
         $this->add_responsive_control(
             'image_min_width',
@@ -137,7 +134,27 @@ class Widget_Call_to_action extends Widget_Base
                     'bg_image[url]!' => '',
                     'layout' => ['left', 'right'],
                 ],
-                'section'     => 'section_cta',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'image_min_height',
+            [
+                'label' => \IqitElementorWpHelper::__('Min height', 'elementor'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => ['min' => 0, 'max' => 500,],
+                    '%' => ['min' => 0, 'max' => 100,],
+                ],
+                'size_units' => ['px', '%'],
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-cta-bg-wrapper' => 'min-height: {{SIZE}}{{UNIT}}',
+                ],
+                'condition' => [
+                    'skin' => 'classic',
+                    'bg_image[url]!' => '',
+                    'layout' => ['above'],
+                ],
             ]
         );
 
@@ -261,7 +278,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label_block' => false,
                 'default'   => 'left',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta__content' => 'text-align: {{VALUE}};',
+                    '{{WRAPPER}} .elementor-cta-content' => 'text-align: {{VALUE}};',
                 ],
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_box',
@@ -281,7 +298,7 @@ class Widget_Call_to_action extends Widget_Base
                     'middle' => ['title' => \IqitElementorWpHelper::__('Middle'), 'icon' => 'eicon-v-align-middle',],
                     'bottom' => ['title' => \IqitElementorWpHelper::__('Bottom'), 'icon' => 'eicon-v-align-bottom',],
                 ],
-                'prefix_class' => 'elementor-cta--valign-',
+                'prefix_class' => 'elementor-cta-valign-',
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_box',
             ]
@@ -294,7 +311,7 @@ class Widget_Call_to_action extends Widget_Base
                 'type'       => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', 'em', '%', 'rem' ],
                 'selectors'  => [
-                    '{{WRAPPER}} .elementor-cta' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} .elementor-cta-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
                 'tab'        => self::TAB_STYLE,
                 'section'    => 'section_style_box',
@@ -330,7 +347,7 @@ class Widget_Call_to_action extends Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name'     => 'title_typography',
-                'selector' => '{{WRAPPER}} .elementor-cta__title',
+                'selector' => '{{WRAPPER}} .elementor-cta-title',
                 'tab'      => self::TAB_STYLE,
                 'section'  => 'section_style_content',
                 'scheme'   => Scheme_Typography::TYPOGRAPHY_1,
@@ -369,7 +386,7 @@ class Widget_Call_to_action extends Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name'     => 'description_typography',
-                'selector' => '{{WRAPPER}} .elementor-cta__description',
+                'selector' => '{{WRAPPER}} .elementor-cta-description',
                 'tab'      => self::TAB_STYLE,
                 'section'  => 'section_style_content',
                 'scheme'   => Scheme_Typography::TYPOGRAPHY_3,
@@ -382,7 +399,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Spacing'),
                 'type' => Controls_Manager::SLIDER,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta-title:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementor-cta-description:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'title!' => '',
@@ -420,7 +437,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label'     => \IqitElementorWpHelper::__( 'Color', 'elementor' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta__title' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementor-cta-title' => 'color: {{VALUE}};',
                 ],
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_content',
@@ -437,7 +454,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label'     => \IqitElementorWpHelper::__( 'Description color', 'elementor' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta__description' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementor-cta-description' => 'color: {{VALUE}};',
                 ],
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_content',
@@ -477,7 +494,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label'     => \IqitElementorWpHelper::__( 'Color', 'elementor' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}}:hover .elementor-cta__title' => 'color: {{VALUE}};',
+                    '{{WRAPPER}}:hover .elementor-cta-title' => 'color: {{VALUE}};',
                 ],
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_content',
@@ -494,7 +511,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label'     => \IqitElementorWpHelper::__( 'Description color', 'elementor' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}}:hover .elementor-cta__description' => 'color: {{VALUE}};',
+                    '{{WRAPPER}}:hover .elementor-cta-description' => 'color: {{VALUE}};',
                 ],
                 'tab'       => self::TAB_STYLE,
                 'section'   => 'section_style_content',
@@ -711,33 +728,12 @@ class Widget_Call_to_action extends Widget_Base
             }
         }
 
-        // Button tag & attributes
-        $buttonTag   = 'span';
-        $buttonHref  = null;
-        $buttonTarget = null;
-        $buttonRel   = null;
-
-        if ($hasLink && 'button' === $linkClick && $hasButton) {
-            $buttonTag  = 'a';
-            $buttonHref = $optionsSource['link']['url'];
-
-            if (!empty($optionsSource['link']['is_external'])) {
-                $buttonTarget = '_blank';
-                $buttonRel    = 'noopener noreferrer';
-            }
-        }
-
         // CSS classes
         $wrapperClass = sprintf(
             'elementor-cta elementor-cta-skin-%s elementor-cta-layout-%s',
             $skin,
             $layout
         );
-
-        $buttonClass = 'elementor-button btn btn-primary elementor-cta__button';
-        if (!empty($optionsSource['button_size'])) {
-            $buttonClass .= ' elementor-size-' . $optionsSource['button_size'];
-        }
 
         // Background image
         $hasBgImage = !empty($optionsSource['bg_image']['url']);
@@ -750,6 +746,9 @@ class Widget_Call_to_action extends Widget_Base
         $title       = !empty($optionsSource['title']) ? $optionsSource['title'] : '';
         $titleTag    = !empty($optionsSource['title_tag']) ? $optionsSource['title_tag'] : 'div';
         $description = !empty($optionsSource['description_text']) ? $optionsSource['description_text'] : '';
+
+        $optionsSource['link'] = null;
+        $buttonOptions = $this->buildButtonOptions($optionsSource);
 
         return [
 
@@ -770,13 +769,7 @@ class Widget_Call_to_action extends Widget_Base
             'description_text' => $description,
 
             // Button
-            'has_button'    => $hasButton,
-            'button_text'   => $buttonText,
-            'button_tag'    => $buttonTag,
-            'button_href'   => $buttonHref,
-            'button_target' => $buttonTarget,
-            'button_rel'    => $buttonRel,
-            'button_class'  => $buttonClass,
+            'button'    => $buttonOptions
         ];
     }
 }

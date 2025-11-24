@@ -1,8 +1,16 @@
-<div class="elementor-btn-wrapper{if !empty($align)} elementor-align-{$align}{/if}">
-    <a class="elementor-btn btn btn-{if $outline}outline-{/if}{$button_type}{if $size != 'default'} btn-{$size}{/if}{if !empty($hover_animation)} elementor-animation-{$hover_animation}{/if}{if !empty($icon)} elementor-align-icon-{$icon_align}{/if}"{if !empty($link.url)} href="{$link.url}"{if !empty($link.url)} target="_blank"{/if}{/if}>
+{if isset($button) && is_array($button)}
+    {assign var='text' value=$button.text}
+    {assign var='link' value=$button.link}
+    {assign var='button_classes' value=$button.button_classes}
+    {assign var='wrapper_classes' value=$button.wrapper_classes}
+    {assign var='icon' value=$button.icon}
+    {assign var='button_tag' value=$button.button_tag}
+{/if}
+<div class="{if !empty($wrapper_classes)}{$wrapper_classes}{/if}">
+    <{$button_tag} class="{if !empty($button_classes)}{$button_classes}{/if}"{if !empty($link.url)} href="{$link.url}"{if !empty($link.url)} target="_blank"{/if}{/if}>
         {if !empty($icon)}
             <i class="{$icon}"></i>
         {/if}
         <span class="elementor-button-text">{$text}</span>
-    </a>
+    </{$button_tag}>
 </div>

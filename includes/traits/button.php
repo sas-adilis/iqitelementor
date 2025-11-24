@@ -154,38 +154,6 @@ trait IqitElementorButtonTrait
             ]
         );
 
-        $this->add_control(
-            'button_text_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => $sectionId,
-                'condition' => $condition,
-                'default' => '',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-btn' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'background_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => $sectionId,
-                'condition' => $condition,
-                'scheme' => [
-                    'type' => Scheme_Color::get_type(),
-                    'value' => Scheme_Color::COLOR_4,
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-btn' => 'background-color: {{VALUE}};',
-                ],
-            ]
-        );
 
         $this->add_control(
             'button_border_heading',
@@ -229,9 +197,9 @@ trait IqitElementorButtonTrait
         );
 
         $this->add_control(
-            'button_hover_heading',
+            'button_colors_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Hover', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Colors', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => $sectionId,
                 'condition' => $condition,
@@ -239,6 +207,59 @@ trait IqitElementorButtonTrait
                 'separator' => 'before',
             ]
         );
+
+        $this->start_controls_tabs('button_colors_tabs', [
+            'tab'       => self::TAB_STYLE,
+            'section' => $sectionId,
+            'condition' => $condition,
+        ]);
+        $this->start_controls_tab('button_colors_normal', [
+            'label' => \IqitElementorWpHelper::__('Normal'),
+            'tab'       => self::TAB_STYLE,
+            'section' => $sectionId,
+            'condition' => $condition,
+        ]);
+
+        $this->add_control(
+            'button_text_color',
+            [
+                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'tab' => self::TAB_STYLE,
+                'section' => $sectionId,
+                'condition' => $condition,
+                'default' => '',
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-btn' => 'color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'background_color',
+            [
+                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'tab' => self::TAB_STYLE,
+                'section' => $sectionId,
+                'condition' => $condition,
+                'scheme' => [
+                    'type' => Scheme_Color::get_type(),
+                    'value' => Scheme_Color::COLOR_4,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-btn' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+        $this->start_controls_tab('button_colors_hover', [
+            'label' => \IqitElementorWpHelper::__('Hover'),
+            'tab'       => self::TAB_STYLE,
+            'section' => $sectionId,
+            'condition' => $condition,
+        ]);
 
         $this->add_control(
             'hover_color',
@@ -283,19 +304,53 @@ trait IqitElementorButtonTrait
                 ],
             ]
         );
+
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
     }
 
     protected function buildButtonOptions(array $settings): array
     {
+        $button_classes = ['elementor-btn', 'btn'];
+        $wrapper_classes = ['elementor-button-wrapper'];
+
+        $button_classes[] = sprintf('btn-%s%s',
+            $settings['outline'] == 'yes' ? 'outline-' : '',
+            $settings['button_type'] ?? 'secondary'
+        );
+
+        if (($settings['size'] ?? 'default') !== 'default') {
+            $button_classes[] = 'btn-' . $settings['size'];
+        }
+
+        if (!empty($settings['hover_animation'])) {
+            $button_classes[] = ' elementor-animation-' . $settings['hover_animation'];
+        }
+
+        if (!empty($settings['icon'])) {
+            $button_classes[] = ' elementor-align-icon-' . $settings['icon_align'];
+        }
+
+        $button_tag = 'button';
+        if (!empty($settings['link']['url'])) {
+            $button_tag = 'a';
+        }
+
+        $align = $settings['align'] ?? '';
+        if (!empty($align)) {
+            $wrapper_classes[] = 'elementor-align-' . $align;
+        }
+
         return [
-            'size' => $settings['size'],
-            'button_type' => $settings['button_type'],
-            'outline' => $settings['outline'] == 'yes',
-            'hover_animation' => $settings['hover_animation'],
+            'text' => $settings['text'],
+            'icon' => $settings['icon'] ?? null,
+            'button_tag' => $button_tag,
+            'wrapper_classes' => implode(' ', $wrapper_classes),
+            'button_classes' => implode(' ', $button_classes),
             'link' => [
-                'url' => $settings['link']['url'],
-                'is_external' => $settings['link']['is_external'],
-                'nofollow' => $settings['link']['nofollow'],
+                'url' => $settings['link']['url'] ?? null,
+                'is_external' => $settings['link']['is_external'] ?? null,
+                'nofollow' => $settings['link']['nofollow'] ?? null,
             ]
         ];
     }

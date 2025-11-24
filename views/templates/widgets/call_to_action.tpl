@@ -5,42 +5,29 @@ class="{$wrapper_class|escape:'html':'UTF-8'}"
 {if $wrapper_rel} rel="{$wrapper_rel|escape:'html':'UTF-8'}"{/if}
 >
 
-{if $has_bg_image}
-    <figure class="elementor-cta__bg-wrapper">
-        <img src="{$bg_image_url|escape:'html':'UTF-8'}"
-             alt=""
-             class="elementor-cta__bg-image" />
-    </figure>
-{/if}
+    {if $has_bg_image}
+        <figure class="elementor-cta-bg-wrapper">
+            <img src="{$bg_image_url|escape:'html':'UTF-8'}" alt="" class="elementor-cta-bg elementor-bg" />
+        </figure>
+    {/if}
 
-<div class="elementor-cta__inner">
-    <div class="elementor-cta__content">
-
+    <div class="elementor-cta-content">
         {if $title}
-        <{$title_tag} class="elementor-cta__title">
-        {$title nofilter}
-    </{$title_tag}>
-    {/if}
+            <{$title_tag} class="elementor-cta-title elementor-content-item">
+            {$title nofilter}
+            </{$title_tag}>
+        {/if}
 
-    {if $description_text}
-        <div class="elementor-cta__description">
-            {$description_text nofilter}
-        </div>
-    {/if}
+        {if $description_text}
+            <div class="elementor-cta-description elementor-content-item">
+                {$description_text nofilter}
+            </div>
+        {/if}
 
-    {if $has_button && $button_text}
-    <div class="elementor-cta__button-wrapper">
-        <{$button_tag}
-        class="{$button_class|escape:'html':'UTF-8'}"
-        {if $button_href} href="{$button_href|escape:'html':'UTF-8'}"{/if}
-        {if $button_target} target="{$button_target|escape:'html':'UTF-8'}"{/if}
-        {if $button_rel} rel="{$button_rel|escape:'html':'UTF-8'}"{/if}
-        >
-        <span class="elementor-button-text">{$button_text nofilter}</span>
-    </{$button_tag}>
-</div>
-{/if}
-
-</div>
-</div>
+        {if !empty($button.text)}
+            <div class="elementor-cta-button-wrapper elementor-content-item">
+                {include file="module:iqitelementor/views/templates/widgets/button.tpl" button=$button}
+            </div>
+        {/if}
+    </div>
 </{$wrapper_tag}>

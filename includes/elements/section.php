@@ -132,22 +132,6 @@ class Element_Section extends Element_Base
         );
 
         $this->add_control(
-            'slider_section',
-            [
-                'label' => \IqitElementorWpHelper::__('As slider', 'elementor'),
-                'type' => Controls_Manager::SWITCHER,
-                'default' => '',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
-                'return_value' => 'section-slidered',
-                'prefix_class' => 'elementor-',
-                'force_render' => true,
-                'hide_in_inner' => true,
-                'description' => \IqitElementorWpHelper::__('Section will be showed as slider/carousel on frontend. On backed it wll be showed as normal section with one column per row for easier editing and yellow border', 'elementor'),
-            ]
-        );
-
-        $this->add_control(
             'layout',
             [
                 'label' => \IqitElementorWpHelper::__('Content Width', 'elementor'),
@@ -322,21 +306,6 @@ class Element_Section extends Element_Base
                 'default' => '10',
             ]
         );
-
-        $this->end_controls_section();
-
-        $this->start_controls_section(
-            'section_carousel_options',
-            [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
-                'tab' => self::TAB_LAYOUT,
-                'condition' => [
-                    'slider_section' => 'section-slidered',
-                ],
-            ]
-        );
-
-        $this->registerCarouselControls('section_carousel_options', ['slider_section' => 'section-slidered']);
 
         $this->end_controls_section();
 
@@ -525,62 +494,6 @@ class Element_Section extends Element_Base
                 ],
                 'selectors' => [
                     '{{WRAPPER}} > .elementor-container' => 'text-align: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->end_controls_section();
-
-        // Section Typography
-        $this->start_controls_section(
-            'section_slider',
-            [
-                'label' => \IqitElementorWpHelper::__('Slider', 'elementor'),
-                'tab' => self::TAB_STYLE,
-            ]
-        );
-
-        $this->add_control(
-            'arrows_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-section-button' => 'color: {{VALUE}};',
-                ],
-                'condition' => [
-                    'slider_section_navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'arrows_bg_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows background', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-section-button' => 'background: {{VALUE}};',
-                ],
-                'condition' => [
-                    'slider_section_navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'dots_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Dots Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-section-pagination .swiper-pagination-bullet' => 'background: {{VALUE}};',
-                ],
-                'condition' => [
-                    'slider_section_navigation' => ['dots', 'both'],
                 ],
             ]
         );
@@ -781,7 +694,7 @@ class Element_Section extends Element_Base
         <div class="elementor-background-overlay"></div>
         <# } #>
         <div class="elementor-container elementor-column-gap-{{ settings.gap }}" <# if ( settings.get_render_attribute_string ) { #>{{{ settings.get_render_attribute_string( 'wrapper' ) }}} <# } #> >
-        <div class="elementor-row <# if ( 'section-slidered' === settings.slider_section  ) { #> elementor-row-slidered-backend <# } #> "></div>
+        <div class="elementor-row"></div>
         </div>
         <?php
     }
@@ -789,20 +702,6 @@ class Element_Section extends Element_Base
     public function before_render($instance, $element_id, $element_data = [])
     {
         $section_type = !empty($element_data['isInner']) ? 'inner' : 'top';
-
-        $is_slideshow = true;
-        $show_dots = in_array($instance['slider_section_navigation'], ['dots', 'both']);
-        $show_arrows = in_array($instance['slider_section_navigation'], ['arrows', 'both']);
-
-        $swiper_options = [
-            'autoplaySpeed' => \IqitElementorWpHelper::absint($instance['slider_section_autoplay_speed']),
-            'autoplay' => ('yes' === $instance['slider_section_autoplay']),
-            'allowTouchMove' => ('yes' === $instance['slider_section_swipe']),
-            'disableOnInteraction' => ('yes' === $instance['slider_section_pause_on_hover']),
-            'arrows' => $show_arrows,
-            'dots' => $show_dots,
-            'fade' => ($is_slideshow && ('fade' === $instance['slider_section_effect']) ? true : false),
-        ];
 
         $this->add_render_attribute('wrapper', 'class', [
             'elementor-section',
@@ -853,10 +752,8 @@ class Element_Section extends Element_Base
         <?php } ?>
 
 
-        <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorWpHelper::esc_attr($instance['gap']); ?>     <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper swiper-container elementor-swiper-section<?php } ?> "
-        <?php if ('section-slidered' === $instance['slider_section']) { ?>  data-slider_options='<?php echo json_encode($swiper_options); ?>' <?php } ?>
-        >
-        <div class="elementor-row  <?php if ('section-slidered' === $instance['slider_section']) { ?> swiper-wrapper<?php } ?>">
+        <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorWpHelper::esc_attr($instance['gap']); ?>">
+        <div class="elementor-row">
         <?php
     }
 
@@ -864,26 +761,6 @@ class Element_Section extends Element_Base
     {
         ?>
         </div>
-
-        <?php if ('section-slidered' === $instance['slider_section']) { ?>
-
-
-        <?php
-
-        $show_dots = in_array($instance['slider_section_navigation'], ['dots', 'both']);
-        $show_arrows = in_array($instance['slider_section_navigation'], ['arrows', 'both']);
-
-        if ($show_dots) { ?>
-            <div class="swiper-pagination elementor-section-pagination"></div>
-
-        <?php } ?>
-
-        <?php if ($show_arrows) { ?>
-            <div class="swiper-button-prev swiper-section-button"></div>
-            <div class="swiper-button-next swiper-section-button"></div>
-        <?php } ?>
-
-    <?php } ?>
         </div>
         </div>
         <?php
@@ -891,18 +768,9 @@ class Element_Section extends Element_Base
 
     public function before_render_column($instance, $element_id, $element_data = [])
     {
-        ?>
-        <?php if ('section-slidered' === $instance['slider_section']) { ?><div class="swiper-slide"><?php } ?>
-
-        <?php
     }
 
     public function after_render_column($instance, $element_id, $element_data = [])
     {
-        ?>
-        <?php if ('section-slidered' === $instance['slider_section']) { ?></div><?php } ?>
-
-        <?php
-
     }
 }

@@ -356,6 +356,11 @@ abstract class Element_Base
             $condition_sub_key = $condition_key_parts[2];
             $is_negative_condition = (bool)$condition_key_parts[3];
 
+            if (!isset($element_instance[$pure_condition_key])) {
+                dump($element_instance);
+                dump($pure_condition_key);
+            }
+
             $instance_value = $element_instance[$pure_condition_key];
 
             if ($condition_sub_key) {

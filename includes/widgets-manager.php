@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -47,6 +48,7 @@ class Widgets_Manager
             'alert',
             'html',
             'brands',
+            'prestashop-module',
         ];
 
         $this->_registered_widgets = [];

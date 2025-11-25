@@ -387,7 +387,7 @@ class Widget_Call_to_action extends Widget_Base
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
                 'condition' => [
-                    'description!' => '',
+                    'description_text!' => '',
                 ],
             ]
         );
@@ -401,7 +401,7 @@ class Widget_Call_to_action extends Widget_Base
                 'section' => 'section_style_content',
                 'scheme' => Scheme_Typography::TYPOGRAPHY_3,
                 'condition' => [
-                    'description!' => '',
+                    'description_text!' => '',
                 ],
             ]
         );
@@ -415,7 +415,7 @@ class Widget_Call_to_action extends Widget_Base
                     '{{WRAPPER}} .elementor-cta-description:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
-                    'description!' => '',
+                    'description_text!' => '',
                 ],
                 'section' => 'section_style_content',
                 'tab' => self::TAB_STYLE,
@@ -476,7 +476,7 @@ class Widget_Call_to_action extends Widget_Base
                     'value' => Scheme_Color::COLOR_3,
                 ],
                 'condition' => [
-                    'description!' => '',
+                    'description_text!' => '',
                 ],
             ]
         );
@@ -534,7 +534,7 @@ class Widget_Call_to_action extends Widget_Base
                     'value' => Scheme_Color::COLOR_3,
                 ],
                 'condition' => [
-                    'description!' => '',
+                    'description_text!' => '',
                 ],
             ]
         );

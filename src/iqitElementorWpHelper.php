@@ -187,14 +187,14 @@ class IqitElementorWpHelper
         return false;
     }
 
-    public static function _doing_it_wrong($function, $message, $version)
+    public static function _doing_it_wrong($function, $message, $version = null)
     {
-        exit($function . ' - ' . $message . ' - ' . $version);
+        throw new PrestaShopException($function . ' - ' . $message . ($version ? ' - ' . $version : ''));
     }
 
-    public static function triggerWpError($message)
+    public static function triggerError($message)
     {
-        exit($message);
+        throw new PrestaShopException($message);
     }
 
     public static function get_option($option, $default = false)
@@ -262,7 +262,7 @@ class IqitElementorWpHelper
     {
         $product_ids = join(',', $ids);
 
-        $id_shop = (int) $context->shop->id;
+        $id_shop = (int)$context->shop->id;
 
         $sql = 'SELECT p.*, product_shop.*, stock.out_of_stock, IFNULL(stock.quantity, 0) as quantity, pl.`description`, pl.`description_short`, pl.`link_rewrite`,
 					pl.`meta_description`, pl.`meta_title`, pl.`name`, pl.`available_now`, pl.`available_later`,
@@ -277,18 +277,18 @@ class IqitElementorWpHelper
 				FROM  `' . _DB_PREFIX_ . 'product` p 
 				' . Shop::addSqlAssociation('product', 'p') . '
 				LEFT JOIN `' . _DB_PREFIX_ . 'product_attribute_shop` product_attribute_shop
-					ON (p.`id_product` = product_attribute_shop.`id_product` AND product_attribute_shop.`default_on` = 1 AND product_attribute_shop.id_shop=' . (int) $id_shop . ')
+					ON (p.`id_product` = product_attribute_shop.`id_product` AND product_attribute_shop.`default_on` = 1 AND product_attribute_shop.id_shop=' . (int)$id_shop . ')
 				LEFT JOIN `' . _DB_PREFIX_ . 'product_lang` pl ON (
 					p.`id_product` = pl.`id_product`
-					AND pl.`id_lang` = ' . (int) $id_lang . Shop::addSqlRestrictionOnLang('pl') . '
+					AND pl.`id_lang` = ' . (int)$id_lang . Shop::addSqlRestrictionOnLang('pl') . '
 				)
 				LEFT JOIN `' . _DB_PREFIX_ . 'category_lang` cl ON (
 					product_shop.`id_category_default` = cl.`id_category`
-					AND cl.`id_lang` = ' . (int) $id_lang . Shop::addSqlRestrictionOnLang('cl') . '
+					AND cl.`id_lang` = ' . (int)$id_lang . Shop::addSqlRestrictionOnLang('cl') . '
 				)
 				LEFT JOIN `' . _DB_PREFIX_ . 'image_shop` image_shop
-					ON (image_shop.`id_product` = p.`id_product` AND image_shop.cover=1 AND image_shop.id_shop=' . (int) $id_shop . ')
-				LEFT JOIN `' . _DB_PREFIX_ . 'image_lang` il ON (image_shop.`id_image` = il.`id_image` AND il.`id_lang` = ' . (int) $id_lang . ')
+					ON (image_shop.`id_product` = p.`id_product` AND image_shop.cover=1 AND image_shop.id_shop=' . (int)$id_shop . ')
+				LEFT JOIN `' . _DB_PREFIX_ . 'image_lang` il ON (image_shop.`id_image` = il.`id_image` AND il.`id_lang` = ' . (int)$id_lang . ')
 				LEFT JOIN `' . _DB_PREFIX_ . 'manufacturer` m ON (p.`id_manufacturer`= m.`id_manufacturer`)
 				' . Product::sqlStock('p', 0) . '
 				WHERE p.id_product IN (' . $product_ids . ')'
@@ -299,7 +299,7 @@ class IqitElementorWpHelper
             return false;
         }
         foreach ($result as &$row) {
-            $row['id_product_attribute'] = Product::getDefaultAttribute((int) $row['id_product']);
+            $row['id_product_attribute'] = Product::getDefaultAttribute((int)$row['id_product']);
         }
 
         return Product::getProductsProperties($id_lang, $result);

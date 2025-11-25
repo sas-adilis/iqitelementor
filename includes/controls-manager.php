@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -144,22 +145,22 @@ class Controls_Manager
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param $control_id
      * @param $class_name
      *
      * @return bool|string
+     * @since 1.0.0
+     *
      */
     public function register_control($control_id, $class_name)
     {
         if (!class_exists($class_name)) {
-            return \IqitElementorWpHelper::triggerWpError(sprintf('element_class_name_not_exists: %s', $class_name));
+            return \IqitElementorWpHelper::triggerError(sprintf('element_class_name_not_exists: %s', $class_name));
         }
         $instance_control = new $class_name();
 
         if (!$instance_control instanceof Control_Base) {
-            return \IqitElementorWpHelper::triggerWpError('wrong_instance_control');
+            return \IqitElementorWpHelper::triggerError('wrong_instance_control');
         }
         $this->_controls[$control_id] = $instance_control;
 
@@ -169,9 +170,9 @@ class Controls_Manager
     /**
      * @param $control_id
      *
+     * @return bool
      * @since 1.0.0
      *
-     * @return bool
      */
     public function unregister_control($control_id)
     {
@@ -184,9 +185,9 @@ class Controls_Manager
     }
 
     /**
+     * @return Control_Base[]
      * @since 1.0.0
      *
-     * @return Control_Base[]
      */
     public function get_controls()
     {
@@ -194,11 +195,11 @@ class Controls_Manager
     }
 
     /**
-     * @since 1.0.0
-     *
      * @param $control_id
      *
      * @return bool|Control_Base
+     * @since 1.0.0
+     *
      */
     public function get_control($control_id)
     {
@@ -208,9 +209,9 @@ class Controls_Manager
     }
 
     /**
+     * @return array
      * @since 1.0.0
      *
-     * @return array
      */
     public function get_controls_data()
     {
@@ -225,9 +226,9 @@ class Controls_Manager
     }
 
     /**
+     * @return void
      * @since 1.0.0
      *
-     * @return void
      */
     public function render_controls()
     {
@@ -237,9 +238,9 @@ class Controls_Manager
     }
 
     /**
+     * @return Group_Control_Base[]
      * @since 1.0.0
      *
-     * @return Group_Control_Base[]
      */
     public function get_group_controls()
     {
@@ -247,9 +248,9 @@ class Controls_Manager
     }
 
     /**
+     * @return void
      * @since 1.0.0
      *
-     * @return void
      */
     public function enqueue_control_scripts()
     {

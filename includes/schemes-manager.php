@@ -1,4 +1,5 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -35,13 +36,13 @@ class Schemes_Manager
     public function register_scheme($scheme_class)
     {
         if (!class_exists($scheme_class)) {
-            return \IqitElementorWpHelper::triggerWpError('scheme_class_name_not_exists');
+            return \IqitElementorWpHelper::triggerError('scheme_class_name_not_exists');
         }
 
         $scheme_instance = new $scheme_class();
 
         if (!$scheme_instance instanceof Scheme_Base) {
-            return \IqitElementorWpHelper::triggerWpError('wrong_instance_scheme');
+            return \IqitElementorWpHelper::triggerError('wrong_instance_scheme');
         }
         $this->_registered_schemes[$scheme_instance::get_type()] = $scheme_instance;
 

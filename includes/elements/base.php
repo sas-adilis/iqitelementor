@@ -357,8 +357,13 @@ abstract class Element_Base
             $is_negative_condition = (bool)$condition_key_parts[3];
 
             if (!isset($element_instance[$pure_condition_key])) {
-                dump($element_instance);
-                dump($pure_condition_key);
+                \IqitElementorWpHelper::triggerError(
+                    sprintf(
+                        'Condition key "%s" not found in element instance in control %s.',
+                        $pure_condition_key,
+                        $control['name']
+                    )
+                );
             }
 
             $instance_value = $element_instance[$pure_condition_key];

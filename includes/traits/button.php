@@ -38,6 +38,24 @@ trait IqitElementorButtonTrait
         }
 
 
+        if (!in_array('outline', $exclude_controls)) {
+            $this->add_control(
+                'outline',
+                [
+                    'label' => \IqitElementorWpHelper::__('Outline mode', 'elementor'),
+                    'type' => Controls_Manager::SWITCHER,
+                    'default' => '',
+                    'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'force_render' => true,
+                    'hide_in_inner' => true,
+                    'section' => $sectionId,
+                    'condition' => $condition,
+                ]
+            );
+        }
+
+
         if (!in_array('text', $exclude_controls)) {
             $this->add_control(
                 'text',
@@ -95,24 +113,8 @@ trait IqitElementorButtonTrait
                     ],
                     'prefix_class' => 'elementor%s-align-',
                     'force_render' => true,
+                    'label_block' => false,
                     'default' => '',
-                    'section' => $sectionId,
-                    'condition' => $condition,
-                ]
-            );
-        }
-
-        if (!in_array('outline', $exclude_controls)) {
-            $this->add_control(
-                'outline',
-                [
-                    'label' => \IqitElementorWpHelper::__('Outline mode', 'elementor'),
-                    'type' => Controls_Manager::SWITCHER,
-                    'default' => '',
-                    'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'force_render' => true,
-                    'hide_in_inner' => true,
                     'section' => $sectionId,
                     'condition' => $condition,
                 ]
@@ -136,6 +138,61 @@ trait IqitElementorButtonTrait
                     'label_block' => false,
                     'section' => $sectionId,
                     'condition' => $condition,
+                ]
+            );
+        }
+
+        if (!in_array('icon', $exclude_controls)) {
+            $this->add_control(
+                'icon',
+                [
+                    'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                    'type' => Controls_Manager::ICON,
+                    'label_block' => true,
+                    'default' => '',
+                    'section' => 'section_button',
+                ]
+            );
+        }
+
+        if (!in_array('icon_align', $exclude_controls)) {
+            $this->add_control(
+                'icon_align',
+                [
+                    'label' => \IqitElementorWpHelper::__('Icon Position', 'elementor'),
+                    'type' => Controls_Manager::SELECT,
+                    'default' => 'left',
+                    'options' => [
+                        'left' => \IqitElementorWpHelper::__('Before', 'elementor'),
+                        'right' => \IqitElementorWpHelper::__('After', 'elementor'),
+                    ],
+                    'condition' => [
+                        'icon!' => '',
+                    ],
+                    'section' => 'section_button',
+                ]
+            );
+        }
+
+        if (!in_array('icon_indent', $exclude_controls)) {
+            $this->add_control(
+                'icon_indent',
+                [
+                    'label' => \IqitElementorWpHelper::__('Icon Spacing', 'elementor'),
+                    'type' => Controls_Manager::SLIDER,
+                    'range' => [
+                        'px' => [
+                            'max' => 50,
+                        ],
+                    ],
+                    'condition' => [
+                        'icon!' => '',
+                    ],
+                    'selectors' => [
+                        '{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
+                        '{{WRAPPER}} .elementor-button .elementor-align-icon-left' => 'margin-right: {{SIZE}}{{UNIT}};',
+                    ],
+                    'section' => 'section_button',
                 ]
             );
         }

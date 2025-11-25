@@ -25,15 +25,21 @@ class Widget_Image extends Widget_Base
 
     protected function _register_controls()
     {
-        $this->add_control(
+        $this->start_controls_section(
             'section_image',
             [
                 'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
-                'type' => Controls_Manager::SECTION,
             ]
         );
 
-        $this->add_control(
+        $this->add_group_control(
+            Group_Control_Image::get_type(),
+            [
+                'name' => 'image',
+            ]
+        );
+
+        /*$this->add_control(
             'image',
             [
                 'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
@@ -45,7 +51,7 @@ class Widget_Image extends Widget_Base
             ]
         );
 
-        $this->add_control(
+        /*$this->add_control(
             'image_lazy',
             [
                 'label' => \IqitElementorWpHelper::__('Lazy load', 'elementor'),
@@ -58,7 +64,7 @@ class Widget_Image extends Widget_Base
                     'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
                 ],
             ]
-        );
+        );*/
 
         $this->add_responsive_control(
             'align',
@@ -80,22 +86,9 @@ class Widget_Image extends Widget_Base
                     ],
                 ],
                 'default' => 'center',
-                'section' => 'section_image',
                 'selectors' => [
                     '{{WRAPPER}}' => 'text-align: {{VALUE}};',
                 ],
-            ]
-        );
-
-        $this->add_control(
-            'caption',
-            [
-                'label' => \IqitElementorWpHelper::__('Alt text', 'elementor'),
-                'type' => Controls_Manager::TEXT,
-                'default' => '',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your Alt about the image', 'elementor'),
-                'title' => \IqitElementorWpHelper::__('Input image Alt here', 'elementor'),
-                'section' => 'section_image',
             ]
         );
 
@@ -105,7 +98,6 @@ class Widget_Image extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Link to', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'none',
-                'section' => 'section_image',
                 'options' => [
                     'none' => \IqitElementorWpHelper::__('None', 'elementor'),
                     'file' => \IqitElementorWpHelper::__('Media File', 'elementor'),
@@ -120,7 +112,6 @@ class Widget_Image extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Link to', 'elementor'),
                 'type' => Controls_Manager::URL,
                 'placeholder' => \IqitElementorWpHelper::__('http://your-link.com', 'elementor'),
-                'section' => 'section_image',
                 'condition' => [
                     'link_to' => 'custom',
                 ],
@@ -134,33 +125,44 @@ class Widget_Image extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
-                'section' => 'section_image',
             ]
         );
 
-        $this->add_control(
+        $this->end_controls_section();
+
+        $this->start_controls_section(
             'section_style_image',
             [
-                'type' => Controls_Manager::SECTION,
                 'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
 
-        $this->add_control(
-            'space',
+        $this->add_responsive_control(
+            'width',
             [
-                'label' => \IqitElementorWpHelper::__('Size (%)', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Width', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_image',
                 'default' => [
-                    'size' => 100,
                     'unit' => '%',
                 ],
-                'size_units' => ['%'],
+                'tablet_default' => [
+                    'unit' => '%',
+                ],
+                'mobile_default' => [
+                    'unit' => '%',
+                ],
+                'size_units' => ['%', 'px', 'vw'],
                 'range' => [
                     '%' => [
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                    'px' => [
+                        'min' => 1,
+                        'max' => 1000,
+                    ],
+                    'vw' => [
                         'min' => 1,
                         'max' => 100,
                     ],
@@ -171,13 +173,83 @@ class Widget_Image extends Widget_Base
             ]
         );
 
+        $this->add_responsive_control(
+            'max_width',
+            [
+                'label' => \IqitElementorWpHelper::__('Max width', 'elementor'),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'unit' => '%',
+                ],
+                'tablet_default' => [
+                    'unit' => '%',
+                ],
+                'mobile_default' => [
+                    'unit' => '%',
+                ],
+                'size_units' => ['%', 'px', 'vw'],
+                'range' => [
+                    '%' => [
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                    'px' => [
+                        'min' => 1,
+                        'max' => 1000,
+                    ],
+                    'vw' => [
+                        'min' => 1,
+                        'max' => 100,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-image img' => 'max-width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'height',
+            [
+                'label' => \IqitElementorWpHelper::__('Height', 'elementor'),
+                'type' => Controls_Manager::SLIDER,
+                'tab' => self::TAB_STYLE,
+                'default' => [
+                    'unit' => 'px',
+                ],
+                'tablet_default' => [
+                    'unit' => 'px',
+                ],
+                'mobile_default' => [
+                    'unit' => 'px',
+                ],
+                'size_units' => ['px', 'vh'],
+                'range' => [
+                    'px' => [
+                        'min' => 1,
+                        'max' => 1000,
+                    ],
+                    'vh' => [
+                        'min' => 1,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-image img' => 'max-width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->start_controls_tabs('image', [
+        ]);
+        $this->start_controls_tab('image_normal', [
+            'label' => \IqitElementorWpHelper::__('Normal'),
+        ]);
+
         $this->add_control(
             'opacity',
             [
                 'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_image',
                 'default' => [
                     'size' => 1,
                 ],
@@ -191,6 +263,33 @@ class Widget_Image extends Widget_Base
                 'selectors' => [
                     '{{WRAPPER}} .elementor-image img' => 'opacity: {{SIZE}};',
                 ],
+                'separator' => 'after',
+            ]
+        );
+
+        $this->end_controls_tab();
+        $this->start_controls_tab('image_hover', [
+            'label' => \IqitElementorWpHelper::__('Hover'),
+        ]);
+
+        $this->add_control(
+            'opacity_hover',
+            [
+                'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
+                'type' => Controls_Manager::SLIDER,
+                'default' => [
+                    'size' => 1,
+                ],
+                'range' => [
+                    'px' => [
+                        'max' => 1,
+                        'min' => 0.10,
+                        'step' => 0.01,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}:hover .elementor-image img' => 'opacity: {{SIZE}};',
+                ],
             ]
         );
 
@@ -199,18 +298,18 @@ class Widget_Image extends Widget_Base
             [
                 'label' => \IqitElementorWpHelper::__('Hover Animation', 'elementor'),
                 'type' => Controls_Manager::HOVER_ANIMATION,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_image',
+                'separator' => 'after',
             ]
         );
+
+        $this->end_controls_tab();
+        $this->end_controls_tabs();
 
         $this->add_group_control(
             Group_Control_Border::get_type(),
             [
                 'name' => 'image_border',
                 'label' => \IqitElementorWpHelper::__('Image Border', 'elementor'),
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_image',
                 'selector' => '{{WRAPPER}} .elementor-image img',
             ]
         );
@@ -221,8 +320,6 @@ class Widget_Image extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_image',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-image img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -233,24 +330,23 @@ class Widget_Image extends Widget_Base
             Group_Control_Box_Shadow::get_type(),
             [
                 'name' => 'image_box_shadow',
-                'section' => 'section_style_image',
-                'tab' => self::TAB_STYLE,
                 'selector' => '{{WRAPPER}} .elementor-image img',
             ]
         );
+
+        $this->end_controls_section();
     }
 
     protected function render($instance = [])
     {
-        if (empty($instance['image']['url'])) {
+        if (empty($instance['image_settings']['url'])) {
             return;
         }
-        $has_caption = !empty($instance['caption']);
 
         $image_class_html = !empty($instance['hover_animation']) ? ' class="elementor-animation-' . $instance['hover_animation'] . '"' : '';
 
-        $image_width = $instance['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($instance['image']['width']) . '"' : '';
-        $image_height = $instance['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($instance['image']['height']) . '"' : '';
+        $image_width = $instance['image_settings']['width'] ? 'width="' . \IqitElementorWpHelper::absint($instance['image_settings']['width']) . '"' : '';
+        $image_height = $instance['image_settings']['height'] ? 'height="' . \IqitElementorWpHelper::absint($instance['image_settings']['height']) . '"' : '';
 
         if ('yes' === $instance['image_lazy']) {
             $lazyload_tag = 'loading="lazy" ';
@@ -258,7 +354,15 @@ class Widget_Image extends Widget_Base
             $lazyload_tag = '';
         }
 
-        $image_html = sprintf('<img %s src="%s" %s %s alt="%s"%s />', $lazyload_tag, \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($instance['image']['url'])), $image_width, $image_height, \IqitElementorWpHelper::esc_attr($instance['caption']), $image_class_html);
+        $image_html = sprintf(
+                '<img %s src="%s" %s %s alt="%s"%s />',
+                $lazyload_tag,
+                \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($instance['image_settings']['url'])),
+                $image_width,
+                $image_height,
+                \IqitElementorWpHelper::esc_attr($instance['image_alt']),
+                $image_class_html
+        );
 
         $link = $this->get_link_url($instance);
         if ($link) {
@@ -277,18 +381,17 @@ class Widget_Image extends Widget_Base
     protected function content_template()
     {
         ?>
-        <# if ( '' !== settings.image.url ) { #>
+        <# if ( settings.image_settings && '' !== settings.image_settings.url ) { #>
         <div class="elementor-image{{ settings.shape ? ' elementor-image-shape-' + settings.shape : '' }}">
             <#
             var imgClass = '', image_html = '',
-            hasCaption = '' !== settings.caption,
             image_html = '';
 
             if ( '' !== settings.hover_animation ) {
             imgClass = 'elementor-animation-' + settings.hover_animation;
             }
 
-            image_html = '<img src="' + settings.image.url + '" ' + (settings.image.width ? 'width="' + settings.image.width + '" ' : '') + (settings.image.height ? 'height="' + settings.image.height + '" ' : '') + ' class="' + imgClass + '" alt="' + settings.caption + '" />';
+            image_html = '<img src="' + settings.image_settings.url + '" ' + (settings.image_settings.width ? 'width="' + settings.image_settings.width + '" ' : '') + (settings.image_settings.height ? 'height="' + settings.image_settings.height + '" ' : '') + ' class="' + imgClass + '" alt="' + settings.image_alt + '" />';
 
             var link_url;
             if ( 'custom' === settings.link_to ) {

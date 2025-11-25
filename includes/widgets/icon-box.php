@@ -573,7 +573,7 @@ class Widget_Icon_box extends Widget_Base
     protected function content_template()
     {
         ?>
-        <# var link = settings.link.url ? 'href="' + settings.link.url + '"' : '',
+        <# var link = settings.link && settings.link.url ? 'href="' + settings.link.url + '"' : '',
         iconTag = link ? 'a' : 'span'; #>
         <div class="elementor-icon-box-wrapper">
             <div class="elementor-icon-box-icon">

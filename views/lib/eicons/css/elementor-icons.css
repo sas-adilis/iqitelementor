@@ -1287,6 +1287,11 @@
 .eicon-icons-solid:before {
   content: '\e979'; }
 
+
+.eicon-module:before {
+  content: "\e9b7";
+}
+
 .elementor-element > .icon > .eicon-heart:before,
 .elementor-element > .eicon-heart:before,
 .elementor-element > .icon > .eicon-puzzle-piece:before,

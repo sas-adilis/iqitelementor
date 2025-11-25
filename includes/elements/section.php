@@ -683,7 +683,7 @@ class Element_Section extends Element_Base
             <# if ( videoID ) { #>
             <div class="elementor-background-video" data-video-id="{{ videoID }}"></div>
             <# } #>
-            <# } else { #>
+            <# } else if ( settings.background_video_link_h && settings.background_video_link_h.url ) { #>
             <video class="elementor-background-video" src="{{ settings.background_video_link_h.url }}" autoplay loop muted></video>
             <# } #>
         </div>
@@ -741,7 +741,9 @@ class Element_Section extends Element_Base
                             <div class="elementor-background-video" data-video-id="<?php echo $video_id; ?>"></div>
                         <?php } ?>
                     <?php } else { ?>
-                        <video class="elementor-background-video elementor-html5-video" src="<?php echo $instance['background_video_link_h']['url']; ?>" autoplay loop muted playsinline></video>
+                        <?php if (!empty($instance['background_video_link_h']['url'])) { ?>
+                            <video class="elementor-background-video elementor-html5-video" src="<?php echo $instance['background_video_link_h']['url']; ?>" autoplay loop muted playsinline></video>
+                        <?php } ?>
                     <?php } ?>
                 </div>
             <?php }

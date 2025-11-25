@@ -136,12 +136,14 @@ class Controls_Manager
         include 'controls/groups/typography.php';
         include 'controls/groups/image-size.php';
         include 'controls/groups/box-shadow.php';
+        include 'controls/groups/image.php';
 
         $this->_group_controls['background'] = new Group_Control_Background();
         $this->_group_controls['border'] = new Group_Control_Border();
         $this->_group_controls['typography'] = new Group_Control_Typography();
         $this->_group_controls['image-size'] = new Group_Control_Image_Size();
         $this->_group_controls['box-shadow'] = new Group_Control_Box_Shadow();
+        $this->_group_controls['image'] = new Group_Control_Image();
     }
 
     /**

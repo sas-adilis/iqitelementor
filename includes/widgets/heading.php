@@ -232,7 +232,7 @@ class Widget_Heading extends Widget_Base
         var title_html = '<' + settings.header_size  + ' class="elementor-heading-title elementor-size-' + settings.size + ' ' +  settings.header_style + '"><span>' + settings.title + '</span></' + settings.header_size + '>';
         }
 
-        if ( '' !== settings.link.url ) {
+        if ( settings.link && '' !== settings.link.url ) {
         var title_html = '<' + settings.header_size  + ' class="elementor-heading-title elementor-size-' + settings.size + ' ' +  settings.header_style + '"><a href="' + settings.link.url + '"><span>' + title_html + '</span></a></' + settings.header_size + '>';
         }
 

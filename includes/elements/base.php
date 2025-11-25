@@ -169,6 +169,12 @@ abstract class Element_Base
                 $control->add_controls($this, $args);
 
                 return;
+
+            case 'image':
+                $control = new Group_Control_Image();
+                $control->add_controls($this, $args);
+
+                return;
         }
     }
 

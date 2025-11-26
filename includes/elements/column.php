@@ -23,8 +23,158 @@ class Element_Column extends Element_Base
         return 'columns';
     }
 
+    private function add_width_controls(string $device = null)
+    {
+        $this->add_control(
+            'width_auto'.($device ? "_$device" : ''),
+            [
+                'label' => \IqitElementorWpHelper::__('Auto Width'),
+                'type' => Controls_Manager::SWITCHER,
+                'description' => \IqitElementorWpHelper::__('Column width will be defined by its content width.'),
+                'condition' => [
+                    'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'width_dynamic'.($device ? "_$device" : ''),
+            [
+                'label' => \IqitElementorWpHelper::__('Dynamic Width'),
+                'type' => Controls_Manager::SWITCHER,
+                'description' => \IqitElementorWpHelper::__('The column will fill the remaining space in the row.'),
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: auto; flex-grow: 1;',
+                ],
+                'condition' => [
+                    'width_auto'.($device ? "_$device" : '').'!' => 'yes',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'width'.($device ? "_$device" : ''),
+            [
+                'label' => \IqitElementorWpHelper::__('Column Width') . ' (%)',
+                'type' => Controls_Manager::NUMBER,
+                'min' => 2,
+                'max' => 98,
+                'required' => true,
+                'device_args' => [
+                    'tablet' => [
+                        'max' => 100,
+                        'required' => false,
+                    ],
+                    'mobile' => [
+                        'max' => 100,
+                        'required' => false,
+                    ],
+                ],
+                'min_affected_device' => [
+                    'desktop' => 'tablet',
+                    'tablet'=> 'tablet',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: {{VALUE}}%',
+                ],
+                'condition' => [
+                    'width_auto'.($device ? "_$device" : '').'!' => 'yes',
+                    'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
+                ],
+            ]
+        );
+    }
+
     protected function _register_controls()
     {
+
+        // Section Layout.
+        $this->start_controls_section(
+            'layout',
+            [
+                'label' => \IqitElementorWpHelper::__('Layout'),
+                'tab' => self::TAB_LAYOUT,
+            ]
+        );
+
+        $this->start_controls_tabs('column_size_tabs');
+
+        $this->start_controls_tab('column_size_desktop_tab', ['label' => \IqitElementorWpHelper::__('Desktop')]);
+        $this->add_width_controls();
+        $this->end_controls_tab();
+
+        $this->start_controls_tab('column_size_tablet_tab', ['label' => \IqitElementorWpHelper::__('Tablet')]);
+        $this->add_width_controls('tablet');
+        $this->end_controls_tab();
+
+        $this->start_controls_tab('column_size_mobile_tab', ['label' => \IqitElementorWpHelper::__('Mobile')]);
+        $this->add_width_controls('mobile');
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->add_responsive_control(
+            'content_position',
+            [
+                'label' => \IqitElementorWpHelper::__('Vertical Align'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    '' => \IqitElementorWpHelper::__('Default'),
+                    'top' => \IqitElementorWpHelper::__('Top'),
+                    'center' => \IqitElementorWpHelper::__('Middle'),
+                    'bottom' => \IqitElementorWpHelper::__('Bottom'),
+                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
+                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
+                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
+                ],
+                'selectors_dictionary' => [
+                    'top' => 'flex-start',
+                    'bottom' => 'flex-end',
+                ],
+                'separator' => 'before',
+                'selectors' => [
+                    // TODO: The following line is for BC since 2.7.0
+                    '.elementor-bc-flex-widget {{WRAPPER}}.elementor-column .elementor-column-wrap' => 'align-items: {{VALUE}}',
+                    // This specificity is intended to make sure column css overwrites section css on vertical alignment (content_position)
+                    '{{WRAPPER}}.elementor-column.elementor-element[data-element_type="column"] > .elementor-column-wrap.elementor-element-populated > .elementor-widget-wrap' => 'align-content: {{VALUE}}; align-items: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'align',
+            [
+                'label' => \IqitElementorWpHelper::__('Horizontal Align'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    '' => \IqitElementorWpHelper::__('Default'),
+                    'flex-start' => \IqitElementorWpHelper::__('Start'),
+                    'center' => \IqitElementorWpHelper::__('Center'),
+                    'flex-end' => \IqitElementorWpHelper::__('End'),
+                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
+                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
+                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'justify-content: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'space_between_widgets',
+            [
+                'label' => \IqitElementorWpHelper::__('Widgets Space') . ' (px)',
+                'type' => Controls_Manager::NUMBER,
+                'placeholder' => 20,
+                'selectors' => [
+                    // Need the full path for exclude the inner section
+                    '{{WRAPPER}} > .elementor-column-wrap > .elementor-widget-wrap > .elementor-widget:not(.elementor-widget__width-auto):not(.elementor-widget__width-initial, .elementor-widget__width-calc):not(:last-child):not(.elementor-absolute)' => 'margin-bottom: {{VALUE}}px',
+                ],
+            ]
+        );
+        $this->end_controls_section();
+
         $this->add_control(
             'section_style',
             [
@@ -41,7 +191,7 @@ class Element_Column extends Element_Base
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
                 'types' => ['classic', 'gradient'],
-                'selector' => '{{WRAPPER}} > .elementor-element-populated',
+                'selector' => '{{WRAPPER}} > .elementor-column-wrap',
             ]
         );
 
@@ -430,6 +580,12 @@ class Element_Column extends Element_Base
             'elementor-col-' . $instance['_column_size'],
             'elementor-' . $column_type . '-column',
         ]);
+
+        if ($instance['width_auto'] === 'yes') {
+            dump($instance);
+
+            $this->add_render_attribute('wrapper', 'class', 'col-auto');
+        }
 
         foreach ($this->get_class_controls() as $control) {
             if (empty($instance[$control['name']])) {

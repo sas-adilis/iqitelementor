@@ -104,11 +104,10 @@ function openPsFileManager($fieldId = 'elementor-control-media-field', type = 1)
       $link.attr('data-field_id', $fieldId);
     },
     afterClose: function () {
-
       let $input = $('#' + $fieldId);
       let val = $input.val();
-
-      $input.val(val.replace(elementorFrontendConfig.iqitBaseUrl, ""));
+      val = val.replace(elementorFrontendConfig.iqitBaseUrl, "").replace(/ /g, '%20');
+      $input.val(val);
 
       $input.trigger( 'input' );
     }

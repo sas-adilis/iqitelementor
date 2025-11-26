@@ -593,9 +593,25 @@ class Element_Section extends Element_Base
         );
 
         $this->add_control(
+            'reverse_order_tablet',
+            [
+                'label' => \IqitElementorWpHelper::__('Reverse Columns (Tablet)', 'elementor'),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => '',
+                'prefix_class' => 'elementor-',
+                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'return_value' => 'reverse-tablet',
+                'description' => \IqitElementorWpHelper::__('Reverse column order - When on tablet, the column order is reversed, so the last column appears on top and vice versa.', 'elementor'),
+            ]
+        );
+
+
+
+        $this->add_control(
             'reverse_order_mobile',
             [
-                'label' => \IqitElementorWpHelper::__('Reverse Columns', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Reverse Columns (Mobile)', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',

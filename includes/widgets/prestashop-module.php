@@ -50,39 +50,29 @@ class Widget_Prestashop_module extends Widget_Base
      */
     public $context;
 
-    public $status = 1;
-    public $editMode = false;
-
-    public function get_id()
+    public function get_id(): string
     {
-        // Internal widget ID
         return 'prestashop_module';
     }
 
     public function get_title()
     {
-        // Label shown in the Elementor panel
         return IqitElementorWpHelper::__('Module', 'elementor');
     }
 
-    public function get_icon()
+    public function get_icon(): string
     {
-        // Keep same icon identifier as before
-        return 'module';
+        return 'puzzle-piece';
+    }
+
+    public function get_categories(): array
+    {
+        return ['prestashop'];
     }
 
     protected function _register_controls()
     {
-        $hooks = [
-            'displayHome' => 'displayHome',
-            'displayLeftColumn' => 'displayLeftColumn',
-            'displayRightColumn' => 'displayRightColumn',
-            'displayTopColumn' => 'displayTopColumn',
-            'displayTop' => 'displayTop',
-            'displayFooter' => 'displayFooter',
-        ];
         $availableHooks = [];
-
 
         // Only compute available modules in editor context
         $availableModules = [];

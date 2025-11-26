@@ -319,10 +319,12 @@ body.elementor-editor-preview #elementor-panel > .ui-resizable-e, body.elementor
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2px;
   line-height: 23px;
+  display: flex;
+  gap: 10px;
+    align-items: center;
 }
 
 #elementor-panel #elementor-panel-elements-languageselector-wrapper select {
-  max-width: 75px;
 }
 
 #elementor-panel #elementor-panel-elements-language-import {

@@ -17,7 +17,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 </script>
 
 <script type="text/template" id="tmpl-elementor-panel-element-languageselector">
-		<div><?php \IqitElementorWpHelper::_e('Editing:', 'elementor'); ?>
+		<?php \IqitElementorWpHelper::_e('Editing:', 'elementor'); ?>
 			<select>
 				<# _.each( elementor.config.languages, function( language ) { #>
 					<option value="{{{ language.id_lang }}}" <# if (elementor.config.id_lang == language.id_lang) {#> selected <# } #> >{{{ language.name }}}</option>
@@ -34,7 +34,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 								<# } ); #>
 					</ul>
 				</div>
-			</div>
+
 </script>
 
 

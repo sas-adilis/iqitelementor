@@ -566,9 +566,12 @@ class IqitElementor extends Module implements WidgetInterface
             $templatePath = 'module:' . $this->name . '/views/templates/widgets/' . $templateFile;
         }
 
-        $this->smarty->assign($this->getIqitElementorWidgetVariables($name, $options, $preview));
+        $vars = $this->getIqitElementorWidgetVariables($name, $options, $preview);
+        $smarty = clone $this->context->smarty;
+        $smarty->clearAllAssign();
+        $smarty->assign($vars);
 
-        return $this->fetch($templatePath);
+        return $smarty->fetch($templatePath);
     }
 
     public function getIqitElementorWidgetVariables($name, $options = [], $preview = false)

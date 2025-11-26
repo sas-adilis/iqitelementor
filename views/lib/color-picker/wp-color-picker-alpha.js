@@ -54,7 +54,6 @@
 			var self = this,
 				el = self.element;
 
-			console.log(self.options);
 			$.extend( self.options, el.data() );
 
 			// keep close bound so it can be attached to a body listener

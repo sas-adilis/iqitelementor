@@ -1,0 +1,30 @@
+.elementor-newsletter .elementor-newsletter-form {
+  display: inline-block;
+  width: 100%;
+}
+.elementor-newsletter .elementor-newsletter-input {
+  outline: none;
+}
+.elementor-newsletter .input-wrapper {
+  overflow: hidden;
+}
+
+.elementor-brands {
+  text-align: center;
+}
+.elementor-brands img {
+  margin: 0 auto;
+}
+
+.elementor-search {
+  display: inline-block;
+  width: 100%;
+}
+.elementor-search .form-search-control {
+  border: none;
+}
+.elementor-search .search-btn {
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/*# sourceMappingURL=prestashop.css.map */

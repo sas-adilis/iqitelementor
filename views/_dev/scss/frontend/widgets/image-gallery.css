@@ -1,0 +1,11 @@
+.elementor-image-gallery figure img {
+  display: block;
+}
+.elementor-image-gallery figure figcaption {
+  width: 100%;
+}
+.gallery-spacing-custom .elementor-image-gallery .gallery-icon {
+  padding: 0;
+}
+
+/*# sourceMappingURL=image-gallery.css.map */

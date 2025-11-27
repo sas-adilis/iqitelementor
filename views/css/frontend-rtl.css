@@ -563,23 +563,18 @@
   .elementor-column.elementor-col-100, .elementor-column[data-col="100"] {
     width: 100%;
   }
-
   .elementor-column-gap-default .elementor-element-populated {
     padding: 15px;
   }
-
   .elementor-column-gap-narrow .elementor-element-populated {
     padding: 5px;
   }
-
   .elementor-column-gap-extended .elementor-element-populated {
     padding: 15px;
   }
-
   .elementor-column-gap-wide .elementor-element-populated {
     padding: 20px;
   }
-
   .elementor-column-gap-wider .elementor-element-populated {
     padding: 30px;
   }
@@ -588,7 +583,6 @@
   .elementor-column {
     width: 100%;
   }
-
   .elementor-reverse-mobile > .elementor-container > .elementor-row {
     -webkit-box-orient: vertical;
     -webkit-box-direction: reverse;
@@ -1057,7 +1051,6 @@
     height: 25px;
     line-height: 25px;
   }
-
   .elementor-progress-text {
     padding-right: 10px;
   }

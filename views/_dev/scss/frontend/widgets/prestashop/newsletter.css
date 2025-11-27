@@ -1,0 +1,12 @@
+.elementor-newsletter .elementor-newsletter-form {
+  display: inline-block;
+  width: 100%;
+}
+.elementor-newsletter .elementor-newsletter-input {
+  outline: none;
+}
+.elementor-newsletter .input-wrapper {
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=newsletter.css.map */

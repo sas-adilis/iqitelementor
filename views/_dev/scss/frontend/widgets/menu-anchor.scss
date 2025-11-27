@@ -1,0 +1,10 @@
+body.elementor-page .elementor-widget-menu-anchor { // Hard selector to override the default rule
+	margin-bottom: 0;
+}
+
+.elementor-editor-active {
+	.elementor-menu-anchor {
+		height: 25px;
+
+	}
+}

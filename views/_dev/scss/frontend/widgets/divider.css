@@ -1,0 +1,9 @@
+.elementor-widget-divider .elementor-divider {
+  line-height: 0;
+  font-size: 0;
+}
+.elementor-widget-divider .elementor-divider-separator {
+  display: inline-block;
+}
+
+/*# sourceMappingURL=divider.css.map */

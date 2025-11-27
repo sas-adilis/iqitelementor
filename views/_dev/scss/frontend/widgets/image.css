@@ -1,0 +1,8 @@
+.elementor-widget-image .elementor-image img {
+  vertical-align: middle;
+}
+.elementor-widget-image .elementor-image.elementor-image-shape-circle {
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=image.css.map */

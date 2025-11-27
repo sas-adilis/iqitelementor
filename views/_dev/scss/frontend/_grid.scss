@@ -1,0 +1,254 @@
+//
+// Grid
+//
+
+// Section
+.elementor-section {
+	position: relative;
+	-webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	-ms-backface-visibility: hidden;
+	backface-visibility: hidden;
+	// Container
+	.elementor-container {
+		display: flex;
+		margin-right: auto;
+		margin-left: auto;
+		position: relative;
+	}
+
+	// Max-width of container depending on section settings
+	&.elementor-section-boxed {
+	}
+
+	// Stretched section settings
+	&.elementor-section-stretched {
+		width: 100vw;
+		position: relative;
+		@if ($direction == rtl) {
+			margin-right: -50vw;
+			right: 50%;
+		} @else {
+			margin-left: -50vw;
+			left: 50%;
+		}
+	}
+
+	// In section min-height / fit to screen mode
+	&.elementor-section-items- {
+		&top {
+			> .elementor-container {
+				align-items: flex-start;
+			}
+		}
+
+		&middle {
+			> .elementor-container {
+				align-items: center;
+			}
+		}
+
+		&bottom {
+			> .elementor-container {
+				align-items: flex-end;
+			}
+		}
+	}
+
+	// In columns stretch mode
+	&.elementor-section-content- {
+		&top {
+			.elementor-column-wrap {
+				align-items: flex-start;
+			}
+		}
+
+		&middle {
+			.elementor-column-wrap {
+				align-items: center;
+			}
+		}
+
+		&bottom {
+			.elementor-column-wrap {
+				align-items: flex-end;
+			}
+		}
+	}
+
+	@media (min-width: $screen-md-min) {
+		// Section Full Height (note: don't be smart - min-height does not work well with the content position)
+		&.elementor-section-height-full {
+			height: 100vh;
+
+			> .elementor-container {
+				height: 100%;
+			}
+		}
+	}
+}
+
+// Row
+.elementor-row {
+	display: flex;
+	width: 100%;
+	/* In dragging mode it's causing a columns fall */
+	@media (max-width: $screen-md-max) {
+		flex-wrap: wrap;
+	}
+}
+
+// Widget
+.elementor-column-wrap {
+	width: 100%;
+	display: flex;
+}
+
+.elementor-widget-wrap {
+	position: relative;
+	width: 100%;
+}
+
+.elementor-editor-active .elementor-widget-wrap {
+	z-index: 1;
+}
+
+.elementor-widget {
+	position: relative;
+}
+
+// Columns
+.elementor-column {
+	position: relative;
+	min-height: 1px;
+	display: flex;
+	//z-index: 2;
+}
+/*
+.elementor-column ~ .elementor-column{
+	z-index: 1;
+}
+*/
+
+//slidered section
+.elementor-editor-active {
+	.elementor-section-slidered:hover {
+		outline: 3px dashed yellow;
+	}
+	.elementor-column {
+		min-height: 30px;
+	}
+}
+
+.elementor-section-slidered {
+	.swiper-wrapper {
+		-ms-flex-wrap: initial !important;
+		flex-wrap: initial !important;
+	}
+	.elementor-row-slidered-backend {
+		display: block;
+	}
+	.elementor-top-column{
+		width: 100% !important;
+	}
+}
+
+@mixin elementor-grid-classes {
+	@each $sizeKey, $size in $column-sizes {
+		&.elementor-col-#{$sizeKey},
+		&[data-col="#{$sizeKey}"] {
+			width: $size;
+		}
+	}
+}
+
+@mixin elementor-responsive($breakpoint-name) {
+	@if ($breakpoint-name == md) {
+		@each $size-name, $size in $column-sizes {
+			&.elementor-#{$breakpoint-name}-#{$size-name} {
+				width: $size !important;
+			}
+		}
+	} @else {
+		@each $size-name, $size in $column-sizes {
+			&.elementor-#{$breakpoint-name}-#{$size-name} {
+				width: $size;
+			}
+		}
+	}
+}
+
+// Columns Gap (Inner section supported)
+.elementor-inner-section {
+	.elementor-column-gap-no {
+		.elementor-element-populated {
+			padding: 0;
+		}
+	}
+}
+
+// Responsive Grid
+.elementor-column {
+	@media (max-width: $screen-xs-max) {
+		@include elementor-responsive(xs);
+	}
+
+	@media (max-width: $screen-sm-max) {
+		@include elementor-responsive(sm);
+	}
+
+	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+		@include elementor-responsive(md);
+	}
+}
+
+@media (min-width: $screen-md-min) {
+	.elementor-column {
+		@include elementor-grid-classes;
+	}
+
+	// Columns Gap
+	.elementor-column-gap-default {
+		.elementor-element-populated {
+			padding: 15px;
+		}
+	}
+
+	.elementor-column-gap-narrow {
+		.elementor-element-populated {
+			padding: 5px;
+		}
+	}
+
+	.elementor-column-gap-extended {
+		.elementor-element-populated {
+			padding: 15px;
+		}
+	}
+
+	.elementor-column-gap-wide {
+		.elementor-element-populated {
+			padding: 20px;
+		}
+	}
+
+	.elementor-column-gap-wider {
+		.elementor-element-populated {
+			padding: 30px;
+		}
+	}
+}
+
+@media (max-width: $screen-sm-max) {
+	.elementor-column {
+		width: 100%;
+	}
+
+	.elementor-reverse-mobile > .elementor-container > .elementor-row {
+		flex-direction: column-reverse;
+	}
+}
+
+.modal-open .elementor-widget-wrap {
+	z-index: initial;
+}

@@ -1,0 +1,25 @@
+.elementor-widget-icon-list .elementor-icon-list-items {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+.elementor-widget-icon-list .elementor-icon-list-item {
+  margin: 0;
+  padding: 0;
+}
+.elementor-widget-icon-list .elementor-icon-list-item a {
+  display: inline;
+}
+.elementor-widget-icon-list .elementor-icon-list-text {
+  display: inline;
+  vertical-align: middle;
+}
+.elementor-widget-icon-list .elementor-icon-list-icon {
+  width: 1em;
+  line-height: 1;
+  vertical-align: middle;
+  display: inline-block;
+  text-align: center;
+}
+
+/*# sourceMappingURL=icon-list.css.map */

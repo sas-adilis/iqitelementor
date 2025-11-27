@@ -1,19 +1,19 @@
 .btn-edit-with-elementor {
-  background: #9b0a46;
+  background: #9b0a46 !important;
   padding: 12px 15px !important;
   color: #fff !important;
 }
 .btn-edit-with-elementor:hover {
-  background: #ac0a49;
+  background: #ac0a49 !important;
 }
 
 .btn-connect-with-instagram {
-  background: #386793;
+  background: #386793 !important;
   padding: 12px 15px !important;
   color: #fff !important;
 }
 .btn-connect-with-instagram:hover {
-  background: #2c7ac4;
+  background: #2c7ac4 !important;
 }
 
 .elementor-instagram-connection {

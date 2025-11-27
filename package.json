@@ -1,0 +1,57 @@
+{
+  "name": "iqitelementor",
+  "slug": "iqitelementor",
+  "version": "1.0.0",
+  "description": "Tools to help while developing the module",
+  "author": "iqit-commerce.com based on pojo.me work",
+  "devDependencies": {
+    "autoprefixer": "~6.4.0",
+    "browserify": "^13.1.0",
+    "browserify-shim": "^3.8.12",
+    "cssnano": "~3.7.3",
+    "grunt": "^1.6.1",
+    "grunt-banner": "~0.6.0",
+    "grunt-browserify": "^5.0.0",
+    "grunt-bumpup": "~0.6.3",
+    "grunt-checktextdomain": "~1.0.1",
+    "grunt-cli": "^1.5.0",
+    "grunt-contrib-clean": "~1.0.0",
+    "grunt-contrib-copy": "~1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-sass": "~1.0.0",
+    "grunt-contrib-uglify": "~2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-exorcise": "~2.1.1",
+    "grunt-postcss": "~0.8.0",
+    "grunt-release": "~0.14.0",
+    "grunt-shell": "~1.3.0",
+    "grunt-text-replace": "~0.4.0",
+    "grunt-wp-readme-to-markdown-with-extra": "~2.2.0",
+    "matchdep": "~1.0.1",
+    "remapify": "2.1.0"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "global:jQuery",
+    "underscore": "global:_",
+    "backbone": {
+      "exports": "global:Backbone",
+      "depends": [
+        "jquery",
+        "underscore"
+      ]
+    },
+    "marionette": {
+      "exports": "global:Marionette",
+      "depends": [
+        "jquery",
+        "underscore",
+        "backbone"
+      ]
+    }
+  }
+}

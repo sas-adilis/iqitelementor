@@ -1135,14 +1135,23 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin-top: 10px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-field {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   gap: 5px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-field > * {
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-title {
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-description {
   margin-top: 10px;
@@ -1155,8 +1164,14 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   color: #a4afb7;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #a4afb7;
   border: 1px solid #a4afb7;
   overflow: hidden;
@@ -1174,8 +1189,12 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   color: #a4afb7;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices .elementor-choices-label {
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   font-size: 12px;
+  -webkit-transition: all 0.5s;
   transition: all 0.5s;
   cursor: pointer;
   line-height: 25px;
@@ -1994,9 +2013,18 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin-top: 10px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
   gap: 5px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field .elementor-control-title {
@@ -3032,5 +3060,4 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
 #elementor-template-library-error-info {
   margin-top: 10px;
 }
-
-/*# sourceMappingURL=editor.css.map */
+/*# sourceMappingURL=editor-off.css.map */

@@ -316,7 +316,7 @@ html.elementor-html {
   }
 }
 .elementor-editor-active #elementor .elementor-widget {
-  min-height: 27px;
+  min-height: 26px;
 }
 .elementor-editor-active #elementor .elementor-widget.elementor-loading {
   opacity: 0.3;

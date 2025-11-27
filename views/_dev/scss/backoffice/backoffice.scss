@@ -1,0 +1,30 @@
+.btn-edit-with-elementor{
+  background: #9b0a46 !important;
+  padding: 12px 15px !important;
+  color: #fff !important;
+
+  &:hover{
+    background: #ac0a49 !important;
+  }
+}
+
+.btn-connect-with-instagram{
+  background: #386793 !important;
+  padding: 12px 15px !important;
+  color: #fff !important;
+
+  &:hover{
+    background: #2c7ac4 !important;
+  }
+}
+
+.elementor-instagram-connection{
+  background: #eff1f2;
+  padding: 15px;
+  .expiration-date{
+    margin: 10px 0;
+  }
+  .access-token{
+  word-break: break-word;
+  }
+}

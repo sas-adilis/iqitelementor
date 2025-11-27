@@ -1,6 +1,7 @@
 config.xml
 config_*.xml
 /vendor/*
+/node_modules/*
 !vendor/autoload.php
 !vendor/composer
 composer.lock

@@ -1,0 +1,17 @@
+.elementor-image-hotspots-wrapper {
+  position: relative;
+}
+.elementor-image-hotspots-wrapper .elementor-hotspot {
+  position: absolute;
+  background: #eaeaea;
+  padding: 0.3em 0.6em;
+}
+
+.tooltip-inner-hotspot {
+  text-align: inherit;
+}
+.tooltip-inner-hotspot:before {
+  display: none;
+}
+
+/*# sourceMappingURL=image-hotspots.css.map */

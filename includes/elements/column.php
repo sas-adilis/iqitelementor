@@ -582,8 +582,6 @@ class Element_Column extends Element_Base
         ]);
 
         if ($instance['width_auto'] === 'yes') {
-            dump($instance);
-
             $this->add_render_attribute('wrapper', 'class', 'col-auto');
         }
 

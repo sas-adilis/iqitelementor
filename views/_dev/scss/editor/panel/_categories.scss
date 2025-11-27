@@ -1,0 +1,23 @@
+// Panel elements categories
+
+.elementor-panel-category {
+
+	&:first-child {
+
+		.panel-elements-category-title {
+			padding-top: 14px;
+		}
+	}
+}
+
+.panel-elements-category-title {
+	padding: 7px 10px 0;
+	text-transform: uppercase;
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.panel-elements-category-items {
+	overflow: hidden;
+	padding: 5px;
+}

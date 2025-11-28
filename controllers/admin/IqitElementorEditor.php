@@ -252,12 +252,12 @@ class IqitElementorEditorController extends ModuleAdminController
 
     public function setMedia($isNewTheme = false)
     {
-        $is_177 = (version_compare(_PS_VERSION_, '1.7.7.0', '>=') === true) ? true : false;
+        /*$is_177 = (version_compare(_PS_VERSION_, '1.7.7.0', '>=') === true) ? true : false;
 
         if ($is_177) {
             $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-3.7.1.min.js');
             $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-migrate-3.4.0.min.js');
-        }
+        }*/
 
         $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-3.5.1.min.js');
         $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-migrate-3.1.0.min.js');
@@ -265,8 +265,12 @@ class IqitElementorEditorController extends ModuleAdminController
         $this->addJs(_PS_JS_DIR_ . 'jquery/jquery.live-polyfill-1.1.2.min.js');
 
         $this->addJS(_PS_JS_DIR_ . 'tiny_mce/tinymce.min.js');
-        $this->addJqueryPlugin('fancybox');
-        $this->addJqueryPlugin('autocomplete');
+        $this->addJqueryPlugin(['fancybox', 'autocomplete']);
+        $this->addJqueryUI(['ui.datepicker']);
+
+        /*$this->addCSS([
+            _PS_JS_DIR_ . 'jquery/plugins/timepicker/jquery-ui-timepicker-addon.css',
+        ]);*/
 
         $this->addCSS([
             __PS_BASE_URI__ . $this->admin_webpath . '/themes/' . $this->bo_theme . '/css/admin-theme.css',
@@ -279,6 +283,7 @@ class IqitElementorEditorController extends ModuleAdminController
         ]);
 
         $this->addJS([
+            _PS_JS_DIR_ . 'jquery/plugins/timepicker/jquery-ui-timepicker-addon.js',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/core.min.js?ver=1.11.4',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/widget.min.js?ver=1.11.4',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/mouse.min.js?ver=1.11.4',
@@ -316,8 +321,8 @@ class IqitElementorEditorController extends ModuleAdminController
         $base_url = Tools::getHttpHost(true);  // DON'T TOUCH (base url (only domain) of site (without final /)).
         $base_url = Configuration::get('PS_SSL_ENABLED') && Configuration::get('PS_SSL_ENABLED_EVERYWHERE') ? $base_url : str_replace('https', 'http', $base_url);
 
-        Media::addJsDef(
-            ['elementorFrontendConfig' => [
+        Media::addJsDef([
+            'elementorFrontendConfig' => [
                 'isEditMode' => 1,
                 'stretchedSectionContainer' => '',
                 'is_rtl' => (bool) $this->context->language->is_rtl,
@@ -325,7 +330,16 @@ class IqitElementorEditorController extends ModuleAdminController
                 'ajax_csfr_token_url' => $this->context->link->getModuleLink($this->module->name, 'Actions', ['process' => 'handleCsfrToken', 'ajax' => 1], true),
                 'iqitBaseUrl' => Tools::safeOutput($base_url),
                 'iqitElementorColorPalette' => IqitElementorWpHelper::stringToArrayOfColors(Configuration::get('IQIT_ELEMENT_COLORS')),
-            ]]);
+            ],
+            'dateTimePickerL10n' => [
+                'currentText' => $this->l('Now'),
+                'closeText' => $this->l('Done'),
+                'timeOnlyTitle' => $this->l('Choose Time'),
+                'timeText' => $this->l('Time'),
+                'hourText' => $this->l('Hour'),
+                'minuteText' => $this->l('Minute'),
+            ]
+        ]);
 
         Hook::exec('actionAdminControllerSetMedia');
     }

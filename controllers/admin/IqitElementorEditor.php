@@ -79,18 +79,6 @@ class IqitElementorEditorController extends ModuleAdminController
                     $elementorData = $content;
                 }
                 break;
-            case 'ybcblog':
-                $editedPage = new Ybc_blog_post_class($pageId, $idLang);
-                $editedPageLink = $this->context->link->getAdminLink('AdminYbcBlogPost') . '&id_post=' . $pageId . '&editybc_post';
-
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $editedPage->description);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $elementorData = $content;
-                }
-                break;
             case 'category':
                 $id = IqitElementorCategory::getIdByCategory($pageId);
 
@@ -385,16 +373,6 @@ class IqitElementorEditorController extends ModuleAdminController
                 $blogPost->content[$idLang] = $data;
                 $blogPost->update();
                 break;
-            case 'ybcblog':
-                $blogPost = new Ybc_blog_post_class($pageId);
-                $blogPost->description[$idLang] = $data;
-                $blogPost->update();
-
-                $this->module->clearYbcBlogCache($pageId);
-                $blog = Module::getInstanceByName('ybc_blog');
-                $blog->_clearCache('single_post.tpl');
-
-                break;
             case 'category':
                 $id = IqitElementorCategory::getIdByCategory($pageId);
                 if ($id) {
@@ -502,16 +480,6 @@ class IqitElementorEditorController extends ModuleAdminController
             case 'blog':
                 $source = new SimpleBlogPost($pageId, $idLang);
                 $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $source->content);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $data = $content;
-                }
-                break;
-            case 'ybcblog':
-                $source = new Ybc_blog_post_class($pageId, $idLang);
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $source->description);
                 $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
                 $content = json_decode($strippedCms, true);
 

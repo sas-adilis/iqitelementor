@@ -10,13 +10,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
             var $wrapperCms = $('form[name="cms_page"]').first().find('.form-wrapper').first();
                 $wrapperProduct = $('#features, #product_description_description'),
                 $wrapperBlog = $('#elementor-button-blog-wrapper'),
-                $wrapperYbcBlog = $('.ybc_blogpost').first().find('.ybc-blog-tab-basic').first(),
                 $wrapperCategory = $('form[name="category"], form[name="root_category"]').first().find('.form-wrapper').first();
                 $wrapperBrand = $('form[name="manufacturer"]').first().find('#manufacturer_description'),
                 $btnTemplate = $('#tmpl-btn-edit-with-elementor'),
                 $btnTemplateProduct = $('#tmpl-btn-edit-with-elementor-product'),
                 $btnTemplateBlog = $('#tmpl-btn-edit-with-elementor-blog'),
-                $btnTemplateYbcBlog = $('#tmpl-btn-edit-with-elementor-ybc-blog'),
                 $btnTemplateCategory = $('#tmpl-btn-edit-with-elementor-category'),
                 $btnTemplateBrand = $('#tmpl-btn-edit-with-elementor-brand');
 
@@ -24,7 +22,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                 $wrapperCms.prepend($btnTemplate.html());
                 $wrapperProduct.prepend($btnTemplateProduct.html());
                 $wrapperBlog.prepend($btnTemplateBlog.html());
-                $wrapperYbcBlog.prepend($btnTemplateYbcBlog.html());
                 $wrapperCategory.prepend($btnTemplateCategory.html());
                 $wrapperBrand.append($btnTemplateBrand.html());
 
@@ -53,17 +50,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         });
                         if (hideEditor){
                             $("[id^=content_]").first().parents('.form-group').last().remove();
-                        }
-                    }
-                    if (elementorPageType == 'ybcblog') {
-                        var  hideEditor = false;
-                        jQuery.each(onlyElementor, function(i, val) {
-                            if(val){
-                                hideEditor = true;
-                            }
-                        });
-                        if (hideEditor){
-                            $("[id^=description_]").first().parents('.ybc-form-group').last().hide();
                         }
                     }
 

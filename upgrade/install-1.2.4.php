@@ -16,21 +16,5 @@ if (!defined('_PS_VERSION_')) {
 
 function upgrade_module_1_2_4($object)
 {
-    $object->registerHook('displayYbcBlogElementor');
-
-    $tableExists = Db::getInstance()->getValue('
-    SELECT COUNT(*) 
-    FROM information_schema.tables 
-    WHERE table_schema = \'' . _DB_NAME_ . '\' 
-    AND table_name = \'' . _DB_PREFIX_ . 'ybc_blog_post_lang\'
-    ');
-
-    if ($tableExists) {
-        Db::getInstance()->execute('
-                ALTER TABLE `' . _DB_PREFIX_ . 'ybc_blog_post_lang`
-                MODIFY `description` LONGTEXT
-            ');
-    }
-
     return true;
 }

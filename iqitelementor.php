@@ -88,12 +88,9 @@ class IqitElementor extends Module implements WidgetInterface
             && $this->registerHook('actionObjectCmsUpdateAfter')
             && $this->registerHook('actionObjectSimpleBlogPostUpdateAfter')
             && $this->registerHook('actionObjectSimpleBlogPostAddAfter')
-            && $this->registerHook('actionObjectYbc_blog_post_classUpdateAfter')
-            && $this->registerHook('actionObjectYbc_blog_post_classUpdateBefore')
             && $this->registerHook('actionObjectCmsDeleteAfter')
             && $this->registerHook('actionObjectProductDeleteAfter')
             && $this->registerHook('displayCMSDisputeInformation')
-            && $this->registerHook('displayYbcBlogElementor')
             && $this->registerHook('displayProductElementor')
             && $this->registerHook('displayCategoryElementor')
             && $this->registerHook('actionObjectManufacturerUpdateAfter')
@@ -189,7 +186,6 @@ class IqitElementor extends Module implements WidgetInterface
             || $this->context->controller->controller_name == 'AdminProducts'
             || $this->context->controller->controller_name == 'AdminCategories'
             || $this->context->controller->controller_name == 'AdminManufacturers'
-            || $this->context->controller->controller_name == 'AdminYbcBlogPost'
             || $this->context->controller->controller_name == 'AdminSimpleBlogPosts'
         ) {
             $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
@@ -232,29 +228,6 @@ class IqitElementor extends Module implements WidgetInterface
                     $cms = new SimpleBlogPost($idPage);
 
                     foreach ($cms->content as $key => $contentLang) {
-                        $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $contentLang);
-                        $strippedCms = str_replace(["\r\n", "\n", "\r"], '', $strippedCms);
-                        $content = json_decode($strippedCms, true);
-
-                        if (json_last_error() == JSON_ERROR_NONE) {
-                            if (empty($content)) {
-                                $onlyElementor[$key] = 0;
-                            } else {
-                                $onlyElementor[$key] = 1;
-                            }
-                        } else {
-                            $onlyElementor[$key] = 0;
-                        }
-                    }
-                }
-            } elseif ($this->context->controller->controller_name == 'AdminYbcBlogPost') {
-                $idPage = (int)Tools::getValue('id_post');
-                $pageType = 'ybcblog';
-
-                if ($idPage) {
-                    $blogPost = new Ybc_blog_post_class($idPage);
-
-                    foreach ($blogPost->description as $key => $contentLang) {
                         $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $contentLang);
                         $strippedCms = str_replace(["\r\n", "\n", "\r"], '', $strippedCms);
                         $content = json_decode($strippedCms, true);
@@ -611,10 +584,6 @@ class IqitElementor extends Module implements WidgetInterface
             $blogId = (int)$configuration['smarty']->tpl_vars['post']->value->id_simpleblog_post;
             $templateFile = 'generated_content_cms.tpl';
             $cacheId = 'iqitelementor|' . $hookName . '|' . $blogId;
-        } elseif (preg_match('/^displayYbcBlogElementor\d*$/', $hookName)) {
-            $blogId = (int)$configuration['smarty']->tpl_vars['blog_post']->value['id_post'];
-            $templateFile = 'generated_content_cms.tpl';
-            $cacheId = 'iqitelementor|' . $hookName . '|' . $blogId;
         } elseif (preg_match('/^displayManufacturerElementor\d*$/', $hookName)) {
             $manfuacturerId = (int)$configuration['manufacturerId'];
             $templateFile = 'generated_content_cms.tpl';
@@ -701,22 +670,6 @@ class IqitElementor extends Module implements WidgetInterface
             }
         } elseif (preg_match('/^displayBlogElementor\d*$/', $hookName)) {
             $blogContent = $configuration['smarty']->tpl_vars['post']->value->content;
-            $strippedBlog = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $blogContent);
-            $strippedBlog = str_replace(["\r", "\n"], '', $strippedBlog);
-
-            $content = json_decode($strippedBlog, true);
-
-            if (json_last_error() == JSON_ERROR_NONE) {
-                ob_start();
-                PluginElementor::instance()->get_frontend((array)$content);
-                $options['elementor'] = true;
-                $content = ob_get_clean();
-            } else {
-                $options['elementor'] = false;
-                $content = $blogContent;
-            }
-        } elseif (preg_match('/^displayYbcBlogElementor\d*$/', $hookName)) {
-            $blogContent = $configuration['smarty']->tpl_vars['blog_post']->value['description'];
             $strippedBlog = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $blogContent);
             $strippedBlog = str_replace(["\r", "\n"], '', $strippedBlog);
 
@@ -851,13 +804,6 @@ class IqitElementor extends Module implements WidgetInterface
         $this->_clearCache($templateFile, $cacheId);
     }
 
-    public function clearYbcBlogCache($idPost)
-    {
-        $cacheId = 'iqitelementor|displayYbcBlogElementor|' . (int)$idPost;
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
     public function hookActionObjectCmsDeleteAfter($params)
     {
         $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
@@ -875,19 +821,6 @@ class IqitElementor extends Module implements WidgetInterface
         $cmsId = (int)$params['object']->id_cms;
         $cacheId = 'iqitelementor|displayCMSDisputeInformation|' . $cmsId;
         $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function hookActionObjectYbc_blog_post_classUpdateBefore($params)
-    {
-        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER');
-        Configuration::updateValue('PS_USE_HTMLPURIFIER_TMP', $pur);
-        Configuration::updateValue('PS_USE_HTMLPURIFIER', 0);
-    }
-
-    public function hookActionObjectYbc_blog_post_classUpdateAfter($params)
-    {
-        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER_TMP');
-        Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
     }
 
     public function hookIsJustElementor($params)

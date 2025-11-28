@@ -86,23 +86,6 @@
     </div>
 </script>
 
-<script type="text/template" id="tmpl-btn-edit-with-elementor-ybc-blog">
-    <div>
-
-        {if $urlElementor }
-            <a  href="{$urlElementor}" class="m-b-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Edit with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-        {else}
-            {l s=' Save post first to enable page builder' mod='iqitelementor'}
-        {/if}
-
-        {if $onlyElementor}
-            <p><br />
-                <i>{l s='If you want to return to standard text editor go to elementor page builder first, remove all widgets and save.' mod='iqitelementor'}</i>
-            </p>
-        {/if}
-    </div>
-</script>
-
 
 <script type="text/template" id="tmpl-btn-edit-with-elementor-category">
     <div style="margin-bottom: 20px;">

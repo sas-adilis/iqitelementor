@@ -37,18 +37,27 @@ const ContextMenuBehavior = Marionette.Behavior.extend({
         // Groupes propres à la vue
         let groups = view.getContextMenuGroups() || [];
 
-        // Hook global façon Elementor : elements/context-menu/groups
-        /*if (elementor && elementor.hooks && elementor.hooks.applyFilters) {
-            groups = elementor.hooks.applyFilters(
-                'elements/context-menu/groups',
-                groups,
-                view.model || null
-            ) || groups;
-        }*/
-
         if (!groups.length) {
             return;
         }
+
+        let coords = {
+            clientX: event.clientX,
+            clientY: event.clientY,
+        };
+
+        // Si le menu est rendu dans la fenêtre parente, on translate
+        if (window.frameElement && window.parent) {
+            const iframeRect = window.frameElement.getBoundingClientRect();
+
+            coords = {
+                clientX: event.clientX + iframeRect.left,
+                clientY: event.clientY + iframeRect.top,
+            };
+        }
+
+        event.realClientX = coords.clientX;
+        event.realClientY = coords.clientY;
 
         // On délègue l’affichage au manager via le channel editor
         if (elementor.channels && elementor.channels.editor) {

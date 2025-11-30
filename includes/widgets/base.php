@@ -324,7 +324,7 @@ abstract class Widget_Base extends Element_Base
     protected function render_settings()
     {
         ?>
-        <div class="elementor-editor-element-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_type()); ?>-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_id()); ?>-settings">
+        <div class="elementor-editor-element-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_type()); ?>-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_id()); ?>-settings" data-title="<?php echo \IqitElementorWpHelper::esc_attr($this->get_title()); ?>">
             <ul class="elementor-editor-element-settings-list">
                 <li class="elementor-editor-element-setting elementor-editor-element-edit">
                     <a href="#" title="<?php \IqitElementorWpHelper::_e('Edit', 'elementor'); ?>">

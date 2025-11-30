@@ -701,12 +701,12 @@ class Element_Section extends Element_Base
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
-                    <!--<li class="elementor-editor-element-setting elementor-editor-element-save">
+                    <li class="elementor-editor-element-setting elementor-editor-element-save">
                         <a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
                             <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
                             <i class="fa fa-floppy-o"></i>
                         </a>
-                    </li>-->
+                    </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
                         <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
                             <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>

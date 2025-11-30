@@ -38,18 +38,27 @@ const ContextMenuBehavior = Marionette.Behavior.extend({
         // Groupes propres à la vue
         let groups = view.getContextMenuGroups() || [];
 
-        // Hook global façon Elementor : elements/context-menu/groups
-        /*if (elementor && elementor.hooks && elementor.hooks.applyFilters) {
-            groups = elementor.hooks.applyFilters(
-                'elements/context-menu/groups',
-                groups,
-                view.model || null
-            ) || groups;
-        }*/
-
         if (!groups.length) {
             return;
         }
+
+        let coords = {
+            clientX: event.clientX,
+            clientY: event.clientY,
+        };
+
+        // Si le menu est rendu dans la fenêtre parente, on translate
+        if (window.frameElement && window.parent) {
+            const iframeRect = window.frameElement.getBoundingClientRect();
+
+            coords = {
+                clientX: event.clientX + iframeRect.left,
+                clientY: event.clientY + iframeRect.top,
+            };
+        }
+
+        event.realClientX = coords.clientX;
+        event.realClientY = coords.clientY;
 
         // On délègue l’affichage au manager via le channel editor
         if (elementor.channels && elementor.channels.editor) {
@@ -633,6 +642,7 @@ var ContextMenuView = Marionette.ItemView.extend( {
 
         this.$el.html( '<ul class="iqit-context-menu-list"></ul>' );
         Backbone.$( 'body' ).append( this.el );
+        this.hide();
 
         // On écoute un channel de l’éditeur
         if ( elementor.channels && elementor.channels.editor ) {
@@ -645,8 +655,8 @@ var ContextMenuView = Marionette.ItemView.extend( {
         var event  = payload.event,
             view   = payload.view,
             groups = payload.groups,
-            menuX = event.pageX,
-            menuY = event.pageY
+            menuX = event.realClientX,
+            menuY = event.realClientY
         ;
 
         this.context = { event: event, view: view, groups: groups };
@@ -5864,6 +5874,9 @@ ColumnView = BaseElementView.extend( {
 		},
 		HandleElementsRelation: {
 			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
 		}
 	},
 
@@ -5994,12 +6007,91 @@ ColumnView = BaseElementView.extend( {
 
 	onWidgetDragEnd: function() {
 		this.$el.removeClass( 'elementor-dragging' );
-	}
+	},
+
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'> .elementor-element-overlay .elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+
+			actions.push({
+				name: 'edit',
+				title: (elementor.translate ? elementor.translate('Edit Column') : 'Edit Column'),
+				icon: '<i class="eicon-edit"></i>',
+				callback: () => {
+					this.triggerMethod('click:edit');
+				},
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+			const $add = this.$el.find('.elementor-editor-element-add');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($add.length) {
+				actions.push({
+					name: 'add',
+					icon: '<i class="fa fa-plus"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Add column after') : 'Add column after',
+					callback: () => {
+						$add.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		/*// Hook plus spécifique pour les widgets,
+		// comme le `getContextMenuGroups` du widget promo sur le dépôt officiel.
+		if (elementor.hooks && elementor.hooks.applyFilters) {
+			return elementor.hooks.applyFilters(
+				'elements/widget/context-menu/groups',
+				groups,
+				this.model
+			);
+		}*/
+
+		return groups;
+	},
 } );
 
 module.exports = ColumnView;
 
-},{"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/resizable":7,"elementor-behaviors/sortable":8,"elementor-views/base-element":70,"elementor-views/element-empty":98,"elementor-views/section":99,"elementor-views/widget":101}],72:[function(require,module,exports){
+},{"elementor-behaviors/context-menu":1,"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/resizable":7,"elementor-behaviors/sortable":8,"elementor-views/base-element":70,"elementor-views/element-empty":98,"elementor-views/section":99,"elementor-views/widget":101}],72:[function(require,module,exports){
 var ControlBaseItemView = require( 'elementor-views/controls/base' ),
 	ControlAnimationItemView;
 
@@ -8209,6 +8301,9 @@ SectionView = BaseElementView.extend( {
 		},
 		HandleElementsRelation: {
 			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
 		}
 	},
 
@@ -8422,12 +8517,80 @@ SectionView = BaseElementView.extend( {
 		elementor.templates.startModal( function() {
 			elementor.templates.getLayout().showSaveTemplateView( sectionID );
 		} );
-	}
+	},
+
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'> .elementor-element-overlay .elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+			actions.push({
+				name: 'edit',
+				title: (elementor.translate ? elementor.translate('Edit Section') : 'Edit Section'),
+				icon: '<i class="eicon-edit"></i>',
+				callback: () => {
+					this.triggerMethod('click:edit');
+				},
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+			const $template = this.$el.find('.elementor-editor-element-save');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($template.length) {
+				actions.push({
+					name: 'save-as-template',
+					icon: '<i class="fa fa-save"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Save as Template') : 'Save as Template',
+					callback: () => {
+						$template.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		return groups;
+	},
 } );
 
 module.exports = SectionView;
 
-},{"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/sortable":8,"elementor-views/base-element":70,"elementor-views/column":71}],100:[function(require,module,exports){
+},{"elementor-behaviors/context-menu":1,"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/sortable":8,"elementor-views/base-element":70,"elementor-views/column":71}],100:[function(require,module,exports){
 var SectionView = require( 'elementor-views/section' ),
 	SectionsCollectionView;
 
@@ -8751,17 +8914,14 @@ WidgetView = BaseElementView.extend( {
 			'.elementor-editor-element-settings'
 		);
 
-
 		if ($settings.length) {
 			const actions = [];
 
-			console.log(this.model);
-
-
+			const elementTitle = $settings.attr('data-title') || 'Widget';
 
 			actions.push({
 			    name: 'edit',
-			    title: (elementor.translate ? elementor.translate('edit') : 'Edit'),
+			    title: (elementor.translate ? elementor.translate('Edit') : 'Edit') + ' ' + elementTitle,
 			    icon: '<i class="eicon-edit"></i>',
 			    callback: () => {
 			        this.triggerMethod('click:edit');
@@ -8801,16 +8961,6 @@ WidgetView = BaseElementView.extend( {
 				});
 			}
 		}
-
-		/*// Hook plus spécifique pour les widgets,
-		// comme le `getContextMenuGroups` du widget promo sur le dépôt officiel.
-		if (elementor.hooks && elementor.hooks.applyFilters) {
-			return elementor.hooks.applyFilters(
-				'elements/widget/context-menu/groups',
-				groups,
-				this.model
-			);
-		}*/
 
 		return groups;
 	},

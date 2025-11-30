@@ -50,6 +50,9 @@ SectionView = BaseElementView.extend( {
 		},
 		HandleElementsRelation: {
 			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
 		}
 	},
 
@@ -263,7 +266,75 @@ SectionView = BaseElementView.extend( {
 		elementor.templates.startModal( function() {
 			elementor.templates.getLayout().showSaveTemplateView( sectionID );
 		} );
-	}
+	},
+
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'> .elementor-element-overlay .elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+			actions.push({
+				name: 'edit',
+				title: (elementor.translate ? elementor.translate('Edit Section') : 'Edit Section'),
+				icon: '<i class="eicon-edit"></i>',
+				callback: () => {
+					this.triggerMethod('click:edit');
+				},
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+			const $template = this.$el.find('.elementor-editor-element-save');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($template.length) {
+				actions.push({
+					name: 'save-as-template',
+					icon: '<i class="fa fa-save"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Save as Template') : 'Save as Template',
+					callback: () => {
+						$template.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		return groups;
+	},
 } );
 
 module.exports = SectionView;

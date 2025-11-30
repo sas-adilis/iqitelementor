@@ -17,6 +17,7 @@ var ContextMenuView = Marionette.ItemView.extend( {
 
         this.$el.html( '<ul class="iqit-context-menu-list"></ul>' );
         Backbone.$( 'body' ).append( this.el );
+        this.hide();
 
         // On écoute un channel de l’éditeur
         if ( elementor.channels && elementor.channels.editor ) {
@@ -29,8 +30,8 @@ var ContextMenuView = Marionette.ItemView.extend( {
         var event  = payload.event,
             view   = payload.view,
             groups = payload.groups,
-            menuX = event.pageX,
-            menuY = event.pageY
+            menuX = event.realClientX,
+            menuY = event.realClientY
         ;
 
         this.context = { event: event, view: view, groups: groups };

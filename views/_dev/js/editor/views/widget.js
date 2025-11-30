@@ -130,17 +130,14 @@ WidgetView = BaseElementView.extend( {
 			'.elementor-editor-element-settings'
 		);
 
-
 		if ($settings.length) {
 			const actions = [];
 
-			console.log(this.model);
-
-
+			const elementTitle = $settings.attr('data-title') || 'Widget';
 
 			actions.push({
 			    name: 'edit',
-			    title: (elementor.translate ? elementor.translate('edit') : 'Edit'),
+			    title: (elementor.translate ? elementor.translate('Edit') : 'Edit') + ' ' + elementTitle,
 			    icon: '<i class="eicon-edit"></i>',
 			    callback: () => {
 			        this.triggerMethod('click:edit');
@@ -180,16 +177,6 @@ WidgetView = BaseElementView.extend( {
 				});
 			}
 		}
-
-		/*// Hook plus spécifique pour les widgets,
-		// comme le `getContextMenuGroups` du widget promo sur le dépôt officiel.
-		if (elementor.hooks && elementor.hooks.applyFilters) {
-			return elementor.hooks.applyFilters(
-				'elements/widget/context-menu/groups',
-				groups,
-				this.model
-			);
-		}*/
 
 		return groups;
 	},

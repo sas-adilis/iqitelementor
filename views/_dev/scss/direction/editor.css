@@ -71,7 +71,7 @@ body {
   overflow: hidden;
 }
 body a {
-  color: #71d7f7;
+  color: #3c90a8;
 }
 body a:hover {
   color: #9b0a46;
@@ -195,7 +195,7 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
 }
 
 #elementor-fatal-error-dialog button.dialog-ok {
-  color: #71d7f7;
+  color: #3c90a8;
 }
 #elementor-fatal-error-dialog .dialog-widget-header {
   font-size: 13px;
@@ -1225,10 +1225,10 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 
 .elementor-device-mobile #elementor-panel #elementor-panel-page-editor .elementor-responsive-switcher-mobile {
-  background-color: #71d7f7;
+  background-color: #3c90a8;
 }
 .elementor-device-tablet #elementor-panel #elementor-panel-page-editor .elementor-responsive-switcher-tablet {
-  background-color: #71d7f7;
+  background-color: #3c90a8;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-media .elementor-control-media {
   padding: 7px;
@@ -1989,7 +1989,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   opacity: 0;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-input:checked ~ .elementor-switch-label {
-  background: #71d7f7;
+  background: #3c90a8;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15), inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-input:checked ~ .elementor-switch-label:before {

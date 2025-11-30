@@ -69,6 +69,7 @@ html.elementor-html {
 				bottom: 0;
 				letter-spacing: 0; // Hack for front-end style themes
 				z-index: $element-overlay;
+				pointer-events: none;
 			}
 
 			&.elementor-widget-empty {
@@ -100,11 +101,8 @@ html.elementor-html {
 			}
 
 			&:not(:hover) {
-
 				&:not(.elementor-element-editable) {
-
 					> .elementor-element-overlay {
-
 						.elementor-editor-element-settings-list {
 							display: none;
 						}
@@ -112,9 +110,7 @@ html.elementor-html {
 				}
 
 				&:not(.ui-resizable-resizing) {
-
 					> .elementor-element-overlay {
-
 						.column-title {
 							display: none;
 						}
@@ -148,6 +144,10 @@ html.elementor-html {
 
 		// Section
 		.elementor-section {
+
+			&:hover {
+				outline: 2px solid $editor-accent;
+			}
 
 			&:not(.elementor-section-height-full) {
 
@@ -184,6 +184,7 @@ html.elementor-html {
 		.elementor-editor-element-settings {
 			position: absolute;
 			overflow: hidden;
+			pointer-events: auto;
 
 			.elementor-editor-element-settings-list {
 				display: table;
@@ -249,28 +250,61 @@ html.elementor-html {
 			}
 
 			.elementor-editor-element-remove {
-
 				.fa {
-					color: $editor-danger;
 				}
 			}
 		}
 
-		// Column - Overlay Settings
-		.elementor-editor-column-settings {
-			@include start(-1px);
+		// Section - Overlay Settings
+		.elementor-editor-section-settings {
+			left: 50%;
+			transform: translateX(-50%);
 			z-index: $first-layer;
 			bottom: 100%;
-			margin-bottom: 1px;
-			transform: translateY(1px);
 			border-radius: 3px 3px 0 0;
+
+			.elementor-editor-element-settings-list {
+				float: $start;
+				background-color: $editor-accent !important;
+
+
+				.elementor-editor-element-setting {
+
+					@media (min-width: $screen-lg-min) {
+						border-right: 1px solid rgba(0, 0, 0, .2) !important;
+					}
+
+					> a {
+						&:hover {
+							background-color: rgba(0, 0, 0, .2) !important;
+						}
+					}
+				}
+			}
+
+			.elementor-editor-element-trigger {
+				@media(min-width: $screen-lg-min) {
+					> a {
+						cursor: move;
+					}
+				}
+			}
+		}
+
+
+		// Column - Overlay Settings
+		.elementor-editor-column-settings {
+			@include start(0);
+			z-index: $second-layer;
+			margin-bottom: 1px;
+			border-radius: 0;
+			top: 0;
 
 			.elementor-editor-element-settings-list {
 				float: $start;
 				background-color: $editor-darkest;
 
 				.elementor-editor-element-setting {
-
 					@media (min-width: $screen-lg-min) {
 						&:not(:last-child) {
 							@include border-end(1px solid $editor-darker);
@@ -278,50 +312,25 @@ html.elementor-html {
 					}
 
 					> a {
-
 						&:hover {
 							background-color: $editor-darker;
 						}
 					}
+
+					&:not(:first-child) {
+						/*display: none;*/
+					}
+				}
+
+				&:not(:hover) > .elementor-editor-element-setting:not(:first-child) {
+					display: none;
 				}
 			}
 
 			.elementor-editor-element-trigger {
-
-				&:not(.elementor-active) {
-
-					~ .elementor-editor-element-setting {
-						display: none;
-					}
-				}
-
-				> a {
-					padding: 8.5px;
-				}
-
 				@media(min-width: $screen-lg-min) {
-
 					> a {
 						cursor: move;
-
-						&:hover {
-
-							&:after {
-								content: getValueByDirection('\f105', '\f104');
-								font-family: 'FontAwesome';
-								@include margin-start(5px);
-							}
-						}
-					}
-
-					&.elementor-active {
-						> a {
-							&:after {
-								content: getValueByDirection('\f105', '\f104');
-								font-family: 'FontAwesome';
-								@include margin-start(5px);
-							}
-						}
 					}
 				}
 			}
@@ -449,7 +458,7 @@ html.elementor-html {
 
 			.column-title {
 				position: absolute;
-				bottom: 100%;
+				top: 0;
 				@include end(0);
 				margin-bottom: 5px;
 				color: #999;
@@ -545,14 +554,19 @@ html.elementor-html {
 	.elementor-sortable-placeholder {
 		background: $editor-info;
 		transition-timing-function: ease-out;
+		opacity: 0.3;
 
 		&:not(.elementor-column) {
-			height: 5px;
+			height: 50px;
 		}
 
 		&.elementor-column {
-			width: 5px;
+			width: 25px;
 		}
+	}
+
+	#elementor-section-wrap > .elementor-sortable-placeholder {
+		background: $editor-accent;
 	}
 
 	.elementor-sortable-helper {

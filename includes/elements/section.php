@@ -685,7 +685,37 @@ class Element_Section extends Element_Base
     protected function render_settings()
     {
         ?>
-        <div class="elementor-element-overlay"></div>
+        <div class="elementor-element-overlay">
+            <div class="section-title"></div>
+            <div class="elementor-editor-element-settings elementor-editor-section-settings">
+                <ul class="elementor-editor-element-settings-list  elementor-editor-section-settings-list">
+                    <li class="elementor-editor-element-setting elementor-editor-element-trigger">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Section', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Section', 'elementor'); ?></span>
+                            <i class="fa fa-grip-lines"></i>
+                        </a>
+                    </li>
+                    <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate Section', 'elementor'); ?></span>
+                            <i class="fa fa-copy"></i>
+                        </a>
+                    </li>
+                    <!--<li class="elementor-editor-element-setting elementor-editor-element-save">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
+                            <i class="fa fa-floppy-o"></i>
+                        </a>
+                    </li>-->
+                    <li class="elementor-editor-element-setting elementor-editor-element-remove">
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
         <?php
     }
 

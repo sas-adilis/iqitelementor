@@ -511,7 +511,10 @@ class Element_Column extends Element_Base
             <div class="elementor-editor-element-settings elementor-editor-column-settings">
                 <ul class="elementor-editor-element-settings-list elementor-editor-column-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-trigger">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Column', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Column', 'elementor'); ?></a>
+                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Column', 'elementor'); ?></span>
+                            <i class="fa fa-columns"></i>
+                        </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
                         <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate Column', 'elementor'); ?>">
@@ -528,29 +531,6 @@ class Element_Column extends Element_Base
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
                         <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove Column', 'elementor'); ?>">
                             <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?></span>
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="elementor-editor-element-settings-list  elementor-editor-section-settings-list">
-                    <li class="elementor-editor-element-setting elementor-editor-element-trigger">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Section', 'elementor'); ?>"><?php \IqitElementorWpHelper::_e('Section', 'elementor'); ?></a>
-                    </li>
-                    <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate Section', 'elementor'); ?></span>
-                            <i class="fa fa-copy"></i>
-                        </a>
-                    </li>
-                    <li class="elementor-editor-element-setting elementor-editor-element-save">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
-                            <i class="fa fa-floppy-o"></i>
-                        </a>
-                    </li>
-                    <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>
                             <i class="fa fa-times"></i>
                         </a>
                     </li>

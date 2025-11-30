@@ -94,6 +94,7 @@ BaseSettingsModel = Backbone.Model.extend( {
 	},
 
 	toJSON: function() {
+
 		var data = Backbone.Model.prototype.toJSON.call( this );
 
 		delete data.widgetType;
@@ -107,6 +108,70 @@ BaseSettingsModel = Backbone.Model.extend( {
 		} );
 
 		return data;
+	},
+
+	toJSONCleaned: function() {
+		var data = Backbone.Model.prototype.toJSONCleaned.call( this );
+
+		delete data.widgetType;
+		delete data.elType;
+		delete data.isInner;
+
+		// remove empty values
+		data = this.cleanEmptyValues(data);
+
+
+		console.log(data);
+		_.each( data, function( attribute, key ) {
+			if ( attribute && attribute.toJSON ) {
+				data[ key ] = attribute.toJSON();
+			}
+		});
+
+		return data;
+	},
+
+	cleanEmptyValues: function(data) {
+		function cleanEmptyValues(data) {
+			// Si tableau → nettoyer chaque entrée
+			if (Array.isArray(data)) {
+				const cleanedArray = data
+					.map(item => cleanEmptyValues(item))           // nettoyage récursif
+					.filter(item =>                                 // suppression des entrées vides
+						item !== null &&
+						item !== undefined &&
+						item !== '' &&
+						!(typeof item === 'object' && Object.keys(item).length === 0)
+					);
+
+				return cleanedArray.length > 0 ? cleanedArray : [];  // retourne tableau vide si vide
+			}
+
+			// Si objet → nettoyer chaque clé
+			if (typeof data === 'object' && data !== null) {
+				const cleanedObj = {};
+
+				Object.keys(data).forEach(key => {
+					const value = cleanEmptyValues(data[key]);
+
+					const isEmpty =
+						value === null ||
+						value === undefined ||
+						value === '' ||
+						(Array.isArray(value) && value.length === 0) ||
+						(typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+
+					if (!isEmpty) {
+						cleanedObj[key] = value;
+					}
+				});
+
+				return cleanedObj;
+			}
+
+			// Valeur primitive → retourner tel quel
+			return data;
+		}
 	}
 } );
 

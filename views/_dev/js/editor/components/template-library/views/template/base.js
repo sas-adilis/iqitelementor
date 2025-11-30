@@ -1,4 +1,3 @@
-var TemplateLibraryTemplateView;
 
 TemplateLibraryTemplateView = Marionette.ItemView.extend( {
 	className: function() {

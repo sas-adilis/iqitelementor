@@ -116,8 +116,9 @@ App = Marionette.Application.extend( {
 
 		this.modals.init();
 		this.ajax.init();
+		const initContextMenu = require("./components/context-menu");
+		initContextMenu(this);
 
-		//this.tabHandler.init(this);
 	},
 
 	initDialogsManager: function() {
@@ -223,6 +224,36 @@ App = Marionette.Application.extend( {
 				elementor.getPanelView().setPage( 'elements' );
 			}
 		} );
+		/*console.log( this.$previewContents );
+
+		// Right-click context menu handling inside the preview iframe
+		this.$previewContents.on( 'contextmenu', function( event ) {
+			console.log( 'IQIT ContextMenu: native contextmenu event detected', event );
+
+			var $target = Backbone.$( event.target ),
+				isClickInsideElementor = !! $target.closest( '#elementor' ).length,
+				isTargetInsideDocument = this.contains( $target[0] );
+
+			// Ignore right-clicks en dehors de la zone Elementor ou hors du document
+			if ( ! isClickInsideElementor || ! isTargetInsideDocument ) {
+				return;
+			}
+
+			// Empêche le menu contextuel natif du navigateur
+			event.preventDefault();
+
+			console.log( 'IQIT ContextMenu: native contextmenu captured on', $target[0] );
+
+			// TODO: retrouver la vue Backbone/Marionette associée à l'élément cliqué
+			var clickedView = null;
+
+			// Déclenchement de l'événement interne consommé par ContextMenuView
+			elementor.channels.editor.trigger( 'context-menu:open', {
+				event: event,
+				view: clickedView,
+				groups: []
+			} );
+		} );*/
 
 		this.addRegions( {
 			sections: iframeRegion,
@@ -372,6 +403,11 @@ App = Marionette.Application.extend( {
 
 		NProgress.start();
 
+		let elements = elementor.elements.toJSON();
+		for (let i = 0; i < elements.length; i++) {
+			elements[i] = this.cleanEmptyValues(elements[i]);
+		}
+
 		return this.ajax.send( 'SaveEditor', {
 	        data: {
 		        page_id: this.config.post_id,
@@ -380,7 +416,7 @@ App = Marionette.Application.extend( {
 				content_type: this.config.content_type,
 				page_type: this.config.page_type,
 		        revision: options.revision,
-		        data: JSON.stringify( elementor.elements.toJSON() )
+		        data: JSON.stringify( elements )
 	        },
 			success: function( data ) {
 				NProgress.done();
@@ -392,6 +428,69 @@ App = Marionette.Application.extend( {
 				}
 			}
         } );
+	},
+
+	cleanEmptyValues: function(element) {
+		//console.log('Before cleaning:', element);
+		//element = this._cleanEmptyData(element);
+		//console.log('After cleaning:', element);
+		return element;
+	},
+
+	_cleanEmptyData: function(data) {
+		// Si tableau → nettoyer chaque entrée récursivement et supprimer les entrées vides
+		if (Array.isArray(data)) {
+			const cleanedArray = data
+				.map(item => this._cleanEmptyData(item))
+				.filter(item => {
+					if (item === null || item === undefined || item === '') {
+						return false;
+					}
+
+					if (Array.isArray(item) && item.length === 0) {
+						return false;
+					}
+
+					if (item && typeof item === 'object' && !Array.isArray(item) && Object.keys(item).length === 0) {
+						return false;
+					}
+
+					return true;
+				});
+
+			return cleanedArray;
+		}
+
+		// Si objet → nettoyer chaque clé récursivement
+		if (data && typeof data === 'object') {
+			const cleanedObj = {};
+
+			Object.keys(data).forEach(key => {
+				const value = this._cleanEmptyData(data[key]);
+
+				const isEmpty =
+					value === null ||
+					value === undefined ||
+					value === '' ||
+					(Array.isArray(value) && value.length === 0) ||
+					(value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+
+				if (!isEmpty) {
+					cleanedObj[key] = value;
+				}
+			});
+
+			// Si l'objet ne contient qu'une seule clé 'unit', on le considère comme vide
+			const keys = Object.keys(cleanedObj);
+			if (keys.length === 1 && keys[0] === 'unit') {
+				return {};
+			}
+
+			return cleanedObj;
+		}
+
+		// Valeur primitive → retourner tel quel
+		return data;
 	},
 
 	changeDeviceMode: function( newDeviceMode ) {

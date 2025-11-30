@@ -272,7 +272,7 @@ class Widget_Countdown extends Widget_Base
      */
     protected function render($instance = [])
     {
-        $settings = $this->get_settings_for_display();
+        $settings = $instance;
 
         // Data pour le JS
         $date = !empty($settings['due_date']) ? strtotime($settings['due_date']) : 0;

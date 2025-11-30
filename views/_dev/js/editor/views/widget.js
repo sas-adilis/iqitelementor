@@ -40,6 +40,9 @@ WidgetView = BaseElementView.extend( {
 		},
 		HandleEditMode: {
 			behaviorClass: require( 'elementor-behaviors/handle-edit-mode' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
 		}
 	},
 
@@ -119,7 +122,77 @@ WidgetView = BaseElementView.extend( {
 				//}, 200 );
 			// Is element empty?
 		//} );
-	}
+	},
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'.elementor-editor-element-settings'
+		);
+
+
+		if ($settings.length) {
+			const actions = [];
+
+			console.log(this.model);
+
+
+
+			actions.push({
+			    name: 'edit',
+			    title: (elementor.translate ? elementor.translate('edit') : 'Edit'),
+			    icon: '<i class="eicon-edit"></i>',
+			    callback: () => {
+			        this.triggerMethod('click:edit');
+			    },
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		/*// Hook plus spécifique pour les widgets,
+		// comme le `getContextMenuGroups` du widget promo sur le dépôt officiel.
+		if (elementor.hooks && elementor.hooks.applyFilters) {
+			return elementor.hooks.applyFilters(
+				'elements/widget/context-menu/groups',
+				groups,
+				this.model
+			);
+		}*/
+
+		return groups;
+	},
 } );
 
 module.exports = WidgetView;

@@ -8997,7 +8997,6 @@ module.exports = SectionsCollectionView;
 
 },{"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/sortable":8,"elementor-views/section":101}],103:[function(require,module,exports){
 var BaseElementView = require( 'elementor-views/base-element' ),
-	widgetClipboard = window.iqitElementorClipboard || null,
 	WidgetView;
 
 WidgetView = BaseElementView.extend( {

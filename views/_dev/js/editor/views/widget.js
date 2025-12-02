@@ -158,6 +158,16 @@ WidgetView = BaseElementView.extend( {
 				});
 			}
 
+			actions.push(
+				require( 'elementor-utils/actions/copy' )( this, {
+					separator: 'before',
+				})
+			);
+
+			actions.push(
+				require( 'elementor-utils/actions/paste-styles' )( this)
+			);
+
 			if ($remove.length) {
 				actions.push({
 					name: 'delete',

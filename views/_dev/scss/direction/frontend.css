@@ -192,10 +192,11 @@
   position: relative;
 }
 .elementor-section.elementor-section-stretched {
-  width: 100vw;
+  margin-inline: calc(-50vw + var(--scrollbar-width, 0px) / 2);
+  width: calc(100vw - var(--scrollbar-width, 0px));
   position: relative;
-  margin-left: -50vw;
   left: 50%;
+  right: 50%;
 }
 .elementor-section.elementor-section-items-top > .elementor-container {
   align-items: flex-start;

@@ -23,15 +23,11 @@
 
 	// Stretched section settings
 	&.elementor-section-stretched {
-		width: 100vw;
+		margin-inline: calc(-50vw + (var(--scrollbar-width, 0px) / 2));
+		width: calc(100vw - var(--scrollbar-width, 0px));
 		position: relative;
-		@if ($direction == rtl) {
-			margin-right: -50vw;
-			right: 50%;
-		} @else {
-			margin-left: -50vw;
-			left: 50%;
-		}
+		left: 50%;
+		right: 50%;
 	}
 
 	// In section min-height / fit to screen mode

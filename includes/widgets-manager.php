@@ -49,6 +49,7 @@ class Widgets_Manager
             'html',
             'brands',
             'prestashop-module',
+            'shortcode',
         ];
 
         $this->_registered_widgets = [];

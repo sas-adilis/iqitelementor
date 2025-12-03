@@ -23,13 +23,14 @@
 
 			&default {
 
-				&:before {
+				/*&:before {
 					content: '';
 					height: 1px;
 					display: block;
 					margin-bottom: 15px;
 					background-color: $editor-background;
-				}
+				}*/
+
 
 				// WP Widgets
 				&.elementor-control-wp {
@@ -47,7 +48,7 @@
 				&:before {
 					content: '';
 					position: absolute;
-					height: 3px;
+					height: 1px;
 					width: 100%;
 					top: 0;
 					left: 0;
@@ -185,6 +186,7 @@
 			cursor: pointer;
 			line-height: 26px;
 			border-left: 1px solid $editor-light;
+			padding-inline: .5rem;
 		}
 
 		input {
@@ -1210,6 +1212,9 @@
 
 	// Box-shadow control
 	@import "controls/box-shadow";
+
+	// Text-shadow control
+	@import "controls/text-shadow";
 
 	// Switcher control
 	@import "controls/switcher";

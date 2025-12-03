@@ -1,7 +1,7 @@
 // Global style for animate.css
 
 .animated {
-	animation-duration: 1.25s;
+	animation-duration: 1.055s;
 
 	&.animated-slow {
 		animation-duration: 2s;
@@ -30,24 +30,24 @@
 */
 
 .elementor-bg-transform-zoom-in:hover .elementor-bg {
-	transform: scale(1.2); }
+	transform: scale(1.05); }
 .elementor-bg-transform-zoom-out .elementor-bg {
-	transform: scale(1.2); }
+	transform: scale(1.05); }
 .elementor-bg-transform-zoom-out:hover .elementor-bg {
 	transform: scale(1); }
 .elementor-bg-transform-move-left .elementor-bg {
-	transform: scale(1.2) translateX(8%); }
+	transform: scale(1.05) translateX(8%); }
 .elementor-bg-transform-move-left:hover .elementor-bg {
-	transform: scale(1.2) translateX(-8%); }
+	transform: scale(1.05) translateX(-8%); }
 .elementor-bg-transform-move-right .elementor-bg {
-	transform: scale(1.2) translateX(-8%); }
+	transform: scale(1.05) translateX(-8%); }
 .elementor-bg-transform-move-right:hover .elementor-bg {
-	transform: scale(1.2) translateX(8%); }
+	transform: scale(1.05) translateX(8%); }
 .elementor-bg-transform-move-up .elementor-bg {
-	transform: scale(1.2) translateY(8%); }
+	transform: scale(1.05) translateY(8%); }
 .elementor-bg-transform-move-up:hover .elementor-bg {
-	transform: scale(1.2) translateY(-8%); }
+	transform: scale(1.05) translateY(-8%); }
 .elementor-bg-transform-move-down .elementor-bg {
-	transform: scale(1.2) translateY(-8%); }
+	transform: scale(1.05) translateY(-8%); }
 .elementor-bg-transform-move-down:hover .elementor-bg {
-	transform: scale(1.2) translateY(8%); }
+	transform: scale(1.05) translateY(8%); }

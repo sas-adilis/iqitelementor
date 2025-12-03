@@ -51,6 +51,7 @@ class Controls_Manager
     public const BOX_SHADOW = 'box_shadow';
     public const ANIMATION = 'animation';
     public const HOVER_ANIMATION = 'hover_animation';
+    public const TEXT_SHADOW = 'text_shadow';
 
     /**
      * @var Control_Base[]
@@ -111,6 +112,7 @@ class Controls_Manager
             self::STRUCTURE,
             self::SELECT2,
             self::BOX_SHADOW,
+            self::TEXT_SHADOW,
             self::ANIMATION,
             self::HOVER_ANIMATION,
 
@@ -137,6 +139,7 @@ class Controls_Manager
         include 'controls/groups/image-size.php';
         include 'controls/groups/box-shadow.php';
         include 'controls/groups/image.php';
+        include 'controls/groups/text-shadow.php';
 
         $this->_group_controls['background'] = new Group_Control_Background();
         $this->_group_controls['border'] = new Group_Control_Border();
@@ -144,6 +147,7 @@ class Controls_Manager
         $this->_group_controls['image-size'] = new Group_Control_Image_Size();
         $this->_group_controls['box-shadow'] = new Group_Control_Box_Shadow();
         $this->_group_controls['image'] = new Group_Control_Image();
+        $this->_group_controls['text-shadow'] = new Group_Control_Text_Shadow();
     }
 
     /**

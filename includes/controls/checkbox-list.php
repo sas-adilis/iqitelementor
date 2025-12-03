@@ -7,7 +7,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Control_Checkbox_List extends Control_Base_Multiple
 {
-    public function get_type()
+    public function get_type(): string
     {
         return 'checkbox_list';
     }

@@ -24,7 +24,7 @@ class Control_Code extends Control_Base
 		<?php
     }
 
-    protected function get_default_settings()
+    protected function get_default_settings(): array
     {
         return [
             'label_block' => true,

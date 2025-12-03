@@ -95,6 +95,7 @@ App = Marionette.Application.extend( {
 				select2: require( 'elementor-views/controls/select2' ),
 				select_sort: require( 'elementor-views/controls/select-sort' ),
 				box_shadow: require( 'elementor-views/controls/box-shadow' ),
+				text_shadow: require( 'elementor-views/controls/text-shadow' ),
 				structure: require( 'elementor-views/controls/structure' ),
 				animation: require( 'elementor-views/controls/animation' ),
 				hover_animation: require( 'elementor-views/controls/animation' ),

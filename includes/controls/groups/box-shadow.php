@@ -7,12 +7,12 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Group_Control_Box_Shadow extends Group_Control_Base
 {
-    public static function get_type()
+    public static function get_type(): string
     {
         return 'box-shadow';
     }
 
-    protected function _get_controls($args)
+    protected function _get_controls($args): array
     {
         $controls = [];
 

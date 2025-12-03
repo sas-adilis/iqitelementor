@@ -1029,12 +1029,14 @@ select {
   position: relative;
   padding: 0 20px 15px;
 }
-#elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-separator-default:before {
-  content: "";
-  height: 1px;
-  display: block;
-  margin-bottom: 15px;
-  background-color: #e6e9ec;
+#elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-separator-default {
+  /*&:before {
+  	content: '';
+  	height: 1px;
+  	display: block;
+  	margin-bottom: 15px;
+  	background-color: $editor-background;
+  }*/
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-separator-default.elementor-control-wp {
   margin-top: 15px;
@@ -1048,7 +1050,7 @@ select {
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-separator-before:before {
   content: "";
   position: absolute;
-  height: 3px;
+  height: 1px;
   width: 100%;
   top: 0;
   left: 0;
@@ -1130,6 +1132,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   cursor: pointer;
   line-height: 26px;
   border-left: 1px solid #a4afb7;
+  padding-inline: 0.5rem;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices input {
   display: none;
@@ -1930,6 +1933,33 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-box_shadow .elementor-box-shadow-slider {
   margin-top: 10px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow {
+  padding-block: 15px 40px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow .elementor-control-input-wrapper {
+  overflow: hidden;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow .elementor-text-shadow-slider {
+  margin-top: 10px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:before, #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:after {
+  content: "";
+  height: 15px;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:before {
+  top: 0;
+  background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
+  border-top: 1px solid #d5dadf;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:after {
+  bottom: 15px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  border-bottom: 1px solid #d5dadf;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field {
   display: flex;

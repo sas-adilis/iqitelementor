@@ -1469,8 +1469,8 @@ body.elementor-page .elementor-widget-menu-anchor {
 }
 
 .animated {
-  -webkit-animation-duration: 1.25s;
-          animation-duration: 1.25s;
+  -webkit-animation-duration: 1.055s;
+          animation-duration: 1.055s;
 }
 .animated.animated-slow {
   -webkit-animation-duration: 2s;
@@ -1500,13 +1500,13 @@ body.elementor-page .elementor-widget-menu-anchor {
 }
 */
 .elementor-bg-transform-zoom-in:hover .elementor-bg {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
 }
 
 .elementor-bg-transform-zoom-out .elementor-bg {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
+  -webkit-transform: scale(1.05);
+          transform: scale(1.05);
 }
 
 .elementor-bg-transform-zoom-out:hover .elementor-bg {
@@ -1515,43 +1515,43 @@ body.elementor-page .elementor-widget-menu-anchor {
 }
 
 .elementor-bg-transform-move-left .elementor-bg {
-  -webkit-transform: scale(1.2) translateX(8%);
-          transform: scale(1.2) translateX(8%);
+  -webkit-transform: scale(1.05) translateX(8%);
+          transform: scale(1.05) translateX(8%);
 }
 
 .elementor-bg-transform-move-left:hover .elementor-bg {
-  -webkit-transform: scale(1.2) translateX(-8%);
-          transform: scale(1.2) translateX(-8%);
+  -webkit-transform: scale(1.05) translateX(-8%);
+          transform: scale(1.05) translateX(-8%);
 }
 
 .elementor-bg-transform-move-right .elementor-bg {
-  -webkit-transform: scale(1.2) translateX(-8%);
-          transform: scale(1.2) translateX(-8%);
+  -webkit-transform: scale(1.05) translateX(-8%);
+          transform: scale(1.05) translateX(-8%);
 }
 
 .elementor-bg-transform-move-right:hover .elementor-bg {
-  -webkit-transform: scale(1.2) translateX(8%);
-          transform: scale(1.2) translateX(8%);
+  -webkit-transform: scale(1.05) translateX(8%);
+          transform: scale(1.05) translateX(8%);
 }
 
 .elementor-bg-transform-move-up .elementor-bg {
-  -webkit-transform: scale(1.2) translateY(8%);
-          transform: scale(1.2) translateY(8%);
+  -webkit-transform: scale(1.05) translateY(8%);
+          transform: scale(1.05) translateY(8%);
 }
 
 .elementor-bg-transform-move-up:hover .elementor-bg {
-  -webkit-transform: scale(1.2) translateY(-8%);
-          transform: scale(1.2) translateY(-8%);
+  -webkit-transform: scale(1.05) translateY(-8%);
+          transform: scale(1.05) translateY(-8%);
 }
 
 .elementor-bg-transform-move-down .elementor-bg {
-  -webkit-transform: scale(1.2) translateY(-8%);
-          transform: scale(1.2) translateY(-8%);
+  -webkit-transform: scale(1.05) translateY(-8%);
+          transform: scale(1.05) translateY(-8%);
 }
 
 .elementor-bg-transform-move-down:hover .elementor-bg {
-  -webkit-transform: scale(1.2) translateY(8%);
-          transform: scale(1.2) translateY(8%);
+  -webkit-transform: scale(1.05) translateY(8%);
+          transform: scale(1.05) translateY(8%);
 }
 
 @media (max-width: 767px) {

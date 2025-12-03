@@ -171,9 +171,7 @@ class Group_Control_Typography extends Group_Control_Base
             ],
         ];
 
-        $controls = $typography_control + $controls;
-
-        return $controls;
+        return $typography_control + $controls;
     }
 
     protected function _add_group_args_to_control($control_id, $control_args)

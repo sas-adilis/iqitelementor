@@ -33,7 +33,15 @@ class Widget_Call_to_action extends Widget_Base
      */
     protected function _register_controls()
     {
+        $this->register_content_controls();
+        $this->register_style_controls();
+    }
 
+    /**
+     * Register content-related controls (TAB CONTENT).
+     */
+    protected function register_content_controls()
+    {
         /**
          * TAB CONTENT – Section principale CTA
          */
@@ -233,8 +241,13 @@ class Widget_Call_to_action extends Widget_Base
         $this->registerButtonControls('section_content', [], ['align', 'link']);
 
         $this->end_controls_section();
+    }
 
-
+    /**
+     * Register style-related controls (TAB STYLE).
+     */
+    protected function register_style_controls()
+    {
         /**
          * TAB STYLE – Box
          */
@@ -345,7 +358,6 @@ class Widget_Call_to_action extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
-                'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
             ]
         );
@@ -355,9 +367,18 @@ class Widget_Call_to_action extends Widget_Base
             [
                 'name' => 'title_typography',
                 'selector' => '{{WRAPPER}} .elementor-cta-title',
-                'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
                 'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Text_Shadow::get_type(),
+            [
+                'name' => 'title_text_shadow',
+                'selector' => '{{WRAPPER}} .elementor-cta-title',
+                'tab' => self::TAB_STYLE,
+                'section' => 'section_style_content',
             ]
         );
 

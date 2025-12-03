@@ -170,6 +170,12 @@ abstract class Element_Base
 
                 return;
 
+            case 'text-shadow':
+                $control = new Group_Control_Text_Shadow();
+                $control->add_controls($this, $args);
+
+                return;
+
             case 'image':
                 $control = new Group_Control_Image();
                 $control->add_controls($this, $args);

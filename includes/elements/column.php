@@ -31,6 +31,9 @@ class Element_Column extends Element_Base
                 'label' => \IqitElementorWpHelper::__('Auto Width'),
                 'type' => Controls_Manager::SWITCHER,
                 'description' => \IqitElementorWpHelper::__('Column width will be defined by its content width.'),
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: auto; flex: 0 0 auto;',
+                ],
                 'condition' => [
                     'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
                 ],
@@ -113,35 +116,7 @@ class Element_Column extends Element_Base
 
         $this->end_controls_tabs();
 
-        $this->add_responsive_control(
-            'content_position',
-            [
-                'label' => \IqitElementorWpHelper::__('Vertical Align'),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
-                    '' => \IqitElementorWpHelper::__('Default'),
-                    'top' => \IqitElementorWpHelper::__('Top'),
-                    'center' => \IqitElementorWpHelper::__('Middle'),
-                    'bottom' => \IqitElementorWpHelper::__('Bottom'),
-                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
-                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
-                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
-                ],
-                'selectors_dictionary' => [
-                    'top' => 'flex-start',
-                    'bottom' => 'flex-end',
-                ],
-                'separator' => 'before',
-                'selectors' => [
-                    // TODO: The following line is for BC since 2.7.0
-                    '.elementor-bc-flex-widget {{WRAPPER}}.elementor-column .elementor-column-wrap' => 'align-items: {{VALUE}}',
-                    // This specificity is intended to make sure column css overwrites section css on vertical alignment (content_position)
-                    '{{WRAPPER}}.elementor-column.elementor-element[data-element_type="column"] > .elementor-column-wrap.elementor-element-populated > .elementor-widget-wrap' => 'align-content: {{VALUE}}; align-items: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_responsive_control(
+        /*$this->add_responsive_control(
             'align',
             [
                 'label' => \IqitElementorWpHelper::__('Horizontal Align'),
@@ -151,15 +126,12 @@ class Element_Column extends Element_Base
                     'flex-start' => \IqitElementorWpHelper::__('Start'),
                     'center' => \IqitElementorWpHelper::__('Center'),
                     'flex-end' => \IqitElementorWpHelper::__('End'),
-                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
-                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
-                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
                 ],
                 'selectors' => [
-                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'justify-content: {{VALUE}}',
+                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'align-items: {{VALUE}}',
                 ],
             ]
-        );
+        );*/
 
         $this->add_responsive_control(
             'space_between_widgets',

@@ -8,7 +8,10 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Widget_Testimonial extends Widget_Base
 {
-    public function get_id()
+
+    use IqitElementorCarouselTrait;
+
+    public function get_id(): string
     {
         return 'testimonial';
     }
@@ -18,18 +21,19 @@ class Widget_Testimonial extends Widget_Base
         return \IqitElementorWpHelper::__('Testimonial', 'elementor');
     }
 
-    public function get_icon()
+    public function get_icon(): string
     {
-        return 'testimonial';
+        return 'testimonial-carousel';
     }
 
     protected function _register_controls()
     {
-        $this->add_control(
+
+
+        $this->start_controls_section(
             'section_testimonial',
             [
                 'label' => \IqitElementorWpHelper::__('Testimonial', 'elementor'),
-                'type' => Controls_Manager::SECTION,
             ]
         );
 
@@ -39,29 +43,12 @@ class Widget_Testimonial extends Widget_Base
                 'label' => '',
                 'type' => Controls_Manager::REPEATER,
                 'default' => [],
-                'section' => 'section_testimonial',
                 'fields' => [
                     [
                         'name' => 'name',
                         'label' => \IqitElementorWpHelper::__('Name', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'default' => 'John Doe',
-                    ],
-                    [
-                        'name' => 'job',
-                        'label' => \IqitElementorWpHelper::__('Job', 'elementor'),
-                        'type' => Controls_Manager::TEXT,
-                        'default' => 'Designer',
-                    ],
-                    [
-                        'name' => 'image',
-                        'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
-                        'type' => Controls_Manager::MEDIA,
-                        'placeholder' => \IqitElementorWpHelper::__('Image', 'elementor'),
-                        'label_block' => true,
-                        'default' => [
-                            'url' => UtilsElementor::get_placeholder_image_src(),
-                        ],
                     ],
                     [
                         'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
@@ -72,29 +59,6 @@ class Widget_Testimonial extends Widget_Base
                     ],
                 ],
                 'title_field' => 'name',
-            ]
-        );
-
-        $this->add_control(
-            'section_additional_options',
-            [
-                'label' => \IqitElementorWpHelper::__('Settings', 'elementor'),
-                'type' => Controls_Manager::SECTION,
-            ]
-        );
-
-        $this->add_control(
-            'testimonial_image_position',
-            [
-                'label' => \IqitElementorWpHelper::__('Image Position', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'aside',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'aside' => \IqitElementorWpHelper::__('Aside to name', 'elementor'),
-                    'top' => \IqitElementorWpHelper::__('Top (above content)', 'elementor'),
-                ],
-                'separator' => 'before',
             ]
         );
 
@@ -122,121 +86,24 @@ class Widget_Testimonial extends Widget_Base
             ]
         );
 
-        $slides_to_show = range(1, 10);
-        $slides_to_show = array_combine($slides_to_show, $slides_to_show);
+        $this->end_controls_section();
 
-        $this->add_control(
-            'slides_to_show',
+        $this->start_controls_section(
+            'section_carousel_options',
             [
-                'label' => \IqitElementorWpHelper::__('Slides to Show', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => '3',
-                'section' => 'section_additional_options',
-                'options' => $slides_to_show,
+                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
             ]
         );
 
-        $this->add_control(
-            'navigation',
-            [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'both',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'both' => \IqitElementorWpHelper::__('Arrows and Dots', 'elementor'),
-                    'arrows' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
-                    'dots' => \IqitElementorWpHelper::__('Dots', 'elementor'),
-                    'none' => \IqitElementorWpHelper::__('None', 'elementor'),
-                ],
-            ]
-        );
+        $this->register_carousel_controls('section_carousel_options', [], ['slides_to_show' => 1]);
 
-        $this->add_control(
-            'pause_on_hover',
-            [
-                'label' => \IqitElementorWpHelper::__('Pause on Hover', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'yes',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'autoplay',
-            [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'yes',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'autoplay_speed',
-            [
-                'label' => \IqitElementorWpHelper::__('Autoplay Speed', 'elementor'),
-                'type' => Controls_Manager::NUMBER,
-                'default' => 5000,
-                'section' => 'section_additional_options',
-            ]
-        );
-
-        $this->add_control(
-            'infinite',
-            [
-                'label' => \IqitElementorWpHelper::__('Infinite Loop', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'yes',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'effect',
-            [
-                'label' => \IqitElementorWpHelper::__('Effect', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'slide',
-                'section' => 'section_additional_options',
-                'options' => [
-                    'slide' => \IqitElementorWpHelper::__('Slide', 'elementor'),
-                    'fade' => \IqitElementorWpHelper::__('Fade', 'elementor'),
-                ],
-                'condition' => [
-                    'slides_to_show' => '1',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'speed',
-            [
-                'label' => \IqitElementorWpHelper::__('Animation Speed', 'elementor'),
-                'type' => Controls_Manager::NUMBER,
-                'default' => 500,
-                'section' => 'section_additional_options',
-            ]
-        );
+        $this->end_controls_section();
 
         // Box
-        $this->add_control(
+        $this->start_controls_section(
             'section_style_testimonial_box',
             [
                 'label' => \IqitElementorWpHelper::__('Testimonial box', 'elementor'),
-                'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -246,12 +113,11 @@ class Widget_Testimonial extends Widget_Base
             [
                 'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_box',
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
                     'value' => Scheme_Color::COLOR_4,
                 ],
+                'separator' => 'after',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-wrapper' => 'background-color: {{VALUE}};',
                 ],
@@ -262,9 +128,7 @@ class Widget_Testimonial extends Widget_Base
             Group_Control_Border::get_type(),
             [
                 'name' => 'testimonial_border',
-                'label' => \IqitElementorWpHelper::__('Image Border', 'elementor'),
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_box',
+                'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
                 'selector' => '{{WRAPPER}} .elementor-testimonial-wrapper',
             ]
         );
@@ -275,8 +139,6 @@ class Widget_Testimonial extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_box',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-wrapper' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -289,8 +151,7 @@ class Widget_Testimonial extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Box padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_box',
+                'separator' => 'before',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-wrapper' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -303,8 +164,6 @@ class Widget_Testimonial extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Box Margin', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_box',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-wrapper' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -316,18 +175,26 @@ class Widget_Testimonial extends Widget_Base
             [
                 'name' => 'testimonial_box_shadow',
                 'section' => 'section_style_testimonial_box',
-                'tab' => self::TAB_STYLE,
                 'selector' => '{{WRAPPER}} .elementor-testimonial-wrapper',
             ]
         );
 
+        $this->end_controls_section();
+
         // Content
-        $this->add_control(
-            'section_style_testimonial_content',
+        $this->start_controls_section(
+            'section_style_content',
             [
                 'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
-                'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->add_control(
+            'section_style_content_content',
+            [
+                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'type' => Controls_Manager::HEADING,
             ]
         );
 
@@ -340,8 +207,6 @@ class Widget_Testimonial extends Widget_Base
                     'type' => Scheme_Color::get_type(),
                     'value' => Scheme_Color::COLOR_3,
                 ],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_content',
                 'default' => '',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-content' => 'color: {{VALUE}};',
@@ -355,73 +220,16 @@ class Widget_Testimonial extends Widget_Base
                 'name' => 'content_typography',
                 'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
                 'scheme' => Scheme_Typography::TYPOGRAPHY_3,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_content',
                 'selector' => '{{WRAPPER}} .elementor-testimonial-content',
             ]
         );
 
-        // Image
         $this->add_control(
-            'section_style_testimonial_image',
-            [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
-                'type' => Controls_Manager::SECTION,
-                'tab' => self::TAB_STYLE,
-            ]
-        );
-
-        $this->add_control(
-            'image_size',
-            [
-                'label' => \IqitElementorWpHelper::__('Image Size', 'elementor'),
-                'type' => Controls_Manager::SLIDER,
-                'size_units' => ['px'],
-                'range' => [
-                    'px' => [
-                        'min' => 20,
-                        'max' => 200,
-                    ],
-                ],
-                'section' => 'section_style_testimonial_image',
-                'tab' => self::TAB_STYLE,
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-testimonial-wrapper .elementor-testimonial-image img' => 'width: {{SIZE}}{{UNIT}};height: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Border::get_type(),
-            [
-                'name' => 'image_border',
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_image',
-                'selector' => '{{WRAPPER}} .elementor-testimonial-wrapper .elementor-testimonial-image img',
-            ]
-        );
-
-        $this->add_control(
-            'image_border_radius',
-            [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
-                'type' => Controls_Manager::DIMENSIONS,
-                'size_units' => ['px', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_image',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-testimonial-wrapper .elementor-testimonial-image img' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        // Name
-        $this->add_control(
-            'section_style_testimonial_name',
+            'section_style_content_name',
             [
                 'label' => \IqitElementorWpHelper::__('Name', 'elementor'),
-                'type' => Controls_Manager::SECTION,
-                'tab' => self::TAB_STYLE,
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
             ]
         );
 
@@ -434,8 +242,6 @@ class Widget_Testimonial extends Widget_Base
                     'type' => Scheme_Color::get_type(),
                     'value' => Scheme_Color::COLOR_1,
                 ],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_name',
                 'default' => '',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-testimonial-name' => 'color: {{VALUE}};',
@@ -455,171 +261,22 @@ class Widget_Testimonial extends Widget_Base
             ]
         );
 
-        // Job
-        $this->add_control(
-            'section_style_testimonial_job',
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_carousel_styles',
             [
-                'label' => \IqitElementorWpHelper::__('Job', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
                 'type' => Controls_Manager::SECTION,
-                'tab' => self::TAB_STYLE,
+                'tab' => self::TAB_STYLE
             ]
         );
 
-        $this->add_control(
-            'job_text_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'scheme' => [
-                    'type' => Scheme_Color::get_type(),
-                    'value' => Scheme_Color::COLOR_2,
-                ],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_job',
-                'default' => '',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-testimonial-job' => 'color: {{VALUE}};',
-                ],
-            ]
-        );
+        $this->register_carousel_styles('section_carousel_styles');
 
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'job_typography',
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
-                'scheme' => Scheme_Typography::TYPOGRAPHY_2,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_testimonial_job',
-                'selector' => '{{WRAPPER}} .elementor-testimonial-job',
-            ]
-        );
-
-        $this->add_control(
-            'section_style_navigation',
-            [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
-                'type' => Controls_Manager::SECTION,
-                'tab' => self::TAB_STYLE,
-                'condition' => [
-                    'navigation' => ['arrows', 'dots', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'heading_style_arrows',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
-                'type' => Controls_Manager::HEADING,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_navigation',
-                'separator' => 'before',
-                'condition' => [
-                    'navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'arrows_position',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows Position', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => 'middle',
-                'section' => 'section_style_navigation',
-                'tab' => self::TAB_STYLE,
-                'options' => [
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'above' => \IqitElementorWpHelper::__('Above', 'elementor'),
-                ],
-                'condition' => [
-                    'navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'arrows_position_top',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows Top Position', 'elementor'),
-                'type' => Controls_Manager::NUMBER,
-                'section' => 'section_style_navigation',
-                'tab' => self::TAB_STYLE,
-                'default' => '-20',
-                'min' => '-100',
-                'condition' => [
-                    'arrows_position' => ['above'],
-                ],
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-arrows-above .swiper-button' => 'top: {{VALUE}}px;',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'arrows_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_navigation',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-swiper-button' => 'color: {{VALUE}};',
-                ],
-                'condition' => [
-                    'navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'arrows_bg_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Arrows background', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_navigation',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-swiper-button' => 'background: {{VALUE}};',
-                ],
-                'condition' => [
-                    'navigation' => ['arrows', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'heading_style_dots',
-            [
-                'label' => \IqitElementorWpHelper::__('Dots', 'elementor'),
-                'type' => Controls_Manager::HEADING,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_navigation',
-                'separator' => 'before',
-                'condition' => [
-                    'navigation' => ['dots', 'both'],
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'dots_color',
-            [
-                'label' => \IqitElementorWpHelper::__('Dots Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_navigation',
-                'selectors' => [
-                    '{{WRAPPER}} .swiper-pagination-bullet' => 'background: {{VALUE}};',
-                ],
-                'condition' => [
-                    'navigation' => ['dots', 'both'],
-                ],
-            ]
-        );
+        $this->end_controls_section();
     }
-
+/*
     protected function render($instance = [])
     {
         if (empty($instance['testimonials_list'])) {
@@ -727,9 +384,27 @@ class Widget_Testimonial extends Widget_Base
                 <div class="swiper-button-next swiper-button elementor-swiper-button elementor-swiper-button-next"></div>
             <?php } ?>
         </div>
-    <?php }
+    <?php }*/
 
     protected function content_template()
     {
+    }
+
+    public function parseOptions($optionsSource, $preview = false): array
+    {
+        if (empty($optionsSource['testimonials_list'])) {
+            return [];
+        }
+
+        $testimonial_alignment = $optionsSource['testimonial_alignment'] ? ' elementor-testimonial-text-align-' . $optionsSource['testimonial_alignment'] : '';
+        $testimonials_list = $optionsSource['testimonials_list'];
+
+        return array_merge(
+            [
+                'testimonial_alignment' => $testimonial_alignment,
+                'testimonials_list' => $testimonials_list,
+            ],
+            $this->build_carousel_options($optionsSource)
+        );
     }
 }

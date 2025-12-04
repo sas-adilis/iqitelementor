@@ -326,6 +326,19 @@ abstract class Element_Base
         return true;
     }
 
+    public function update_control($id, $args)
+    {
+        if (!isset($this->_controls[$id])) {
+            \IqitElementorWpHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, 'Cannot update non-existing control. - ' . $id, '1.0.0');
+
+            return false;
+        }
+
+        $this->_controls[$id] = array_merge($this->_controls[$id], $args);
+
+        return true;
+    }
+
     public function remove_control($id)
     {
         unset($this->_controls[$id]);

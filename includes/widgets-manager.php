@@ -39,7 +39,7 @@ class Widgets_Manager
             'icon-list',
             'counter',
             // 'progress',
-            // 'testimonial',
+            'testimonial',
             'tabs',
             'accordion',
             // 'toggle',

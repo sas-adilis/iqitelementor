@@ -32,7 +32,7 @@ class Widget_Shortcode extends Widget_Base
      */
     public function get_icon()
     {
-        return 'eicon-shortcode';
+        return 'shortcode';
     }
 
     /**

@@ -7,19 +7,13 @@ if (!defined('_PS_VERSION_')) {
 
 trait IqitElementorCarouselTrait
 {
-    protected function getCarouselSlidesToShowOptions(): array
-    {
-        $slides = range(1, 12);
-
-        return array_combine($slides, $slides);
-    }
-
     /**
      * Enregistre les contrôles liés au carousel sur la section donnée
      */
-    protected function registerCarouselControls(string $sectionId = 'section_pswidget_options', array $condition = []): void
+    protected function register_carousel_controls(string $sectionId = 'section_pswidget_options', array $condition = [], array $default_params = []): void
     {
-        $slidesToShowSlider = $this->getCarouselSlidesToShowOptions();
+        $slides = range(1, 12);
+        $slidesToShowSlider = array_combine($slides, $slides);
 
         $this->add_responsive_control(
             'dots',
@@ -180,9 +174,24 @@ trait IqitElementorCarouselTrait
                 'condition' => $condition,
             ]
         );
+
+        if (count($default_params)) {
+            $controls = $this->get_controls();
+            foreach ($controls as $control) {
+                if (array_key_exists($control['name'], $default_params)) {
+                    $this->update_control(
+                        $control['name'],
+                        [
+                            'default' => $default_params[$control['name']],
+                        ]
+                    );
+                }
+            }
+        }
+
     }
 
-    protected function registerCarouselStyles(string $sectionId = 'section_pswidget_options', array $condition = []): void
+    protected function register_carousel_styles(string $sectionId = 'section_pswidget_options', array $condition = []): void
     {
         $this->add_control(
             'arrows_position',
@@ -275,7 +284,7 @@ trait IqitElementorCarouselTrait
         );
     }
 
-    protected function buildCarouselOptions(array $settings): array
+    protected function build_carousel_options(array $settings): array
     {
         return [
             'arrows_position' => $settings['arrows_position'] ?? 'middle',

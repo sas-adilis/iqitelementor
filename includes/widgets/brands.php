@@ -261,7 +261,7 @@ class Widget_Brands extends Widget_Base
             ]
         );
 
-        $this->registerCarouselControls('section_carousel_options', [
+        $this->register_carousel_controls('section_carousel_options', [
             'view' => 'carousel',
         ]);
 
@@ -274,7 +274,7 @@ class Widget_Brands extends Widget_Base
             ]
         );
 
-        $this->registerCarouselStyles('section_carousel_styles', [
+        $this->register_carousel_styles('section_carousel_styles', [
             'view' => 'carousel',
         ]);
     }
@@ -362,7 +362,7 @@ class Widget_Brands extends Widget_Base
         if ($optionsSource['view'] == 'carousel') {
             $widgetOptions = array_merge(
                 $widgetOptions,
-                $this->buildCarouselOptions($optionsSource)
+                $this->build_carousel_options($optionsSource)
             );
         }
 

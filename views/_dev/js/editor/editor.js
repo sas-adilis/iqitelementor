@@ -117,9 +117,12 @@ App = Marionette.Application.extend( {
 
 		this.modals.init();
 		this.ajax.init();
+
 		const initContextMenu = require("./components/context-menu");
 		initContextMenu(this);
 
+		const initTypographyGroup = require("./components/typography-group");
+		initTypographyGroup(this);
 	},
 
 	initDialogsManager: function() {

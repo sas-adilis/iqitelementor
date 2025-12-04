@@ -11,12 +11,12 @@ class Group_Control_Typography extends Group_Control_Base
 
     private static $_scheme_fields_keys = ['font_family', 'font_weight'];
 
-    public static function get_scheme_fields_keys()
+    public static function get_scheme_fields_keys(): array
     {
         return self::$_scheme_fields_keys;
     }
 
-    public static function get_type()
+    public static function get_type(): string
     {
         return 'typography';
     }
@@ -48,11 +48,7 @@ class Group_Control_Typography extends Group_Control_Base
             'selector_value' => 'font-size: {{SIZE}}{{UNIT}}',
         ];
 
-        $default_fonts = 'Sans-serif';
-
-        if ($default_fonts) {
-            $default_fonts = ', ' . $default_fonts;
-        }
+        $default_fonts = ', Sans-serif';
 
         $fields['font_family'] = [
             'label' => \IqitElementorWpHelper::_x('Family', 'Typography Control', 'elementor'),
@@ -101,6 +97,19 @@ class Group_Control_Typography extends Group_Control_Base
                 'normal' => \IqitElementorWpHelper::_x('Normal', 'Typography Control', 'elementor'),
                 'italic' => \IqitElementorWpHelper::_x('Italic', 'Typography Control', 'elementor'),
                 'oblique' => \IqitElementorWpHelper::_x('Oblique', 'Typography Control', 'elementor'),
+            ],
+        ];
+
+        $fields['text_decoration'] = [
+            'label' => \IqitElementorWpHelper::_x('Decoration', 'Typography Control', 'elementor'),
+            'type' => Controls_Manager::SELECT,
+            'default' => '',
+            'options' => [
+                '' => \IqitElementorWpHelper::__('Default', 'elementor'),
+                'underline' => \IqitElementorWpHelper::_x('Underline', 'Typography Control', 'elementor'),
+                'overline' => \IqitElementorWpHelper::_x('Overline', 'Typography Control', 'elementor'),
+                'line-through' => \IqitElementorWpHelper::_x('Line through', 'Typography Control', 'elementor'),
+                'none' => \IqitElementorWpHelper::_x('None', 'Typography Control', 'elementor'),
             ],
         ];
 

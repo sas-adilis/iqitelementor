@@ -283,6 +283,19 @@
 .elementor-widget-wrap {
   position: relative;
   width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  row-gap: 20px;
+}
+.elementor-widget-wrap > .elementor-widget {
+  width: 100%;
 }
 
 .elementor-editor-active .elementor-widget-wrap {
@@ -1431,6 +1444,23 @@
 }
 .elementor-widget-icon-box .elementor-icon-box-description {
   margin: 0;
+}
+
+.elementor-testimonial-wrapper {
+  overflow: hidden;
+  text-align: center;
+}
+.elementor-testimonial-wrapper .elementor-testimonial-content {
+  margin-bottom: 1.5rem;
+}
+.elementor-testimonial-wrapper .elementor-testimonial-name {
+  line-height: 1.5;
+}
+.elementor-testimonial-wrapper.elementor-testimonial-text-align-left {
+  text-align: left;
+}
+.elementor-testimonial-wrapper.elementor-testimonial-text-align-right {
+  text-align: right;
 }
 
 body.elementor-page .elementor-widget-menu-anchor {

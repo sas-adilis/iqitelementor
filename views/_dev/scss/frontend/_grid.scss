@@ -103,6 +103,13 @@
 .elementor-widget-wrap {
 	position: relative;
 	width: 100%;
+	display: flex;
+	flex-direction: column;
+	row-gap: 20px;
+
+	& > .elementor-widget {
+		width: 100%;
+	}
 }
 
 .elementor-editor-active .elementor-widget-wrap {

@@ -22,20 +22,25 @@ class IqitElementorWpHelper
 
     public static function _e($text, $domain = 'default')
     {
-        echo $text;
+        echo self::translate($text);
     }
 
     public static function __($text, $domain = 'default')
     {
-        return $text;
+        return self::translate($text);
     }
 
     public static function _x($text, $context, $domain = 'default')
     {
-        return $text;
+        return self::translate($text);
     }
 
     public static function esc_attr_e($text, $domain = 'default')
+    {
+        return self::translate($text);
+    }
+
+    private static function translate($text, $domain = 'default')
     {
         return $text;
     }

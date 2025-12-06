@@ -133,11 +133,14 @@
 
 				var orderedRules = {};
 
-				$.each( styleRules, function() {
-					var property = this.split( /:(.*)?/ );
-
-					orderedRules[ property[0].trim() ] = property[1].trim().replace( ';', '' );
-				} );
+				try {
+					$.each( styleRules, function() {
+						var property = this.split( /:(.*)?/ );
+						orderedRules[ property[ 0 ].trim() ] = property[ 1 ].trim().replace( ';', '' );
+					} );
+				} catch ( error ) { // At least one of the properties is incorrect
+					return;
+				}
 
 				styleRules = orderedRules;
 			}

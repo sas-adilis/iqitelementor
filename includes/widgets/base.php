@@ -31,10 +31,10 @@ abstract class Widget_Base extends Element_Base
     {
         parent::_after_register_controls();
 
-        $this->add_control(
+        $this->start_controls_section(
             '_section_style',
             [
-                'label' => \IqitElementorWpHelper::__('Element Style', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Layout', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_ADVANCED,
             ]
@@ -47,7 +47,6 @@ abstract class Widget_Base extends Element_Base
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_ADVANCED,
-                'section' => '_section_style',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-widget-container' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
@@ -68,35 +67,115 @@ abstract class Widget_Base extends Element_Base
             ]
         );
 
-        $this->add_control(
-            '_animation',
+        $this->add_responsive_control(
+            '_element_width',
             [
-                'label' => \IqitElementorWpHelper::__('Entrance Animation', 'elementor'),
-                'type' => Controls_Manager::ANIMATION,
-                'default' => '',
-                'prefix_class' => 'animated ',
-                'tab' => self::TAB_ADVANCED,
-                'label_block' => true,
-                'section' => '_section_style',
+                'label' => \IqitElementorWpHelper::__('Width'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    '' => \IqitElementorWpHelper::__('Default'),
+                    'auto' => \IqitElementorWpHelper::__('Inline') . ' (auto)',
+                    'initial' => \IqitElementorWpHelper::__('Custom'),
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: {{VALUE}}; max-width: {{VALUE}}',
+                ],
             ]
         );
 
-        $this->add_control(
-            'animation_duration',
+        $this->add_responsive_control(
+            '_element_custom_width',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Duration', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => '',
-                'options' => [
-                    'slow' => \IqitElementorWpHelper::__('Slow', 'elementor'),
-                    '' => \IqitElementorWpHelper::__('Normal', 'elementor'),
-                    'fast' => \IqitElementorWpHelper::__('Fast', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Custom Width'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'max' => 1000,
+                        'step' => 1,
+                    ],
                 ],
-                'prefix_class' => 'animated-',
-                'tab' => self::TAB_ADVANCED,
-                'section' => '_section_style',
                 'condition' => [
-                    '_animation!' => '',
+                    '_element_width' => 'initial',
+                ],
+                'device_args' => [
+                    'tablet' => [
+                        'condition' => [
+                            '_element_width_tablet' => 'initial',
+                        ],
+                    ],
+                    'mobile' => [
+                        'condition' => [
+                            '_element_width_mobile' => 'initial',
+                        ],
+                    ],
+                ],
+                'size_units' => ['px', '%', 'vw'],
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}}',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            '_flex_order',
+            [
+                'label' => \IqitElementorWpHelper::__('Order'),
+                'type' => Controls_Manager::CHOOSE,
+                'label_block' => false,
+                'options' => [
+                    'start' => [
+                        'title' => \IqitElementorWpHelper::__('Start'),
+                        'icon' => 'eicon-v-align-top',
+                    ],
+                    'end' => [
+                        'title' => \IqitElementorWpHelper::__('End'),
+                        'icon' => 'eicon-v-align-bottom',
+                    ],
+                    'custom' => [
+                        'title' => \IqitElementorWpHelper::__('Custom'),
+                        'icon' => 'eicon-ellipsis-v',
+                    ],
+                ],
+                'selectors_dictionary' => [
+                    'start' => 'order: -99999;',
+                    'end' => 'order: 99999;',
+                    'custom' => '',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}' => '{{VALUE}}',
+                ],
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_responsive_control(
+            '_flex_order_custom',
+            [
+                'label' => \IqitElementorWpHelper::__('Custom Order'),
+                'type' => Controls_Manager::NUMBER,
+                'condition' => [
+                    '_flex_order' => 'custom',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}' => 'order: {{VALUE}};',
+                ],
+            ]
+        );
+
+
+
+        $this->add_control(
+            '_z_index',
+            [
+                'label' => \IqitElementorWpHelper::__('Z-index', 'elementor'),
+                'type' => Controls_Manager::NUMBER,
+                'min' => 0,
+                'default' => '',
+                'section' => '_section_style',
+                'tab' => self::TAB_ADVANCED,
+                'separator' => 'before',
+                'selectors' => [
+                    '{{WRAPPER}}' => 'z-index: {{VALUE}};',
                 ],
             ]
         );
@@ -127,25 +206,56 @@ abstract class Widget_Base extends Element_Base
             ]
         );
 
-        $this->add_control(
-            '_z_index',
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            '_section_animation_entrance',
             [
-                'label' => \IqitElementorWpHelper::__('Z-index', 'elementor'),
-                'type' => Controls_Manager::NUMBER,
-                'min' => 0,
-                'default' => '',
-                'section' => '_section_style',
+                'label' => \IqitElementorWpHelper::__('Entrance Animation', 'elementor'),
+                'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_ADVANCED,
-                'selectors' => [
-                    '{{WRAPPER}}' => 'z-index: {{VALUE}};',
-                ],
+            ]
+        );
+
+
+
+        $this->add_control(
+            '_animation',
+            [
+                'label' => \IqitElementorWpHelper::__('Entrance Animation', 'elementor'),
+                'type' => Controls_Manager::ANIMATION,
+                'default' => '',
+                'prefix_class' => 'animated ',
+                'tab' => self::TAB_ADVANCED,
+                'label_block' => true,
             ]
         );
 
         $this->add_control(
-            '_section_background',
+            'animation_duration',
             [
-                'label' => \IqitElementorWpHelper::__('Background', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Animation Duration', 'elementor'),
+                'type' => Controls_Manager::SELECT,
+                'default' => '',
+                'options' => [
+                    'slow' => \IqitElementorWpHelper::__('Slow', 'elementor'),
+                    '' => \IqitElementorWpHelper::__('Normal', 'elementor'),
+                    'fast' => \IqitElementorWpHelper::__('Fast', 'elementor'),
+                ],
+                'prefix_class' => 'animated-',
+                'tab' => self::TAB_ADVANCED,
+                'condition' => [
+                    '_animation!' => '',
+                ],
+            ]
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            '_section_advanced_style',
+            [
+                'label' => \IqitElementorWpHelper::__('Advanced Style', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_ADVANCED,
             ]

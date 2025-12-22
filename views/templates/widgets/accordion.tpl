@@ -9,7 +9,7 @@
             </h2>
             <div id="accordion_{$random_id}_{$key}" class="accordion-collapse collapse {if $active_first && $key == 0}show{/if}" data-bs-parent="#accordion_{$random_id}"{if $faq} itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"{/if}>
                 <div class="accordion-body"{if $faq} itemprop="text"{/if}>
-                    {$item.tab_content}
+                    {$item.tab_content nofilter}
                 </div>
             </div>
         </div>

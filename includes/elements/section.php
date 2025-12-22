@@ -298,12 +298,49 @@ class Element_Section extends Element_Base
             ]
         );
 
+
+        $this->add_control(
+            'slider_section',
+            [
+                'label' => \IqitElementorWpHelper::__('As slider', 'elementor'),
+                'type' => Controls_Manager::SWITCHER,
+                'default' => '',
+                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'return_value' => 'section-slidered',
+                'prefix_class' => 'elementor-',
+                'force_render' => true,
+                'hide_in_inner' => true,
+                'description' => \IqitElementorWpHelper::__('Section will be showed as slider/carousel on frontend. On backed it wll be showed as normal section with one column per row for easier editing and yellow border', 'elementor'),
+            ]
+        );
+
+        $this->end_controls_section();
+
+        $this->start_controls_section(
+            'section_slider_settings',
+            [
+                'label' => \IqitElementorWpHelper::__('Slider Settings', 'elementor'),
+                'tab' => self::TAB_LAYOUT,
+                'condition' => [
+                    'slider_section' => 'section-slidered',
+                ],
+            ]
+        );
+
+        $this->register_carousel_controls('section_slider_settings', [
+            'slider_section' => 'section-slidered',
+        ]);
+
         $this->add_control(
             'structure',
             [
                 'label' => \IqitElementorWpHelper::__('Structure', 'elementor'),
                 'type' => Controls_Manager::STRUCTURE,
                 'default' => '10',
+                'condition' => [
+                    'slider_section!' => 'section-slidered',
+                ],
             ]
         );
 
@@ -497,6 +534,24 @@ class Element_Section extends Element_Base
                 ],
             ]
         );
+
+        $this->end_controls_section();
+
+        // Section Advanced
+        $this->start_controls_section(
+            'section_carousel_styles',
+            [
+                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'tab' => self::TAB_STYLE,
+                'condition' => [
+                    'slider_section' => 'section-slidered',
+                ],
+            ]
+        );
+
+        $this->register_carousel_styles('section_carousel_styles', [
+            'slider_section' => 'section-slidered',
+        ]);
 
         $this->end_controls_section();
 

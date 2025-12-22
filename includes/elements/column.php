@@ -133,18 +133,69 @@ class Element_Column extends Element_Base
             ]
         );*/
 
+        $this->add_control(
+            'layout_vertical',
+            [
+                'label' => \IqitElementorWpHelper::__('Vertical behavior'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
         $this->add_responsive_control(
-            'space_between_widgets',
+            'row_gap',
             [
                 'label' => \IqitElementorWpHelper::__('Widgets Space') . ' (px)',
                 'type' => Controls_Manager::NUMBER,
                 'placeholder' => 20,
                 'selectors' => [
                     // Need the full path for exclude the inner section
-                    '{{WRAPPER}} > .elementor-column-wrap > .elementor-widget-wrap > .elementor-widget:not(.elementor-widget__width-auto):not(.elementor-widget__width-initial, .elementor-widget__width-calc):not(:last-child):not(.elementor-absolute)' => 'margin-bottom: {{VALUE}}px',
+                    '{{WRAPPER}} > .elementor-column-wrap > .elementor-widget-wrap' => 'row-gap: {{VALUE}}px',
                 ],
             ]
         );
+
+        $this->add_control(
+            'layout_horizontal',
+            [
+                'label' => \IqitElementorWpHelper::__('Horizontal behavior'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->add_responsive_control(
+            'align',
+            [
+                'label' => \IqitElementorWpHelper::__('Horizontal Align'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    '' => \IqitElementorWpHelper::__('Default'),
+                    'flex-start' => \IqitElementorWpHelper::__('Start'),
+                    'center' => \IqitElementorWpHelper::__('Center'),
+                    'flex-end' => \IqitElementorWpHelper::__('End'),
+                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
+                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
+                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'justify-content: {{VALUE}}',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'column_gap',
+            [
+                'label' => \IqitElementorWpHelper::__('Widgets Space') . ' (px)',
+                'type' => Controls_Manager::NUMBER,
+                'placeholder' => 20,
+                'selectors' => [
+                    '{{WRAPPER}} > .elementor-column-wrap > .elementor-widget-wrap' => 'column-gap: {{VALUE}}px',
+                ],
+            ]
+        );
+
         $this->end_controls_section();
 
         $this->add_control(

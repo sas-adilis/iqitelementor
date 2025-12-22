@@ -508,7 +508,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}} .elementor-cta-content' => 'background-color: {{VALUE}};',
                 ],
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
@@ -566,7 +566,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}}:hover .elementor-cta' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}}:hover .elementor-cta-content' => 'background-color: {{VALUE}};',
                 ],
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',

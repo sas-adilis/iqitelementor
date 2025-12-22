@@ -278,7 +278,7 @@ trait IqitElementorCarouselTrait
                     ['dots' => 'yes']
                 ),
                 'selectors' => [
-                    '{{WRAPPER}} .swiper-pagination-bullet' => 'background: {{VALUE}};',
+                    '{{WRAPPER}} .swiper-pagination .swiper-pagination-bullet' => '--swiper-pagination-color: {{VALUE}};',
                 ],
             ]
         );

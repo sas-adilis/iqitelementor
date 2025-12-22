@@ -57,8 +57,33 @@ class Widget_Testimonial extends Widget_Base
                         'name' => 'content',
                         'default' => 'Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.',
                     ],
+                    [
+                        'label' => \IqitElementorWpHelper::__('Note', 'elementor'),
+                        'type' => Controls_Manager::SELECT,
+                        'name' => 'note',
+                        'options' => [
+                            '5' => '5 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
+                            '4' => '4 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
+                            '3' => '3 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
+                            '2' => '2 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
+                            '1' => '1 ' . \IqitElementorWpHelper::__('Star', 'elementor'),
+                        ],
+                        'default' => '5',
+                    ]
                 ],
                 'title_field' => 'name',
+            ]
+        );
+
+        $this->add_control(
+            'testimonial_notes',
+            [
+                'label' => \IqitElementorWpHelper::__('Show Notes', 'elementor'),
+                'type' => Controls_Manager::SWITCHER,
+                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'return_value' => 'yes',
+                'default' => 'yes',
             ]
         );
 
@@ -105,6 +130,22 @@ class Widget_Testimonial extends Widget_Base
             [
                 'label' => \IqitElementorWpHelper::__('Testimonial box', 'elementor'),
                 'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->add_control(
+            'note_color',
+            [
+                'label' => \IqitElementorWpHelper::__('Note Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'scheme' => [
+                    'type' => Scheme_Color::get_type(),
+                    'value' => Scheme_Color::COLOR_4,
+                ],
+                'separator' => 'after',
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-testimonial-name svg' => 'color: {{VALUE}};',
+                ],
             ]
         );
 
@@ -403,6 +444,8 @@ class Widget_Testimonial extends Widget_Base
             [
                 'testimonial_alignment' => $testimonial_alignment,
                 'testimonials_list' => $testimonials_list,
+                'show_notes' => isset($optionsSource['testimonial_notes']) && 'yes' === $optionsSource['testimonial_notes'],
+                'note_color' => $optionsSource['note_color'] ?? '#000000',
             ],
             $this->build_carousel_options($optionsSource)
         );

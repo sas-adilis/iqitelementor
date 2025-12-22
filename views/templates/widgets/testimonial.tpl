@@ -8,9 +8,17 @@
                     {$testimonial.content nofilter}
                 </div>
                 {/if}
-                {if $testimonial.content}
+                {if $testimonial.name}
                 <div class="elementor-testimonial-name">
                     {$testimonial.name nofilter}
+                    {if $show_notes}
+                        {for $i=1 to 5}
+                        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.5 0L9.875 5L15 5.75L11.25 9.625L12.125 15L7.5 12.375L2.875 15L3.75 9.625L0 5.75L5.25 5L7.5 0Z" fill="{if $testimonial.note >= $i}currentColor{else}transparent{/if}"></path>
+                            <path d="M7.5 0L9.875 5L15 5.75L11.25 9.625L12.125 15L7.5 12.375L2.875 15L3.75 9.625L0 5.75L5.25 5L7.5 0Z" fill="none" stroke="currentColor" stroke-width="1" stroke-linejoin="round"></path>
+                        </svg>
+                        {/for}
+                    {/if}
                 </div>
                 {/if}
             </div>

@@ -168,7 +168,7 @@ class Widget_Image extends Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-image img' => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementor-image img' => 'width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );

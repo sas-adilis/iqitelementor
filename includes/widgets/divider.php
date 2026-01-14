@@ -93,12 +93,17 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'width',
             [
-                'label' => \IqitElementorWpHelper::__('Width', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Widtdddh', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 100,
                     'unit' => '%',
                 ],
+                'range' => [
+                    'px' => ['min' => 1, 'max' => 900,],
+                    '%' => ['min' => 1, 'max' => 100,],
+                ],
+                'size_units' => ['px', '%'],
                 'section' => 'section_divider',
                 'selectors' => [
                     '{{WRAPPER}} .elementor-divider-separator' => 'width: {{SIZE}}{{UNIT}};',

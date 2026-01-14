@@ -1,21 +1,31 @@
 <{$wrapper_tag}
 class="{$wrapper_class|escape:'html':'UTF-8'}"
-{if $wrapper_href} href="{$wrapper_href|escape:'html':'UTF-8'}"{/if}
-{if $wrapper_target} target="{$wrapper_target|escape:'html':'UTF-8'}"{/if}
-{if $wrapper_rel} rel="{$wrapper_rel|escape:'html':'UTF-8'}"{/if}
+{if $wrapper_tag == 'a' && $has_link}
+    href="{$link.url|escape:'html':'UTF-8'}"
+    {if $link.is_external} target="_blank"{/if}
+    {if $link.nofollow|default:false} rel="nofollow"{/if}
+{/if}
 >
 
     {if $has_bg_image}
-        <figure class="elementor-cta-bg-wrapper">
+        {if $link_click == 'button' && $wrapper_tag != 'a'}
+           <a class="elementor-cta-bg-wrapper" href="{$link.url|escape:'html':'UTF-8'}" {if $link.is_external} target="_blank"{/if} {if $link.nofollow|default:false} rel="nofollow"{/if}>
+        {else}
+            <figure class="elementor-cta-bg-wrapper">
+        {/if}
             <img src="{$bg_image_url|escape:'html':'UTF-8'}" alt="" class="elementor-cta-bg elementor-bg" />
-        </figure>
+        {if $link_click == 'button' && $wrapper_tag != 'a'}
+            </a>
+        {else}
+            </figure>
+        {/if}
     {/if}
 
     <div class="elementor-cta-content">
-        {if $title}
-            <{$title_tag} class="elementor-cta-title elementor-content-item">
-            {$title nofilter}
-            </{$title_tag}>
+        {if !empty($heading.text)}
+            <div class="elementor-cta-heading-wrapper elementor-content-item">
+                {include file="module:iqitelementor/views/templates/widgets/heading.tpl" heading=$heading}
+            </div>
         {/if}
 
         {if $description_text}
@@ -24,7 +34,7 @@ class="{$wrapper_class|escape:'html':'UTF-8'}"
             </div>
         {/if}
 
-        {if !empty($button.text)}
+        {if !empty($button.button_text)}
             <div class="elementor-cta-button-wrapper elementor-content-item">
                 {include file="module:iqitelementor/views/templates/widgets/button.tpl" button=$button}
             </div>

@@ -124,6 +124,11 @@ class IqitElementorEditorController extends ModuleAdminController
                 break;
         }
 
+        if (!isset($editedPageLink)) {
+            // redirect to dashboard if something wrong
+            Tools::redirectAdmin($this->context->link->getAdminLink('AdminDashboard'));
+        }
+
         $previewLink = $this->context->link->getModuleLink('iqitelementor', 'Preview', [
             'iqit_fronteditor_token' => $this->module->getFrontEditorToken(),
             'admin_webpath' => $this->context->controller->admin_webpath,

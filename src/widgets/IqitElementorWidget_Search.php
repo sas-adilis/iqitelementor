@@ -250,7 +250,7 @@ class IqitElementorWidget_Search
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         $options = [];
         $options['autocomplete'] = IqitElementorWpHelper::absint($optionsSource['autocomplete']);

@@ -36,6 +36,12 @@ class Group_Control_Border extends Group_Control_Base
             ],
         ];
 
+        if (isset($args['separator']) && $args['separator']) {
+            $controls['border'] = [
+                'separator' => $args['separator']
+            ];
+        }
+
         $controls['color'] = [
             'label' => \IqitElementorWpHelper::_x('Border color', 'Border Control', 'elementor'),
             'type' => Controls_Manager::COLOR,

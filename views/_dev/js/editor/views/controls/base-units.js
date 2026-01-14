@@ -16,6 +16,18 @@ ControlBaseUnitsItemView = ControlBaseMultipleItemView.extend( {
 
 		return ranges[ unit ];
 	}
+}, {
+
+	// Static methods
+	getStyleValue( placeholder, controlValue ) {
+		let returnValue = ControlBaseMultipleItemView.getStyleValue( placeholder, controlValue );
+
+		if ( 'unit' === placeholder && 'custom' === returnValue ) {
+			returnValue = '__EMPTY__';
+		}
+
+		return returnValue;
+	},
 } );
 
 module.exports = ControlBaseUnitsItemView;

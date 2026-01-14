@@ -146,6 +146,8 @@ class AdminIqitElementorContentController extends ModuleAdminController
                     'type' => 'select',
                     'label' => $this->module->getTranslator()->trans('Hook', [], 'Modules.Iqitelementor.Admin'),
                     'name' => 'hook',
+                    'class' => 'chosen',
+                    'required' => true,
                     'options' => [
                         'query' => IqitElementorContent::getSelectableHooks(),
                         'id' => 'id',
@@ -247,5 +249,21 @@ class AdminIqitElementorContentController extends ModuleAdminController
         } else {
             return '';
         }
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    protected function afterAdd($object): void
+    {
+        $this->module->updateHookRegistrations();
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    protected function afterUpdate($object): void
+    {
+        $this->module->updateHookRegistrations();
     }
 }

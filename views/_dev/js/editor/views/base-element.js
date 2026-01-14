@@ -452,9 +452,14 @@ BaseElementView = Marionette.CompositeView.extend( {
 
                     var parsedValue = elementor.getControlItemView( parserControl.type ).getStyleValue( placeholder.toLowerCase(), valueToInsert );
 
+
                     if ( '' === parsedValue ) {
                         throw '';
                     }
+
+					if ('__EMPTY__' === parsedValue) {
+						parsedValue = '';
+					}
 
                     return parsedValue;
 				} );

@@ -198,6 +198,11 @@ abstract class Element_Base
         }
 
         $control_args['responsive'] = self::RESPONSIVE_DESKTOP;
+
+        if (!empty($args['condition'])) {
+            $this->iqit_validate_condition_keys($args['condition'], $id);
+        }
+
         $this->add_control(
             $id,
             $control_args
@@ -214,6 +219,12 @@ abstract class Element_Base
         }
 
         $control_args['responsive'] = self::RESPONSIVE_TABLET;
+
+        if (!empty($args['condition'])) {
+            $control_args['condition'] = $this->iqit_build_responsive_condition($args['condition'], self::RESPONSIVE_TABLET);
+            $this->iqit_validate_condition_keys($control_args['condition'], $id . '_tablet');
+        }
+
         $this->add_control(
             $id . '_tablet',
             $control_args
@@ -231,10 +242,84 @@ abstract class Element_Base
         }
 
         $control_args['responsive'] = self::RESPONSIVE_MOBILE;
+
+        if (!empty($args['condition'])) {
+            $control_args['condition'] = $this->iqit_build_responsive_condition($args['condition'], self::RESPONSIVE_MOBILE);
+            $this->iqit_validate_condition_keys($control_args['condition'], $id . '_mobile');
+        }
+
         $this->add_control(
             $id . '_mobile',
             $control_args
         );
+    }
+
+    /**
+     * Duplique une condition "desktop" vers le device demandé.
+     * Pour chaque clé "field" (ou "field[sub]" ou "field!"), on tente:
+     * - si un control "field_{device}" existe => on pointe dessus
+     * - sinon on garde "field" (fallback)
+     */
+    protected function iqit_build_responsive_condition(array $conditions, $device)
+    {
+        $out = [];
+
+        foreach ($conditions as $condition_key => $condition_value) {
+            if (!is_string($condition_key)) {
+                $out[$condition_key] = $condition_value;
+                continue;
+            }
+
+            // key = field, field[sub], field!
+            preg_match('/([a-z_0-9]+)(?:\[([a-z_]+)])?(!?)$/i', $condition_key, $parts);
+            $field = $parts[1] ?? $condition_key;
+            $sub = $parts[2] ?? null;
+            $neg = $parts[3] ?? '';
+
+            // Ne pas re-suffixer si déjà responsive
+            $responsive_field = preg_match('/_(tablet|mobile)$/i', $field) ? $field : ($field . '_' . $device);
+
+            // Si la version responsive n’existe pas, fallback sur la desktop
+            if (!isset($this->_controls[$responsive_field]) && isset($this->_controls[$field])) {
+                $responsive_field = $field;
+            }
+
+            $new_key = $responsive_field;
+            if ($sub) {
+                $new_key .= '[' . $sub . ']';
+            }
+            $new_key .= $neg;
+
+            $out[$new_key] = $condition_value;
+        }
+
+        return $out;
+    }
+
+    /**
+     * Valide que les clés référencées dans 'condition' existent dans les controls.
+     * (accepte naturellement les variantes responsive *_tablet / *_mobile si elles existent)
+     */
+    protected function iqit_validate_condition_keys(array $conditions, $control_id_for_error)
+    {
+        foreach ($conditions as $condition_key => $condition_value) {
+            if (!is_string($condition_key)) {
+                continue;
+            }
+
+            preg_match('/([a-z_0-9]+)(?:\[([a-z_]+)])?(!?)$/i', $condition_key, $condition_key_parts);
+            $pure_condition_key = $condition_key_parts[1] ?? $condition_key;
+
+            if (!isset($this->_controls[$pure_condition_key])) {
+                \IqitElementorWpHelper::triggerError(
+                    sprintf(
+                        'Condition key "%s" not found in element instance in control %s.',
+                        $pure_condition_key,
+                        $control_id_for_error
+                    )
+                );
+            }
+        }
     }
 
     /**
@@ -347,6 +432,11 @@ abstract class Element_Base
     public function get_controls()
     {
         return array_values($this->_controls);
+    }
+
+    public function get_control($id)
+    {
+        return $this->_controls[$id] ?? null;
     }
 
     public function get_controls_for_css()

@@ -197,6 +197,7 @@
   position: relative;
   left: 50%;
   right: 50%;
+  max-width: 100vw;
 }
 .elementor-section.elementor-section-items-top > .elementor-container {
   align-items: flex-start;
@@ -294,7 +295,7 @@
   padding: 0;
 }
 
-@media (max-width: 479px) {
+@media (max-width: 575px) {
   .elementor-column.elementor-xs-10 {
     width: 10%;
   }
@@ -558,6 +559,46 @@
   z-index: initial;
 }
 
+@media (max-width: 575px) {
+  .col-mobile-auto-yes {
+    width: auto !important;
+    flex: 0 0 auto;
+  }
+  .col-mobile-dynamic-yes {
+    width: 100% !important;
+    max-width: 100%;
+    flex: 1 0 0;
+    min-width: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .col-tablet-auto-yes {
+    width: auto !important;
+    flex: 0 0 auto;
+  }
+  .col-tablet-dynamic-yes {
+    width: 100% !important;
+    max-width: 100%;
+    flex: 1 0 0;
+    min-width: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .col-auto-yes {
+    width: auto !important;
+    flex: 0 0 auto;
+  }
+  .col-dynamic-yes {
+    width: 100% !important;
+    max-width: 100%;
+    flex: 1 0 0;
+    min-width: 0;
+  }
+}
+.elementor-column .elementor-section.elementor-section-full_width {
+  width: 100%;
+}
+
 .elementor-screen-only,
 .screen-reader-text,
 .screen-reader-text span,
@@ -580,29 +621,33 @@
   height: 0;
 }
 
-.elementor-widget-heading .elementor-heading-title {
+.elementor-widget .elementor-heading-title {
   padding: 0;
   margin: 0;
   line-height: 1;
 }
-.elementor-widget-heading .elementor-heading-title.elementor-size-small {
+.elementor-widget .elementor-heading-title.elementor-size-small {
   font-size: 15px;
 }
-.elementor-widget-heading .elementor-heading-title.elementor-size-medium {
+.elementor-widget .elementor-heading-title.elementor-size-medium {
   font-size: 19px;
 }
-.elementor-widget-heading .elementor-heading-title.elementor-size-large {
-  font-size: 29px;
+.elementor-widget .elementor-heading-title.elementor-size-large {
+  font-size: 24px;
 }
-.elementor-widget-heading .elementor-heading-title.elementor-size-xl {
-  font-size: 39px;
+.elementor-widget .elementor-heading-title.elementor-size-xl {
+  font-size: 32px;
 }
-.elementor-widget-heading .elementor-heading-title.elementor-size-xxl {
-  font-size: 59px;
+.elementor-widget .elementor-heading-title.elementor-size-xxl {
+  font-size: 40px;
 }
 
+.elementor-widget-image .elementor-image figure {
+  overflow: hidden;
+}
 .elementor-widget-image .elementor-image img {
   vertical-align: middle;
+  object-fit: cover;
 }
 .elementor-widget-image .elementor-image.elementor-image-shape-circle {
   border-radius: 50%;
@@ -651,12 +696,12 @@
     max-width: 10%;
   }
 }
-@media (min-width: 480px) and (max-width: 767px) {
+@media (min-width: 576px) and (max-width: 767px) {
   .elementor-image-gallery .gallery.gallery-columns-2 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-3 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-4 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-5 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-6 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-7 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-8 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-9 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-10 .gallery-item {
     max-width: 50%;
   }
 }
-@media (max-width: 479px) {
+@media (max-width: 575px) {
   .elementor-image-gallery .gallery.gallery-columns-2 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-3 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-4 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-5 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-6 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-7 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-8 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-9 .gallery-item, .elementor-image-gallery .gallery.gallery-columns-10 .gallery-item {
     max-width: 100%;
   }
@@ -698,6 +743,20 @@
   display: inline-block;
 }
 
+.elementor-button-wrapper.elementor-align-justify > .elementor-btn {
+  width: 100%;
+}
+@media (max-width: 767px) {
+  .elementor-button-wrapper.elementor-mobile-align-justify > .elementor-btn {
+    width: 100%;
+  }
+}
+@media (max-width: 1023px) {
+  .elementor-button-wrapper.elementor-tablet-align-justify > .elementor-btn {
+    width: 100%;
+  }
+}
+
 .elementor-widget-call-to-action .elementor-widget-container {
   overflow: hidden;
 }
@@ -705,8 +764,7 @@
 .elementor-cta {
   position: relative;
   display: flex;
-  overflow: hidden;
-  transition: 0.5s;
+  /*overflow: hidden;*/
 }
 .elementor-cta-content {
   z-index: 2;
@@ -718,21 +776,11 @@
   padding: 35px;
   width: 100%;
   position: relative;
-  transition: 0.5s;
-  color: #fff;
 }
 .elementor-cta .elementor-content-item {
   position: relative;
-  transition: 0.5s;
-  color: #fff;
   width: 100%;
   margin: 0;
-}
-.elementor-cta .elementor-content-item:not(:last-child) {
-  margin-bottom: 15px;
-}
-.elementor-cta .elementor-content-item .elementor-icon {
-  color: #fff;
 }
 .elementor-cta-bg, .elementor-cta-bg-overlay {
   position: absolute;
@@ -781,36 +829,16 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.elementor-button-default .elementor-cta .elementor-button:hover {
-  background: transparent;
-  text-decoration: none;
-}
-
 .elementor-cta-skin-classic .elementor-cta {
   flex-wrap: wrap;
 }
 .elementor-cta-skin-classic .elementor-cta-bg-wrapper {
   position: relative;
-  min-height: 200px;
   width: 100%;
 }
 .elementor-cta-skin-classic .elementor-cta-content {
   transition: all 0.4s;
   width: 100%;
-  background-color: #f7f7f7;
-}
-.elementor-cta-skin-classic .elementor-content-item,
-.elementor-cta-skin-classic .elementor-content-item .elementor-icon {
-  color: #55595c;
-  border-color: currentColor;
-}
-.elementor-cta-skin-classic.elementor-button-default a.elementor-button:not(#e) {
-  color: #55595c;
-}
-.elementor-cta-skin-classic.elementor-button-default .elementor-button {
-  color: #55595c;
-  border: solid 2px currentColor;
-  background: transparent;
 }
 
 .elementor-cta-skin-cover .elementor-cta {
@@ -825,17 +853,9 @@
   transition: all 0.4s;
   width: 100%;
 }
-.elementor-cta-skin-cover .elementor-cta-content {
-  min-height: 280px;
-}
 .elementor-cta-skin-cover .elementor-content-item,
 .elementor-cta-skin-cover .elementor-content-item .elementor-icon {
   color: #fff;
-}
-.elementor-cta-skin-cover.elementor-button-default .elementor-button {
-  color: #fff;
-  border: solid 2px #fff;
-  background: transparent;
 }
 
 .elementor-cta-layout-image-above .elementor-cta {
@@ -867,46 +887,6 @@
   flex-direction: row-reverse;
 }
 
-.elementor-ribbon {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: auto;
-  right: 0;
-  transform: rotate(90deg);
-  width: 150px;
-  overflow: hidden;
-  height: 150px;
-}
-.elementor-ribbon-inner {
-  text-align: center;
-  left: 0;
-  width: 200%;
-  transform: translateY(-50%) translateX(-50%) translateX(35px) rotate(-45deg);
-  margin-top: 35px;
-  font-size: 13px;
-  line-height: 2;
-  font-weight: 800;
-  text-transform: uppercase;
-  background: #000;
-  color: #fff;
-}
-.elementor-ribbon.elementor-ribbon-left {
-  transform: rotate(0);
-  left: 0;
-  right: auto;
-}
-.elementor-ribbon.elementor-ribbon-right {
-  transform: rotate(90deg);
-  left: auto;
-  right: 0;
-}
-
-@media (max-device-width: 1024px) {
-  .elementor-cta {
-    cursor: pointer;
-  }
-}
 @media (min-width: 1025px) {
   .elementor-cta-desktop-layout-image-above .elementor-cta {
     flex-wrap: wrap;
@@ -1243,6 +1223,9 @@
 }
 .elementor-testimonial-wrapper .elementor-testimonial-name {
   line-height: 1.5;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
 }
 .elementor-testimonial-wrapper.elementor-testimonial-text-align-left {
   text-align: left;
@@ -1290,6 +1273,18 @@ body.elementor-page .elementor-widget-menu-anchor {
 
 .animated {
   animation-duration: 1.055s;
+  /*
+  &.hinge {
+  	animation-duration: 2s;
+  }
+
+  &.flipOutX,
+  &.flipOutY,
+  &.bounceIn,
+  &.bounceOut {
+  	animation-duration: .75s;
+  }
+  */
 }
 .animated.animated-slow {
   animation-duration: 2s;
@@ -1297,24 +1292,10 @@ body.elementor-page .elementor-widget-menu-anchor {
 .animated.animated-fast {
   animation-duration: 0.75s;
 }
-
 .animated.infinite {
   animation-iteration-count: infinite;
 }
 
-/*
-.animated.hinge {
-	animation-duration: 2s;
-}
-
-
-.animated.flipOutX,
-.animated.flipOutY,
-.animated.bounceIn,
-.animated.bounceOut {
-	animation-duration: .75s;
-}
-*/
 .elementor-bg-transform-zoom-in:hover .elementor-bg {
   transform: scale(1.05);
 }
@@ -1322,7 +1303,6 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-bg-transform-zoom-out .elementor-bg {
   transform: scale(1.05);
 }
-
 .elementor-bg-transform-zoom-out:hover .elementor-bg {
   transform: scale(1);
 }
@@ -1330,7 +1310,6 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-bg-transform-move-left .elementor-bg {
   transform: scale(1.05) translateX(8%);
 }
-
 .elementor-bg-transform-move-left:hover .elementor-bg {
   transform: scale(1.05) translateX(-8%);
 }
@@ -1338,7 +1317,6 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-bg-transform-move-right .elementor-bg {
   transform: scale(1.05) translateX(-8%);
 }
-
 .elementor-bg-transform-move-right:hover .elementor-bg {
   transform: scale(1.05) translateX(8%);
 }
@@ -1346,7 +1324,6 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-bg-transform-move-up .elementor-bg {
   transform: scale(1.05) translateY(8%);
 }
-
 .elementor-bg-transform-move-up:hover .elementor-bg {
   transform: scale(1.05) translateY(-8%);
 }
@@ -1354,9 +1331,469 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-bg-transform-move-down .elementor-bg {
   transform: scale(1.05) translateY(-8%);
 }
-
 .elementor-bg-transform-move-down:hover .elementor-bg {
   transform: scale(1.05) translateY(8%);
+}
+
+.elementor-animation-grow {
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.elementor-animation-grow:active, .elementor-animation-grow:focus, .elementor-animation-grow:hover {
+  transform: scale(1.1);
+}
+
+.elementor-animation-shrink {
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.elementor-animation-shrink:active, .elementor-animation-shrink:focus, .elementor-animation-shrink:hover {
+  transform: scale(0.9);
+}
+
+@keyframes elementor-animation-pulse {
+  25% {
+    transform: scale(1.1);
+  }
+  75% {
+    transform: scale(0.9);
+  }
+}
+.elementor-animation-pulse:active, .elementor-animation-pulse:focus, .elementor-animation-pulse:hover {
+  animation-name: elementor-animation-pulse;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes elementor-animation-pulse-grow {
+  to {
+    transform: scale(1.1);
+  }
+}
+.elementor-animation-pulse-grow:active, .elementor-animation-pulse-grow:focus, .elementor-animation-pulse-grow:hover {
+  animation-name: elementor-animation-pulse-grow;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes elementor-animation-pulse-shrink {
+  to {
+    transform: scale(0.9);
+  }
+}
+.elementor-animation-pulse-shrink:active, .elementor-animation-pulse-shrink:focus, .elementor-animation-pulse-shrink:hover {
+  animation-name: elementor-animation-pulse-shrink;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+@keyframes elementor-animation-push {
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.elementor-animation-push:active, .elementor-animation-push:focus, .elementor-animation-push:hover {
+  animation-name: elementor-animation-push;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-pop {
+  50% {
+    transform: scale(1.2);
+  }
+}
+.elementor-animation-pop:active, .elementor-animation-pop:focus, .elementor-animation-pop:hover {
+  animation-name: elementor-animation-pop;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+}
+
+.elementor-animation-bounce-in {
+  transition-duration: 0.5s;
+}
+.elementor-animation-bounce-in:active, .elementor-animation-bounce-in:focus, .elementor-animation-bounce-in:hover {
+  transform: scale(1.2);
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+}
+
+.elementor-animation-bounce-out {
+  transition-duration: 0.5s;
+}
+.elementor-animation-bounce-out:active, .elementor-animation-bounce-out:focus, .elementor-animation-bounce-out:hover {
+  transform: scale(0.8);
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+}
+
+.elementor-animation-rotate {
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.elementor-animation-rotate:active, .elementor-animation-rotate:focus, .elementor-animation-rotate:hover {
+  transform: rotate(4deg);
+}
+
+.elementor-animation-grow-rotate {
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.elementor-animation-grow-rotate:active, .elementor-animation-grow-rotate:focus, .elementor-animation-grow-rotate:hover {
+  transform: scale(1.1) rotate(4deg);
+}
+
+.elementor-animation-float {
+  transition-duration: 0.3s;
+  transition-property: transform;
+  transition-timing-function: ease-out;
+}
+.elementor-animation-float:active, .elementor-animation-float:focus, .elementor-animation-float:hover {
+  transform: translateY(-8px);
+}
+
+.elementor-animation-sink {
+  transition-duration: 0.3s;
+  transition-property: transform;
+  transition-timing-function: ease-out;
+}
+.elementor-animation-sink:active, .elementor-animation-sink:focus, .elementor-animation-sink:hover {
+  transform: translateY(8px);
+}
+
+@keyframes elementor-animation-bob {
+  0% {
+    transform: translateY(-8px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes elementor-animation-bob-float {
+  100% {
+    transform: translateY(-8px);
+  }
+}
+.elementor-animation-bob:active, .elementor-animation-bob:focus, .elementor-animation-bob:hover {
+  animation-name: elementor-animation-bob-float, elementor-animation-bob;
+  animation-duration: 0.3s, 1.5s;
+  animation-delay: 0s, 0.3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
+}
+
+@keyframes elementor-animation-hang {
+  0% {
+    transform: translateY(8px);
+  }
+  50% {
+    transform: translateY(4px);
+  }
+  100% {
+    transform: translateY(8px);
+  }
+}
+@keyframes elementor-animation-hang-sink {
+  100% {
+    transform: translateY(8px);
+  }
+}
+.elementor-animation-hang:active, .elementor-animation-hang:focus, .elementor-animation-hang:hover {
+  animation-name: elementor-animation-hang-sink, elementor-animation-hang;
+  animation-duration: 0.3s, 1.5s;
+  animation-delay: 0s, 0.3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
+}
+
+.elementor-animation-skew {
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+.elementor-animation-skew:active, .elementor-animation-skew:focus, .elementor-animation-skew:hover {
+  transform: skew(-10deg);
+}
+
+.elementor-animation-skew-forward {
+  transition-duration: 0.3s;
+  transition-property: transform;
+  transform-origin: 0 100%;
+}
+.elementor-animation-skew-forward:active, .elementor-animation-skew-forward:focus, .elementor-animation-skew-forward:hover {
+  transform: skew(-10deg);
+}
+
+.elementor-animation-skew-backward {
+  transition-duration: 0.3s;
+  transition-property: transform;
+  transform-origin: 0 100%;
+}
+.elementor-animation-skew-backward:active, .elementor-animation-skew-backward:focus, .elementor-animation-skew-backward:hover {
+  transform: skew(10deg);
+}
+
+@keyframes elementor-animation-wobble-vertical {
+  16.65% {
+    transform: translateY(8px);
+  }
+  33.3% {
+    transform: translateY(-6px);
+  }
+  49.95% {
+    transform: translateY(4px);
+  }
+  66.6% {
+    transform: translateY(-2px);
+  }
+  83.25% {
+    transform: translateY(1px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+.elementor-animation-wobble-vertical:active, .elementor-animation-wobble-vertical:focus, .elementor-animation-wobble-vertical:hover {
+  animation-name: elementor-animation-wobble-vertical;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-horizontal {
+  16.65% {
+    transform: translateX(8px);
+  }
+  33.3% {
+    transform: translateX(-6px);
+  }
+  49.95% {
+    transform: translateX(4px);
+  }
+  66.6% {
+    transform: translateX(-2px);
+  }
+  83.25% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.elementor-animation-wobble-horizontal:active, .elementor-animation-wobble-horizontal:focus, .elementor-animation-wobble-horizontal:hover {
+  animation-name: elementor-animation-wobble-horizontal;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-to-bottom-right {
+  16.65% {
+    transform: translate(8px, 8px);
+  }
+  33.3% {
+    transform: translate(-6px, -6px);
+  }
+  49.95% {
+    transform: translate(4px, 4px);
+  }
+  66.6% {
+    transform: translate(-2px, -2px);
+  }
+  83.25% {
+    transform: translate(1px, 1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.elementor-animation-wobble-to-bottom-right:active, .elementor-animation-wobble-to-bottom-right:focus, .elementor-animation-wobble-to-bottom-right:hover {
+  animation-name: elementor-animation-wobble-to-bottom-right;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-to-top-right {
+  16.65% {
+    transform: translate(8px, -8px);
+  }
+  33.3% {
+    transform: translate(-6px, 6px);
+  }
+  49.95% {
+    transform: translate(4px, -4px);
+  }
+  66.6% {
+    transform: translate(-2px, 2px);
+  }
+  83.25% {
+    transform: translate(1px, -1px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.elementor-animation-wobble-to-top-right:active, .elementor-animation-wobble-to-top-right:focus, .elementor-animation-wobble-to-top-right:hover {
+  animation-name: elementor-animation-wobble-to-top-right;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-top {
+  16.65% {
+    transform: skew(-12deg);
+  }
+  33.3% {
+    transform: skew(10deg);
+  }
+  49.95% {
+    transform: skew(-6deg);
+  }
+  66.6% {
+    transform: skew(4deg);
+  }
+  83.25% {
+    transform: skew(-2deg);
+  }
+  100% {
+    transform: skew(0);
+  }
+}
+.elementor-animation-wobble-top {
+  transform-origin: 0 100%;
+}
+.elementor-animation-wobble-top:active, .elementor-animation-wobble-top:focus, .elementor-animation-wobble-top:hover {
+  animation-name: elementor-animation-wobble-top;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-bottom {
+  16.65% {
+    transform: skew(-12deg);
+  }
+  33.3% {
+    transform: skew(10deg);
+  }
+  49.95% {
+    transform: skew(-6deg);
+  }
+  66.6% {
+    transform: skew(4deg);
+  }
+  83.25% {
+    transform: skew(-2deg);
+  }
+  100% {
+    transform: skew(0);
+  }
+}
+.elementor-animation-wobble-bottom {
+  transform-origin: 100% 0;
+}
+.elementor-animation-wobble-bottom:active, .elementor-animation-wobble-bottom:focus, .elementor-animation-wobble-bottom:hover {
+  animation-name: elementor-animation-wobble-bottom;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-wobble-skew {
+  16.65% {
+    transform: skew(-12deg);
+  }
+  33.3% {
+    transform: skew(10deg);
+  }
+  49.95% {
+    transform: skew(-6deg);
+  }
+  66.6% {
+    transform: skew(4deg);
+  }
+  83.25% {
+    transform: skew(-2deg);
+  }
+  100% {
+    transform: skew(0);
+  }
+}
+.elementor-animation-wobble-skew:active, .elementor-animation-wobble-skew:focus, .elementor-animation-wobble-skew:hover {
+  animation-name: elementor-animation-wobble-skew;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+}
+
+@keyframes elementor-animation-buzz {
+  50% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  100% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+}
+.elementor-animation-buzz:active, .elementor-animation-buzz:focus, .elementor-animation-buzz:hover {
+  animation-name: elementor-animation-buzz;
+  animation-duration: 0.15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes elementor-animation-buzz-out {
+  10% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  20% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+  30% {
+    transform: translateX(3px) rotate(2deg);
+  }
+  40% {
+    transform: translateX(-3px) rotate(-2deg);
+  }
+  50% {
+    transform: translateX(2px) rotate(1deg);
+  }
+  60% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+  70% {
+    transform: translateX(2px) rotate(1deg);
+  }
+  80% {
+    transform: translateX(-2px) rotate(-1deg);
+  }
+  90% {
+    transform: translateX(1px) rotate(0);
+  }
+  100% {
+    transform: translateX(-1px) rotate(0);
+  }
+}
+.elementor-animation-buzz-out:active, .elementor-animation-buzz-out:focus, .elementor-animation-buzz-out:hover {
+  animation-name: elementor-animation-buzz-out;
+  animation-duration: 0.75s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 @media (max-width: 767px) {

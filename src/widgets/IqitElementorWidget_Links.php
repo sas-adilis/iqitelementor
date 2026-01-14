@@ -188,7 +188,7 @@ class IqitElementorWidget_Links
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         $selectedLinks = $optionsSource['link_list'];
         $widgetOptions = [];

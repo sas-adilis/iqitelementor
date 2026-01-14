@@ -7,8 +7,14 @@
 	.elementor-image {
 		//overflow: hidden; // TEMP removing for Box Shadow
 
+
+		figure {
+			overflow: hidden;
+		}
+
 		img {
 			vertical-align: middle;
+			object-fit: cover;
 		}
 
 		&.elementor-image-shape- {

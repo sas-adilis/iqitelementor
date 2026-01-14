@@ -43,7 +43,7 @@ class Widget_Button extends Widget_Base
             ]
         );
 
-        $this->registerButtonControls('section_content');
+        $this->register_button_controls('section_content');
         $this->end_controls_section();
 
         $this->start_controls_section(
@@ -54,13 +54,13 @@ class Widget_Button extends Widget_Base
             ]
         );
 
-        $this->registerButtonStyles('section_styles');
+        $this->register_button_styles('section_styles');
         $this->end_controls_section();
 
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
-        return $this->buildButtonOptions($optionsSource);
+        return $this->build_button_options($optionsSource);
     }
 }

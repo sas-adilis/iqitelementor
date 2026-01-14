@@ -153,166 +153,275 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function hookDisplayBackOfficeHeader($params)
     {
-        $instagramExpDate = (int)Configuration::get('iqit_elementor_inst_token_exp');
-
-        if ($instagramExpDate) {
-            $date = strtotime(date('Y-m-d H:i:s'));
-            $date = strtotime('+15 day', $date);
-
-            if ($date > $instagramExpDate) {
-                $instagramToken = Configuration::get('iqit_elementor_inst_token');
-                if ($instagramToken) {
-                    $apiData = [
-                        'grant_type' => 'ig_refresh_token',
-                        'access_token' => $instagramToken,
-                    ];
-                    $newToken = $this->refreshInstagramToken('https://graph.instagram.com/refresh_access_token', $apiData);
-                    Configuration::updateValue('iqit_elementor_inst_token', $newToken->access_token);
-                    Configuration::updateValue('iqit_elementor_inst_token_exp', self::instaTokenExpirationDate($newToken->expires_in));
-                }
-            }
-        }
-
         $this->context->controller->addCSS($this->_path . 'views/css/backoffice.css');
 
-        $onlyElementor = [];
-        $justElementorCategory = false;
-        $idLang = (int)$this->context->language->id;
-        $newContent = 0;
-        $contentType = 'default';
+        $controllerName = $this->context->controller->controller_name ?? '';
+        $boCtx = $this->buildBackOfficeElementorContext($controllerName);
 
-        if (
-            $this->context->controller->controller_name == 'AdminCmsContent'
-            || $this->context->controller->controller_name == 'AdminProducts'
-            || $this->context->controller->controller_name == 'AdminCategories'
-            || $this->context->controller->controller_name == 'AdminManufacturers'
-            || $this->context->controller->controller_name == 'AdminSimpleBlogPosts'
-        ) {
-            $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
-
-            if ($this->context->controller->controller_name == 'AdminCmsContent') {
-                global $kernel;
-
-                $request = $kernel->getContainer()->get('request_stack')->getCurrentRequest();
-                if (!isset($request->attributes)) {
-                    return;
-                }
-
-                $idPage = (int)$request->attributes->get('cmsPageId');
-                $pageType = 'cms';
-
-                if ($idPage) {
-                    $cms = new CMS($idPage);
-
-                    foreach ($cms->content as $key => $contentLang) {
-                        $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $contentLang);
-                        $strippedCms = str_replace(["\r\n", "\n", "\r"], '', $strippedCms);
-                        $content = json_decode($strippedCms, true);
-
-                        if (json_last_error() == JSON_ERROR_NONE) {
-                            if (empty($content)) {
-                                $onlyElementor[$key] = 0;
-                            } else {
-                                $onlyElementor[$key] = 1;
-                            }
-                        } else {
-                            $onlyElementor[$key] = 0;
-                        }
-                    }
-                }
-            } elseif ($this->context->controller->controller_name == 'AdminSimpleBlogPosts') {
-                $idPage = (int)Tools::getValue('id_simpleblog_post');
-                $pageType = 'blog';
-
-                if ($idPage) {
-                    $cms = new SimpleBlogPost($idPage);
-
-                    foreach ($cms->content as $key => $contentLang) {
-                        $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $contentLang);
-                        $strippedCms = str_replace(["\r\n", "\n", "\r"], '', $strippedCms);
-                        $content = json_decode($strippedCms, true);
-
-                        if (json_last_error() == JSON_ERROR_NONE) {
-                            if (empty($content)) {
-                                $onlyElementor[$key] = 0;
-                            } else {
-                                $onlyElementor[$key] = 1;
-                            }
-                        } else {
-                            $onlyElementor[$key] = 0;
-                        }
-                    }
-                }
-            } elseif ($this->context->controller->controller_name == 'AdminCategories') {
-                global $kernel;
-
-                $request = $kernel->getContainer()->get('request_stack')->getCurrentRequest();
-                if (!isset($request->attributes)) {
-                    return;
-                }
-
-                $idPage = (int)$request->attributes->get('categoryId');
-                $pageType = 'category';
-
-                $justElementorCategory = (bool)IqitElementorCategory::isJustElementor($idPage);
-            } elseif ($this->context->controller->controller_name == 'AdminManufacturers') {
-                global $kernel;
-
-                $request = $kernel->getContainer()->get('request_stack')->getCurrentRequest();
-                if (!isset($request->attributes)) {
-                    return;
-                }
-                $idPage = (int)$request->attributes->get('manufacturerId');
-
-                $contentType = 'brand';
-                $pageType = 'content';
-            } else {
-                global $kernel;
-
-                $request = $kernel->getContainer()->get('request_stack')->getCurrentRequest();
-
-                if (!isset($request->attributes)) {
-                    return;
-                }
-
-                $idPage = (int)$request->attributes->get('id');
-                if (!$idPage) {
-                    $idPage = (int)$request->attributes->get('productId');
-                }
-                $pageType = 'product';
-            }
-
-            if (!$idPage) {
-                if ($newContent) {
-                    $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int)$this->context->language->id;
-                } else {
-                    $url = '';
-                }
-                $this->context->smarty->assign([
-                    'urlElementor' => $url,
-                ]);
-            } else {
-                $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=' . $pageType . '&contentType=' . $contentType . '&newContent=' . $newContent . '&pageId=' . $idPage . '&idLang=' . (int)$this->context->language->id;
-
-                $this->context->smarty->assign([
-                    'urlElementor' => $url,
-                ]);
-            }
-
-            Media::addJsDef([
-                'onlyElementor' => $onlyElementor,
-                'elementorAjaxUrl' => $this->context->link->getAdminLink('AdminIqitElementor') . '&ajax=1',
-            ]);
-
-            $this->context->smarty->assign([
-                'onlyElementor' => $onlyElementor,
-                'pageType' => $pageType,
-                'justElementorCategory' => $justElementorCategory,
-                'idPage' => $idPage,
-            ]);
-
-            return $this->fetch(_PS_MODULE_DIR_ . '/' . $this->name . '/views/templates/hook/backoffice_header.tpl');
+        // Si le controller n'est pas supporté, on ne fait rien
+        if (empty($boCtx['enabled'])) {
+            return;
         }
+
+        $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
+
+        // URL de l'éditeur (peut être vide si pas d'idPage et pas de newContent)
+        $url = $this->buildElementorEditorUrl(
+            (string)$boCtx['pageType'],
+            (string)$boCtx['contentType'],
+            (int)$boCtx['newContent'],
+            (int)$boCtx['idPage'],
+            (int)$this->context->language->id
+        );
+
+        $this->context->smarty->assign([
+            'urlElementor' => $url,
+        ]);
+
+        Media::addJsDef([
+            'onlyElementor' => (array)$boCtx['onlyElementor'],
+            'elementorAjaxUrl' => $this->context->link->getAdminLink('AdminIqitElementor') . '&ajax=1',
+        ]);
+
+        $this->context->smarty->assign([
+            'onlyElementor' => (array)$boCtx['onlyElementor'],
+            'pageType' => (string)$boCtx['pageType'],
+            'justElementorCategory' => (bool)$boCtx['justElementorCategory'],
+            'idPage' => (int)$boCtx['idPage'],
+        ]);
+
+        return $this->fetch(_PS_MODULE_DIR_ . '/' . $this->name . '/views/templates/hook/backoffice_header.tpl');
+    }
+    /**
+     * Déclare les endroits BO où Elementor peut fonctionner.
+     *
+     * Pour ajouter un nouvel écran :
+     * - Ajoute une entrée dans ce tableau (controller_name)
+     * - Définis pageType/contentType
+     * - Renseigne la source de l'id (attrs Symfony ou param GET)
+     */
+    private function getBackOfficeElementorControllersConfig(): array
+    {
+        return [
+            'AdminCmsContent' => [
+                'pageType' => 'cms',
+                'contentType' => 'default',
+                // id dans les attributes Symfony
+                'id_attr_keys' => ['cmsPageId'],
+                // on calcule onlyElementor à partir du contenu multilang
+                'only_elementor_from' => 'cms',
+            ],
+            'AdminSimpleBlogPosts' => [
+                'pageType' => 'blog',
+                'contentType' => 'default',
+                // id en GET
+                'id_param' => 'id_simpleblog_post',
+                'only_elementor_from' => 'simpleblog',
+            ],
+            'AdminCategories' => [
+                'pageType' => 'category',
+                'contentType' => 'default',
+                'id_attr_keys' => ['categoryId'],
+                'just_elementor_category' => true,
+            ],
+            'AdminManufacturers' => [
+                'pageType' => 'content',
+                'contentType' => 'brand',
+                'id_attr_keys' => ['manufacturerId'],
+            ],
+            'AdminProducts' => [
+                'pageType' => 'product',
+                'contentType' => 'default',
+                // selon les versions, l'id peut être dans `id` ou `productId`
+                'id_attr_keys' => ['id', 'productId'],
+            ],
+            'AdminModules' => [
+                // Exemple: écran de configuration d'un module (ici iqitadditionaltabs)
+                // URL type:
+                // index.php?controller=AdminModules&configure=iqitadditionaltabs&updateiqitadditionaltabs=1&id_iqitadditionaltab=2
+                'pageType' => 'content',
+                'contentType' => 'iqitadditionaltabs',
+                'id_param' => 'id_iqitadditionaltab',
+                // On n'active Elementor que sur ce module + uniquement sur les pages add/update
+                'when_get' => [
+                    'configure' => 'iqitadditionaltabs',
+                ],
+                'when_get_any_keys' => ['updateiqitadditionaltabs', 'addiqitadditionaltabs'],
+            ],
+        ];
+    }
+
+    private function matchesBackOfficeElementorConfig(array $cfg): bool
+    {
+        // Conditions sur paramètres GET (tous doivent matcher)
+        if (!empty($cfg['when_get']) && is_array($cfg['when_get'])) {
+            foreach ($cfg['when_get'] as $key => $expected) {
+                $val = Tools::getValue($key, null);
+
+                // expected === true => le param doit exister (non vide)
+                if ($expected === true) {
+                    if ($val === null || $val === '' || $val === false) {
+                        return false;
+                    }
+                    continue;
+                }
+
+                // expected est une valeur => égalité stricte en string
+                if ((string) $val !== (string) $expected) {
+                    return false;
+                }
+            }
+        }
+
+        // Au moins un des paramètres doit exister (utile pour add/update)
+        if (!empty($cfg['when_get_any_keys']) && is_array($cfg['when_get_any_keys'])) {
+            $ok = false;
+            foreach ($cfg['when_get_any_keys'] as $key) {
+                $val = Tools::getValue((string) $key, null);
+                if (!($val === null || $val === '' || $val === false)) {
+                    $ok = true;
+                    break;
+                }
+            }
+            if (!$ok) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private function buildBackOfficeElementorContext(string $controllerName): array
+    {
+        $cfgs = $this->getBackOfficeElementorControllersConfig();
+        if (!isset($cfgs[$controllerName])) {
+            return ['enabled' => false];
+        }
+
+        $cfg = $cfgs[$controllerName];
+
+        // Permet d'affiner l'activation (ex: AdminModules + configure=xxx)
+        if (!$this->matchesBackOfficeElementorConfig($cfg)) {
+            return ['enabled' => false];
+        }
+
+        $idPage = $this->resolveBackOfficePageId($cfg);
+        $pageType = (string) ($cfg['pageType'] ?? 'default');
+        $contentType = (string) ($cfg['contentType'] ?? 'default');
+        $newContent = (int) ($cfg['newContent'] ?? 0);
+
+        $onlyElementor = [];
+        if (!empty($cfg['only_elementor_from']) && $idPage) {
+            if ($cfg['only_elementor_from'] === 'cms') {
+                $cms = new CMS((int) $idPage);
+                if (Validate::isLoadedObject($cms) && is_array($cms->content)) {
+                    $onlyElementor = $this->computeOnlyElementorFlags($cms->content);
+                }
+            } elseif ($cfg['only_elementor_from'] === 'simpleblog') {
+                $post = new SimpleBlogPost((int) $idPage);
+                if (Validate::isLoadedObject($post) && is_array($post->content)) {
+                    $onlyElementor = $this->computeOnlyElementorFlags($post->content);
+                }
+            }
+        }
+
+        $justElementorCategory = false;
+        if (!empty($cfg['just_elementor_category']) && $idPage) {
+            $justElementorCategory = (bool) IqitElementorCategory::isJustElementor((int) $idPage);
+        }
+
+        return [
+            'enabled' => true,
+            'pageType' => $pageType,
+            'contentType' => $contentType,
+            'newContent' => $newContent,
+            'idPage' => (int) $idPage,
+            'onlyElementor' => (array) $onlyElementor,
+            'justElementorCategory' => (bool) $justElementorCategory,
+        ];
+    }
+
+    private function resolveBackOfficePageId(array $cfg): int
+    {
+        // 1) Via paramètre GET
+        if (!empty($cfg['id_param'])) {
+            return (int) Tools::getValue($cfg['id_param']);
+        }
+
+        // 2) Via attributes Symfony
+        $request = $this->getSymfonyRequest();
+        if (!$request) {
+            return 0;
+        }
+
+        $keys = !empty($cfg['id_attr_keys']) && is_array($cfg['id_attr_keys']) ? $cfg['id_attr_keys'] : [];
+        foreach ($keys as $k) {
+            $v = (int) $request->attributes->get($k);
+            if ($v) {
+                return $v;
+            }
+        }
+
+        return 0;
+    }
+
+    private function getSymfonyRequest()
+    {
+        // PS 1.7+ (Symfony) : on essaye de récupérer la Request courante
+        if (!isset($GLOBALS['kernel'])) {
+            return null;
+        }
+
+        try {
+            $request = $GLOBALS['kernel']->getContainer()->get('request_stack')->getCurrentRequest();
+        } catch (Exception $e) {
+            return null;
+        }
+
+        return $request;
+    }
+
+    private function buildElementorEditorUrl(string $pageType, string $contentType, int $newContent, int $pageId, int $idLang): string
+    {
+        // Comportement existant : si pas d'id et pas de newContent => pas de bouton
+        if (!$pageId && !$newContent) {
+            return '';
+        }
+
+        return $this->context->link->getAdminLink('IqitElementorEditor')
+            . '&pageType=' . $pageType
+            . '&contentType=' . $contentType
+            . '&newContent=' . (int) $newContent
+            . '&pageId=' . (int) $pageId
+            . '&idLang=' . (int) $idLang;
+    }
+
+    /**
+     * Retourne un tableau [id_lang => 0/1] indiquant si le contenu correspond à du JSON Elementor.
+     */
+    private function computeOnlyElementorFlags(array $contentByLang): array
+    {
+        $onlyElementor = [];
+
+        foreach ($contentByLang as $key => $contentLang) {
+            $onlyElementor[$key] = $this->isElementorJsonContent((string) $contentLang) ? 1 : 0;
+        }
+
+        return $onlyElementor;
+    }
+
+    private function isElementorJsonContent(string $html): bool
+    {
+        $stripped = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $html);
+        $stripped = str_replace(["\r\n", "\n", "\r"], '', (string) $stripped);
+
+        $decoded = json_decode($stripped, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return false;
+        }
+
+        // JSON valide mais vide => on considère que ce n'est pas du contenu Elementor
+        return !empty($decoded);
     }
 
     public function uninstall()
@@ -556,7 +665,7 @@ class IqitElementor extends Module implements WidgetInterface
         }
 
 
-        return $widgetInstance->parseOptions($options, $preview);
+        return $widgetInstance->parse_options($options, $preview);
     }
 
     public function renderWidget($hookName = null, array $configuration = [])
@@ -608,6 +717,10 @@ class IqitElementor extends Module implements WidgetInterface
         return $this->fetch('module:' . $this->name . '/views/templates/hook/' . $templateFile, $this->getCacheId($cacheId));
     }
 
+    /**
+     * @throws PrestaShopDatabaseException
+     * @throws PrestaShopException
+     */
     public function getWidgetVariables($hookName = null, array $configuration = [])
     {
         if ($hookName == null && isset($configuration['hook'])) {
@@ -938,5 +1051,70 @@ class IqitElementor extends Module implements WidgetInterface
                 $elementor->add();
             }
         }
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    public function updateHookRegistrations(): bool
+    {
+        $used_hooks = self::getUsedHooks();
+        $hooks = $this->getRegisteredHooks();
+
+        foreach ($hooks as $hook) {
+            if (in_array($hook['name'], $used_hooks)) {
+                $this->registerHook($hook['name']);
+            } else {
+                $this->unregisterHook($hook['name']);
+            }
+            if (($key = array_search($hook['name'], $used_hooks)) !== false) {
+                unset($used_hooks[$key]);
+            }
+        }
+
+        if (is_array($used_hooks)) {
+            foreach ($used_hooks as $used_hook) {
+                $this->registerHook($used_hook);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    public static function getUsedHooks($active_only = true): array
+    {
+        $hooks = [
+            'displayHome', 'displayBackOfficeHeader', 'displayManufacturerElementor', 'actionObjectCmsUpdateBefore',
+            'actionObjectCmsUpdateAfter', 'actionObjectSimpleBlogPostUpdateAfter', 'actionObjectSimpleBlogPostAddAfter',
+            'actionObjectCmsDeleteAfter', 'actionObjectProductDeleteAfter', 'displayCMSDisputeInformation', 'displayProductElementor',
+            'displayCategoryElementor', 'actionObjectManufacturerUpdateAfter', 'actionObjectManufacturerDeleteAfter',
+            'actionObjectManufacturerAddAfter', 'actionObjectProductUpdateAfter', 'actionObjectProductAddAfter', 'actionObjectCategoryUpdateAfter',
+            'actionObjectCategoryAddAfter', 'actionObjectCategoryDeleteAfter', 'displayHeader',  'isJustElementor', 'registerGDPRConsent', 'actionProductAdd'
+        ];
+
+        $used_hooks = Db::getInstance()->ExecuteS('
+            SELECT DISTINCT(hook_name)
+            FROM '._DB_PREFIX_.'reassuranceplus_group '.( $active_only ? 'WHERE active=1' : '' )
+        );
+        if (is_array($used_hooks)) {
+            $hooks = array_merge($hooks, array_column($used_hooks, 'hook_name'));
+        }
+        return $hooks;
+    }
+
+    /**
+     * @throws PrestaShopDatabaseException
+     */
+    private function getRegisteredHooks(): array
+    {
+        return Db::getInstance()->ExecuteS('
+            SELECT
+                DISTINCT(h.name) FROM '._DB_PREFIX_.'hook_module hm
+                INNER JOIN '._DB_PREFIX_.'hook h ON (hm.id_hook = hm.id_hook)
+                WHERE hm.id_module = \'' . $this->name . '\' AND hm.id_shop = ' . (int) Context::getContext()->shop->id
+        );
     }
 }

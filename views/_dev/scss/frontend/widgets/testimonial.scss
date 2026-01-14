@@ -11,6 +11,9 @@
 
 	.elementor-testimonial-name {
 		line-height: 1.5;
+		display: inline-flex;
+		align-items: center;
+		gap: .15rem
 	}
 
 	&.elementor-testimonial-text-align- {

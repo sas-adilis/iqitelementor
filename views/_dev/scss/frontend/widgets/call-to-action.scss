@@ -7,8 +7,7 @@
 .elementor-cta {
   position: relative;
   display: flex;
-  overflow: hidden;
-  transition: 0.5s;
+  /*overflow: hidden;*/
 
   &-content {
     z-index: 2;
@@ -20,24 +19,12 @@
     padding: 35px;
     width: 100%;
     position: relative;
-    transition: 0.5s;
-    color: #fff;
   }
 
   .elementor-content-item {
     position: relative;
-    transition: 0.5s;
-    color: #fff;
     width: 100%;
     margin: 0;
-
-    &:not(:last-child) {
-      margin-bottom: 15px;
-    }
-
-    .elementor-icon {
-      color: #fff;
-    }
   }
 
   &-bg,
@@ -106,15 +93,6 @@
   }
 }
 
-.elementor-button-default {
-  .elementor-cta {
-    .elementor-button:hover {
-      background: transparent;
-      text-decoration: none;
-    }
-  }
-}
-
 .elementor-cta-skin-classic {
   .elementor-cta {
     flex-wrap: wrap;
@@ -122,32 +100,12 @@
 
   .elementor-cta-bg-wrapper {
     position: relative;
-    min-height: 200px;
     width: 100%;
   }
 
   .elementor-cta-content {
     transition: all 0.4s;
     width: 100%;
-    background-color: #f7f7f7;
-  }
-
-  .elementor-content-item,
-  .elementor-content-item .elementor-icon {
-    color: #55595c;
-    border-color: currentColor;
-  }
-
-  &.elementor-button-default {
-    a.elementor-button:not(#e) {
-      color: #55595c;
-    }
-
-    .elementor-button {
-      color: #55595c;
-      border: solid 2px currentColor;
-      background: transparent;
-    }
   }
 }
 
@@ -167,20 +125,11 @@
   }
 
   .elementor-cta-content {
-    min-height: 280px;
   }
 
   .elementor-content-item,
   .elementor-content-item .elementor-icon {
     color: #fff;
-  }
-
-  &.elementor-button-default {
-    .elementor-button {
-      color: #fff;
-      border: solid 2px #fff;
-      background: transparent;
-    }
   }
 }
 
@@ -219,50 +168,6 @@
 .elementor-cta-layout-image-right {
   .elementor-cta {
     flex-direction: row-reverse;
-  }
-}
-
-.elementor-ribbon {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: auto;
-  right: 0;
-  transform: rotate(90deg);
-  width: 150px;
-  overflow: hidden;
-  height: 150px;
-
-  &-inner {
-    text-align: center;
-    left: 0;
-    width: 200%;
-    transform: translateY(-50%) translateX(-50%) translateX(35px) rotate(-45deg);
-    margin-top: 35px;
-    font-size: 13px;
-    line-height: 2;
-    font-weight: 800;
-    text-transform: uppercase;
-    background: #000;
-    color: #fff;
-  }
-
-  &.elementor-ribbon-left {
-    transform: rotate(0);
-    left: 0;
-    right: auto;
-  }
-
-  &.elementor-ribbon-right {
-    transform: rotate(90deg);
-    left: auto;
-    right: 0;
-  }
-}
-
-@media (max-device-width: 1024px) {
-  .elementor-cta {
-    cursor: pointer;
   }
 }
 

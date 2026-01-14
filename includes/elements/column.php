@@ -31,9 +31,10 @@ class Element_Column extends Element_Base
                 'label' => \IqitElementorWpHelper::__('Auto Width'),
                 'type' => Controls_Manager::SWITCHER,
                 'description' => \IqitElementorWpHelper::__('Column width will be defined by its content width.'),
-                'selectors' => [
-                    '{{WRAPPER}}' => 'width: auto; flex: 0 0 auto;',
-                ],
+                /*'selectors' => [
+                    '{{WRAPPER}}' => 'width: auto !important; flex: 0 0 auto;',
+                ],*/
+                'prefix_class' => 'col'.($device ? "-$device" : '').'-auto-',
                 'condition' => [
                     'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
                 ],
@@ -46,9 +47,10 @@ class Element_Column extends Element_Base
                 'label' => \IqitElementorWpHelper::__('Dynamic Width'),
                 'type' => Controls_Manager::SWITCHER,
                 'description' => \IqitElementorWpHelper::__('The column will fill the remaining space in the row.'),
-                'selectors' => [
-                    '{{WRAPPER}}' => 'width: auto; flex-grow: 1;',
-                ],
+                /*'selectors' => [
+                    '{{WRAPPER}}' => 'width: 100% !important; max-width: 100%; flex: 1 0 0; min-width: 0;',
+                ],*/
+                'prefix_class' => 'col'.($device ? "-$device" : '').'-dynamic-',
                 'condition' => [
                     'width_auto'.($device ? "_$device" : '').'!' => 'yes',
                 ],
@@ -583,10 +585,6 @@ class Element_Column extends Element_Base
             'elementor-col-' . $instance['_column_size'],
             'elementor-' . $column_type . '-column',
         ]);
-
-        if ($instance['width_auto'] === 'yes') {
-            $this->add_render_attribute('wrapper', 'class', 'col-auto');
-        }
 
         foreach ($this->get_class_controls() as $control) {
             if (empty($instance[$control['name']])) {

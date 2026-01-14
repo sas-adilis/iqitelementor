@@ -223,7 +223,7 @@ class Widget_Image extends Widget_Base
                 'mobile_default' => [
                     'unit' => 'px',
                 ],
-                'size_units' => ['px', 'vh'],
+                'size_units' => ['px', 'vh', 'custom'],
                 'range' => [
                     'px' => [
                         'min' => 1,
@@ -234,7 +234,31 @@ class Widget_Image extends Widget_Base
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-image img' => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementor-image img' => 'height: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            'image_position',
+            [
+                'label' => \IqitElementorWpHelper::__('Image position', 'elementor'),
+                'type' => Controls_Manager::SELECT,
+                'options' => [
+                    'center center' => \IqitElementorWpHelper::_x('Center Center', 'Image position', 'elementor'),
+                    'center left' => \IqitElementorWpHelper::_x('Center Left', 'Image position', 'elementor'),
+                    'center right' => \IqitElementorWpHelper::_x('Center Right', 'Image position', 'elementor'),
+                    'top center' => \IqitElementorWpHelper::_x('Top Center', 'Image position', 'elementor'),
+                    'top left' => \IqitElementorWpHelper::_x('Top Left', 'Image position', 'elementor'),
+                    'top right' => \IqitElementorWpHelper::_x('Top Right', 'Image position', 'elementor'),
+                    'bottom center' => \IqitElementorWpHelper::_x('Bottom Center', 'Image position', 'elementor'),
+                    'bottom left' => \IqitElementorWpHelper::_x('Bottom Left', 'Image position', 'elementor'),
+                    'bottom right' => \IqitElementorWpHelper::_x('Bottom Right', 'Image position', 'elementor'),
+                ],
+                'default' => 'center center',
+                'description' => \IqitElementorWpHelper::__('Select which part of the image stays visible when it’s cropped (cover)', 'elementor'),
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-image img' => 'object-position: {{VALUE}};',
                 ],
             ]
         );
@@ -248,7 +272,7 @@ class Widget_Image extends Widget_Base
         $this->add_control(
             'opacity',
             [
-                'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Opacity', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 1,
@@ -275,7 +299,7 @@ class Widget_Image extends Widget_Base
         $this->add_control(
             'opacity_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Opacity', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 1,
@@ -302,6 +326,27 @@ class Widget_Image extends Widget_Base
             ]
         );
 
+        $this->add_control(
+            'hover_animation_duration',
+            [
+                'label' => \IqitElementorWpHelper::__('Animation Duration (ms)'),
+                'type' => Controls_Manager::SLIDER,
+                'render_type' => 'template',
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 10000,
+                    ],
+                ],
+                'selectors' => [
+                    '{{WRAPPER}}:hover .elementor-image img' => 'transition-duration: {{SIZE}}ms',
+                ],
+                'condition' => [
+                    'hover_animation!' => '',
+                ],
+            ]
+        );
+
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
@@ -311,6 +356,7 @@ class Widget_Image extends Widget_Base
                 'name' => 'image_border',
                 'label' => \IqitElementorWpHelper::__('Image Border', 'elementor'),
                 'selector' => '{{WRAPPER}} .elementor-image img',
+                'separator' => 'before',
             ]
         );
 
@@ -355,7 +401,7 @@ class Widget_Image extends Widget_Base
         }
 
         $image_html = sprintf(
-                '<img %s src="%s" %s %s alt="%s"%s />',
+                '<figure><img %s src="%s" %s %s alt="%s"%s /></figure>',
                 $lazyload_tag,
                 \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($instance['image_settings']['url'])),
                 $image_width,
@@ -391,7 +437,7 @@ class Widget_Image extends Widget_Base
             imgClass = 'elementor-animation-' + settings.hover_animation;
             }
 
-            image_html = '<img src="' + settings.image_settings.url + '" ' + (settings.image_settings.width ? 'width="' + settings.image_settings.width + '" ' : '') + (settings.image_settings.height ? 'height="' + settings.image_settings.height + '" ' : '') + ' class="' + imgClass + '" alt="' + settings.image_alt + '" />';
+            image_html = '<figure><img src="' + settings.image_settings.url + '" ' + (settings.image_settings.width ? 'width="' + settings.image_settings.width + '" ' : '') + (settings.image_settings.height ? 'height="' + settings.image_settings.height + '" ' : '') + ' class="' + imgClass + '" alt="' + settings.image_alt + '" /></figure>';
 
             var link_url;
             if ( 'custom' === settings.link_to ) {

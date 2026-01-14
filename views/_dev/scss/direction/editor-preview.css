@@ -413,7 +413,7 @@ html.elementor-html {
 .elementor-editor-active #elementor-add-section[data-side] {
   border: 3px dashed #3c90a8;
 }
-@media (max-width: 479px) {
+@media (max-width: 575px) {
   .elementor-editor-active #elementor-add-section {
     display: none;
   }

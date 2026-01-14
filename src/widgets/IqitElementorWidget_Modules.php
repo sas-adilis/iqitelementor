@@ -110,7 +110,7 @@ class IqitElementorWidget_Modules
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         if (!$optionsSource['module']) {
             return [

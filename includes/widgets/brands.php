@@ -279,7 +279,7 @@ class Widget_Brands extends Widget_Base
         ]);
     }
 
-    public function parseOptions($optionsSource, $preview = false): array
+    public function parse_options($optionsSource, $preview = false): array
     {
         $selectedBrands = $optionsSource['brand_list'];
         $brandsType = $optionsSource['brand_select'];

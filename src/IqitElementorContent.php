@@ -78,12 +78,6 @@ class IqitElementorContent extends ObjectModel
 
     public static function getSelectableHooks()
     {
-        $usableHooks = ['displayBanner', 'displayHeaderLeft', 'displayProductAfterTabs', 'displayShoppingCartFooter', 'displayHeaderCategory', 'displayAboveMobileMenu', 'displayBelowMobileMenu',
-            'displayFooterProduct', 'displayAboveProductsTabs', 'displayMyAccountDashboard', 'displayCheckoutFooter', 'displayShoppingCart', 'displayFooter', 'displayFooterBefore', 'displayFooterAfter',
-            'displayLeftColumn', 'displayRightColumn',  'displayWrapperTopInContainer', 'displayWrapperTop',  'displayWrapperBottom', 'displayWrapperBottomInContainer',
-            'displayCartAjaxInfoModal', 'displayCartAjaxInfoBlock', 'displayTop', 'displayHeaderTop', 'displayNotFound',
-            'displayReassurance', 'displayRightColumnProduct', 'displayAfterProductThumbs2',  'displayProductAdditionalInfo',  'displayBelowHeader', 'displayBelowProductsCategory', 'displayCustomerLoginFormAfter'];
-
         $sql = 'SELECT h.id_hook as id, h.name as name
                 FROM ' . _DB_PREFIX_ . "hook h
                 WHERE (lower(h.`name`) LIKE 'display%')
@@ -95,10 +89,6 @@ class IqitElementorContent extends ObjectModel
             if (preg_match('/admin/i', $hook['name'])
                 || preg_match('/backoffice/i', $hook['name'])) {
                 unset($hooks[$key]);
-            } else {
-                if (!in_array($hook['name'], $usableHooks)) {
-                    unset($hooks[$key]);
-                }
             }
         }
 
@@ -113,10 +103,13 @@ class IqitElementorContent extends ObjectModel
         return Db::getInstance()->getValue($sql);
     }
 
+    /**
+     * @throws PrestaShopDatabaseException
+     */
     public static function getByHook($hook, $id_shop = null)
     {
         if (!Validate::isUnsignedInt($hook)) {
-            return;
+            return false;
         }
 
         if ($id_shop) {
@@ -125,9 +118,7 @@ class IqitElementorContent extends ObjectModel
             $sql = 'SELECT c.id_elementor FROM ' . _DB_PREFIX_ . 'iqit_elementor_content c WHERE c.active = 1 AND c.hook = ' . (int) $hook;
         }
 
-        $return = Db::getInstance()->executeS($sql);
-
-        return $return;
+        return Db::getInstance()->executeS($sql);
     }
 
     public static function getIdByObjectAndHook($hook, $idObject, $id_shop = null)

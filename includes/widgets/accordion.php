@@ -278,7 +278,7 @@ class Widget_Accordion extends Widget_Base
         );
     }
 
-    public function parseOptions($optionsSource, $preview = false): array
+    public function parse_options($optionsSource, $preview = false): array
     {
         return [
             'faq' => $optionsSource['faq'] == 'yes',

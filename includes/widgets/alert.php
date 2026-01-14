@@ -229,7 +229,7 @@ class Widget_Alert extends Widget_Base
         echo $html;
     }*/
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         return $optionsSource;
     }

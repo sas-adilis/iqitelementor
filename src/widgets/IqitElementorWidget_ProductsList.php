@@ -444,7 +444,7 @@ class IqitElementorWidget_ProductsList
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         $source = $optionsSource['product_source'];
 

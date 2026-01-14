@@ -66,7 +66,7 @@ class IqitElementorWidget_Menu
         return [];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
     }
 }

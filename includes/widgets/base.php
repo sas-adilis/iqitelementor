@@ -76,10 +76,7 @@ abstract class Widget_Base extends Element_Base
                     '' => \IqitElementorWpHelper::__('Default'),
                     'auto' => \IqitElementorWpHelper::__('Inline') . ' (auto)',
                     'initial' => \IqitElementorWpHelper::__('Custom'),
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}' => 'width: {{VALUE}}; max-width: {{VALUE}}',
-                ],
+                ]
             ]
         );
 
@@ -111,7 +108,37 @@ abstract class Widget_Base extends Element_Base
                 ],
                 'size_units' => ['px', '%', 'vw'],
                 'selectors' => [
-                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}}',
+                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
+
+        $this->add_responsive_control(
+            '_element_max_width',
+            [
+                'label' => \IqitElementorWpHelper::__('Max Width'),
+                'type' => Controls_Manager::SLIDER,
+                'range' => [
+                    'px' => [
+                        'max' => 1000,
+                        'step' => 1,
+                    ],
+                ],
+                'device_args' => [
+                    'tablet' => [
+                        'condition' => [
+                            '_element_width_tablet' => 'initial',
+                        ],
+                    ],
+                    'mobile' => [
+                        'condition' => [
+                            '_element_width_mobile' => 'initial',
+                        ],
+                    ],
+                ],
+                'size_units' => ['px', '%', 'vw'],
+                'selectors' => [
+                    '{{WRAPPER}}' => 'max-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -507,7 +534,7 @@ abstract class Widget_Base extends Element_Base
         }
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         return $optionsSource;
     }
@@ -517,3 +544,4 @@ abstract class Widget_Base extends Element_Base
         // TODO: Implement content_template() method.
     }
 }
+

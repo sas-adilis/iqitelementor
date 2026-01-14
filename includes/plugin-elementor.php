@@ -95,6 +95,7 @@ class PluginElementor
         include_once ELEMENTOR_PATH . 'includes/elements-manager.php';
         include_once ELEMENTOR_PATH . 'includes/traits/carousel.php';
         include_once ELEMENTOR_PATH . 'includes/traits/button.php';
+        include_once ELEMENTOR_PATH . 'includes/traits/heading.php';
         include_once ELEMENTOR_PATH . 'includes/widgets-manager.php';
         include_once ELEMENTOR_PATH . 'includes/editor.php';
         include_once ELEMENTOR_PATH . 'includes/frontend.php';

@@ -431,7 +431,7 @@ class Widget_Testimonial extends Widget_Base
     {
     }
 
-    public function parseOptions($optionsSource, $preview = false): array
+    public function parse_options($optionsSource, $preview = false): array
     {
         if (empty($optionsSource['testimonials_list'])) {
             return [];

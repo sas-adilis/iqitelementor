@@ -1065,6 +1065,9 @@ select {
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-hidden-label .elementor-control-title {
   display: none;
 }
+#elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-hidden-label .elementor-control-input-wrapper {
+  margin-top: 0;
+}
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-hidden-control {
   display: none;
 }
@@ -1147,35 +1150,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices input:first-child + .elementor-choices-label {
   border-left: none;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-slider {
-  display: inline-block;
-  margin-top: 10px;
-  height: 4px;
-  background-color: #a4afb7;
-  border-radius: 5px;
-  position: relative;
-  width: 67%;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-slider .ui-slider-handle {
-  height: 16px;
-  width: 16px;
-  background-color: #fff;
-  display: inline-block;
-  top: 50%;
-  transform: translateY(-50%) translateX(-8px);
-  position: absolute;
-  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 50%;
-  cursor: pointer;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-slider-input {
-  width: 33%;
-  float: right;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-slider-input input {
-  width: 80%;
-  float: right;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-units-choices {
   flex-grow: 1;
@@ -2070,6 +2044,34 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-tab-close {
   display: none !important;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider {
+  display: inline-block;
+  height: 4px;
+  background-color: #a4afb7;
+  border-radius: 5px;
+  position: relative;
+  min-width: 70%;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider .ui-slider-handle {
+  height: 16px;
+  width: 16px;
+  background-color: #fff;
+  display: inline-block;
+  top: 50%;
+  transform: translateY(-50%) translateX(-8px);
+  position: absolute;
+  box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider-input {
+  flex-grow: 1;
 }
 #elementor-panel .wp-picker-container.wp-picker-active {
   position: absolute;

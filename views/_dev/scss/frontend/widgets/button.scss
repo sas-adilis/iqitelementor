@@ -46,3 +46,20 @@
 	}
 }
 
+.elementor-button-wrapper {
+	&.elementor-align-justify > .elementor-btn {
+		width: 100%;
+	}
+
+	@media (max-width: 767px) {
+		&.elementor-mobile-align-justify > .elementor-btn {
+			width: 100%;
+		}
+	}
+
+	@media (max-width: 1023px) {
+		&.elementor-tablet-align-justify > .elementor-btn {
+			width: 100%;
+		}
+	}
+}

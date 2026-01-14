@@ -274,7 +274,7 @@ class IqitElementorWidget_Brands
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         $selectedBrands = $optionsSource['brand_list'];
         $brandsType = $optionsSource['brand_select'];

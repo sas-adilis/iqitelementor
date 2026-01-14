@@ -211,7 +211,7 @@ class Widget_Tabs extends Widget_Base
         <?php
     }*/
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         return [
             'tabs' => $optionsSource['tabs'],

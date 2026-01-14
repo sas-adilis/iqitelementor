@@ -7,6 +7,7 @@ if (!defined('ELEMENTOR_ABSPATH')) exit; // Exit if accessed directly
 class Widget_Call_to_action extends Widget_Base
 {
     use IqitElementorButtonTrait;
+    use IqitElementorHeadingTrait;
 
     public function get_id()
     {
@@ -145,8 +146,7 @@ class Widget_Call_to_action extends Widget_Base
                 ],
                 'condition' => [
                     'skin' => 'classic',
-                    'bg_image[url]!' => '',
-                    'layout' => ['left', 'right'],
+                    'bg_image[url]!' => ''
                 ],
             ]
         );
@@ -167,7 +167,6 @@ class Widget_Call_to_action extends Widget_Base
                 'condition' => [
                     'skin' => 'classic',
                     'bg_image[url]!' => '',
-                    'layout' => ['above'],
                 ],
             ]
         );
@@ -184,15 +183,23 @@ class Widget_Call_to_action extends Widget_Base
 
 
         $this->add_control(
-            'title',
+            'section_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Title & description', 'elementor'),
-                'type' => Controls_Manager::TEXT,
-                'default' => \IqitElementorWpHelper::__('This is the heading', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Your title', 'elementor'),
-                'label_block' => true,
-                'section' => 'section_content',
-                'save_empty_value' => true,
+                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
+            ]
+        );
+
+
+        $this->register_heading_controls('section_content', [], ['heading_link']);
+
+        $this->add_control(
+            'section_description',
+            [
+                'label' => \IqitElementorWpHelper::__('Description', 'elementor'),
+                'type' => Controls_Manager::HEADING,
+                'separator' => 'before',
             ]
         );
 
@@ -200,31 +207,10 @@ class Widget_Call_to_action extends Widget_Base
             'description_text',
             [
                 'label' => null,
-                'type' => Controls_Manager::TEXTAREA,
+                'type' => Controls_Manager::WYSIWYG,
                 'default' => \IqitElementorWpHelper::__('I am text block. Click edit button to change this text.', 'elementor'),
                 'section' => 'section_content',
                 'save_empty_value' => true,
-            ]
-        );
-
-        $this->add_control(
-            'title_tag',
-            [
-                'label' => \IqitElementorWpHelper::__('Title HTML Tag', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'options' => [
-                    'h1' => 'H1',
-                    'h2' => 'H2',
-                    'h3' => 'H3',
-                    'h4' => 'H4',
-                    'h5' => 'H5',
-                    'h6' => 'H6',
-                    'div' => 'div',
-                    'span' => 'span',
-                    'p' => 'p',
-                ],
-                'default' => 'div',
-                'section' => 'section_content',
             ]
         );
 
@@ -238,7 +224,7 @@ class Widget_Call_to_action extends Widget_Base
             ]
         );
 
-        $this->registerButtonControls('section_content', [], ['align', 'link']);
+        $this->register_button_controls('section_content', [], ['button_link']);
 
         $this->end_controls_section();
     }
@@ -270,7 +256,7 @@ class Widget_Call_to_action extends Widget_Base
                 ],
                 'size_units' => ['px', 'vh'],
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta-content' => 'min-height: {{SIZE}}{{UNIT}}',
+                    '{{WRAPPER}} .elementor-cta' => 'min-height: {{SIZE}}{{UNIT}}',
                 ],
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_box',
@@ -351,47 +337,33 @@ class Widget_Call_to_action extends Widget_Base
             ]
         );
 
-        // Title
+        // Description
         $this->add_control(
-            'heading_title_style',
+            'heading_heading_style',
             [
                 'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
                 'type' => Controls_Manager::HEADING,
-                'separator' => 'before',
-                'section' => 'section_style_content',
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'title_typography',
-                'selector' => '{{WRAPPER}} .elementor-cta-title',
-                'section' => 'section_style_content',
-                'scheme' => Scheme_Typography::TYPOGRAPHY_1,
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Text_Shadow::get_type(),
-            [
-                'name' => 'title_text_shadow',
-                'selector' => '{{WRAPPER}} .elementor-cta-title',
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
+                'condition' => [
+                    'heading_text!' => '',
+                ],
             ]
         );
 
+
+        $this->register_heading_styles('section_style_content', [], ['heading_color']);
+
         $this->add_responsive_control(
-            'title_spacing',
+            'heading_spacing',
             [
                 'label' => \IqitElementorWpHelper::__('Spacing'),
                 'type' => Controls_Manager::SLIDER,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta-title:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementor-content-item:not(:last-child) .elementor-heading-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
-                    'title!' => '',
+                    'heading_text!' => '',
                 ],
                 'section' => 'section_style_content',
                 'tab' => self::TAB_STYLE,
@@ -466,12 +438,12 @@ class Widget_Call_to_action extends Widget_Base
 
 
         $this->add_control(
-            'title_color',
+            'heading_color',
             [
                 'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-cta-title' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} .elementor-heading-title' => 'color: {{VALUE}};',
                 ],
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
@@ -529,7 +501,7 @@ class Widget_Call_to_action extends Widget_Base
                 'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}}:hover .elementor-cta-title' => 'color: {{VALUE}};',
+                    '{{WRAPPER}}:hover .elementor-heading-title' => 'color: {{VALUE}};',
                 ],
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
@@ -588,7 +560,7 @@ class Widget_Call_to_action extends Widget_Base
             ]
         );
 
-        $this->registerButtonStyles('section_style_button');
+        $this->register_button_styles('section_style_button');
 
         $this->end_controls_section();
 
@@ -737,32 +709,24 @@ class Widget_Call_to_action extends Widget_Base
         $this->end_controls_section();
     }
 
-    public function parseOptions($optionsSource, $preview = false): array
+    public function parse_options($optionsSource, $preview = false): array
     {
         // $optionsSource is expected to be the widget settings (similar to get_settings_for_display())
         // Basic options
         $skin = !empty($optionsSource['skin']) ? $optionsSource['skin'] : 'classic';
         $layout = !empty($optionsSource['layout']) ? $optionsSource['layout'] : 'left';
 
-        $hasLink = !empty($optionsSource['link']['url']);
+        $hasLink = !empty($optionsSource['link']['url']) && $optionsSource['link']['url'] !== '#';
         $linkClick = !empty($optionsSource['link_click']) ? $optionsSource['link_click'] : 'button';
 
-        $buttonText = !empty($optionsSource['button']) ? $optionsSource['button'] : '';
+        $buttonText = !empty($optionsSource['button_text']) ? $optionsSource['button_text'] : '';
         $hasButton = $buttonText !== '';
 
         // Wrapper tag & attributes
         $wrapperTag = 'div';
-        $wrapperHref = null;
-        $wrapperTarget = null;
-        $wrapperRel = null;
-
-        if ($hasLink && ('box' === $linkClick || !$hasButton)) {
-            $wrapperTag = 'a';
-            $wrapperHref = $optionsSource['link']['url'];
-
-            if (!empty($optionsSource['link']['is_external'])) {
-                $wrapperTarget = '_blank';
-                $wrapperRel = 'noopener noreferrer';
+        if ($hasLink) {
+            if ('box' === $linkClick || !$hasButton) {
+                $wrapperTag = 'a';
             }
         }
 
@@ -781,29 +745,31 @@ class Widget_Call_to_action extends Widget_Base
         }
 
         // Content fields
-        $title = !empty($optionsSource['title']) ? $optionsSource['title'] : '';
-        $titleTag = !empty($optionsSource['title_tag']) ? $optionsSource['title_tag'] : 'div';
         $description = !empty($optionsSource['description_text']) ? $optionsSource['description_text'] : '';
 
-        $optionsSource['link'] = null;
-        $buttonOptions = $this->buildButtonOptions($optionsSource);
+        if ($hasLink && $hasButton && $linkClick === 'button') {
+            $optionsSource['button_link'] = $optionsSource['link'];
+        }
+
+        $buttonOptions = $this->build_button_options($optionsSource);
+        $headingOptions = $this->build_heading_options($optionsSource);
 
         return [
 
             // Wrapper
             'wrapper_tag' => $wrapperTag,
-            'wrapper_href' => $wrapperHref,
-            'wrapper_target' => $wrapperTarget,
-            'wrapper_rel' => $wrapperRel,
             'wrapper_class' => $wrapperClass,
+
+            'link_click' => $linkClick,
+            'has_link' => $hasLink,
+            'link' => $optionsSource['link'] ?? [],
 
             // Background image
             'has_bg_image' => $hasBgImage,
             'bg_image_url' => $bgImageUrl,
 
             // Content
-            'title' => $title,
-            'title_tag' => $titleTag,
+            'heading' => $headingOptions,
             'description_text' => $description,
 
             // Button

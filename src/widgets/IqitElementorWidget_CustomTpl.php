@@ -96,7 +96,7 @@ class IqitElementorWidget_CustomTpl
         ];
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         if (isset($optionsSource['file'])) {
             return [

@@ -11,7 +11,7 @@ trait IqitElementorButtonTrait
     /**
      * Enregistre les contrôles liés au carousel sur la section donnée
      */
-    protected function registerButtonControls(string $sectionId = 'section_button_options', array $condition = [], $exclude_controls = []): void
+    protected function register_button_controls(string $sectionId = 'section_button_options', array $condition = [], $exclude_controls = []): void
     {
 
         if (!in_array('button_type', $exclude_controls)) {
@@ -38,9 +38,9 @@ trait IqitElementorButtonTrait
         }
 
 
-        if (!in_array('outline', $exclude_controls)) {
+        if (!in_array('button_outline', $exclude_controls)) {
             $this->add_control(
-                'outline',
+                'button_outline',
                 [
                     'label' => \IqitElementorWpHelper::__('Outline mode', 'elementor'),
                     'type' => Controls_Manager::SWITCHER,
@@ -56,9 +56,9 @@ trait IqitElementorButtonTrait
         }
 
 
-        if (!in_array('text', $exclude_controls)) {
+        if (!in_array('button_text', $exclude_controls)) {
             $this->add_control(
-                'text',
+                'button_text',
                 [
                     'label' => \IqitElementorWpHelper::__('Text', 'elementor'),
                     'type' => Controls_Manager::TEXT,
@@ -71,9 +71,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('link', $exclude_controls)) {
+        if (!in_array('button_link', $exclude_controls)) {
             $this->add_control(
-                'link',
+                'button_link',
                 [
                     'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
                     'type' => Controls_Manager::URL,
@@ -87,9 +87,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('align', $exclude_controls)) {
+        if (!in_array('button_align', $exclude_controls)) {
             $this->add_responsive_control(
-                'align',
+                'button_align',
                 [
                     'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
                     'type' => Controls_Manager::CHOOSE,
@@ -111,7 +111,6 @@ trait IqitElementorButtonTrait
                             'icon' => 'fa fa-align-justify',
                         ],
                     ],
-                    'prefix_class' => 'elementor%s-align-',
                     'force_render' => true,
                     'label_block' => false,
                     'default' => '',
@@ -121,9 +120,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('size', $exclude_controls)) {
+        if (!in_array('button_size', $exclude_controls)) {
             $this->add_control(
-                'size',
+                'button_size',
                 [
                     'label' => \IqitElementorWpHelper::__('Size', 'elementor'),
                     'type' => Controls_Manager::CHOOSE,
@@ -142,9 +141,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('icon', $exclude_controls)) {
+        if (!in_array('button_icon', $exclude_controls)) {
             $this->add_control(
-                'icon',
+                'button_icon',
                 [
                     'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
                     'type' => Controls_Manager::ICON,
@@ -155,9 +154,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('icon_align', $exclude_controls)) {
+        if (!in_array('button_icon_align', $exclude_controls)) {
             $this->add_control(
-                'icon_align',
+                'button_icon_align',
                 [
                     'label' => \IqitElementorWpHelper::__('Icon Position', 'elementor'),
                     'type' => Controls_Manager::SELECT,
@@ -174,9 +173,9 @@ trait IqitElementorButtonTrait
             );
         }
 
-        if (!in_array('icon_indent', $exclude_controls)) {
+        if (!in_array('button_icon_indent', $exclude_controls)) {
             $this->add_control(
-                'icon_indent',
+                'button_icon_indent',
                 [
                     'label' => \IqitElementorWpHelper::__('Icon Spacing', 'elementor'),
                     'type' => Controls_Manager::SLIDER,
@@ -186,7 +185,7 @@ trait IqitElementorButtonTrait
                         ],
                     ],
                     'condition' => [
-                        'icon!' => '',
+                        'button_icon!' => '',
                     ],
                     'selectors' => [
                         '{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'margin-left: {{SIZE}}{{UNIT}};',
@@ -198,12 +197,12 @@ trait IqitElementorButtonTrait
         }
     }
 
-    protected function registerButtonStyles(string $sectionId = 'section_button_styles', array $condition = []): void
+    protected function register_button_styles(string $sectionId = 'section_button_styles', array $condition = []): void
     {
         $this->add_group_control(
             Group_Control_Typography::get_type(),
             [
-                'name' => 'typography',
+                'name' => 'button_typography',
                 'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
                 'scheme' => Scheme_Typography::TYPOGRAPHY_4,
                 'tab' => self::TAB_STYLE,
@@ -229,7 +228,7 @@ trait IqitElementorButtonTrait
         $this->add_group_control(
             Group_Control_Border::get_type(),
             [
-                'name' => 'border',
+                'name' => 'button_border',
                 'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'placeholder' => '1px',
@@ -241,7 +240,7 @@ trait IqitElementorButtonTrait
         );
 
         $this->add_control(
-            'border_radius',
+            'button_border_radius',
             [
                 'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
@@ -295,7 +294,7 @@ trait IqitElementorButtonTrait
         );
 
         $this->add_control(
-            'background_color',
+            'button_background_color',
             [
                 'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
@@ -321,7 +320,7 @@ trait IqitElementorButtonTrait
         ]);
 
         $this->add_control(
-            'hover_color',
+            'button_text_color_hover',
             [
                 'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
@@ -335,7 +334,7 @@ trait IqitElementorButtonTrait
         );
 
         $this->add_control(
-            'button_background_hover_color',
+            'button_background_color_hover',
             [
                 'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
@@ -349,7 +348,7 @@ trait IqitElementorButtonTrait
         );
 
         $this->add_control(
-            'button_hover_border_color',
+            'button_border_color_hover',
             [
                 'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
@@ -368,48 +367,59 @@ trait IqitElementorButtonTrait
         $this->end_controls_tabs();
     }
 
-    protected function buildButtonOptions(array $settings): array
+    protected function build_button_options(array $settings): array
     {
         $button_classes = ['elementor-btn', 'btn'];
         $wrapper_classes = ['elementor-button-wrapper'];
 
         $button_classes[] = sprintf('btn-%s%s',
-            $settings['outline'] == 'yes' ? 'outline-' : '',
+            $settings['button_outline'] == 'yes' ? 'outline-' : '',
             $settings['button_type'] ?? 'secondary'
         );
 
-        if (($settings['size'] ?? 'default') !== 'default') {
-            $button_classes[] = 'btn-' . $settings['size'];
+        if ($settings['button_size'] && $settings['button_size'] !== 'default') {
+            $button_classes[] = 'btn-' . $settings['button_size'];
         }
 
-        if (!empty($settings['hover_animation'])) {
-            $button_classes[] = ' elementor-animation-' . $settings['hover_animation'];
+        if (!empty($settings['button_animation_hover'])) {
+            $button_classes[] = ' elementor-animation-' . $settings['button_animation_hover'];
         }
 
-        if (!empty($settings['icon'])) {
-            $button_classes[] = ' elementor-align-icon-' . $settings['icon_align'];
+        if (!empty($settings['button_icon'])) {
+            $button_classes[] = ' elementor-align-icon-' . $settings['button_icon_align'];
         }
 
         $button_tag = 'button';
-        if (!empty($settings['link']['url'])) {
+        if (!empty($settings['button_link']['url']) && $settings['button_link']['url'] !== '#') {
             $button_tag = 'a';
         }
 
-        $align = $settings['align'] ?? '';
+        $align = $settings['button_align'] ?? '';
         if (!empty($align)) {
             $wrapper_classes[] = 'elementor-align-' . $align;
         }
 
+        $align = $settings['button_align_tablet'] ?? '';
+        if (!empty($align)) {
+            $wrapper_classes[] = 'elementor-tablet-align-' . $align;
+        }
+
+        $align = $settings['button_align_mobile'] ?? '';
+        if (!empty($align)) {
+            $wrapper_classes[] = 'elementor-mobile-align-' . $align;
+        }
+
+
         return [
-            'text' => $settings['text'],
-            'icon' => $settings['icon'] ?? null,
+            'button_text' => $settings['button_text'],
+            'button_icon' => $settings['button_icon'] ?? null,
             'button_tag' => $button_tag,
             'wrapper_classes' => implode(' ', $wrapper_classes),
             'button_classes' => implode(' ', $button_classes),
-            'link' => [
-                'url' => $settings['link']['url'] ?? null,
-                'is_external' => $settings['link']['is_external'] ?? null,
-                'nofollow' => $settings['link']['nofollow'] ?? null,
+            'button_link' => [
+                'url' => $settings['button_link']['url'] ?? null,
+                'is_external' => $settings['button_link']['is_external'] ?? null,
+                'nofollow' => $settings['button_link']['nofollow'] ?? null,
             ]
         ];
     }

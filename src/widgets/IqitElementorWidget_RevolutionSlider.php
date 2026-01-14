@@ -113,7 +113,7 @@ class IqitElementorWidget_RevolutionSlider
         return $result;
     }
 
-    public function parseOptions($optionsSource, $preview = false)
+    public function parse_options($optionsSource, $preview = false)
     {
         $slider = '';
         $sliderId = (int) $optionsSource['slider'];

@@ -70,6 +70,10 @@
 			.elementor-control-title {
 				display: none;
 			}
+
+			.elementor-control-input-wrapper {
+				margin-top: 0;
+			}
 		}
 
 		&.elementor-hidden-control {
@@ -205,39 +209,6 @@
 			&:first-child + .elementor-choices-label {
 				border-left: none;
 			}
-		}
-	}
-
-	.elementor-slider {
-		display: inline-block;
-		margin-top: 10px;
-		height: 4px;
-		background-color: $editor-light;
-		border-radius: 5px;
-		position: relative;
-		width: 67%;
-
-		.ui-slider-handle {
-			height: 16px;
-			width: 16px;
-			background-color: #fff;
-			display: inline-block;
-			top: 50%;
-			transform: translateY(-50%) translateX(-8px);
-			position: absolute;
-			box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
-			border-radius: 50%;
-			cursor: pointer;
-		}
-	}
-
-	.elementor-slider-input {
-		width: 33%;
-		float: $end;
-
-		input {
-			width: 80%;
-			float: $end;
 		}
 	}
 
@@ -1221,4 +1192,7 @@
 
 	// Tabs control
 	@import "controls/tabs";
+
+	// Tabs control
+	@import "controls/slider";
 }

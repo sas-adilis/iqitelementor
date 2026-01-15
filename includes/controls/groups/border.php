@@ -37,9 +37,7 @@ class Group_Control_Border extends Group_Control_Base
         ];
 
         if (isset($args['separator']) && $args['separator']) {
-            $controls['border'] = [
-                'separator' => $args['separator']
-            ];
+            $controls['border']['separator'] = $args['separator'];
         }
 
         $controls['color'] = [

@@ -130,10 +130,13 @@ class Widget_Image extends Widget_Base
 
         $this->end_controls_section();
 
+        /**
+         * Style: Dimensions
+         */
         $this->start_controls_section(
-            'section_style_image',
+            'section_style_image_dimensions',
             [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorWpHelper::__('Dimensions', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -263,6 +266,19 @@ class Widget_Image extends Widget_Base
             ]
         );
 
+        $this->end_controls_section();
+
+        /**
+         * Style: Apparence
+         */
+        $this->start_controls_section(
+            'section_style_image_appearance',
+            [
+                'label' => \IqitElementorWpHelper::__('Appearance', 'elementor'),
+                'tab' => self::TAB_STYLE,
+            ]
+        );
+
         $this->start_controls_tabs('image', [
         ]);
         $this->start_controls_tab('image_normal', [
@@ -317,36 +333,6 @@ class Widget_Image extends Widget_Base
             ]
         );
 
-        $this->add_control(
-            'hover_animation',
-            [
-                'label' => \IqitElementorWpHelper::__('Hover Animation', 'elementor'),
-                'type' => Controls_Manager::HOVER_ANIMATION,
-                'separator' => 'after',
-            ]
-        );
-
-        $this->add_control(
-            'hover_animation_duration',
-            [
-                'label' => \IqitElementorWpHelper::__('Animation Duration (ms)'),
-                'type' => Controls_Manager::SLIDER,
-                'render_type' => 'template',
-                'range' => [
-                    'px' => [
-                        'min' => 0,
-                        'max' => 10000,
-                    ],
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}:hover .elementor-image img' => 'transition-duration: {{SIZE}}ms',
-                ],
-                'condition' => [
-                    'hover_animation!' => '',
-                ],
-            ]
-        );
-
         $this->end_controls_tab();
         $this->end_controls_tabs();
 
@@ -377,6 +363,65 @@ class Widget_Image extends Widget_Base
             [
                 'name' => 'image_box_shadow',
                 'selector' => '{{WRAPPER}} .elementor-image img',
+            ]
+        );
+
+        $this->end_controls_section();
+
+        /**
+         * Nouvelle section: Animations au survol (Style tab)
+         */
+        $this->start_controls_section(
+            'section_style_image_hover_animation',
+            [
+                'label' => \IqitElementorWpHelper::__('Hover Animation', 'elementor'),
+                'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->add_control(
+            'hover_animation',
+            [
+                'label' => \IqitElementorWpHelper::__('Hover Animation', 'elementor'),
+                'type' => Controls_Manager::HOVER_ANIMATION,
+            ]
+        );
+
+        // Optionnel mais utile: applique la transition aussi hors hover (sinon la durée ne s'applique qu'en :hover)
+        $this->add_control(
+            'hover_animation_transition_property',
+            [
+                'label' => \IqitElementorWpHelper::__('Transition Property', 'elementor'),
+                'type' => Controls_Manager::HIDDEN,
+                'default' => 'transform',
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-image img' => 'transition-property: {{VALUE}};',
+                ],
+                'condition' => [
+                    'hover_animation!' => '',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'hover_animation_duration',
+            [
+                'label' => \IqitElementorWpHelper::__('Animation Duration (ms)'),
+                'type' => Controls_Manager::SLIDER,
+                'render_type' => 'template',
+                'range' => [
+                    'px' => [
+                        'min' => 0,
+                        'max' => 10000,
+                    ],
+                ],
+                'selectors' => [
+                    // Appliqué sur l'état normal pour que l'entrée ET la sortie utilisent la même durée
+                    '{{WRAPPER}} .elementor-image img' => 'transition-duration: {{SIZE}}ms',
+                ],
+                'condition' => [
+                    'hover_animation!' => '',
+                ],
             ]
         );
 

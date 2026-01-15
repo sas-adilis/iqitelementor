@@ -6,7 +6,7 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/iqitElementorWpHelper.php';
+require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorHelper.php';
 require_once dirname(__FILE__) . '/../../includes/plugin-elementor.php';
 
 class IqitElementorEditorController extends ModuleAdminController
@@ -322,7 +322,7 @@ class IqitElementorEditorController extends ModuleAdminController
                 'instagramToken' => Configuration::get('iqit_elementor_inst_token'),
                 'ajax_csfr_token_url' => $this->context->link->getModuleLink($this->module->name, 'Actions', ['process' => 'handleCsfrToken', 'ajax' => 1], true),
                 'iqitBaseUrl' => Tools::safeOutput($base_url),
-                'iqitElementorColorPalette' => IqitElementorWpHelper::stringToArrayOfColors(Configuration::get('IQIT_ELEMENT_COLORS')),
+                'iqitElementorColorPalette' => IqitElementorHelper::stringToArrayOfColors(Configuration::get('IQIT_ELEMENT_COLORS')),
             ],
             'dateTimePickerL10n' => [
                 'currentText' => $this->l('Now'),

@@ -43,16 +43,16 @@ class Group_Control_Text_Shadow extends Group_Control_Base
 
 
         $controls['text_shadow_type'] = [
-            'label' => \IqitElementorWpHelper::_x('Text Shadow', 'Text Shadow Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Text Shadow', 'Text Shadow Control', 'elementor'),
             'type' => Controls_Manager::SWITCHER,
             'options' => [
-                '' => \IqitElementorWpHelper::__('No', 'elementor'),
-                'outset' => \IqitElementorWpHelper::_x('Yes', 'Text Shadow Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                'outset' => \IqitElementorTranslater::get()->l('Yes', 'Text Shadow Control', 'elementor'),
             ],
         ];
 
         $controls['text_shadow'] = [
-            'label' => \IqitElementorWpHelper::_x('Text Shadow', 'Text Shadow Control'),
+            'label' => \IqitElementorTranslater::get()->l('Text Shadow', 'Text Shadow Control'),
             'type' => Controls_Manager::TEXT_SHADOW,
             'selectors' => [
                 $args['selector'] => 'text-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}};',

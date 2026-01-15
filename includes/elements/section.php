@@ -19,7 +19,7 @@ class Element_Section extends Element_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Section', 'elementor');
+        return \IqitElementorTranslater::get()->l('Section', 'elementor');
     }
 
     public function get_icon()
@@ -110,7 +110,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_layout',
             [
-                'label' => \IqitElementorWpHelper::__('Layout', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Layout', 'elementor'),
                 'tab' => self::TAB_LAYOUT,
             ]
         );
@@ -118,28 +118,28 @@ class Element_Section extends Element_Base
         $this->add_control(
             'stretch_section',
             [
-                'label' => \IqitElementorWpHelper::__('Stretch Section', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Stretch Section', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'section-stretched',
                 'prefix_class' => 'elementor-',
                 'force_render' => true,
                 'hide_in_inner' => true,
-                'description' => \IqitElementorWpHelper::__('Stretch the section to the full width of the page using JS.', 'elementor') . sprintf(' <a href="%s" target="_blank">%s</a>', 'https://go.elementor.com/stretch-section/', \IqitElementorWpHelper::__('Learn more.', 'elementor')),
+                'description' => \IqitElementorTranslater::get()->l('Stretch the section to the full width of the page using JS.', 'elementor') . sprintf(' <a href="%s" target="_blank">%s</a>', 'https://go.elementor.com/stretch-section/', \IqitElementorTranslater::get()->l('Learn more.', 'elementor')),
             ]
         );
 
         $this->add_control(
             'layout',
             [
-                'label' => \IqitElementorWpHelper::__('Content Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Width', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'boxed',
                 'options' => [
-                    'boxed' => \IqitElementorWpHelper::__('Boxed', 'elementor'),
-                    'full_width' => \IqitElementorWpHelper::__('Full Width', 'elementor'),
+                    'boxed' => \IqitElementorTranslater::get()->l('Boxed', 'elementor'),
+                    'full_width' => \IqitElementorTranslater::get()->l('Full Width', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-section-',
             ]
@@ -148,7 +148,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'content_width',
             [
-                'label' => \IqitElementorWpHelper::__('Content Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Width', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => [
@@ -170,16 +170,16 @@ class Element_Section extends Element_Base
         $this->add_control(
             'gap',
             [
-                'label' => \IqitElementorWpHelper::__('Columns Gap', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Columns Gap', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'default',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No Gap', 'elementor'),
-                    'narrow' => \IqitElementorWpHelper::__('Narrow', 'elementor'),
-                    'extended' => \IqitElementorWpHelper::__('Extended', 'elementor'),
-                    'wide' => \IqitElementorWpHelper::__('Wide', 'elementor'),
-                    'wider' => \IqitElementorWpHelper::__('Wider', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No Gap', 'elementor'),
+                    'narrow' => \IqitElementorTranslater::get()->l('Narrow', 'elementor'),
+                    'extended' => \IqitElementorTranslater::get()->l('Extended', 'elementor'),
+                    'wide' => \IqitElementorTranslater::get()->l('Wide', 'elementor'),
+                    'wider' => \IqitElementorTranslater::get()->l('Wider', 'elementor'),
                 ],
             ]
         );
@@ -187,13 +187,13 @@ class Element_Section extends Element_Base
         $this->add_control(
             'height',
             [
-                'label' => \IqitElementorWpHelper::__('Height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Height', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'default',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'full' => \IqitElementorWpHelper::__('Fit To Screen', 'elementor'),
-                    'min-height' => \IqitElementorWpHelper::__('Min Height', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'full' => \IqitElementorTranslater::get()->l('Fit To Screen', 'elementor'),
+                    'min-height' => \IqitElementorTranslater::get()->l('Min Height', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-section-height-',
                 'hide_in_inner' => true,
@@ -203,7 +203,7 @@ class Element_Section extends Element_Base
         $this->add_responsive_control(
             'custom_height',
             [
-                'label' => \IqitElementorWpHelper::__('Minimum Height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Minimum Height', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 400,
@@ -227,12 +227,12 @@ class Element_Section extends Element_Base
         $this->add_control(
             'height_inner',
             [
-                'label' => \IqitElementorWpHelper::__('Height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Height', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'default',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'min-height' => \IqitElementorWpHelper::__('Min Height', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'min-height' => \IqitElementorTranslater::get()->l('Min Height', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-section-height-',
                 'hide_in_top' => true,
@@ -242,7 +242,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'custom_height_inner',
             [
-                'label' => \IqitElementorWpHelper::__('Minimum Height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Minimum Height', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 400,
@@ -266,14 +266,14 @@ class Element_Section extends Element_Base
         $this->add_control(
             'column_position',
             [
-                'label' => \IqitElementorWpHelper::__('Column Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Column Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'middle',
                 'options' => [
-                    'stretch' => \IqitElementorWpHelper::__('Stretch', 'elementor'),
-                    'top' => \IqitElementorWpHelper::__('Top', 'elementor'),
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'bottom' => \IqitElementorWpHelper::__('Bottom', 'elementor'),
+                    'stretch' => \IqitElementorTranslater::get()->l('Stretch', 'elementor'),
+                    'top' => \IqitElementorTranslater::get()->l('Top', 'elementor'),
+                    'middle' => \IqitElementorTranslater::get()->l('Middle', 'elementor'),
+                    'bottom' => \IqitElementorTranslater::get()->l('Bottom', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-section-items-',
                 'condition' => [
@@ -285,14 +285,14 @@ class Element_Section extends Element_Base
         $this->add_control(
             'content_position',
             [
-                'label' => \IqitElementorWpHelper::__('Content Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'top' => \IqitElementorWpHelper::__('Top', 'elementor'),
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'bottom' => \IqitElementorWpHelper::__('Bottom', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'top' => \IqitElementorTranslater::get()->l('Top', 'elementor'),
+                    'middle' => \IqitElementorTranslater::get()->l('Middle', 'elementor'),
+                    'bottom' => \IqitElementorTranslater::get()->l('Bottom', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-section-content-',
             ]
@@ -302,16 +302,16 @@ class Element_Section extends Element_Base
         $this->add_control(
             'slider_section',
             [
-                'label' => \IqitElementorWpHelper::__('As slider', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('As slider', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'section-slidered',
                 'prefix_class' => 'elementor-',
                 'force_render' => true,
                 'hide_in_inner' => true,
-                'description' => \IqitElementorWpHelper::__('Section will be showed as slider/carousel on frontend. On backed it wll be showed as normal section with one column per row for easier editing and yellow border', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('Section will be showed as slider/carousel on frontend. On backed it wll be showed as normal section with one column per row for easier editing and yellow border', 'elementor'),
             ]
         );
 
@@ -320,7 +320,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_slider_settings',
             [
-                'label' => \IqitElementorWpHelper::__('Slider Settings', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Slider Settings', 'elementor'),
                 'tab' => self::TAB_LAYOUT,
                 'condition' => [
                     'slider_section' => 'section-slidered',
@@ -335,7 +335,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'structure',
             [
-                'label' => \IqitElementorWpHelper::__('Structure', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Structure', 'elementor'),
                 'type' => Controls_Manager::STRUCTURE,
                 'default' => '10',
                 'condition' => [
@@ -350,7 +350,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_background',
             [
-                'label' => \IqitElementorWpHelper::__('Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -369,7 +369,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'background_overlay_section',
             [
-                'label' => \IqitElementorWpHelper::__('Background Overlay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Overlay', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'condition' => [
                     'background_background' => ['classic', 'gradient', 'video'],
@@ -392,7 +392,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'background_overlay_opacity',
             [
-                'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Opacity (%)', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => .5,
@@ -418,7 +418,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_border',
             [
-                'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -433,7 +433,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'selectors' => [
@@ -455,7 +455,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_typo',
             [
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -463,7 +463,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'heading_color',
             [
-                'label' => \IqitElementorWpHelper::__('Heading Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Heading Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
@@ -475,7 +475,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'color_text',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
@@ -487,7 +487,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'color_link',
             [
-                'label' => \IqitElementorWpHelper::__('Link Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
@@ -501,7 +501,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'color_link_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Link Hover Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link Hover Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
@@ -513,19 +513,19 @@ class Element_Section extends Element_Base
         $this->add_control(
             'text_align',
             [
-                'label' => \IqitElementorWpHelper::__('Text Align', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Align', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -541,7 +541,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_carousel_styles',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'condition' => [
                     'slider_section' => 'section-slidered',
@@ -559,7 +559,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             'section_advanced',
             [
-                'label' => \IqitElementorWpHelper::__('Advanced', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Advanced', 'elementor'),
                 'tab' => self::TAB_ADVANCED,
             ]
         );
@@ -567,7 +567,7 @@ class Element_Section extends Element_Base
         $this->add_responsive_control(
             'margin',
             [
-                'label' => \IqitElementorWpHelper::__('Margin', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Margin', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'allowed_dimensions' => 'vertical',
@@ -586,7 +586,7 @@ class Element_Section extends Element_Base
         $this->add_responsive_control(
             'padding',
             [
-                'label' => \IqitElementorWpHelper::__('Padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
@@ -598,7 +598,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'animation',
             [
-                'label' => \IqitElementorWpHelper::__('Entrance Animation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Entrance Animation', 'elementor'),
                 'type' => Controls_Manager::ANIMATION,
                 'default' => '',
                 'prefix_class' => 'animated ',
@@ -609,13 +609,13 @@ class Element_Section extends Element_Base
         $this->add_control(
             'animation_duration',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Duration', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Duration', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    'slow' => \IqitElementorWpHelper::__('Slow', 'elementor'),
-                    '' => \IqitElementorWpHelper::__('Normal', 'elementor'),
-                    'fast' => \IqitElementorWpHelper::__('Fast', 'elementor'),
+                    'slow' => \IqitElementorTranslater::get()->l('Slow', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('Normal', 'elementor'),
+                    'fast' => \IqitElementorTranslater::get()->l('Fast', 'elementor'),
                 ],
                 'prefix_class' => 'animated-',
                 'condition' => [
@@ -627,12 +627,12 @@ class Element_Section extends Element_Base
         $this->add_control(
             'css_classes',
             [
-                'label' => \IqitElementorWpHelper::__('CSS Classes', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('CSS Classes', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
                 'prefix_class' => '',
                 'label_block' => true,
-                'title' => \IqitElementorWpHelper::__('Add your custom class WITHOUT the dot. e.g: my-class', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Add your custom class WITHOUT the dot. e.g: my-class', 'elementor'),
             ]
         );
 
@@ -642,7 +642,7 @@ class Element_Section extends Element_Base
         $this->start_controls_section(
             '_section_responsive',
             [
-                'label' => \IqitElementorWpHelper::__('Responsive', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Responsive', 'elementor'),
                 'tab' => self::TAB_ADVANCED,
             ]
         );
@@ -650,14 +650,14 @@ class Element_Section extends Element_Base
         $this->add_control(
             'reverse_order_tablet',
             [
-                'label' => \IqitElementorWpHelper::__('Reverse Columns (Tablet)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Reverse Columns (Tablet)', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'reverse-tablet',
-                'description' => \IqitElementorWpHelper::__('Reverse column order - When on tablet, the column order is reversed, so the last column appears on top and vice versa.', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('Reverse column order - When on tablet, the column order is reversed, so the last column appears on top and vice versa.', 'elementor'),
             ]
         );
 
@@ -666,21 +666,21 @@ class Element_Section extends Element_Base
         $this->add_control(
             'reverse_order_mobile',
             [
-                'label' => \IqitElementorWpHelper::__('Reverse Columns (Mobile)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Reverse Columns (Mobile)', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'reverse-mobile',
-                'description' => \IqitElementorWpHelper::__('Reverse column order - When on mobile, the column order is reversed, so the last column appears on top and vice versa.', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('Reverse column order - When on mobile, the column order is reversed, so the last column appears on top and vice versa.', 'elementor'),
             ]
         );
 
         $this->add_control(
             'heading_visibility',
             [
-                'label' => \IqitElementorWpHelper::__('Visibility', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Visibility', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -689,7 +689,7 @@ class Element_Section extends Element_Base
         $this->add_control(
             'responsive_description',
             [
-                'raw' => \IqitElementorWpHelper::__('Attention: The display settings (show/hide for mobile, tablet or desktop) will only take effect once you are on the preview or live page, and not while you\'re in editing mode in Elementor.', 'elementor'),
+                'raw' => \IqitElementorTranslater::get()->l('Attention: The display settings (show/hide for mobile, tablet or desktop) will only take effect once you are on the preview or live page, and not while you\'re in editing mode in Elementor.', 'elementor'),
                 'type' => Controls_Manager::RAW_HTML,
                 'classes' => 'elementor-control-descriptor',
             ]
@@ -698,12 +698,12 @@ class Element_Section extends Element_Base
         $this->add_control(
             'hide_desktop',
             [
-                'label' => \IqitElementorWpHelper::__('Hide On Desktop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hide On Desktop', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',
-                'label_on' => \IqitElementorWpHelper::__('Hide', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
                 'return_value' => 'hidden-desktop',
             ]
         );
@@ -711,12 +711,12 @@ class Element_Section extends Element_Base
         $this->add_control(
             'hide_tablet',
             [
-                'label' => \IqitElementorWpHelper::__('Hide On Tablet', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hide On Tablet', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',
-                'label_on' => \IqitElementorWpHelper::__('Hide', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
                 'return_value' => 'hidden-tablet',
             ]
         );
@@ -724,12 +724,12 @@ class Element_Section extends Element_Base
         $this->add_control(
             'hide_mobile',
             [
-                'label' => \IqitElementorWpHelper::__('Hide On Mobile', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hide On Mobile', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'prefix_class' => 'elementor-',
-                'label_on' => \IqitElementorWpHelper::__('Hide', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
                 'return_value' => 'hidden-phone',
             ]
         );
@@ -745,26 +745,26 @@ class Element_Section extends Element_Base
             <div class="elementor-editor-element-settings elementor-editor-section-settings">
                 <ul class="elementor-editor-element-settings-list  elementor-editor-section-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-trigger">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Section', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Section', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Drag Section', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Section', 'elementor'); ?></span>
                             <i class="fa fa-grip-lines"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate Section', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Duplicate Section', 'elementor'); ?></span>
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-save">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Save', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Save to Library', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Save', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Save to Library', 'elementor'); ?></span>
                             <i class="fa fa-floppy-o"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove Section', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Remove Section', 'elementor'); ?></span>
                             <i class="fa fa-times"></i>
                         </a>
                     </li>
@@ -855,7 +855,7 @@ class Element_Section extends Element_Base
         <?php } ?>
 
 
-        <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorWpHelper::esc_attr($instance['gap']); ?>">
+        <div class="elementor-container  elementor-column-gap-<?php echo \IqitElementorHelper::esc_attr($instance['gap']); ?>">
         <div class="elementor-row">
         <?php
     }

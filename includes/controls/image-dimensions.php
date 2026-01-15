@@ -39,14 +39,14 @@ class Control_Image_Dimensions extends Control_Base_Multiple
 			<div class="elementor-control-input-wrapper">
 				<div class="elementor-image-dimensions-field">
 					<input type="text" data-setting="width" />
-					<div class="elementor-image-dimensions-field-description"><?php \IqitElementorWpHelper::_e('Width', 'elementor'); ?></div>
+					<div class="elementor-image-dimensions-field-description"><?php \IqitElementorTranslater::get()->l('Width', 'elementor'); ?></div>
 				</div>
 				<div class="elementor-image-dimensions-separator">x</div>
 				<div class="elementor-image-dimensions-field">
 					<input type="text" data-setting="height" />
-					<div class="elementor-image-dimensions-field-description"><?php \IqitElementorWpHelper::_e('Height', 'elementor'); ?></div>
+					<div class="elementor-image-dimensions-field-description"><?php \IqitElementorTranslater::get()->l('Height', 'elementor'); ?></div>
 				</div>
-				<button class="elementor-button elementor-button-success elementor-image-dimensions-apply-button"><?php \IqitElementorWpHelper::_e('Apply', 'elementor'); ?></button>
+				<button class="elementor-button elementor-button-success elementor-image-dimensions-apply-button"><?php \IqitElementorTranslater::get()->l('Apply', 'elementor'); ?></button>
 			</div>
 		</div>
 		<?php

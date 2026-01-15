@@ -24,7 +24,7 @@ class Control_Autocomplete_Products extends Control_Base
 
 				<div class="elementor-control-content elementor-selected-products-wrapper">
 						<div class="elementor-control-field">
-							<label class="elementor-control-title"> <# if ( data.single ) { #> <?php \IqitElementorWpHelper::_e('Selected product', 'elementor'); ?><# } else { #> <?php \IqitElementorWpHelper::_e('Selected products', 'elementor'); ?><# } #></label>
+							<label class="elementor-control-title"> <# if ( data.single ) { #> <?php \IqitElementorTranslater::get()->l('Selected product', 'elementor'); ?><# } else { #> <?php \IqitElementorTranslater::get()->l('Selected products', 'elementor'); ?><# } #></label>
 
 							<div class="elementor-control-input-wrapper">
 

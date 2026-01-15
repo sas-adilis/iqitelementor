@@ -14,7 +14,7 @@ class Widget_Progress extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Progress Bar', 'elementor');
+        return \IqitElementorTranslater::get()->l('Progress Bar', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'section_progress',
             [
-                'label' => \IqitElementorWpHelper::__('Progress Bar', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Progress Bar', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,10 +35,10 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::TEXT,
-                'placeholder' => \IqitElementorWpHelper::__('Enter your title', 'elementor'),
-                'default' => \IqitElementorWpHelper::__('My Skill', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your title', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('My Skill', 'elementor'),
                 'label_block' => true,
                 'section' => 'section_progress',
             ]
@@ -47,16 +47,16 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'progress_type',
             [
-                'label' => \IqitElementorWpHelper::__('Type', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Type', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'section' => 'section_progress',
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'info' => \IqitElementorWpHelper::__('Info', 'elementor'),
-                    'success' => \IqitElementorWpHelper::__('Success', 'elementor'),
-                    'warning' => \IqitElementorWpHelper::__('Warning', 'elementor'),
-                    'danger' => \IqitElementorWpHelper::__('Danger', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'info' => \IqitElementorTranslater::get()->l('Info', 'elementor'),
+                    'success' => \IqitElementorTranslater::get()->l('Success', 'elementor'),
+                    'warning' => \IqitElementorTranslater::get()->l('Warning', 'elementor'),
+                    'danger' => \IqitElementorTranslater::get()->l('Danger', 'elementor'),
                 ],
             ]
         );
@@ -64,7 +64,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'percent',
             [
-                'label' => \IqitElementorWpHelper::__('Percentage', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Percentage', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 50,
@@ -78,13 +78,13 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'display_percentage',
             [
-                'label' => \IqitElementorWpHelper::__('Display Percentage', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Display Percentage', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'show',
                 'section' => 'section_progress',
                 'options' => [
-                    'show' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'hide' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'show' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'hide' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
             ]
         );
@@ -92,10 +92,10 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'inner_text',
             [
-                'label' => \IqitElementorWpHelper::__('Inner Text', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Inner Text', 'elementor'),
                 'type' => Controls_Manager::TEXT,
-                'placeholder' => \IqitElementorWpHelper::__('e.g. Web Designer', 'elementor'),
-                'default' => \IqitElementorWpHelper::__('Web Designer', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('e.g. Web Designer', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Web Designer', 'elementor'),
                 'label_block' => true,
                 'section' => 'section_progress',
             ]
@@ -104,7 +104,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_progress',
@@ -114,7 +114,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'section_progress_style',
             [
-                'label' => \IqitElementorWpHelper::__('Progress Bar', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Progress Bar', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -123,7 +123,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'bar_color',
             [
-                'label' => \IqitElementorWpHelper::__('Bar Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Bar Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'scheme' => [
@@ -140,7 +140,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'bar_bg_color',
             [
-                'label' => \IqitElementorWpHelper::__('Bar Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Bar Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_progress_style',
@@ -153,7 +153,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'bar_inline_color',
             [
-                'label' => \IqitElementorWpHelper::__('Inner Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Inner Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_progress_style',
@@ -166,7 +166,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title Style', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Style', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -175,7 +175,7 @@ class Widget_Progress extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title',

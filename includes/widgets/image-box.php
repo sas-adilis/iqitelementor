@@ -15,7 +15,7 @@ class Widget_Image_box extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Image Box', 'elementor');
+        return \IqitElementorTranslater::get()->l('Image Box', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'section_image',
             [
-                'label' => \IqitElementorWpHelper::__('Image Box', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Box', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -36,7 +36,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'image',
             [
-                'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Choose Image', 'elementor'),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
                     'url' => UtilsElementor::get_placeholder_image_src(),
@@ -48,14 +48,14 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'image_lazy',
             [
-                'label' => \IqitElementorWpHelper::__('Lazy load', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Lazy load', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_image',
-                'description' => \IqitElementorWpHelper::__('If your widget is above the fold lazy load should be disabled', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('If your widget is above the fold lazy load should be disabled', 'elementor'),
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
             ]
         );
@@ -63,11 +63,11 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'caption',
             [
-                'label' => \IqitElementorWpHelper::__('Alt text', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alt text', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your Alt about the image', 'elementor'),
-                'title' => \IqitElementorWpHelper::__('Input image Alt here', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your Alt about the image', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Input image Alt here', 'elementor'),
                 'section' => 'section_image',
             ]
         );
@@ -75,10 +75,10 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'title_text',
             [
-                'label' => \IqitElementorWpHelper::__('Title & Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title & Description', 'elementor'),
                 'type' => Controls_Manager::TEXT,
-                'default' => \IqitElementorWpHelper::__('This is the heading', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Your Title', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('This is the heading', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Your Title', 'elementor'),
                 'section' => 'section_image',
                 'label_block' => true,
             ]
@@ -88,9 +88,9 @@ class Widget_Image_box extends Widget_Base
             'description_text',
             [
                 'show_label' => false,
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'type' => Controls_Manager::WYSIWYG,
-                'default' => '<p>' . \IqitElementorWpHelper::__('I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor') . '</p>',
+                'default' => '<p>' . \IqitElementorTranslater::get()->l('I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor') . '</p>',
                 'section' => 'section_image',
             ]
         );
@@ -98,9 +98,9 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'link',
             [
-                'label' => \IqitElementorWpHelper::__('Link to', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link to', 'elementor'),
                 'type' => Controls_Manager::URL,
-                'placeholder' => \IqitElementorWpHelper::__('http://your-link.com', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('http://your-link.com', 'elementor'),
                 'section' => 'section_image',
                 'separator' => 'before',
             ]
@@ -109,20 +109,20 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'position',
             [
-                'label' => \IqitElementorWpHelper::__('Image Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Position', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'default' => 'top',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'top' => [
-                        'title' => \IqitElementorWpHelper::__('Top', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Top', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -135,18 +135,18 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'title_size',
             [
-                'label' => \IqitElementorWpHelper::__('Title HTML Tag', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title HTML Tag', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'h1' => \IqitElementorWpHelper::__('H1', 'elementor'),
-                    'h2' => \IqitElementorWpHelper::__('H2', 'elementor'),
-                    'h3' => \IqitElementorWpHelper::__('H3', 'elementor'),
-                    'h4' => \IqitElementorWpHelper::__('H4', 'elementor'),
-                    'h5' => \IqitElementorWpHelper::__('H5', 'elementor'),
-                    'h6' => \IqitElementorWpHelper::__('H6', 'elementor'),
-                    'div' => \IqitElementorWpHelper::__('div', 'elementor'),
-                    'span' => \IqitElementorWpHelper::__('span', 'elementor'),
-                    'p' => \IqitElementorWpHelper::__('p', 'elementor'),
+                    'h1' => \IqitElementorTranslater::get()->l('H1', 'elementor'),
+                    'h2' => \IqitElementorTranslater::get()->l('H2', 'elementor'),
+                    'h3' => \IqitElementorTranslater::get()->l('H3', 'elementor'),
+                    'h4' => \IqitElementorTranslater::get()->l('H4', 'elementor'),
+                    'h5' => \IqitElementorTranslater::get()->l('H5', 'elementor'),
+                    'h6' => \IqitElementorTranslater::get()->l('H6', 'elementor'),
+                    'div' => \IqitElementorTranslater::get()->l('div', 'elementor'),
+                    'span' => \IqitElementorTranslater::get()->l('span', 'elementor'),
+                    'p' => \IqitElementorTranslater::get()->l('p', 'elementor'),
                 ],
                 'default' => 'h3',
                 'section' => 'section_image',
@@ -156,7 +156,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_content',
@@ -167,7 +167,7 @@ class Widget_Image_box extends Widget_Base
             'section_style_image',
             [
                 'type' => Controls_Manager::SECTION,
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -175,7 +175,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'image_space',
             [
-                'label' => \IqitElementorWpHelper::__('Image Spacing', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Spacing', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 15,
@@ -199,7 +199,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'image_size',
             [
-                'label' => \IqitElementorWpHelper::__('Image Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 30,
@@ -223,7 +223,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'image_opacity',
             [
-                'label' => \IqitElementorWpHelper::__('Opacity (%)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Opacity (%)', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 1,
@@ -246,7 +246,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'hover_animation',
             [
-                'label' => \IqitElementorWpHelper::__('Animation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation', 'elementor'),
                 'type' => Controls_Manager::HOVER_ANIMATION,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_image',
@@ -257,7 +257,7 @@ class Widget_Image_box extends Widget_Base
             'section_style_content',
             [
                 'type' => Controls_Manager::SECTION,
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -265,23 +265,23 @@ class Widget_Image_box extends Widget_Base
         $this->add_responsive_control(
             'text_align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                     'justify' => [
-                        'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Justified', 'elementor'),
                         'icon' => 'fa fa-align-justify',
                     ],
                 ],
@@ -296,12 +296,12 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'content_vertical_alignment',
             [
-                'label' => \IqitElementorWpHelper::__('Vertical Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Vertical Alignment', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'top' => \IqitElementorWpHelper::__('Top', 'elementor'),
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'bottom' => \IqitElementorWpHelper::__('Bottom', 'elementor'),
+                    'top' => \IqitElementorTranslater::get()->l('Top', 'elementor'),
+                    'middle' => \IqitElementorTranslater::get()->l('Middle', 'elementor'),
+                    'bottom' => \IqitElementorTranslater::get()->l('Bottom', 'elementor'),
                 ],
                 'default' => 'top',
                 'section' => 'section_style_content',
@@ -313,7 +313,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'heading_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => 'section_style_content',
                 'tab' => self::TAB_STYLE,
@@ -324,7 +324,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_responsive_control(
             'title_bottom_space',
             [
-                'label' => \IqitElementorWpHelper::__('Title Spacing', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Spacing', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => [
@@ -343,7 +343,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Title Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'default' => '',
@@ -372,7 +372,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'heading_description',
             [
-                'label' => \IqitElementorWpHelper::__('Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => 'section_style_content',
                 'tab' => self::TAB_STYLE,
@@ -383,7 +383,7 @@ class Widget_Image_box extends Widget_Base
         $this->add_control(
             'description_color',
             [
-                'label' => \IqitElementorWpHelper::__('Description Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'default' => '',
@@ -417,15 +417,15 @@ class Widget_Image_box extends Widget_Base
         $html = '<div class="elementor-image-box-wrapper">';
 
         if (!empty($instance['image']['url'])) {
-            $this->add_render_attribute('image', 'src', \IqitElementorWpHelper::getImage($instance['image']['url']));
-            $this->add_render_attribute('image', 'alt', \IqitElementorWpHelper::esc_attr($instance['caption']));
+            $this->add_render_attribute('image', 'src', \IqitElementorHelper::getImage($instance['image']['url']));
+            $this->add_render_attribute('image', 'alt', \IqitElementorHelper::esc_attr($instance['caption']));
 
             if ($instance['hover_animation']) {
                 $this->add_render_attribute('image', 'class', 'elementor-animation-' . $instance['hover_animation']);
             }
 
-            $image_width = $instance['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($instance['image']['width']) . '"' : '';
-            $image_height = $instance['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($instance['image']['height']) . '"' : '';
+            $image_width = $instance['image']['width'] ? 'width="' . \IqitElementorHelper::absint($instance['image']['width']) . '"' : '';
+            $image_height = $instance['image']['height'] ? 'height="' . \IqitElementorHelper::absint($instance['image']['height']) . '"' : '';
 
             if ('yes' === $instance['image_lazy']) {
                 $lazyload_tag = 'loading="lazy" ';

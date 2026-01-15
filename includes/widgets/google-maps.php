@@ -14,7 +14,7 @@ class Widget_Google_maps extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Google Maps', 'elementor');
+        return \IqitElementorTranslater::get()->l('Google Maps', 'elementor');
     }
 
     public function get_icon()
@@ -27,16 +27,16 @@ class Widget_Google_maps extends Widget_Base
         $this->add_control(
             'section_map',
             [
-                'label' => \IqitElementorWpHelper::__('Map', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Map', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
 
-        $default_address = \IqitElementorWpHelper::__('London Eye, London, United Kingdom', 'elementor');
+        $default_address = \IqitElementorTranslater::get()->l('London Eye, London, United Kingdom', 'elementor');
         $this->add_control(
             'address',
             [
-                'label' => \IqitElementorWpHelper::__('Address', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Address', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'placeholder' => $default_address,
                 'default' => $default_address,
@@ -48,7 +48,7 @@ class Widget_Google_maps extends Widget_Base
         $this->add_control(
             'zoom',
             [
-                'label' => \IqitElementorWpHelper::__('Zoom Level', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Zoom Level', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 10,
@@ -66,7 +66,7 @@ class Widget_Google_maps extends Widget_Base
         $this->add_control(
             'height',
             [
-                'label' => \IqitElementorWpHelper::__('Height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Height', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 300,
@@ -87,12 +87,12 @@ class Widget_Google_maps extends Widget_Base
         $this->add_control(
             'prevent_scroll',
             [
-                'label' => \IqitElementorWpHelper::__('Prevent Scroll', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Prevent Scroll', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'section' => 'section_map',
                 'selectors' => [
@@ -104,7 +104,7 @@ class Widget_Google_maps extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_map',
@@ -118,14 +118,14 @@ class Widget_Google_maps extends Widget_Base
             return;
         }
 
-        if (0 === \IqitElementorWpHelper::absint($instance['zoom']['size'])) {
+        if (0 === \IqitElementorHelper::absint($instance['zoom']['size'])) {
             $instance['zoom']['size'] = 10;
         }
 
         printf(
             '<div class="elementor-custom-embed"><iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=%s&amp;t=m&amp;z=%d&amp;output=embed&amp;iwloc=near"></iframe></div>',
             urlencode($instance['address']),
-            \IqitElementorWpHelper::absint($instance['zoom']['size'])
+            \IqitElementorHelper::absint($instance['zoom']['size'])
         );
     }
 

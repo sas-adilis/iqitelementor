@@ -14,7 +14,7 @@ class Widget_Spacer extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Spacer', 'elementor');
+        return \IqitElementorTranslater::get()->l('Spacer', 'elementor');
     }
 
     public function get_categories()
@@ -32,7 +32,7 @@ class Widget_Spacer extends Widget_Base
         $this->add_control(
             'section_spacer',
             [
-                'label' => \IqitElementorWpHelper::__('Spacer', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Spacer', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -40,7 +40,7 @@ class Widget_Spacer extends Widget_Base
         $this->add_responsive_control(
             'space',
             [
-                'label' => \IqitElementorWpHelper::__('Space (PX)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Space (PX)', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'section' => 'section_spacer',
                 'default' => [
@@ -61,7 +61,7 @@ class Widget_Spacer extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_spacer',

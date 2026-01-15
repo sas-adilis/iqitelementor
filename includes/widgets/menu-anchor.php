@@ -14,7 +14,7 @@ class Widget_Menu_Anchor extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Menu anchor', 'elementor');
+        return \IqitElementorTranslater::get()->l('Menu anchor', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Menu_Anchor extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Anchor', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Anchor', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -38,8 +38,8 @@ class Widget_Menu_Anchor extends Widget_Base
                 'label' => 'The ID of Menu Anchor.',
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
-                'placeholder' => \IqitElementorWpHelper::__('For Example: About', 'elementor'),
-                'description' => \IqitElementorWpHelper::__('This ID will be the CSS ID you will have to use in your own page, Without #. Make sure that ID is unique per page', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('For Example: About', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('This ID will be the CSS ID you will have to use in your own page, Without #. Make sure that ID is unique per page', 'elementor'),
                 'section' => 'section_title',
                 'label_block' => true,
             ]
@@ -48,7 +48,7 @@ class Widget_Menu_Anchor extends Widget_Base
         $this->add_control(
             'anchor_note',
             [
-                'raw' => \IqitElementorWpHelper::__('Note: The ID link ONLY accepts these chars: `A-Z, a-z, 0-9, _ , -', 'elementor'),
+                'raw' => \IqitElementorTranslater::get()->l('Note: The ID link ONLY accepts these chars: `A-Z, a-z, 0-9, _ , -', 'elementor'),
                 'type' => Controls_Manager::RAW_HTML,
                 'section' => 'section_title',
                 'classes' => 'elementor-control-descriptor elementor-panel-alert elementor-panel-alert-warning',

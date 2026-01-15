@@ -25,7 +25,7 @@ class Group_Control_Image extends Group_Control_Base
         $controls = [];
 
         $controls['settings'] = [
-            'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Choose Image'),
             'type' => Controls_Manager::MEDIA,
             'default' => [
                 'url' => UtilsElementor::get_placeholder_image_src(),
@@ -33,22 +33,21 @@ class Group_Control_Image extends Group_Control_Base
         ];
 
         $controls['lazy'] = [
-            'label' => \IqitElementorWpHelper::__('Lazy load', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Lazy load'),
             'type' => Controls_Manager::SELECT,
             'default' => 'lazy',
-            'description' => \IqitElementorWpHelper::__('If your widget is above the fold lazy load should be disabled', 'elementor'),
+            'description' => \IqitElementorTranslater::get()->l('If your widget is above the fold lazy load should be disabled'),
             'options' => [
-                'lazy' => \IqitElementorWpHelper::__('Lazy', 'elementor'),
-                'eager' => \IqitElementorWpHelper::__('Eager', 'elementor'),
+                'lazy' => \IqitElementorTranslater::get()->l('Lazy'),
+                'eager' => \IqitElementorTranslater::get()->l('Eager'),
             ],
         ];
 
         $controls['alt'] = [
-            'label' => \IqitElementorWpHelper::__('Alt text', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Alt text'),
             'type' => Controls_Manager::TEXT,
             'default' => '',
-            'placeholder' => \IqitElementorWpHelper::__('Enter your Alt about the image', 'elementor'),
-            'title' => \IqitElementorWpHelper::__('Input image Alt here', 'elementor'),
+            'placeholder' => \IqitElementorTranslater::get()->l('Enter your Alt about the image'),
         ];
 
         return $controls;

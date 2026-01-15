@@ -35,10 +35,10 @@ class Control_Dimensions extends Control_Base_Units
     public function content_template()
     {
         $dimensions = [
-            'top' => \IqitElementorWpHelper::__('Top', 'elementor'),
-            'right' => \IqitElementorWpHelper::__('Right', 'elementor'),
-            'bottom' => \IqitElementorWpHelper::__('Bottom', 'elementor'),
-            'left' => \IqitElementorWpHelper::__('Left', 'elementor'),
+            'top' => \IqitElementorTranslater::get()->l('Top', 'elementor'),
+            'right' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
+            'bottom' => \IqitElementorTranslater::get()->l('Bottom', 'elementor'),
+            'left' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
         ];
         ?>
 		<div class="elementor-control-field">
@@ -48,7 +48,7 @@ class Control_Dimensions extends Control_Base_Units
 				<ul class="elementor-control-dimensions">
 					<?php foreach ($dimensions as $dimension_key => $dimension_title) { ?>
 						<li class="elementor-control-dimension">
-							<input type="number" data-setting="<?php echo \IqitElementorWpHelper::esc_attr($dimension_key); ?>"
+							<input type="number" data-setting="<?php echo \IqitElementorHelper::esc_attr($dimension_key); ?>"
 							       placeholder="<#
 						       if ( _.isObject( data.placeholder ) ) {
 						        if ( ! _.isUndefined( data.placeholder.<?php echo $dimension_key; ?> ) ) {
@@ -65,7 +65,7 @@ class Control_Dimensions extends Control_Base_Units
 						</li>
 					<?php } ?>
 					<li>
-						<button class="elementor-link-dimensions tooltip-target" data-tooltip="<?php \IqitElementorWpHelper::_e('Link values together', 'elementor'); ?>">
+						<button class="elementor-link-dimensions tooltip-target" data-tooltip="<?php \IqitElementorTranslater::get()->l('Link values together', 'elementor'); ?>">
 							<span class="elementor-linked"><i class="fa fa-link"></i></span>
 							<span class="elementor-unlinked"><i class="fa fa-chain-broken"></i></span>
 						</button>

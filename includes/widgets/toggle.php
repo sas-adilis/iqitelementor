@@ -14,7 +14,7 @@ class Widget_Toggle extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Toggle', 'elementor');
+        return \IqitElementorTranslater::get()->l('Toggle', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Toggle', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Toggle', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,32 +35,32 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'tabs',
             [
-                'label' => \IqitElementorWpHelper::__('Toggle Items', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Toggle Items', 'elementor'),
                 'type' => Controls_Manager::REPEATER,
                 'section' => 'section_title',
                 'default' => [
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Toggle #1', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Toggle #1', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Toggle #2', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Toggle #2', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                 ],
                 'fields' => [
                     [
                         'name' => 'tab_title',
-                        'label' => \IqitElementorWpHelper::__('Title & Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Title & Content', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'label_block' => true,
-                        'default' => \IqitElementorWpHelper::__('Toggle Title', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Toggle Title', 'elementor'),
                     ],
                     [
                         'name' => 'tab_content',
-                        'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                         'type' => Controls_Manager::WYSIWYG,
-                        'default' => \IqitElementorWpHelper::__('Toggle Content', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Toggle Content', 'elementor'),
                         'show_label' => false,
                     ],
                 ],
@@ -71,7 +71,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_title',
@@ -81,7 +81,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'section_title_style',
             [
-                'label' => \IqitElementorWpHelper::__('Toggle', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Toggle', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -90,7 +90,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'border_width',
             [
-                'label' => \IqitElementorWpHelper::__('Border Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Width', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 1,
@@ -113,7 +113,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'border_color',
             [
-                'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -127,7 +127,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'title_background',
             [
-                'label' => \IqitElementorWpHelper::__('Title Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -141,7 +141,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Title Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -158,7 +158,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'tab_active_color',
             [
-                'label' => \IqitElementorWpHelper::__('Active Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Active Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -175,7 +175,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_group_control(
             Group_Control_Typography::get_type(),
             [
-                'label' => \IqitElementorWpHelper::__('Title Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Typography', 'elementor'),
                 'name' => 'title_typography',
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -187,7 +187,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'content_background_color',
             [
-                'label' => \IqitElementorWpHelper::__('Content Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -201,7 +201,7 @@ class Widget_Toggle extends Widget_Base
         $this->add_control(
             'content_color',
             [
-                'label' => \IqitElementorWpHelper::__('Content Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',

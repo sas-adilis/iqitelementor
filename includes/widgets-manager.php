@@ -71,7 +71,7 @@ class Widgets_Manager
     {
         include ELEMENTOR_PATH . 'includes/widgets/prestashop.php';
 
-        $iqitElementorWidgets = \IqitElementorWpHelper::getIqitElementorWidgets();
+        $iqitElementorWidgets = \IqitElementorHelper::getIqitElementorWidgets();
 
         foreach ($iqitElementorWidgets as $widget) {
             $this->register_widget(__NAMESPACE__ . '\Widget_Prestashop', ['widget_name' => 'IqitElementorWidget_' . $widget]);
@@ -148,7 +148,7 @@ class Widgets_Manager
 
         $render_html = ob_get_clean();
 
-        \IqitElementorWpHelper::wp_send_json_success(
+        \IqitElementorHelper::send_json_success(
             [
                 'render' => $render_html,
             ]

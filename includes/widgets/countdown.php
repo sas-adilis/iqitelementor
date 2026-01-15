@@ -27,7 +27,7 @@ class Widget_Countdown extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Countdown', 'elementor');
+        return \IqitElementorTranslater::get()->l('Countdown', 'elementor');
     }
 
     public function get_icon()
@@ -49,7 +49,7 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'section_countdown',
             [
-                'label' => \IqitElementorWpHelper::__('Countdown', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Countdown', 'elementor'),
                 'type' => 'section',
             ]
         );
@@ -57,7 +57,7 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'due_date',
             [
-                'label' => \IqitElementorWpHelper::__('Due Date', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Due Date', 'elementor'),
                 'type' => Controls_Manager::DATETIME,
                 'dynamic' => [
                     'active' => true,
@@ -71,10 +71,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'show_days',
             [
-                'label' => \IqitElementorWpHelper::__('Days', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Days', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'default' => 'yes',
                 'section' => 'section_countdown',
             ]
@@ -83,10 +83,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'show_hours',
             [
-                'label' => \IqitElementorWpHelper::__('Hours', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hours', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'default' => 'yes',
                 'section' => 'section_countdown',
             ]
@@ -95,10 +95,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'show_minutes',
             [
-                'label' => \IqitElementorWpHelper::__('Minutes', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Minutes', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'default' => 'yes',
                 'section' => 'section_countdown',
             ]
@@ -107,10 +107,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'show_seconds',
             [
-                'label' => \IqitElementorWpHelper::__('Seconds', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Seconds', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'default' => 'yes',
                 'section' => 'section_countdown',
             ]
@@ -120,10 +120,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'show_labels',
             [
-                'label' => \IqitElementorWpHelper::__('Show Label', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Show Label', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'default' => 'yes',
                 'separator' => 'before',
                 'section' => 'section_countdown',
@@ -133,10 +133,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'custom_labels',
             [
-                'label' => \IqitElementorWpHelper::__('Custom Labels', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Custom Labels', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'default' => '',
                 'condition' => [
                     'show_labels!' => '',
@@ -148,10 +148,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'label_days',
             [
-                'label' => \IqitElementorWpHelper::__('Days', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Days', 'elementor'),
                 'type' => 'text',
-                'default' => \IqitElementorWpHelper::__('Days', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Days', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Days', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Days', 'elementor'),
                 'condition' => [
                     'show_labels!' => '',
                     'custom_labels!' => '',
@@ -164,10 +164,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'label_hours',
             [
-                'label' => \IqitElementorWpHelper::__('Hours', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hours', 'elementor'),
                 'type' => 'text',
-                'default' => \IqitElementorWpHelper::__('Hours', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Hours', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Hours', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Hours', 'elementor'),
                 'condition' => [
                     'show_labels!' => '',
                     'custom_labels!' => '',
@@ -180,10 +180,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'label_minutes',
             [
-                'label' => \IqitElementorWpHelper::__('Minutes', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Minutes', 'elementor'),
                 'type' => 'text',
-                'default' => \IqitElementorWpHelper::__('Minutes', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Minutes', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Minutes', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Minutes', 'elementor'),
                 'condition' => [
                     'show_labels!' => '',
                     'custom_labels!' => '',
@@ -196,10 +196,10 @@ class Widget_Countdown extends Widget_Base
         $this->add_control(
             'label_seconds',
             [
-                'label' => \IqitElementorWpHelper::__('Seconds', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Seconds', 'elementor'),
                 'type' => 'text',
-                'default' => \IqitElementorWpHelper::__('Seconds', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Seconds', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Seconds', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Seconds', 'elementor'),
                 'condition' => [
                     'show_labels!' => '',
                     'custom_labels!' => '',
@@ -217,10 +217,10 @@ class Widget_Countdown extends Widget_Base
     {
         if (!$this->_default_countdown_labels) {
             $this->_default_countdown_labels = [
-                'label_days' => \IqitElementorWpHelper::__('Days', 'elementor'),
-                'label_hours' => \IqitElementorWpHelper::__('Hours', 'elementor'),
-                'label_minutes' => \IqitElementorWpHelper::__('Minutes', 'elementor'),
-                'label_seconds' => \IqitElementorWpHelper::__('Seconds', 'elementor'),
+                'label_days' => \IqitElementorTranslater::get()->l('Days', 'elementor'),
+                'label_hours' => \IqitElementorTranslater::get()->l('Hours', 'elementor'),
+                'label_minutes' => \IqitElementorTranslater::get()->l('Minutes', 'elementor'),
+                'label_seconds' => \IqitElementorTranslater::get()->l('Seconds', 'elementor'),
             ];
         }
 

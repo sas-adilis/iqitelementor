@@ -77,11 +77,11 @@ abstract class Element_Base
     {
         if (!self::$_available_tabs_controls) {
             self::$_available_tabs_controls = [
-                self::TAB_CONTENT => \IqitElementorWpHelper::__('Content', 'elementor'),
-                self::TAB_STYLE => \IqitElementorWpHelper::__('Style', 'elementor'),
-                self::TAB_ADVANCED => \IqitElementorWpHelper::__('Advanced', 'elementor'),
-                self::TAB_RESPONSIVE => \IqitElementorWpHelper::__('Responsive', 'elementor'),
-                self::TAB_LAYOUT => \IqitElementorWpHelper::__('Layout', 'elementor'),
+                self::TAB_CONTENT => \IqitElementorTranslater::get()->l('Content', 'elementor'),
+                self::TAB_STYLE => \IqitElementorTranslater::get()->l('Style', 'elementor'),
+                self::TAB_ADVANCED => \IqitElementorTranslater::get()->l('Advanced', 'elementor'),
+                self::TAB_RESPONSIVE => \IqitElementorTranslater::get()->l('Responsive', 'elementor'),
+                self::TAB_LAYOUT => \IqitElementorTranslater::get()->l('Layout', 'elementor'),
             ];
         }
 
@@ -107,31 +107,31 @@ abstract class Element_Base
     {
         ?>
         <div class="elementor-element-overlay">
-            <div class="elementor-editor-element-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_type()); ?>-settings elementor-editor-<?php echo \IqitElementorWpHelper::esc_attr($this->get_id()); ?>-settings">
+            <div class="elementor-editor-element-settings elementor-editor-<?php echo \IqitElementorHelper::esc_attr($this->get_type()); ?>-settings elementor-editor-<?php echo \IqitElementorHelper::esc_attr($this->get_id()); ?>-settings">
                 <ul class="elementor-editor-element-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-add">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Add Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Add', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Add Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
                             <i class="fa fa-plus"></i>
                         </a>
                     </li>
                     <?php /* Temp removing for better UI
                     <li class="elementor-editor-element-setting elementor-editor-element-edit">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e( 'Edit Widget', 'elementor' ); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e( 'Edit', 'elementor' ); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l( 'Edit Widget', 'elementor' ); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l( 'Edit', 'elementor' ); ?></span>
                             <i class="fa fa-pencil"></i>
                         </a>
                     </li>
                     */ ?>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Duplicate Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Remove Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
                             <i class="fa fa-trash-o"></i>
                         </a>
                     </li>
@@ -311,7 +311,7 @@ abstract class Element_Base
             $pure_condition_key = $condition_key_parts[1] ?? $condition_key;
 
             if (!isset($this->_controls[$pure_condition_key])) {
-                \IqitElementorWpHelper::triggerError(
+                \IqitElementorHelper::triggerError(
                     sprintf(
                         'Condition key "%s" not found in element instance in control %s.',
                         $pure_condition_key,
@@ -377,7 +377,7 @@ abstract class Element_Base
         $args = array_merge($default_args, $args);
 
         if (isset($this->_controls[$id])) {
-            \IqitElementorWpHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, 'Cannot redeclare control with same name. - ' . $id, '1.0.0');
+            \IqitElementorHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, 'Cannot redeclare control with same name. - ' . $id, '1.0.0');
 
             return false;
         }
@@ -386,7 +386,7 @@ abstract class Element_Base
             if (null !== $this->_current_section) {
                 $args = array_merge($args, $this->_current_section);
             } elseif (empty($args['section'])) {
-                \IqitElementorWpHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__ . ': Cannot add a control outside a section (use `start_controls_section`).');
+                \IqitElementorHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__ . ': Cannot add a control outside a section (use `start_controls_section`).');
             }
         }
 
@@ -414,7 +414,7 @@ abstract class Element_Base
     public function update_control($id, $args)
     {
         if (!isset($this->_controls[$id])) {
-            \IqitElementorWpHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, 'Cannot update non-existing control. - ' . $id, '1.0.0');
+            \IqitElementorHelper::_doing_it_wrong(__CLASS__ . '::' . __FUNCTION__, 'Cannot update non-existing control. - ' . $id, '1.0.0');
 
             return false;
         }
@@ -472,7 +472,7 @@ abstract class Element_Base
             $is_negative_condition = (bool)$condition_key_parts[3];
 
             if (!isset($element_instance[$pure_condition_key])) {
-                \IqitElementorWpHelper::triggerError(
+                \IqitElementorHelper::triggerError(
                     sprintf(
                         'Condition key "%s" not found in element instance in control %s.',
                         $pure_condition_key,
@@ -528,7 +528,7 @@ abstract class Element_Base
 
         $attributes = [];
         foreach ($render_attributes as $attribute_key => $attribute_values) {
-            $attributes[] = sprintf('%s="%s"', $attribute_key, \IqitElementorWpHelper::esc_attr(implode(' ', $attribute_values)));
+            $attributes[] = sprintf('%s="%s"', $attribute_key, \IqitElementorHelper::esc_attr(implode(' ', $attribute_values)));
         }
 
         unset($this->_render_attributes[$element]);
@@ -546,7 +546,7 @@ abstract class Element_Base
             return;
         }
         ?>
-        <script type="text/html" id="tmpl-elementor-<?php echo $this->get_type(); ?>-<?php echo \IqitElementorWpHelper::esc_attr($this->get_id()); ?>-content">
+        <script type="text/html" id="tmpl-elementor-<?php echo $this->get_type(); ?>-<?php echo \IqitElementorHelper::esc_attr($this->get_id()); ?>-content">
             <?php $this->render_settings(); ?>
             <?php echo $content_template; ?>
         </script>

@@ -16,7 +16,7 @@ class Widget_Call_to_action extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Call to Action', 'elementor');
+        return \IqitElementorTranslater::get()->l('Call to Action', 'elementor');
     }
 
     public function get_icon()
@@ -49,7 +49,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_cta',
             [
-                'label' => \IqitElementorWpHelper::__('Call to Action', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Call to Action', 'elementor'),
                 'tab' => self::TAB_CONTENT,
             ]
         );
@@ -57,7 +57,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'link',
             [
-                'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                 'type' => Controls_Manager::URL,
                 'placeholder' => 'http://your-link.com',
                 'default' => [
@@ -69,11 +69,11 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'link_click',
             [
-                'label' => \IqitElementorWpHelper::__('Apply Link On', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Apply Link On', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'box' => \IqitElementorWpHelper::__('Whole Box', 'elementor'),
-                    'button' => \IqitElementorWpHelper::__('Button Only', 'elementor'),
+                    'box' => \IqitElementorTranslater::get()->l('Whole Box', 'elementor'),
+                    'button' => \IqitElementorTranslater::get()->l('Button Only', 'elementor'),
                 ],
                 'default' => 'button',
                 'condition' => [
@@ -86,11 +86,11 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'skin',
             [
-                'label' => \IqitElementorWpHelper::__('Skin', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Skin', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'classic' => \IqitElementorWpHelper::__('Classic', 'elementor'),
-                    'cover' => \IqitElementorWpHelper::__('Cover', 'elementor'),
+                    'classic' => \IqitElementorTranslater::get()->l('Classic', 'elementor'),
+                    'cover' => \IqitElementorTranslater::get()->l('Cover', 'elementor'),
                 ],
                 'default' => 'classic',
                 'separator' => 'before',
@@ -100,7 +100,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'bg_image',
             [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
                     'url' => UtilsElementor::get_placeholder_image_src(),
@@ -114,13 +114,13 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'layout',
             [
-                'label' => \IqitElementorWpHelper::__('Image Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Position', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'label_block' => false,
                 'options' => [
-                    'left' => ['title' => \IqitElementorWpHelper::__('Left', 'elementor'), 'icon' => 'eicon-h-align-left',],
-                    'above' => ['title' => \IqitElementorWpHelper::__('Above', 'elementor'), 'icon' => 'eicon-v-align-top',],
-                    'right' => ['title' => \IqitElementorWpHelper::__('Right', 'elementor'), 'icon' => 'eicon-h-align-right',],
+                    'left' => ['title' => \IqitElementorTranslater::get()->l('Left', 'elementor'), 'icon' => 'eicon-h-align-left',],
+                    'above' => ['title' => \IqitElementorTranslater::get()->l('Above', 'elementor'), 'icon' => 'eicon-v-align-top',],
+                    'right' => ['title' => \IqitElementorTranslater::get()->l('Right', 'elementor'), 'icon' => 'eicon-h-align-right',],
                 ],
                 'default' => 'left',
                 'prefix_class' => 'elementor-cta%s-layout-image-',
@@ -134,7 +134,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'image_min_width',
             [
-                'label' => \IqitElementorWpHelper::__('Min Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Min Width', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 0, 'max' => 500,],
@@ -154,7 +154,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'image_min_height',
             [
-                'label' => \IqitElementorWpHelper::__('Min height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Min height', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 0, 'max' => 500,],
@@ -176,7 +176,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_content',
             [
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'tab' => self::TAB_CONTENT,
             ]
         );
@@ -185,7 +185,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'section_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -197,7 +197,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'section_description',
             [
-                'label' => \IqitElementorWpHelper::__('Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -208,7 +208,7 @@ class Widget_Call_to_action extends Widget_Base
             [
                 'label' => null,
                 'type' => Controls_Manager::WYSIWYG,
-                'default' => \IqitElementorWpHelper::__('I am text block. Click edit button to change this text.', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('I am text block. Click edit button to change this text.', 'elementor'),
                 'section' => 'section_content',
                 'save_empty_value' => true,
             ]
@@ -217,7 +217,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'section_button',
             [
-                'label' => \IqitElementorWpHelper::__('Button', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Button', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => 'section_content',
                 'separator' => 'before',
@@ -240,7 +240,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_style_box',
             [
-                'label' => \IqitElementorWpHelper::__('Box', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Box', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -248,7 +248,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'min_height',
             [
-                'label' => \IqitElementorWpHelper::__('Min Height'),
+                'label' => \IqitElementorTranslater::get()->l('Min Height'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => ['min' => 100, 'max' => 1000,],
@@ -266,19 +266,19 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'content_text_align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'eicon-text-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'eicon-text-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'eicon-text-align-right',
                     ],
                 ],
@@ -296,13 +296,13 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'vertical_position',
             [
-                'label' => \IqitElementorWpHelper::__('Vertical Position'),
+                'label' => \IqitElementorTranslater::get()->l('Vertical Position'),
                 'type' => Controls_Manager::CHOOSE,
                 'label_block' => false,
                 'options' => [
-                    'top' => ['title' => \IqitElementorWpHelper::__('Top'), 'icon' => 'eicon-v-align-top',],
-                    'middle' => ['title' => \IqitElementorWpHelper::__('Middle'), 'icon' => 'eicon-v-align-middle',],
-                    'bottom' => ['title' => \IqitElementorWpHelper::__('Bottom'), 'icon' => 'eicon-v-align-bottom',],
+                    'top' => ['title' => \IqitElementorTranslater::get()->l('Top'), 'icon' => 'eicon-v-align-top',],
+                    'middle' => ['title' => \IqitElementorTranslater::get()->l('Middle'), 'icon' => 'eicon-v-align-middle',],
+                    'bottom' => ['title' => \IqitElementorTranslater::get()->l('Bottom'), 'icon' => 'eicon-v-align-bottom',],
                 ],
                 'prefix_class' => 'elementor-cta-valign-',
                 'tab' => self::TAB_STYLE,
@@ -313,7 +313,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'box_padding',
             [
-                'label' => \IqitElementorWpHelper::__('Padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%', 'rem'],
                 'selectors' => [
@@ -332,7 +332,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_style_content',
             [
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -341,7 +341,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'heading_heading_style',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_content',
@@ -357,7 +357,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'heading_spacing',
             [
-                'label' => \IqitElementorWpHelper::__('Spacing'),
+                'label' => \IqitElementorTranslater::get()->l('Spacing'),
                 'type' => Controls_Manager::SLIDER,
                 'selectors' => [
                     '{{WRAPPER}} .elementor-content-item:not(:last-child) .elementor-heading-title' => 'margin-bottom: {{SIZE}}{{UNIT}};',
@@ -374,7 +374,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'heading_description_style',
             [
-                'label' => \IqitElementorWpHelper::__('Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'tab' => self::TAB_STYLE,
@@ -402,7 +402,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_responsive_control(
             'description_spacing',
             [
-                'label' => \IqitElementorWpHelper::__('Spacing'),
+                'label' => \IqitElementorTranslater::get()->l('Spacing'),
                 'type' => Controls_Manager::SLIDER,
                 'selectors' => [
                     '{{WRAPPER}} .elementor-cta-description:not(:last-child)' => 'margin-bottom: {{SIZE}}{{UNIT}};',
@@ -418,7 +418,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'heading_colors_style',
             [
-                'label' => \IqitElementorWpHelper::__('Colors', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Colors', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
                 'tab' => self::TAB_STYLE,
@@ -431,7 +431,7 @@ class Widget_Call_to_action extends Widget_Base
             'section' => 'section_style_content',
         ]);
         $this->start_controls_tab('colors_normal', [
-            'label' => \IqitElementorWpHelper::__('Normal'),
+            'label' => \IqitElementorTranslater::get()->l('Normal'),
             'tab' => self::TAB_STYLE,
             'section' => 'section_style_content',
         ]);
@@ -440,7 +440,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'heading_color',
             [
-                'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .elementor-heading-title' => 'color: {{VALUE}};',
@@ -457,7 +457,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'description_color',
             [
-                'label' => \IqitElementorWpHelper::__('Description color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .elementor-cta-description' => 'color: {{VALUE}};',
@@ -477,7 +477,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'box_background_color',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .elementor-cta-content' => 'background-color: {{VALUE}};',
@@ -489,7 +489,7 @@ class Widget_Call_to_action extends Widget_Base
 
         $this->end_controls_tab();
         $this->start_controls_tab('colors_hover', [
-            'label' => \IqitElementorWpHelper::__('Hover'),
+            'label' => \IqitElementorTranslater::get()->l('Hover'),
             'tab' => self::TAB_STYLE,
             'section' => 'section_style_content',
         ]);
@@ -498,7 +498,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'title_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}}:hover .elementor-heading-title' => 'color: {{VALUE}};',
@@ -515,7 +515,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'description_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Description color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}}:hover .elementor-cta-description' => 'color: {{VALUE}};',
@@ -535,7 +535,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'box_background_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}}:hover .elementor-cta-content' => 'background-color: {{VALUE}};',
@@ -555,7 +555,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_style_button',
             [
-                'label' => \IqitElementorWpHelper::__('Button', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Button', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -567,7 +567,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->start_controls_section(
             'section_style_hover_effects',
             [
-                'label' => \IqitElementorWpHelper::__('Hover Effects'),
+                'label' => \IqitElementorTranslater::get()->l('Hover Effects'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -576,7 +576,7 @@ class Widget_Call_to_action extends Widget_Base
             'content_hover_heading',
             [
                 'type' => Controls_Manager::HEADING,
-                'label' => \IqitElementorWpHelper::__('Content'),
+                'label' => \IqitElementorTranslater::get()->l('Content'),
                 'condition' => [
                     'skin' => 'cover',
                 ],
@@ -586,7 +586,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'content_animation',
             [
-                'label' => \IqitElementorWpHelper::__('Hover Animation'),
+                'label' => \IqitElementorTranslater::get()->l('Hover Animation'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
                     '' => 'None',
@@ -624,7 +624,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'animation_class',
             [
-                'label' => \IqitElementorWpHelper::__('Animation'),
+                'label' => \IqitElementorTranslater::get()->l('Animation'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'animated-content',
                 'prefix_class' => 'elementor-',
@@ -637,7 +637,7 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'content_animation_duration',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Duration'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Duration'),
                 'type' => Controls_Manager::SLIDER,
                 'render_type' => 'template',
                 'default' => [
@@ -665,10 +665,10 @@ class Widget_Call_to_action extends Widget_Base
         $this->add_control(
             'sequenced_animation',
             [
-                'label' => \IqitElementorWpHelper::__('Sequenced Animation'),
+                'label' => \IqitElementorTranslater::get()->l('Sequenced Animation'),
                 'type' => Controls_Manager::SWITCHER,
-                'label_on' => \IqitElementorWpHelper::__('On'),
-                'label_off' => \IqitElementorWpHelper::__('Off'),
+                'label_on' => \IqitElementorTranslater::get()->l('On'),
+                'label_off' => \IqitElementorTranslater::get()->l('Off'),
                 'return_value' => 'elementor-cta--sequenced-animation',
                 'prefix_class' => '',
                 'condition' => [
@@ -683,14 +683,14 @@ class Widget_Call_to_action extends Widget_Base
             'background_hover_heading',
             [
                 'type' => Controls_Manager::HEADING,
-                'label' => \IqitElementorWpHelper::__('Background')
+                'label' => \IqitElementorTranslater::get()->l('Background')
             ]
         );
 
         $this->add_control(
             'transformation',
             [
-                'label' => \IqitElementorWpHelper::__('Hover Animation'),
+                'label' => \IqitElementorTranslater::get()->l('Hover Animation'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
                     '' => 'None',
@@ -741,7 +741,7 @@ class Widget_Call_to_action extends Widget_Base
         $hasBgImage = !empty($optionsSource['bg_image']['url']);
         $bgImageUrl = '';
         if ($hasBgImage) {
-            $bgImageUrl = \IqitElementorWpHelper::getImage($optionsSource['bg_image']['url']);
+            $bgImageUrl = \IqitElementorHelper::getImage($optionsSource['bg_image']['url']);
         }
 
         // Content fields

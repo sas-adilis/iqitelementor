@@ -35,7 +35,7 @@ class Group_Control_Typography extends Group_Control_Base
         $fields = [];
 
         $fields['font_size'] = [
-            'label' => \IqitElementorWpHelper::_x('Size', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Size'),
             'type' => Controls_Manager::SLIDER,
             'size_units' => ['px', 'em', 'rem'],
             'range' => [
@@ -51,70 +51,70 @@ class Group_Control_Typography extends Group_Control_Base
         $default_fonts = ', Sans-serif';
 
         $fields['font_family'] = [
-            'label' => \IqitElementorWpHelper::_x('Family', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Family'),
             'type' => Controls_Manager::FONT,
             'default' => '',
             'selector_value' => 'font-family: {{VALUE}}' . $default_fonts . ';',
         ];
 
         $fields['font_family_custom'] = [
-            'label' => \IqitElementorWpHelper::_x('Custom font family', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Custom font family'),
             'type' => Controls_Manager::TEXT,
             'default' => '',
             'selector_value' => 'font-family: {{VALUE}}' . $default_fonts . ';',
         ];
 
-        $typo_weight_options = ['' => \IqitElementorWpHelper::__('Default', 'elementor')];
+        $typo_weight_options = ['' => \IqitElementorTranslater::get()->l('Default', 'elementor')];
         foreach (array_merge(['normal', 'bold'], range(100, 900, 100)) as $weight) {
             $typo_weight_options[$weight] = ucfirst($weight);
         }
 
         $fields['font_weight'] = [
-            'label' => \IqitElementorWpHelper::_x('Weight', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Weight'),
             'type' => Controls_Manager::SELECT,
             'default' => '',
             'options' => $typo_weight_options,
         ];
 
         $fields['text_transform'] = [
-            'label' => \IqitElementorWpHelper::_x('Transform', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Transform'),
             'type' => Controls_Manager::SELECT,
             'default' => '',
             'options' => [
-                '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                'uppercase' => \IqitElementorWpHelper::_x('Uppercase', 'Typography Control', 'elementor'),
-                'lowercase' => \IqitElementorWpHelper::_x('Lowercase', 'Typography Control', 'elementor'),
-                'capitalize' => \IqitElementorWpHelper::_x('Capitalize', 'Typography Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                'uppercase' => \IqitElementorTranslater::get()->l('Uppercase'),
+                'lowercase' => \IqitElementorTranslater::get()->l('Lowercase'),
+                'capitalize' => \IqitElementorTranslater::get()->l('Capitalize'),
             ],
         ];
 
         $fields['font_style'] = [
-            'label' => \IqitElementorWpHelper::_x('Style', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Style'),
             'type' => Controls_Manager::SELECT,
             'default' => '',
             'options' => [
-                '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                'normal' => \IqitElementorWpHelper::_x('Normal', 'Typography Control', 'elementor'),
-                'italic' => \IqitElementorWpHelper::_x('Italic', 'Typography Control', 'elementor'),
-                'oblique' => \IqitElementorWpHelper::_x('Oblique', 'Typography Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                'normal' => \IqitElementorTranslater::get()->l('Normal'),
+                'italic' => \IqitElementorTranslater::get()->l('Italic'),
+                'oblique' => \IqitElementorTranslater::get()->l('Oblique'),
             ],
         ];
 
         $fields['text_decoration'] = [
-            'label' => \IqitElementorWpHelper::_x('Decoration', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Decoration'),
             'type' => Controls_Manager::SELECT,
             'default' => '',
             'options' => [
-                '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                'underline' => \IqitElementorWpHelper::_x('Underline', 'Typography Control', 'elementor'),
-                'overline' => \IqitElementorWpHelper::_x('Overline', 'Typography Control', 'elementor'),
-                'line-through' => \IqitElementorWpHelper::_x('Line through', 'Typography Control', 'elementor'),
-                'none' => \IqitElementorWpHelper::_x('None', 'Typography Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                'underline' => \IqitElementorTranslater::get()->l('Underline'),
+                'overline' => \IqitElementorTranslater::get()->l('Overline'),
+                'line-through' => \IqitElementorTranslater::get()->l('Line through'),
+                'none' => \IqitElementorTranslater::get()->l('None'),
             ],
         ];
 
         $fields['line_height'] = [
-            'label' => \IqitElementorWpHelper::_x('Line-Height', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Line-Height'),
             'type' => Controls_Manager::SLIDER,
             'default' => [
                 'unit' => 'em',
@@ -130,7 +130,7 @@ class Group_Control_Typography extends Group_Control_Base
         ];
 
         $fields['letter_spacing'] = [
-            'label' => \IqitElementorWpHelper::_x('Letter Spacing', 'Typography Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Letter Spacing'),
             'type' => Controls_Manager::SLIDER,
             'range' => [
                 'px' => [
@@ -169,13 +169,13 @@ class Group_Control_Typography extends Group_Control_Base
 
         $typography_control = [
             'typography' => [
-                'label' => \IqitElementorWpHelper::_x('Typography', 'Typography Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography'),
                 'type' => Controls_Manager::CHOOSE,
                 'default' => 'default',
                 'label_block' => false,
                 'options' => [
-                    'default' => ['title' => \IqitElementorWpHelper::__('Default', 'elementor')],
-                    'custom' => ['title' => \IqitElementorWpHelper::__('Custom', 'elementor')],
+                    'default' => ['title' => \IqitElementorTranslater::get()->l('Default', 'elementor')],
+                    'custom' => ['title' => \IqitElementorTranslater::get()->l('Custom', 'elementor')],
                 ],
             ],
         ];

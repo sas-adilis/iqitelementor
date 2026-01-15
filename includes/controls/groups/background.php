@@ -24,22 +24,22 @@ class Group_Control_Background extends Group_Control_Base
     {
         $available_types = [
             'classic' => [
-                'title' => \IqitElementorWpHelper::_x('Classic', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Classic', 'Background Control', 'elementor'),
                 'icon' => 'fa fa-paint-brush',
             ],
             'gradient' => [
-                'title' => \IqitElementorWpHelper::_x('Gradient', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Gradient', 'Background Control', 'elementor'),
                 'icon' => 'fa fa-barcode',
             ],
             'video' => [
-                'title' => \IqitElementorWpHelper::_x('Background Video', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Background Video', 'Background Control', 'elementor'),
                 'icon' => 'fa fa-video-camera',
             ],
         ];
 
         $choose_types = [
             'none' => [
-                'title' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('None', 'Background Control', 'elementor'),
                 'icon' => 'fa fa-ban',
             ],
         ];
@@ -53,7 +53,7 @@ class Group_Control_Background extends Group_Control_Base
         $controls = [];
 
         $controls['background'] = [
-            'label' => \IqitElementorWpHelper::_x('Background Type', 'Background Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Background Type', 'Background Control', 'elementor'),
             'type' => Controls_Manager::CHOOSE,
             'default' => $args['default'],
             'options' => $choose_types,
@@ -63,11 +63,11 @@ class Group_Control_Background extends Group_Control_Base
         // Background:color
         if (in_array('classic', $args['types'])) {
             $controls['color'] = [
-                'label' => \IqitElementorWpHelper::_x('Color', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Color', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'tab' => $args['tab'],
-                'title' => \IqitElementorWpHelper::_x('Background Color', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Background Color', 'Background Control', 'elementor'),
                 'selectors' => [
                     $args['selector'] => 'background-color: {{VALUE}};',
                 ],
@@ -78,7 +78,7 @@ class Group_Control_Background extends Group_Control_Base
 
             if (in_array('gradient', $args['types'])) {
                 $controls['color_stop'] = [
-                    'label' => \IqitElementorWpHelper::_x('Location', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Location', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::SLIDER,
                     'size_units' => ['%'],
                     'default' => [
@@ -91,7 +91,7 @@ class Group_Control_Background extends Group_Control_Base
                     ],
                 ];
                 $controls['color_b'] = [
-                    'label' => \IqitElementorWpHelper::_x('Second Color', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Second Color', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::COLOR,
                     'default' => 'transparent',
                     'render_type' => 'ui',
@@ -100,7 +100,7 @@ class Group_Control_Background extends Group_Control_Base
                     ],
                 ];
                 $controls['color_b_stop'] = [
-                    'label' => \IqitElementorWpHelper::_x('Location', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Location', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::SLIDER,
                     'size_units' => ['%'],
                     'default' => [
@@ -113,11 +113,11 @@ class Group_Control_Background extends Group_Control_Base
                     ],
                 ];
                 $controls['gradient_type'] = [
-                    'label' => \IqitElementorWpHelper::_x('Type', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Type', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::SELECT,
                     'options' => [
-                        'linear' => \IqitElementorWpHelper::_x('Linear', 'Background Control', 'elementor'),
-                        'radial' => \IqitElementorWpHelper::_x('Radial', 'Background Control', 'elementor'),
+                        'linear' => \IqitElementorTranslater::get()->l('Linear', 'Background Control', 'elementor'),
+                        'radial' => \IqitElementorTranslater::get()->l('Radial', 'Background Control', 'elementor'),
                     ],
                     'default' => 'linear',
                     'render_type' => 'ui',
@@ -126,7 +126,7 @@ class Group_Control_Background extends Group_Control_Base
                     ],
                 ];
                 $controls['gradient_angle'] = [
-                    'label' => \IqitElementorWpHelper::_x('Angle', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Angle', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::SLIDER,
                     'size_units' => ['deg'],
                     'default' => [
@@ -147,18 +147,18 @@ class Group_Control_Background extends Group_Control_Base
                     ],
                 ];
                 $controls['gradient_position'] = [
-                    'label' => \IqitElementorWpHelper::_x('Position', 'Background Control', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Position', 'Background Control', 'elementor'),
                     'type' => Controls_Manager::SELECT,
                     'options' => [
-                        'center center' => \IqitElementorWpHelper::_x('Center Center', 'Background Control', 'elementor'),
-                        'center left' => \IqitElementorWpHelper::_x('Center Left', 'Background Control', 'elementor'),
-                        'center right' => \IqitElementorWpHelper::_x('Center Right', 'Background Control', 'elementor'),
-                        'top center' => \IqitElementorWpHelper::_x('Top Center', 'Background Control', 'elementor'),
-                        'top left' => \IqitElementorWpHelper::_x('Top Left', 'Background Control', 'elementor'),
-                        'top right' => \IqitElementorWpHelper::_x('Top Right', 'Background Control', 'elementor'),
-                        'bottom center' => \IqitElementorWpHelper::_x('Bottom Center', 'Background Control', 'elementor'),
-                        'bottom left' => \IqitElementorWpHelper::_x('Bottom Left', 'Background Control', 'elementor'),
-                        'bottom right' => \IqitElementorWpHelper::_x('Bottom Right', 'Background Control', 'elementor'),
+                        'center center' => \IqitElementorTranslater::get()->l('Center Center', 'Background Control', 'elementor'),
+                        'center left' => \IqitElementorTranslater::get()->l('Center Left', 'Background Control', 'elementor'),
+                        'center right' => \IqitElementorTranslater::get()->l('Center Right', 'Background Control', 'elementor'),
+                        'top center' => \IqitElementorTranslater::get()->l('Top Center', 'Background Control', 'elementor'),
+                        'top left' => \IqitElementorTranslater::get()->l('Top Left', 'Background Control', 'elementor'),
+                        'top right' => \IqitElementorTranslater::get()->l('Top Right', 'Background Control', 'elementor'),
+                        'bottom center' => \IqitElementorTranslater::get()->l('Bottom Center', 'Background Control', 'elementor'),
+                        'bottom left' => \IqitElementorTranslater::get()->l('Bottom Left', 'Background Control', 'elementor'),
+                        'bottom right' => \IqitElementorTranslater::get()->l('Bottom Right', 'Background Control', 'elementor'),
                     ],
                     'default' => 'center center',
                     'selectors' => [
@@ -176,9 +176,9 @@ class Group_Control_Background extends Group_Control_Base
         // Background:image
         if (in_array('classic', $args['types'])) {
             $controls['image'] = [
-                'label' => \IqitElementorWpHelper::_x('Image', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::MEDIA,
-                'title' => \IqitElementorWpHelper::_x('Background Image', 'Background Control', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Background Image', 'Background Control', 'elementor'),
                 'selectors' => [
                     $args['selector'] => 'background-image: url("{{URL}}");',
                 ],
@@ -188,20 +188,20 @@ class Group_Control_Background extends Group_Control_Base
             ];
 
             $controls['position'] = [
-                'label' => \IqitElementorWpHelper::_x('Position', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Position', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
-                    'top left' => \IqitElementorWpHelper::_x('Top Left', 'Background Control', 'elementor'),
-                    'top center' => \IqitElementorWpHelper::_x('Top Center', 'Background Control', 'elementor'),
-                    'top right' => \IqitElementorWpHelper::_x('Top Right', 'Background Control', 'elementor'),
-                    'center left' => \IqitElementorWpHelper::_x('Center Left', 'Background Control', 'elementor'),
-                    'center center' => \IqitElementorWpHelper::_x('Center Center', 'Background Control', 'elementor'),
-                    'center right' => \IqitElementorWpHelper::_x('Center Right', 'Background Control', 'elementor'),
-                    'bottom left' => \IqitElementorWpHelper::_x('Bottom Left', 'Background Control', 'elementor'),
-                    'bottom center' => \IqitElementorWpHelper::_x('Bottom Center', 'Background Control', 'elementor'),
-                    'bottom right' => \IqitElementorWpHelper::_x('Bottom Right', 'Background Control', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('None', 'Background Control', 'elementor'),
+                    'top left' => \IqitElementorTranslater::get()->l('Top Left', 'Background Control', 'elementor'),
+                    'top center' => \IqitElementorTranslater::get()->l('Top Center', 'Background Control', 'elementor'),
+                    'top right' => \IqitElementorTranslater::get()->l('Top Right', 'Background Control', 'elementor'),
+                    'center left' => \IqitElementorTranslater::get()->l('Center Left', 'Background Control', 'elementor'),
+                    'center center' => \IqitElementorTranslater::get()->l('Center Center', 'Background Control', 'elementor'),
+                    'center right' => \IqitElementorTranslater::get()->l('Center Right', 'Background Control', 'elementor'),
+                    'bottom left' => \IqitElementorTranslater::get()->l('Bottom Left', 'Background Control', 'elementor'),
+                    'bottom center' => \IqitElementorTranslater::get()->l('Bottom Center', 'Background Control', 'elementor'),
+                    'bottom right' => \IqitElementorTranslater::get()->l('Bottom Right', 'Background Control', 'elementor'),
                 ],
                 'selectors' => [
                     $args['selector'] => 'background-position: {{VALUE}};',
@@ -213,13 +213,13 @@ class Group_Control_Background extends Group_Control_Base
             ];
 
             $controls['attachment'] = [
-                'label' => \IqitElementorWpHelper::_x('Attachment', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Attachment', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
-                    'scroll' => \IqitElementorWpHelper::_x('Scroll', 'Background Control', 'elementor'),
-                    'fixed' => \IqitElementorWpHelper::_x('Fixed', 'Background Control', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('None', 'Background Control', 'elementor'),
+                    'scroll' => \IqitElementorTranslater::get()->l('Scroll', 'Background Control', 'elementor'),
+                    'fixed' => \IqitElementorTranslater::get()->l('Fixed', 'Background Control', 'elementor'),
                 ],
                 'selectors' => [
                     $args['selector'] => 'background-attachment: {{VALUE}};',
@@ -231,15 +231,15 @@ class Group_Control_Background extends Group_Control_Base
             ];
 
             $controls['repeat'] = [
-                'label' => \IqitElementorWpHelper::_x('Repeat', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Repeat', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
-                    'no-repeat' => \IqitElementorWpHelper::_x('No-repeat', 'Background Control', 'elementor'),
-                    'repeat' => \IqitElementorWpHelper::_x('Repeat', 'Background Control', 'elementor'),
-                    'repeat-x' => \IqitElementorWpHelper::_x('Repeat-x', 'Background Control', 'elementor'),
-                    'repeat-y' => \IqitElementorWpHelper::_x('Repeat-y', 'Background Control', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('None', 'Background Control', 'elementor'),
+                    'no-repeat' => \IqitElementorTranslater::get()->l('No-repeat', 'Background Control', 'elementor'),
+                    'repeat' => \IqitElementorTranslater::get()->l('Repeat', 'Background Control', 'elementor'),
+                    'repeat-x' => \IqitElementorTranslater::get()->l('Repeat-x', 'Background Control', 'elementor'),
+                    'repeat-y' => \IqitElementorTranslater::get()->l('Repeat-y', 'Background Control', 'elementor'),
                 ],
                 'selectors' => [
                     $args['selector'] => 'background-repeat: {{VALUE}};',
@@ -251,14 +251,14 @@ class Group_Control_Background extends Group_Control_Base
             ];
 
             $controls['size'] = [
-                'label' => \IqitElementorWpHelper::_x('Size', 'Background Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Size', 'Background Control', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    '' => \IqitElementorWpHelper::_x('None', 'Background Control', 'elementor'),
-                    'auto' => \IqitElementorWpHelper::_x('Auto', 'Background Control', 'elementor'),
-                    'cover' => \IqitElementorWpHelper::_x('Cover', 'Background Control', 'elementor'),
-                    'contain' => \IqitElementorWpHelper::_x('Contain', 'Background Control', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('None', 'Background Control', 'elementor'),
+                    'auto' => \IqitElementorTranslater::get()->l('Auto', 'Background Control', 'elementor'),
+                    'cover' => \IqitElementorTranslater::get()->l('Cover', 'Background Control', 'elementor'),
+                    'contain' => \IqitElementorTranslater::get()->l('Contain', 'Background Control', 'elementor'),
                 ],
                 'selectors' => [
                     $args['selector'] => 'background-size: {{VALUE}};',
@@ -275,21 +275,21 @@ class Group_Control_Background extends Group_Control_Base
 
         $controls['video_type']
             = [
-            'label' => \IqitElementorWpHelper::__('Video Type', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Video Type', 'elementor'),
             'type' => Controls_Manager::SELECT,
             'section' => 'section_video',
             'default' => 'youtube',
             'options' => [
-                'youtube' => \IqitElementorWpHelper::__('YouTube', 'elementor'),
-                'hosted' => \IqitElementorWpHelper::__('HTML5 Video', 'elementor'),
+                'youtube' => \IqitElementorTranslater::get()->l('YouTube', 'elementor'),
+                'hosted' => \IqitElementorTranslater::get()->l('HTML5 Video', 'elementor'),
             ],
         ];
 
         $controls['video_link'] = [
-            'label' => \IqitElementorWpHelper::_x('Video Link', 'Background Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Video Link', 'Background Control', 'elementor'),
             'type' => Controls_Manager::TEXT,
             'placeholder' => 'https://www.youtube.com/watch?v=9uOETcuFjbE',
-            'description' => \IqitElementorWpHelper::__('Insert YouTube link', 'elementor'),
+            'description' => \IqitElementorTranslater::get()->l('Insert YouTube link', 'elementor'),
             'label_block' => true,
             'default' => '',
             'condition' => [
@@ -299,10 +299,10 @@ class Group_Control_Background extends Group_Control_Base
         ];
 
         $controls['video_link_h'] = [
-            'label' => \IqitElementorWpHelper::_x('Mp4 video Link', 'Background Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Mp4 video Link', 'Background Control', 'elementor'),
             'type' => Controls_Manager::URL,
             'placeholder' => '',
-            'description' => \IqitElementorWpHelper::__('video file (mp4 is recommended)', 'elementor'),
+            'description' => \IqitElementorTranslater::get()->l('video file (mp4 is recommended)', 'elementor'),
             'label_block' => true,
             'show_external' => false,
             'default' => '',
@@ -313,8 +313,8 @@ class Group_Control_Background extends Group_Control_Base
         ];
 
         $controls['video_fallback'] = [
-            'label' => \IqitElementorWpHelper::_x('Background Fallback', 'Background Control', 'elementor'),
-            'description' => \IqitElementorWpHelper::__('This cover image will replace the background video on mobile or tablet.', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Background Fallback', 'Background Control', 'elementor'),
+            'description' => \IqitElementorTranslater::get()->l('This cover image will replace the background video on mobile or tablet.', 'elementor'),
             'type' => Controls_Manager::MEDIA,
             'label_block' => true,
             'condition' => [

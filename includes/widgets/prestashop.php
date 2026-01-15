@@ -20,7 +20,7 @@ class Widget_Prestashop extends Widget_Base
     private function _get_widget_instance()
     {
         if (is_null($this->_widget_instance)) {
-            $this->_widget_instance = \IqitElementorWpHelper::getIqitElementorWidgetInstance($this->_widget_name);
+            $this->_widget_instance = \IqitElementorHelper::getIqitElementorWidgetInstance($this->_widget_name);
         }
 
         return $this->_widget_instance;
@@ -84,10 +84,10 @@ class Widget_Prestashop extends Widget_Base
         $options = $this->get_parse_values($instance);
 
         if (PluginElementor::instance()->editor->is_edit_mode()) {
-            echo \IqitElementorWpHelper::renderIqitElementorWidgetPreview($this->_get_widget_instance()->id_base,
+            echo \IqitElementorHelper::renderIqitElementorWidgetPreview($this->_get_widget_instance()->id_base,
                 $options);
         } else {
-            echo \IqitElementorWpHelper::renderIqitElementorWidget($this->_get_widget_instance()->id_base, $options);
+            echo \IqitElementorHelper::renderIqitElementorWidget($this->_get_widget_instance()->id_base, $options);
         }
     }
 

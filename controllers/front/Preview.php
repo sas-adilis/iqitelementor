@@ -5,7 +5,7 @@ use Elementor\PluginElementor;
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/iqitElementorWpHelper.php';
+require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorHelper.php';
 require_once dirname(__FILE__) . '/../../includes/plugin-elementor.php';
 
 class IqitElementorPreviewModuleFrontController extends ModuleFrontController

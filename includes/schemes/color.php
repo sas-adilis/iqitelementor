@@ -19,21 +19,21 @@ class Scheme_Color extends Scheme_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Colors', 'elementor');
+        return \IqitElementorTranslater::get()->l('Colors', 'elementor');
     }
 
     public function get_disabled_title()
     {
-        return \IqitElementorWpHelper::__('Color Palettes', 'elementor');
+        return \IqitElementorTranslater::get()->l('Color Palettes', 'elementor');
     }
 
     public function get_scheme_titles()
     {
         return [
-            self::COLOR_1 => \IqitElementorWpHelper::__('Primary', 'elementor'),
-            self::COLOR_2 => \IqitElementorWpHelper::__('Secondary', 'elementor'),
-            self::COLOR_3 => \IqitElementorWpHelper::__('Text', 'elementor'),
-            self::COLOR_4 => \IqitElementorWpHelper::__('Accent', 'elementor'),
+            self::COLOR_1 => \IqitElementorTranslater::get()->l('Primary', 'elementor'),
+            self::COLOR_2 => \IqitElementorTranslater::get()->l('Secondary', 'elementor'),
+            self::COLOR_3 => \IqitElementorTranslater::get()->l('Text', 'elementor'),
+            self::COLOR_4 => \IqitElementorTranslater::get()->l('Accent', 'elementor'),
         ];
     }
 

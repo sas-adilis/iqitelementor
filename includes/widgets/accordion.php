@@ -14,7 +14,7 @@ class Widget_Accordion extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Accordion', 'elementor');
+        return \IqitElementorTranslater::get()->l('Accordion', 'elementor');
     }
 
     public function get_icon()
@@ -27,38 +27,38 @@ class Widget_Accordion extends Widget_Base
         $this->start_controls_section(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Accordion', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Accordion', 'elementor'),
             ]
         );
 
         $this->add_control(
             'tabs',
             [
-                'label' => \IqitElementorWpHelper::__('Accordion Items', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Accordion Items', 'elementor'),
                 'type' => Controls_Manager::REPEATER,
                 'default' => [
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Accordion #1', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Accordion #1', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Accordion #2', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Accordion #2', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am item content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                 ],
                 'fields' => [
                     [
                         'name' => 'tab_title',
-                        'label' => \IqitElementorWpHelper::__('Title & Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Title & Content', 'elementor'),
                         'type' => Controls_Manager::TEXT,
-                        'default' => \IqitElementorWpHelper::__('Accordion Title', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Accordion Title', 'elementor'),
                         'label_block' => true,
                     ],
                     [
                         'name' => 'tab_content',
-                        'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                         'type' => Controls_Manager::WYSIWYG,
-                        'default' => \IqitElementorWpHelper::__('Accordion Content', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Accordion Content', 'elementor'),
                         'show_label' => false,
                     ],
                 ],
@@ -69,7 +69,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
             ]
@@ -80,21 +80,21 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'section_options',
             [
-                'label' => \IqitElementorWpHelper::__('Options', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Options', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
         $this->add_control(
             'faq',
             [
-                'label' => \IqitElementorWpHelper::__('Faq schema', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Faq schema', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    '' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
-                'description' => \IqitElementorWpHelper::__('If enabled it will add FAQ rich snippentt schema data for google', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('If enabled it will add FAQ rich snippentt schema data for google', 'elementor'),
                 'section' => 'section_options',
             ]
         );
@@ -102,7 +102,7 @@ class Widget_Accordion extends Widget_Base
         $this->start_controls_section(
             'section_title_style',
             [
-                'label' => \IqitElementorWpHelper::__('Accordion', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Accordion', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -110,12 +110,12 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'active_first',
             [
-                'label' => \IqitElementorWpHelper::__('Active first tab', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Active first tab', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 1,
                 'options' => [
-                    1 => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    0 => \IqitElementorWpHelper::__('No', 'elementor'),
+                    1 => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    0 => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
             ]
         );
@@ -123,12 +123,12 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'icon_align',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Alignment', 'elementor'),
                 'type' => Controls_Manager::SELECT,
-                'default' => \IqitElementorWpHelper::is_rtl() ? 'right' : 'left',
+                'default' => \IqitElementorHelper::is_rtl() ? 'right' : 'left',
                 'options' => [
-                    'left' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                    'right' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                    'left' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
+                    'right' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                 ],
             ]
         );
@@ -136,7 +136,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'border_width',
             [
-                'label' => \IqitElementorWpHelper::__('Border Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Width', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 1,
@@ -160,7 +160,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'border_color',
             [
-                'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -175,7 +175,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Title Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -193,7 +193,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'title_background',
             [
-                'label' => \IqitElementorWpHelper::__('Title Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -206,7 +206,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'tab_active_color',
             [
-                'label' => \IqitElementorWpHelper::__('Active Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Active Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -223,7 +223,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_group_control(
             Group_Control_Typography::get_type(),
             [
-                'label' => \IqitElementorWpHelper::__('Title Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Typography', 'elementor'),
                 'name' => 'title_typography',
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -235,7 +235,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'content_background_color',
             [
-                'label' => \IqitElementorWpHelper::__('Content Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -249,7 +249,7 @@ class Widget_Accordion extends Widget_Base
         $this->add_control(
             'content_color',
             [
-                'label' => \IqitElementorWpHelper::__('Content Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -269,7 +269,7 @@ class Widget_Accordion extends Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'content_typography',
-                'label' => \IqitElementorWpHelper::__('Content Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Typography', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
                 'selector' => '{{WRAPPER}} .elementor-accordion .elementor-accordion-content',

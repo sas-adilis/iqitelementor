@@ -15,7 +15,7 @@ class Widget_Heading extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Heading', 'elementor');
+        return \IqitElementorTranslater::get()->l('Heading', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -36,10 +36,10 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::TEXTAREA,
-                'placeholder' => \IqitElementorWpHelper::__('Enter your title', 'elementor'),
-                'default' => \IqitElementorWpHelper::__('This is heading element', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your title', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('This is heading element', 'elementor'),
                 'section' => 'section_title',
             ]
         );
@@ -47,7 +47,7 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'link',
             [
-                'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                 'type' => Controls_Manager::URL,
                 'placeholder' => 'http://your-link.com',
                 'default' => [
@@ -61,16 +61,16 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'size',
             [
-                'label' => \IqitElementorWpHelper::__('Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Size', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'default',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'small' => \IqitElementorWpHelper::__('Small', 'elementor'),
-                    'medium' => \IqitElementorWpHelper::__('Medium', 'elementor'),
-                    'large' => \IqitElementorWpHelper::__('Large', 'elementor'),
-                    'xl' => \IqitElementorWpHelper::__('XL', 'elementor'),
-                    'xxl' => \IqitElementorWpHelper::__('XXL', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'small' => \IqitElementorTranslater::get()->l('Small', 'elementor'),
+                    'medium' => \IqitElementorTranslater::get()->l('Medium', 'elementor'),
+                    'large' => \IqitElementorTranslater::get()->l('Large', 'elementor'),
+                    'xl' => \IqitElementorTranslater::get()->l('XL', 'elementor'),
+                    'xxl' => \IqitElementorTranslater::get()->l('XXL', 'elementor'),
                 ],
                 'section' => 'section_title',
             ]
@@ -79,18 +79,18 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'header_size',
             [
-                'label' => \IqitElementorWpHelper::__('HTML Tag', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('HTML Tag', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'h1' => \IqitElementorWpHelper::__('H1', 'elementor'),
-                    'h2' => \IqitElementorWpHelper::__('H2', 'elementor'),
-                    'h3' => \IqitElementorWpHelper::__('H3', 'elementor'),
-                    'h4' => \IqitElementorWpHelper::__('H4', 'elementor'),
-                    'h5' => \IqitElementorWpHelper::__('H5', 'elementor'),
-                    'h6' => \IqitElementorWpHelper::__('H6', 'elementor'),
-                    'div' => \IqitElementorWpHelper::__('div', 'elementor'),
-                    'span' => \IqitElementorWpHelper::__('span', 'elementor'),
-                    'p' => \IqitElementorWpHelper::__('p', 'elementor'),
+                    'h1' => \IqitElementorTranslater::get()->l('H1', 'elementor'),
+                    'h2' => \IqitElementorTranslater::get()->l('H2', 'elementor'),
+                    'h3' => \IqitElementorTranslater::get()->l('H3', 'elementor'),
+                    'h4' => \IqitElementorTranslater::get()->l('H4', 'elementor'),
+                    'h5' => \IqitElementorTranslater::get()->l('H5', 'elementor'),
+                    'h6' => \IqitElementorTranslater::get()->l('H6', 'elementor'),
+                    'div' => \IqitElementorTranslater::get()->l('div', 'elementor'),
+                    'span' => \IqitElementorTranslater::get()->l('span', 'elementor'),
+                    'p' => \IqitElementorTranslater::get()->l('p', 'elementor'),
                 ],
                 'default' => 'h2',
                 'section' => 'section_title',
@@ -100,13 +100,13 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'header_style',
             [
-                'label' => \IqitElementorWpHelper::__('Inherit from global', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Inherit from global', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    'none' => \IqitElementorWpHelper::__('None', 'elementor'),
-                    'page-title' => \IqitElementorWpHelper::__('Page title', 'elementor'),
-                    'section-title' => \IqitElementorWpHelper::__('Section title', 'elementor'),
-                    'block-title' => \IqitElementorWpHelper::__('Block title', 'elementor'),
+                    'none' => \IqitElementorTranslater::get()->l('None', 'elementor'),
+                    'page-title' => \IqitElementorTranslater::get()->l('Page title', 'elementor'),
+                    'section-title' => \IqitElementorTranslater::get()->l('Section title', 'elementor'),
+                    'block-title' => \IqitElementorTranslater::get()->l('Block title', 'elementor'),
                 ],
                 'default' => 'none',
                 'section' => 'section_title',
@@ -116,23 +116,23 @@ class Widget_Heading extends Widget_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                     'justify' => [
-                        'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Justified', 'elementor'),
                         'icon' => 'fa fa-align-justify',
                     ],
                 ],
@@ -147,7 +147,7 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_title',
@@ -157,7 +157,7 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'section_title_style',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -166,7 +166,7 @@ class Widget_Heading extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),

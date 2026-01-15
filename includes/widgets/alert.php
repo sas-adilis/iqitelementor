@@ -14,7 +14,7 @@ class Widget_Alert extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Alert', 'elementor');
+        return \IqitElementorTranslater::get()->l('Alert', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'section_alert',
             [
-                'label' => \IqitElementorWpHelper::__('Alert', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alert', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,19 +35,19 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'alert_type',
             [
-                'label' => \IqitElementorWpHelper::__('Type', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Type', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'info',
                 'section' => 'section_alert',
                 'options' => [
-                    'primary' => \IqitElementorWpHelper::__('Primary', 'elementor'),
-                    'secondary' => \IqitElementorWpHelper::__('Secondary', 'elementor'),
-                    'info' => \IqitElementorWpHelper::__('Info', 'elementor'),
-                    'success' => \IqitElementorWpHelper::__('Success', 'elementor'),
-                    'warning' => \IqitElementorWpHelper::__('Warning', 'elementor'),
-                    'danger' => \IqitElementorWpHelper::__('Danger', 'elementor'),
-                    'light' => \IqitElementorWpHelper::__('Light', 'elementor'),
-                    'dark' => \IqitElementorWpHelper::__('Dark', 'elementor'),
+                    'primary' => \IqitElementorTranslater::get()->l('Primary', 'elementor'),
+                    'secondary' => \IqitElementorTranslater::get()->l('Secondary', 'elementor'),
+                    'info' => \IqitElementorTranslater::get()->l('Info', 'elementor'),
+                    'success' => \IqitElementorTranslater::get()->l('Success', 'elementor'),
+                    'warning' => \IqitElementorTranslater::get()->l('Warning', 'elementor'),
+                    'danger' => \IqitElementorTranslater::get()->l('Danger', 'elementor'),
+                    'light' => \IqitElementorTranslater::get()->l('Light', 'elementor'),
+                    'dark' => \IqitElementorTranslater::get()->l('Dark', 'elementor'),
                 ],
             ]
         );
@@ -55,10 +55,10 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'alert_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title & Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title & Description', 'elementor'),
                 'type' => Controls_Manager::TEXT,
-                'placeholder' => \IqitElementorWpHelper::__('Your Title', 'elementor'),
-                'default' => \IqitElementorWpHelper::__('This is Alert', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Your Title', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('This is Alert', 'elementor'),
                 'label_block' => true,
                 'section' => 'section_alert',
             ]
@@ -67,10 +67,10 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'alert_description',
             [
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'type' => Controls_Manager::TEXTAREA,
-                'placeholder' => \IqitElementorWpHelper::__('Your Description', 'elementor'),
-                'default' => \IqitElementorWpHelper::__('I am description. Click edit button to change this text.', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Your Description', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('I am description. Click edit button to change this text.', 'elementor'),
                 'separator' => 'none',
                 'section' => 'section_alert',
                 'show_label' => false,
@@ -80,13 +80,13 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'show_dismiss',
             [
-                'label' => \IqitElementorWpHelper::__('Dismiss Button', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dismiss Button', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'show',
                 'section' => 'section_alert',
                 'options' => [
-                    'show' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'hide' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'show' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'hide' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
             ]
         );
@@ -94,7 +94,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_alert',
@@ -104,7 +104,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'section_type',
             [
-                'label' => \IqitElementorWpHelper::__('Alert Type', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alert Type', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -113,7 +113,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'background',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_type',
@@ -126,7 +126,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'border_color',
             [
-                'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_type',
@@ -139,7 +139,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -148,7 +148,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title',
@@ -172,7 +172,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'section_description',
             [
-                'label' => \IqitElementorWpHelper::__('Description', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Description', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -181,7 +181,7 @@ class Widget_Alert extends Widget_Base
         $this->add_control(
             'description_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_description',

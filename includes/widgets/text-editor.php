@@ -15,7 +15,7 @@ class Widget_Text_editor extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Text Editor', 'elementor');
+        return \IqitElementorTranslater::get()->l('Text Editor', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Text_editor extends Widget_Base
         $this->add_control(
             'section_editor',
             [
-                'label' => \IqitElementorWpHelper::__('Text Editor', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Editor', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -38,8 +38,8 @@ class Widget_Text_editor extends Widget_Base
             [
                 'label' => '',
                 'type' => Controls_Manager::WYSIWYG,
-                'description' => \IqitElementorWpHelper::__('DO NOT use it for CSS or JS codes. Only clean HTML will work', 'elementor'),
-                'default' => '<p>' . \IqitElementorWpHelper::__('I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor') . '</p>',
+                'description' => \IqitElementorTranslater::get()->l('DO NOT use it for CSS or JS codes. Only clean HTML will work', 'elementor'),
+                'default' => '<p>' . \IqitElementorTranslater::get()->l('I am text block. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor') . '</p>',
                 'section' => 'section_editor',
             ]
         );
@@ -47,7 +47,7 @@ class Widget_Text_editor extends Widget_Base
         $this->add_control(
             'section_style',
             [
-                'label' => \IqitElementorWpHelper::__('Text Editor', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Editor', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -56,25 +56,25 @@ class Widget_Text_editor extends Widget_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                     'justify' => [
-                        'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Justified', 'elementor'),
                         'icon' => 'fa fa-align-justify',
                     ],
                 ],
@@ -87,7 +87,7 @@ class Widget_Text_editor extends Widget_Base
         $this->add_control(
             'text_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',

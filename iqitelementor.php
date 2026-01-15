@@ -22,22 +22,10 @@ require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorTemplate.php';
 require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorProduct.php';
 require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorCategory.php';
 require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorContent.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/iqitElementorWpHelper.php';
+require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorHelper.php';
+require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorTranslater.php';
 
 require_once _PS_MODULE_DIR_ . '/iqitelementor/includes/plugin-elementor.php';
-
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Brands.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_ProductsList.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_ProductsListTabs.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Modules.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_CustomTpl.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Menu.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_RevolutionSlider.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Newsletter.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Blog.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Search.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_Links.php';
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/widgets/IqitElementorWidget_ContactForm.php';
 
 class IqitElementor extends Module implements WidgetInterface
 {
@@ -577,7 +565,7 @@ class IqitElementor extends Module implements WidgetInterface
             /* TODO: form validation * */
             if (!count($this->context->controller->errors)) {
                 $colors = Tools::getValue('IQIT_ELEMENT_COLORS');
-                Configuration::updateValue('IQIT_ELEMENT_COLORS', IqitElementorWpHelper::cleanStringOfColors($colors));
+                Configuration::updateValue('IQIT_ELEMENT_COLORS', IqitElementorHelper::cleanStringOfColors($colors));
 
                 $redirect_after = $this->context->link->getAdminLink('AdminModules', true);
                 $redirect_after .= '&conf=4&configure=' . $this->name . '&module_name=' . $this->name;
@@ -640,7 +628,7 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function renderIqitElementorWidget($name, $options, $preview = false)
     {
-        $widgetInstance = iqitElementorWpHelper::getElementorWidgetInstanceByName($name);
+        $widgetInstance = IqitElementorHelper::getElementorWidgetInstanceByName($name);
         if ($widgetInstance && method_exists($widgetInstance, 'getTemplatePath')) {
             $templatePath = $widgetInstance->getTemplatePath();
         } else {
@@ -659,7 +647,7 @@ class IqitElementor extends Module implements WidgetInterface
     public function getIqitElementorWidgetVariables($name, $options = [], $preview = false)
     {
 
-        $widgetInstance = iqitElementorWpHelper::getElementorWidgetInstanceByName($name);
+        $widgetInstance = IqitElementorHelper::getElementorWidgetInstanceByName($name);
         if (!$widgetInstance) {
             return [];
         }

@@ -43,7 +43,7 @@ class Widget_Brands extends Widget_Base
      */
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Brands logos', 'elementor');
+        return \IqitElementorTranslater::get()->l('Brands logos', 'elementor');
     }
 
     /**
@@ -104,11 +104,11 @@ class Widget_Brands extends Widget_Base
         $brandsSelect = [];
         $brandsOrder = [];
 
-        $brandsSelect[0] = \IqitElementorWpHelper::__('Show all', 'elementor');
-        $brandsSelect[1] = \IqitElementorWpHelper::__('Manual select', 'elementor');
+        $brandsSelect[0] = \IqitElementorTranslater::get()->l('Show all', 'elementor');
+        $brandsSelect[1] = \IqitElementorTranslater::get()->l('Manual select', 'elementor');
 
-        $brandsOrder[0] = \IqitElementorWpHelper::__('Default', 'elementor');
-        $brandsOrder[1] = \IqitElementorWpHelper::__('Alphabetical', 'elementor');
+        $brandsOrder[0] = \IqitElementorTranslater::get()->l('Default', 'elementor');
+        $brandsOrder[1] = \IqitElementorTranslater::get()->l('Alphabetical', 'elementor');
 
         foreach ($brands as $brand) {
             $brandsOptions[$brand['id_manufacturer']] = ['name' => $brand['name'], 'selectable' => true];
@@ -118,7 +118,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'section_pswidget_options',
             [
-                'label' => \IqitElementorWpHelper::__('Widget settings', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Widget settings', 'elementor'),
                 'type' => 'section',
             ]
         );
@@ -127,7 +127,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'brand_select',
             [
-                'label' => \IqitElementorWpHelper::__('Selection', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Selection', 'elementor'),
                 'type' => 'select',
                 'default' => '0',
                 'label_block' => true,
@@ -139,7 +139,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'brand_order',
             [
-                'label' => \IqitElementorWpHelper::__('Order', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Order', 'elementor'),
                 'type' => 'select',
                 'default' => '0',
                 'label_block' => true,
@@ -154,7 +154,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'brand_list',
             [
-                'label' => \IqitElementorWpHelper::__('Brands', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Brands', 'elementor'),
                 'type' => 'select_sort',
                 'default' => '0',
                 'label_block' => true,
@@ -170,7 +170,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'image_format',
             [
-                'label' => \IqitElementorWpHelper::__('Image format', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image format', 'elementor'),
                 'type' => 'select',
                 'default' => 'small_default',
                 'section' => 'section_pswidget_options',
@@ -181,7 +181,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => 'select',
                 'default' => 'grid',
                 'condition' => [
@@ -189,8 +189,8 @@ class Widget_Brands extends Widget_Base
                 ],
                 'section' => 'section_pswidget_options',
                 'options' => [
-                    'carousel' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
-                    'grid' => \IqitElementorWpHelper::__('Grid', 'elementor'),
+                    'carousel' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
+                    'grid' => \IqitElementorTranslater::get()->l('Grid', 'elementor'),
                 ],
             ]
         );
@@ -198,21 +198,21 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'alignment',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => 'choose',
                 'default' => '',
                 'section' => 'section_pswidget_options',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -223,7 +223,7 @@ class Widget_Brands extends Widget_Base
         $this->add_responsive_control(
             'columns',
             [
-                'label' => \IqitElementorWpHelper::__('Columns', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Columns', 'elementor'),
                 'type' => 'select',
                 'default' => '3',
                 'responsive' => true,
@@ -238,7 +238,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'items_per_column',
             [
-                'label' => \IqitElementorWpHelper::__('Rows', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Rows', 'elementor'),
                 'type' => 'select',
                 'default' => '2',
                 'label_block' => true,
@@ -253,7 +253,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'section_carousel_options',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
                 'type' => 'section',
                 'condition' => [
                     'view' => 'carousel',
@@ -268,7 +268,7 @@ class Widget_Brands extends Widget_Base
         $this->add_control(
             'section_carousel_styles',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
                 'type' => 'section',
                 'tab' => 'style',
             ]
@@ -356,7 +356,7 @@ class Widget_Brands extends Widget_Base
                 'tablet' => $this->calculateGrid($optionsSource['columns_tablet']),
                 'mobile' => $this->calculateGrid($optionsSource['columns_mobile']),
             ];
-            $widgetOptions['itemsPerColumn'] = \IqitElementorWpHelper::absint($optionsSource['items_per_column']);
+            $widgetOptions['itemsPerColumn'] = \IqitElementorHelper::absint($optionsSource['items_per_column']);
         }
 
         if ($optionsSource['view'] == 'carousel') {

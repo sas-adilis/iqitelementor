@@ -84,7 +84,7 @@ abstract class Control_Base
     final public function print_template()
     {
         ?>
-		<script type="text/html" id="tmpl-elementor-control-<?php echo \IqitElementorWpHelper::esc_attr($this->get_type()); ?>-content">
+		<script type="text/html" id="tmpl-elementor-control-<?php echo \IqitElementorHelper::esc_attr($this->get_type()); ?>-content">
 			<div class="elementor-control-content">
 				<?php $this->content_template(); ?>
 			</div>
@@ -94,6 +94,6 @@ abstract class Control_Base
 
     public function __construct()
     {
-        $this->_settings = \IqitElementorWpHelper::wp_parse_args($this->get_default_settings(), $this->_base_settings);
+        $this->_settings = \IqitElementorHelper::parse_args($this->get_default_settings(), $this->_base_settings);
     }
 }

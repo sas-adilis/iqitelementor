@@ -19,21 +19,21 @@ class Scheme_Typography extends Scheme_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Typography', 'elementor');
+        return \IqitElementorTranslater::get()->l('Typography', 'elementor');
     }
 
     public function get_disabled_title()
     {
-        return \IqitElementorWpHelper::__('Default Fonts', 'elementor');
+        return \IqitElementorTranslater::get()->l('Default Fonts', 'elementor');
     }
 
     public function get_scheme_titles()
     {
         return [
-            self::TYPOGRAPHY_1 => \IqitElementorWpHelper::__('Primary Headline', 'elementor'),
-            self::TYPOGRAPHY_2 => \IqitElementorWpHelper::__('Secondary Headline', 'elementor'),
-            self::TYPOGRAPHY_3 => \IqitElementorWpHelper::__('Body Text', 'elementor'),
-            self::TYPOGRAPHY_4 => \IqitElementorWpHelper::__('Accent Text', 'elementor'),
+            self::TYPOGRAPHY_1 => \IqitElementorTranslater::get()->l('Primary Headline', 'elementor'),
+            self::TYPOGRAPHY_2 => \IqitElementorTranslater::get()->l('Secondary Headline', 'elementor'),
+            self::TYPOGRAPHY_3 => \IqitElementorTranslater::get()->l('Body Text', 'elementor'),
+            self::TYPOGRAPHY_4 => \IqitElementorTranslater::get()->l('Accent Text', 'elementor'),
         ];
     }
 

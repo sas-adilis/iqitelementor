@@ -30,15 +30,15 @@ class Elements_Manager
     {
         return [
             'basic' => [
-                'title' => \IqitElementorWpHelper::__('Elements', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Elements', 'elementor'),
                 'icon' => 'font',
             ],
             'prestashop' => [
-                'title' => \IqitElementorWpHelper::__('Prestashop', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Prestashop', 'elementor'),
                 'icon' => 'wordpress',
             ],
             'custom' => [
-                'title' => \IqitElementorWpHelper::__('Custom', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
                 'icon' => 'wordpress',
             ],
         ];
@@ -47,13 +47,13 @@ class Elements_Manager
     public function register_element($element_class)
     {
         if (!class_exists($element_class)) {
-            return \IqitElementorWpHelper::triggerError(sprintf('element_class_name_not_exists: %s', $element_class));
+            return \IqitElementorHelper::triggerError(sprintf('element_class_name_not_exists: %s', $element_class));
         }
 
         $element_instance = new $element_class();
 
         if (!$element_instance instanceof Element_Base) {
-            return \IqitElementorWpHelper::triggerError('wrong_instance_element');
+            return \IqitElementorHelper::triggerError('wrong_instance_element');
         }
 
         $this->_registered_elements[$element_instance->get_id()] = $element_instance;

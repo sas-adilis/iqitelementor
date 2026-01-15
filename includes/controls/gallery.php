@@ -26,17 +26,17 @@ class Control_Gallery extends Control_Base
 							<# if ( data.controlValue.length ) {
 								print( elementor.translate( 'gallery_images_selected', [ data.controlValue.length ] ) );
 							} else { #>
-								<?php \IqitElementorWpHelper::_e('No Images Selected', 'elementor'); ?>
+								<?php \IqitElementorTranslater::get()->l('No Images Selected', 'elementor'); ?>
 							<# } #>
 						</span>
-						<span class="elementor-control-gallery-clear">(<?php \IqitElementorWpHelper::_e('Clear', 'elementor'); ?>)</span>
+						<span class="elementor-control-gallery-clear">(<?php \IqitElementorTranslater::get()->l('Clear', 'elementor'); ?>)</span>
 					</div>
 					<div class="elementor-control-gallery-thumbnails">
 						<# _.each( data.controlValue, function( image ) { #>
 							<div class="elementor-control-gallery-thumbnail" style="background-image: url({{ image.url }})"></div>
 						<# } ); #>
 					</div>
-					<button class="elementor-button elementor-control-gallery-add"><?php \IqitElementorWpHelper::_e('+ Add Images', 'elementor'); ?></button>
+					<button class="elementor-button elementor-control-gallery-add"><?php \IqitElementorTranslater::get()->l('+ Add Images', 'elementor'); ?></button>
 				</div>
 			</div>
 		</div>

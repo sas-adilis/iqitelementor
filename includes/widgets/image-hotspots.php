@@ -14,7 +14,7 @@ class Widget_Image_hotspots extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Image hotspots', 'elementor');
+        return \IqitElementorTranslater::get()->l('Image hotspots', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'section_image',
             [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,7 +35,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'image',
             [
-                'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Choose Image', 'elementor'),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
                     'url' => UtilsElementor::get_placeholder_image_src(),
@@ -47,25 +47,25 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'image_lazy',
             [
-                'label' => \IqitElementorWpHelper::__('Lazy load', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Lazy load', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_image',
-                'description' => \IqitElementorWpHelper::__('If your widget is above the fold lazy load should be disabled', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('If your widget is above the fold lazy load should be disabled', 'elementor'),
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
             ]
         );
         $this->add_control(
             'caption',
             [
-                'label' => \IqitElementorWpHelper::__('Alt text', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alt text', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your Alt about the image', 'elementor'),
-                'title' => \IqitElementorWpHelper::__('Input image Alt here', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your Alt about the image', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Input image Alt here', 'elementor'),
                 'section' => 'section_image',
             ]
         );
@@ -73,7 +73,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'section_icon',
             [
-                'label' => \IqitElementorWpHelper::__('Hotspots', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hotspots', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -85,7 +85,7 @@ class Widget_Image_hotspots extends Widget_Base
                 'type' => Controls_Manager::REPEATER,
                 'default' => [
                     [
-                        'text' => \IqitElementorWpHelper::__('List Item #1', 'elementor'),
+                        'text' => \IqitElementorTranslater::get()->l('List Item #1', 'elementor'),
                         'icon' => 'fa fa-check',
                         'type' => 'product',
                         'left' => 10,
@@ -96,7 +96,7 @@ class Widget_Image_hotspots extends Widget_Base
                 'fields' => [
                     [
                         'name' => 'top',
-                        'label' => \IqitElementorWpHelper::__('Position top', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Position top', 'elementor'),
                         'type' => Controls_Manager::NUMBER,
                         'min' => 0,
                         'step' => 0.25,
@@ -108,7 +108,7 @@ class Widget_Image_hotspots extends Widget_Base
                     ],
                     [
                         'name' => 'left',
-                        'label' => \IqitElementorWpHelper::__('Position Left', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Position Left', 'elementor'),
                         'type' => Controls_Manager::NUMBER,
                         'min' => 0,
                         'step' => 0.25,
@@ -120,43 +120,43 @@ class Widget_Image_hotspots extends Widget_Base
                     ],
                     [
                         'name' => 'type',
-                        'label' => \IqitElementorWpHelper::__('Type', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Type', 'elementor'),
                         'type' => Controls_Manager::SELECT,
                         'default' => 'custom',
                         'options' => [
-                            'custom' => \IqitElementorWpHelper::__('Custom text', 'elementor'),
-                            'product' => \IqitElementorWpHelper::__('Product', 'elementor'),
+                            'custom' => \IqitElementorTranslater::get()->l('Custom text', 'elementor'),
+                            'product' => \IqitElementorTranslater::get()->l('Product', 'elementor'),
                         ],
                     ],
                     [
                         'name' => 'text',
-                        'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'label_block' => true,
-                        'placeholder' => \IqitElementorWpHelper::__('Hotspot', 'elementor'),
-                        'default' => \IqitElementorWpHelper::__('Hotspot', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Hotspot', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Hotspot', 'elementor'),
                     ],
                     [
                         'name' => 'icon',
-                        'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                         'type' => Controls_Manager::ICON,
                         'label_block' => true,
                         'default' => 'fa fa-check',
                     ],
                     [
                         'name' => 'text_content',
-                        'label' => \IqitElementorWpHelper::__('Text', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Text', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'label_block' => true,
-                        'placeholder' => \IqitElementorWpHelper::__('Lorem ipsum dolor sit amet', 'elementor'),
-                        'default' => \IqitElementorWpHelper::__('Lorem ipsum dolor sit amet', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Lorem ipsum dolor sit amet', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Lorem ipsum dolor sit amet', 'elementor'),
                         'condition' => [
                             'type' => 'custom',
                         ],
                     ],
                     ['name' => 'products_ids',
-                        'label' => \IqitElementorWpHelper::__('Search for product', 'elementor'),
-                        'placeholder' => \IqitElementorWpHelper::__('Product name, id, ref', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Search for product', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Product name, id, ref', 'elementor'),
                         'single' => true,
                         'type' => 'autocomplete_products',
                         'label_block' => true,
@@ -166,25 +166,25 @@ class Widget_Image_hotspots extends Widget_Base
                     ],
                     [
                         'name' => 'link',
-                        'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                         'type' => Controls_Manager::URL,
                         'label_block' => true,
-                        'placeholder' => \IqitElementorWpHelper::__('http://your-link.com', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('http://your-link.com', 'elementor'),
                         'condition' => [
                             'type' => 'custom',
                         ],
                     ],
                     [
                         'name' => 'target',
-                        'label' => \IqitElementorWpHelper::__('New window', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('New window', 'elementor'),
                         'type' => Controls_Manager::SELECT,
                         'default' => '_blank',
                         'condition' => [
                             'type' => 'product',
                         ],
                         'options' => [
-                            '_blank' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                            '' => \IqitElementorWpHelper::__('No', 'elementor'),
+                            '_blank' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                            '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                         ],
                     ],
                 ],
@@ -195,7 +195,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_icon',
@@ -205,7 +205,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'section_icon_style',
             [
-                'label' => \IqitElementorWpHelper::__('Hotspot', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hotspot', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -214,7 +214,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'icon_size',
             [
-                'label' => \IqitElementorWpHelper::__('Font Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Font Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_icon_style',
@@ -235,7 +235,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'icon_color',
             [
-                'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_icon_style',
@@ -252,7 +252,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'icon_background',
             [
-                'label' => \IqitElementorWpHelper::__('Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_icon_style',
@@ -270,7 +270,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'tooltip_content_color',
             [
-                'label' => \IqitElementorWpHelper::__('Tooltip color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tooltip color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_icon_style',
@@ -287,7 +287,7 @@ class Widget_Image_hotspots extends Widget_Base
         $this->add_control(
             'tooltip_content_background',
             [
-                'label' => \IqitElementorWpHelper::__('Tooltip background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tooltip background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_icon_style',
@@ -326,8 +326,8 @@ class Widget_Image_hotspots extends Widget_Base
         $has_caption = !empty($instance['caption']);
         $image_html = '<div class="elementor-hotspot-image' . (!empty($instance['shape']) ? ' elementor-image-shape-' . $instance['shape'] : '') . '">';
         $image_class_html = !empty($instance['hover_animation']) ? ' class="elementor-animation-' . $instance['hover_animation'] . '"' : '';
-        $image_width = $instance['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($instance['image']['width']) . '"' : '';
-        $image_height = $instance['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($instance['image']['height']) . '"' : '';
+        $image_width = $instance['image']['width'] ? 'width="' . \IqitElementorHelper::absint($instance['image']['width']) . '"' : '';
+        $image_height = $instance['image']['height'] ? 'height="' . \IqitElementorHelper::absint($instance['image']['height']) . '"' : '';
 
         if ('yes' === $instance['image_lazy']) {
             $lazyload_tag = 'loading="lazy" ';
@@ -335,7 +335,7 @@ class Widget_Image_hotspots extends Widget_Base
             $lazyload_tag = '';
         }
 
-        $image_html .= sprintf('<img %s src="%s" %s %s alt="%s"%s />', $lazyload_tag, \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($instance['image']['url'])), $image_width, $image_height, \IqitElementorWpHelper::esc_attr($instance['caption']), $image_class_html);
+        $image_html .= sprintf('<img %s src="%s" %s %s alt="%s"%s />', $lazyload_tag, \IqitElementorHelper::esc_attr(\IqitElementorHelper::getImage($instance['image']['url'])), $image_width, $image_height, \IqitElementorHelper::esc_attr($instance['caption']), $image_class_html);
         $image_html .= '</div>';
         echo $image_html;
         ?>
@@ -353,7 +353,7 @@ class Widget_Image_hotspots extends Widget_Base
 				         $tooltipLink = $item['link']['url'];
 				         $tooltipLinkTarget = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
 				     } else {
-				         $product = \IqitElementorWpHelper::getProduct($item['products_ids']);
+				         $product = \IqitElementorHelper::getProduct($item['products_ids']);
 				         if (!empty($product['name'])) {
 				             $tooltipText = "<div class='row align-items-center list-small-gutters'>
 								<div class='thumbnail-container col-4'><img src='" . $product['cover']['url'] . "' class='img-fluid' width='" . $product['cover']['width'] . "' height='" . $product['cover']['height'] . "'></div>
@@ -382,7 +382,7 @@ class Widget_Image_hotspots extends Widget_Base
 
 				     if ($item['icon']) { ?>
 							 <span class="elementor-hotspot-icon">
-							<i class="<?php echo \IqitElementorWpHelper::esc_attr($item['icon']); ?>"></i>
+							<i class="<?php echo \IqitElementorHelper::esc_attr($item['icon']); ?>"></i>
 						</span>
 						 <?php } ?>
 						 <span class="elementor-hotspot-text"><?php echo $item['text']; ?></span>

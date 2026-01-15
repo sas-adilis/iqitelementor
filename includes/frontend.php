@@ -91,7 +91,7 @@ class Frontend
 
     public function print_css()
     {
-        $container_width = \IqitElementorWpHelper::absint(\IqitElementorWpHelper::get_option('elementor_container_width'));
+        $container_width = \IqitElementorHelper::absint(\IqitElementorHelper::get_option('elementor_container_width'));
         if (!empty($container_width)) {
             $this->stylesheet->add_rules('.elementor-section.elementor-section-boxed > .elementor-container', 'max-width:' . $container_width . 'px');
         }
@@ -260,7 +260,7 @@ class Frontend
                     }
 
                     if ($parser_control['name'] === 'background_image') {
-                        $parsed_value = \IqitElementorWpHelper::getImage($parsed_value);
+                        $parsed_value = \IqitElementorHelper::getImage($parsed_value);
                     }
 
                     if ( '__EMPTY__' === $parsed_value ) {
@@ -293,7 +293,7 @@ class Frontend
         $val = (string)$control_obj->get_style_value($placeholder, $value);
 
         if ($control['name'] === 'background_image') {
-            $val = \IqitElementorWpHelper::getImage($val);
+            $val = \IqitElementorHelper::getImage($val);
         }
 
         return $val;

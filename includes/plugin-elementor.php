@@ -44,7 +44,7 @@ class PluginElementor
     public function __wakeup()
     {
         // Unserializing instances of the class is forbidden
-        \IqitElementorWpHelper::_doing_it_wrong(__FUNCTION__, \IqitElementorWpHelper::__('Cheatin&#8217; huh?', 'elementor'), '1.0.0');
+        \IqitElementorHelper::_doing_it_wrong(__FUNCTION__, \IqitElementorTranslater::get()->l('Cheatin&#8217; huh?', 'elementor'), '1.0.0');
     }
 
     /**
@@ -64,9 +64,9 @@ class PluginElementor
         return [
             'active' => true,
             'title' => '<div id="elementor-introduction-title">'
-                . \IqitElementorWpHelper::__('Two Minute Tour Of Elementor', 'elementor')
+                . \IqitElementorTranslater::get()->l('Two Minute Tour Of Elementor', 'elementor')
                 . '</div><div id="elementor-introduction-subtitle">'
-                . \IqitElementorWpHelper::__('Watch this quick tour that gives you a basic understanding of how to use Elementor.', 'elementor')
+                . \IqitElementorTranslater::get()->l('Watch this quick tour that gives you a basic understanding of how to use Elementor.', 'elementor')
                 . '</div>',
             'content' => '<div class="elementor-video-wrapper"><iframe src="https://www.youtube.com/embed/6u45V2q1s4k?autoplay=1&rel=0&showinfo=0" frameborder="0" allowfullscreen></iframe></div>',
             'delay' => 2500,

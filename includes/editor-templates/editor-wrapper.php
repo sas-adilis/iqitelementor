@@ -16,7 +16,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 					<div class="elementor-loader-box"></div>
 					<div class="elementor-loader-box"></div>
 				</div>
-				<div class="elementor-loading-title"><?php \IqitElementorWpHelper::_e('Loading', 'elementor'); ?></div>
+				<div class="elementor-loading-title"><?php \IqitElementorTranslater::get()->l('Loading', 'elementor'); ?></div>
 			</div>
 		</div>
 		<div id="elementor-preview-responsive-wrapper" class="elementor-device-desktop elementor-device-rotate-portrait">

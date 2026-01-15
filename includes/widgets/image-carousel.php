@@ -14,7 +14,7 @@ class Widget_Image_Carousel extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Image Carousel', 'elementor');
+        return \IqitElementorTranslater::get()->l('Image Carousel', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'section_image_carousel',
             [
-                'label' => \IqitElementorWpHelper::__('Images list', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Images list', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -42,17 +42,17 @@ class Widget_Image_Carousel extends Widget_Base
                 'fields' => [
                     [
                         'name' => 'text',
-                        'label' => \IqitElementorWpHelper::__('Image alt', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Image alt', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'label_block' => true,
-                        'placeholder' => \IqitElementorWpHelper::__('Image alt', 'elementor'),
-                        'default' => \IqitElementorWpHelper::__('Image alt', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Image alt', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Image alt', 'elementor'),
                     ],
                     [
                         'name' => 'image',
-                        'label' => \IqitElementorWpHelper::__('Choose Image', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Choose Image', 'elementor'),
                         'type' => Controls_Manager::MEDIA,
-                        'placeholder' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                         'label_block' => true,
                         'default' => [
                             'url' => UtilsElementor::get_placeholder_image_src(),
@@ -60,10 +60,10 @@ class Widget_Image_Carousel extends Widget_Base
                     ],
                     [
                         'name' => 'link',
-                        'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                         'type' => Controls_Manager::URL,
                         'label_block' => true,
-                        'placeholder' => \IqitElementorWpHelper::__('http://your-link.com', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('http://your-link.com', 'elementor'),
                     ],
                 ],
                 'title_field' => 'text',
@@ -73,7 +73,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_image_carousel',
@@ -83,7 +83,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'section_additional_options',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel settings', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel settings', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -94,7 +94,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_responsive_control(
             'slides_to_show',
             [
-                'label' => \IqitElementorWpHelper::__('Slides to Show', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Slides to Show', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '3',
                 'section' => 'section_additional_options',
@@ -105,26 +105,26 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'image_stretch',
             [
-                'label' => \IqitElementorWpHelper::__('Image Stretch', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Stretch', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'no',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
             ]
         );
         $this->add_control(
             'image_lazy',
             [
-                'label' => \IqitElementorWpHelper::__('Lazy load', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Lazy load', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
             ]
         );
@@ -132,15 +132,15 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'navigation',
             [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Navigation', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'both',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'both' => \IqitElementorWpHelper::__('Arrows and Dots', 'elementor'),
-                    'arrows' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
-                    'dots' => \IqitElementorWpHelper::__('Dots', 'elementor'),
-                    'none' => \IqitElementorWpHelper::__('None', 'elementor'),
+                    'both' => \IqitElementorTranslater::get()->l('Arrows and Dots', 'elementor'),
+                    'arrows' => \IqitElementorTranslater::get()->l('Arrows', 'elementor'),
+                    'dots' => \IqitElementorTranslater::get()->l('Dots', 'elementor'),
+                    'none' => \IqitElementorTranslater::get()->l('None', 'elementor'),
                 ],
             ]
         );
@@ -148,20 +148,20 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
             ]
         );
         $this->add_control(
             'pause_on_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Pause on hover', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Pause on hover', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_additional_options',
@@ -169,8 +169,8 @@ class Widget_Image_Carousel extends Widget_Base
                     'autoplay' => 'yes',
                 ],
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
             ]
         );
@@ -178,7 +178,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'autoplay_speed',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay Speed', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay Speed', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 5000,
                 'condition' => [
@@ -191,13 +191,13 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'infinite',
             [
-                'label' => \IqitElementorWpHelper::__('Infinite Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Infinite Loop', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
             ]
         );
@@ -205,13 +205,13 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'effect',
             [
-                'label' => \IqitElementorWpHelper::__('Effect', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Effect', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'slide',
                 'section' => 'section_additional_options',
                 'options' => [
-                    'slide' => \IqitElementorWpHelper::__('Slide', 'elementor'),
-                    'fade' => \IqitElementorWpHelper::__('Fade', 'elementor'),
+                    'slide' => \IqitElementorTranslater::get()->l('Slide', 'elementor'),
+                    'fade' => \IqitElementorTranslater::get()->l('Fade', 'elementor'),
                 ],
                 'condition' => [
                     'slides_to_show' => '1',
@@ -222,7 +222,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'speed',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Speed', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Speed', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 500,
                 'section' => 'section_additional_options',
@@ -232,7 +232,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'section_style_navigation',
             [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Navigation', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
                 'condition' => [
@@ -244,7 +244,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'heading_style_arrows',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -258,14 +258,14 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'arrows_position',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'inside',
                 'section' => 'section_style_navigation',
                 'tab' => self::TAB_STYLE,
                 'options' => [
-                    'inside' => \IqitElementorWpHelper::__('Inside', 'elementor'),
-                    'outside' => \IqitElementorWpHelper::__('Outside', 'elementor'),
+                    'inside' => \IqitElementorTranslater::get()->l('Inside', 'elementor'),
+                    'outside' => \IqitElementorTranslater::get()->l('Outside', 'elementor'),
                 ],
                 'condition' => [
                     'navigation' => ['arrows', 'both'],
@@ -276,7 +276,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'arrows_size',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'section' => 'section_style_navigation',
                 'tab' => self::TAB_STYLE,
@@ -298,7 +298,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'arrows_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -314,7 +314,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'arrows_bg_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -330,7 +330,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'heading_style_dots',
             [
-                'label' => \IqitElementorWpHelper::__('Dots', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -344,14 +344,14 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'dots_position',
             [
-                'label' => \IqitElementorWpHelper::__('Dots Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'outside',
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
                 'options' => [
-                    'outside' => \IqitElementorWpHelper::__('Outside', 'elementor'),
-                    'inside' => \IqitElementorWpHelper::__('Inside', 'elementor'),
+                    'outside' => \IqitElementorTranslater::get()->l('Outside', 'elementor'),
+                    'inside' => \IqitElementorTranslater::get()->l('Inside', 'elementor'),
                 ],
                 'condition' => [
                     'navigation' => ['dots', 'both'],
@@ -362,7 +362,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'dots_size',
             [
-                'label' => \IqitElementorWpHelper::__('Dots Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -384,7 +384,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'dots_color',
             [
-                'label' => \IqitElementorWpHelper::__('Dots Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -400,7 +400,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'section_style_image',
             [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -409,13 +409,13 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'image_spacing',
             [
-                'label' => \IqitElementorWpHelper::__('Spacing', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Spacing', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_image',
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'custom' => \IqitElementorWpHelper::__('Custom', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'custom' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
                 ],
                 'default' => '',
                 'condition' => [
@@ -427,7 +427,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'image_spacing_custom',
             [
-                'label' => \IqitElementorWpHelper::__('Image Spacing', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Spacing', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_image',
@@ -464,7 +464,7 @@ class Widget_Image_Carousel extends Widget_Base
         $this->add_control(
             'image_border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_STYLE,
@@ -486,14 +486,14 @@ class Widget_Image_Carousel extends Widget_Base
 
         foreach ($instance['images_list'] as $item) {
             $image_url = $item['image']['url'];
-            $image_width = $item['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($item['image']['width']) . '"' : '';
-            $image_height = $item['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($item['image']['height']) . '"' : '';
+            $image_width = $item['image']['width'] ? 'width="' . \IqitElementorHelper::absint($item['image']['width']) . '"' : '';
+            $image_height = $item['image']['height'] ? 'height="' . \IqitElementorHelper::absint($item['image']['height']) . '"' : '';
             $image_placeholder = '';
 
             if ('yes' === $instance['image_lazy']) {
-                $image_html = '<img class="swiper-slide-image" ' . $image_width . ' ' . $image_height . '  loading="lazy" src="' . \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($image_url)) . '" alt="' . \IqitElementorWpHelper::esc_attr($item['text']) . '" />';
+                $image_html = '<img class="swiper-slide-image" ' . $image_width . ' ' . $image_height . '  loading="lazy" src="' . \IqitElementorHelper::esc_attr(\IqitElementorHelper::getImage($image_url)) . '" alt="' . \IqitElementorHelper::esc_attr($item['text']) . '" />';
             } else {
-                $image_html = '<img class="swiper-slide-image" ' . $image_width . ' ' . $image_height . ' src="' . \IqitElementorWpHelper::esc_attr(\IqitElementorWpHelper::getImage($image_url)) . '" alt="' . \IqitElementorWpHelper::esc_attr($item['text']) . '" />';
+                $image_html = '<img class="swiper-slide-image" ' . $image_width . ' ' . $image_height . ' src="' . \IqitElementorHelper::esc_attr(\IqitElementorHelper::getImage($image_url)) . '" alt="' . \IqitElementorHelper::esc_attr($item['text']) . '" />';
             }
 
             if (!empty($item['link']['url'])) {
@@ -514,14 +514,14 @@ class Widget_Image_Carousel extends Widget_Base
         $show_arrows = in_array($instance['navigation'], ['arrows', 'both']);
 
         $swiper_options = [
-            'slidesToShow' => \IqitElementorWpHelper::absint($instance['slides_to_show']),
-            'slidesToShowTablet' => \IqitElementorWpHelper::absint($instance['slides_to_show_tablet']),
-            'slidesToShowMobile' => \IqitElementorWpHelper::absint($instance['slides_to_show_mobile']),
-            'autoplaySpeed' => \IqitElementorWpHelper::absint($instance['autoplay_speed']),
+            'slidesToShow' => \IqitElementorHelper::absint($instance['slides_to_show']),
+            'slidesToShowTablet' => \IqitElementorHelper::absint($instance['slides_to_show_tablet']),
+            'slidesToShowMobile' => \IqitElementorHelper::absint($instance['slides_to_show_mobile']),
+            'autoplaySpeed' => \IqitElementorHelper::absint($instance['autoplay_speed']),
             'autoplay' => ('yes' === $instance['autoplay']),
             'loop' => ('yes' === $instance['infinite']),
             'disableOnInteraction' => ('yes' === $instance['pause_on_hover']),
-            'speed' => \IqitElementorWpHelper::absint($instance['speed']),
+            'speed' => \IqitElementorHelper::absint($instance['speed']),
             'lazy' => ('yes' === $instance['image_lazy']),
             'arrows' => $show_arrows,
             'dots' => $show_dots,
@@ -531,9 +531,9 @@ class Widget_Image_Carousel extends Widget_Base
         $carousel_classes = ['elementor-image-carousel'];
 
         $cls_fix_classes[] = 'swiper-cls-fix';
-        $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['slides_to_show']);
-        $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['slides_to_show_tablet']);
-        $cls_fix_classes[] = 'mobile-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['slides_to_show_mobile']);
+        $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['slides_to_show']);
+        $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['slides_to_show_tablet']);
+        $cls_fix_classes[] = 'mobile-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['slides_to_show_mobile']);
 
         if ($show_arrows) {
             $carousel_classes[] = 'swiper-arrows-' . $instance['arrows_position'];

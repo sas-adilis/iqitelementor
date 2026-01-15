@@ -26,14 +26,14 @@ class Control_Font extends Control_Base
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
 				<select class="elementor-control-font-family" data-setting="{{ data.name }}">
-					<option value=""><?php \IqitElementorWpHelper::_e('Default', 'elementor'); ?></option>
-					<option value="custom"><?php \IqitElementorWpHelper::_e('Custom', 'elementor'); ?></option>
-					<optgroup label="<?php \IqitElementorWpHelper::_e('System', 'elementor'); ?>">
+					<option value=""><?php \IqitElementorTranslater::get()->l('Default', 'elementor'); ?></option>
+					<option value="custom"><?php \IqitElementorTranslater::get()->l('Custom', 'elementor'); ?></option>
+					<optgroup label="<?php \IqitElementorTranslater::get()->l('System', 'elementor'); ?>">
 						<# _.each( getFontsByGroups( 'system' ), function( fontType, fontName ) { #>
 						<option value="{{ fontName }}">{{{ fontName }}}</option>
 						<# } ); #>
 					</optgroup>
-					<optgroup label="<?php \IqitElementorWpHelper::_e('Google', 'elementor'); ?>">
+					<optgroup label="<?php \IqitElementorTranslater::get()->l('Google', 'elementor'); ?>">
 						<# _.each( getFontsByGroups( [ 'googlefonts', 'earlyaccess' ] ), function( fontType, fontName ) { #>
 						<option value="{{ fontName }}">{{{ fontName }}}</option>
 						<# } ); #>

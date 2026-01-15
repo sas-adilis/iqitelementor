@@ -27,10 +27,10 @@ class Control_Box_Shadow extends Control_Base_Multiple
     public function get_sliders()
     {
         return [
-            ['label' => \IqitElementorWpHelper::__('Blur', 'elementor'), 'type' => 'blur', 'min' => 0, 'max' => 100],
-            ['label' => \IqitElementorWpHelper::__('Spread', 'elementor'), 'type' => 'spread', 'min' => 0, 'max' => 100],
-            ['label' => \IqitElementorWpHelper::__('Horizontal', 'elementor'), 'type' => 'horizontal', 'min' => -100, 'max' => 100],
-            ['label' => \IqitElementorWpHelper::__('Vertical', 'elementor'), 'type' => 'vertical', 'min' => -100, 'max' => 100],
+            ['label' => \IqitElementorTranslater::get()->l('Blur', 'elementor'), 'type' => 'blur', 'min' => 0, 'max' => 100],
+            ['label' => \IqitElementorTranslater::get()->l('Spread', 'elementor'), 'type' => 'spread', 'min' => 0, 'max' => 100],
+            ['label' => \IqitElementorTranslater::get()->l('Horizontal', 'elementor'), 'type' => 'horizontal', 'min' => -100, 'max' => 100],
+            ['label' => \IqitElementorTranslater::get()->l('Vertical', 'elementor'), 'type' => 'vertical', 'min' => -100, 'max' => 100],
         ];
     }
 
@@ -51,9 +51,9 @@ class Control_Box_Shadow extends Control_Base_Multiple
 		}
 		#>
 		<div class="elementor-control-field">
-			<label class="elementor-control-title"><?php \IqitElementorWpHelper::_e('Color', 'elementor'); ?></label>
+			<label class="elementor-control-title"><?php \IqitElementorTranslater::get()->l('Color', 'elementor'); ?></label>
 			<div class="elementor-control-input-wrapper">
-				<input data-setting="color" class="elementor-box-shadow-color-picker" type="text" maxlength="7" placeholder="<?php \IqitElementorWpHelper::esc_attr_e('Hex Value', 'elementor'); ?>" data-alpha="true"{{{ defaultColorValue }}} />
+				<input data-setting="color" class="elementor-box-shadow-color-picker" type="text" maxlength="7" placeholder="<?php \IqitElementorHelper::esc_attr('Hex Value', 'elementor'); ?>" data-alpha="true"{{{ defaultColorValue }}} />
 			</div>
 		</div>
 		<?php foreach ($this->get_sliders() as $slider) { ?>

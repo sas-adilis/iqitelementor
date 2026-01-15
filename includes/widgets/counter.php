@@ -14,7 +14,7 @@ class Widget_Counter extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Counter', 'elementor');
+        return \IqitElementorTranslater::get()->l('Counter', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'section_counter',
             [
-                'label' => \IqitElementorWpHelper::__('Counter', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Counter', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,7 +35,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'starting_number',
             [
-                'label' => \IqitElementorWpHelper::__('Starting Number', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Starting Number', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'min' => 0,
                 'default' => 0,
@@ -46,7 +46,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'ending_number',
             [
-                'label' => \IqitElementorWpHelper::__('Ending Number', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Ending Number', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'min' => 1,
                 'default' => 100,
@@ -57,7 +57,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'prefix',
             [
-                'label' => \IqitElementorWpHelper::__('Number Prefix', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Number Prefix', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
                 'placeholder' => 1,
@@ -68,10 +68,10 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'suffix',
             [
-                'label' => \IqitElementorWpHelper::__('Number Suffix', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Number Suffix', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'default' => '',
-                'placeholder' => \IqitElementorWpHelper::__('Plus', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Plus', 'elementor'),
                 'section' => 'section_counter',
             ]
         );
@@ -79,7 +79,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'duration',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Duration', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Duration', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 2000,
                 'min' => 100,
@@ -91,11 +91,11 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'label_block' => true,
-                'default' => \IqitElementorWpHelper::__('Cool Number', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Cool Number', 'elementor'),
+                'default' => \IqitElementorTranslater::get()->l('Cool Number', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Cool Number', 'elementor'),
                 'section' => 'section_counter',
             ]
         );
@@ -103,7 +103,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_counter',
@@ -113,7 +113,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'section_number',
             [
-                'label' => \IqitElementorWpHelper::__('Number', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Number', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -122,7 +122,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'number_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
@@ -150,7 +150,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -159,7 +159,7 @@ class Widget_Counter extends Widget_Base
         $this->add_control(
             'title_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),

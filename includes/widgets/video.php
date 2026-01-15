@@ -17,7 +17,7 @@ class Widget_Video extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Video', 'elementor');
+        return \IqitElementorTranslater::get()->l('Video', 'elementor');
     }
 
     public function get_icon()
@@ -30,7 +30,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'section_video',
             [
-                'label' => \IqitElementorWpHelper::__('Video', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Video', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -38,15 +38,15 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'video_type',
             [
-                'label' => \IqitElementorWpHelper::__('Video Type', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Video Type', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'default' => 'youtube',
                 'options' => [
-                    'youtube' => \IqitElementorWpHelper::__('YouTube', 'elementor'),
-                    // 'youtube_nocookie' => \IqitElementorWpHelper::__( 'YouTube without cookies', 'elementor' ),
-                    'vimeo' => \IqitElementorWpHelper::__('Vimeo', 'elementor'),
-                    'hosted' => \IqitElementorWpHelper::__('HTML5 Video', 'elementor'),
+                    'youtube' => \IqitElementorTranslater::get()->l('YouTube', 'elementor'),
+                    // 'youtube_nocookie' => \IqitElementorTranslater::get()->l( 'YouTube without cookies', 'elementor' ),
+                    'vimeo' => \IqitElementorTranslater::get()->l('Vimeo', 'elementor'),
+                    'hosted' => \IqitElementorTranslater::get()->l('HTML5 Video', 'elementor'),
                 ],
             ]
         );
@@ -54,10 +54,10 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'link',
             [
-                'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'section' => 'section_video',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your YouTube link', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your YouTube link', 'elementor'),
                 'default' => 'https://www.youtube.com/watch?v=9uOETcuFjbE',
                 'label_block' => true,
                 'condition' => [
@@ -69,10 +69,10 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_link',
             [
-                'label' => \IqitElementorWpHelper::__('Vimeo Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Vimeo Link', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'section' => 'section_video',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your Vimeo link', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your Vimeo link', 'elementor'),
                 'default' => 'https://vimeo.com/170933924',
                 'label_block' => true,
 
@@ -85,10 +85,10 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'hosted_link',
             [
-                'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                 'type' => Controls_Manager::URL,
                 'section' => 'section_video',
-                'placeholder' => \IqitElementorWpHelper::__('Enter your video link', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your video link', 'elementor'),
                 'default' => '',
                 'label_block' => true,
                 'show_external' => false,
@@ -101,7 +101,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'aspect_ratio',
             [
-                'label' => \IqitElementorWpHelper::__('Aspect Ratio', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Aspect Ratio', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
@@ -118,7 +118,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'heading_youtube',
             [
-                'label' => \IqitElementorWpHelper::__('Video Options', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Video Options', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => 'section_video',
                 'separator' => 'before',
@@ -128,12 +128,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'in_modal',
             [
-                'label' => \IqitElementorWpHelper::__('In modal', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('In modal', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'default' => 'no',
             ]
@@ -143,7 +143,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'section_style',
             [
-                'label' => \IqitElementorWpHelper::__('Modal trigger', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Modal trigger', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
                 'condition' => [
@@ -155,7 +155,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'shape_size',
             [
-                'label' => \IqitElementorWpHelper::__('Shape height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Shape height', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 80,
@@ -177,7 +177,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'modal_play_color',
             [
-                'label' => \IqitElementorWpHelper::__('Play Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Play Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
@@ -194,19 +194,19 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'modal_play_align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -226,12 +226,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'ht_autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes (and muted)', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes (and muted)', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'hosted',
@@ -243,12 +243,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'ht_controls',
             [
-                'label' => \IqitElementorWpHelper::__('Controls', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Controls', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'hosted',
@@ -260,12 +260,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'ht_loop',
             [
-                'label' => \IqitElementorWpHelper::__('Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Loop', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'hosted',
@@ -277,12 +277,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'ht_muted',
             [
-                'label' => \IqitElementorWpHelper::__('Muted', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Muted', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'hosted',
@@ -296,12 +296,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'yt_autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'youtube',
@@ -313,12 +313,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'yt_loop',
             [
-                'label' => \IqitElementorWpHelper::__('Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Loop', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'condition' => [
                     'video_type' => 'youtube',
@@ -330,12 +330,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'yt_rel',
             [
-                'label' => \IqitElementorWpHelper::__('Suggested Videos', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Suggested Videos', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
                 ],
                 'default' => 'no',
                 'condition' => [
@@ -347,12 +347,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'yt_controls',
             [
-                'label' => \IqitElementorWpHelper::__('Player Control', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Player Control', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
                 'default' => 'yes',
                 'condition' => [
@@ -365,12 +365,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'default' => 'no',
                 'condition' => [
@@ -382,12 +382,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_loop',
             [
-                'label' => \IqitElementorWpHelper::__('Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Loop', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
                 ],
                 'default' => 'no',
                 'condition' => [
@@ -399,12 +399,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_title',
             [
-                'label' => \IqitElementorWpHelper::__('Intro Title', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Intro Title', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
                 'default' => 'yes',
                 'condition' => [
@@ -416,12 +416,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_portrait',
             [
-                'label' => \IqitElementorWpHelper::__('Intro Portrait', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Intro Portrait', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
                 'default' => 'yes',
                 'condition' => [
@@ -433,12 +433,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_byline',
             [
-                'label' => \IqitElementorWpHelper::__('Intro Byline', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Intro Byline', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_video',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 ],
                 'default' => 'yes',
                 'condition' => [
@@ -450,7 +450,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'vimeo_color',
             [
-                'label' => \IqitElementorWpHelper::__('Controls Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Controls Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'section' => 'section_video',
                 'default' => '',
@@ -463,7 +463,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'section' => 'section_video',
                 'default' => 'youtube',
@@ -473,7 +473,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'section_image_overlay',
             [
-                'label' => \IqitElementorWpHelper::__('Image Overlay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Overlay', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'condition' => [
                     'in_modal' => 'no',
@@ -484,12 +484,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'show_image_overlay',
             [
-                'label' => \IqitElementorWpHelper::__('Image Overlay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image Overlay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'no',
                 'options' => [
-                    'no' => \IqitElementorWpHelper::__('Hide', 'elementor'),
-                    'yes' => \IqitElementorWpHelper::__('Show', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
                 ],
                 'condition' => [
                     'in_modal' => 'no',
@@ -501,7 +501,7 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'image_overlay',
             [
-                'label' => \IqitElementorWpHelper::__('Image', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Image', 'elementor'),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
                     'url' => UtilsElementor::get_placeholder_image_src(),
@@ -517,12 +517,12 @@ class Widget_Video extends Widget_Base
         $this->add_control(
             'show_play_icon',
             [
-                'label' => \IqitElementorWpHelper::__('Play Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Play Icon', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
                 'section' => 'section_image_overlay',
                 'condition' => [

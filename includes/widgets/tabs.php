@@ -14,7 +14,7 @@ class Widget_Tabs extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Tabs', 'elementor');
+        return \IqitElementorTranslater::get()->l('Tabs', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('Tabs', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tabs', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -35,33 +35,33 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'tabs',
             [
-                'label' => \IqitElementorWpHelper::__('Tabs Items', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tabs Items', 'elementor'),
                 'type' => Controls_Manager::REPEATER,
                 'section' => 'section_title',
                 'default' => [
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Tab #1', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am tab content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Tab #1', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am tab content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                     [
-                        'tab_title' => \IqitElementorWpHelper::__('Tab #2', 'elementor'),
-                        'tab_content' => \IqitElementorWpHelper::__('I am tab content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
+                        'tab_title' => \IqitElementorTranslater::get()->l('Tab #2', 'elementor'),
+                        'tab_content' => \IqitElementorTranslater::get()->l('I am tab content. Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'elementor'),
                     ],
                 ],
                 'fields' => [
                     [
                         'name' => 'tab_title',
-                        'label' => \IqitElementorWpHelper::__('Title & Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Title & Content', 'elementor'),
                         'type' => Controls_Manager::TEXT,
-                        'default' => \IqitElementorWpHelper::__('Tab Title', 'elementor'),
-                        'placeholder' => \IqitElementorWpHelper::__('Tab Title', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Tab Title', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Tab Title', 'elementor'),
                         'label_block' => true,
                     ],
                     [
                         'name' => 'tab_content',
-                        'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
-                        'default' => \IqitElementorWpHelper::__('Tab Content', 'elementor'),
-                        'placeholder' => \IqitElementorWpHelper::__('Tab Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Tab Content', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('Tab Content', 'elementor'),
                         'type' => Controls_Manager::WYSIWYG,
                         'show_label' => false,
                     ],
@@ -73,7 +73,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_title',
@@ -83,7 +83,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'section_title_style',
             [
-                'label' => \IqitElementorWpHelper::__('Tabs Style', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tabs Style', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -92,14 +92,14 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'position',
             [
-                'label' => \IqitElementorWpHelper::__('Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'tab' => self::TAB_STYLE,
                 'default' => 'left',
                 'section' => 'section_title_style',
                 'options' => [
-                    'left' => \IqitElementorWpHelper::__('Left', 'elementor'),
-                    'center' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                    'left' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
+                    'center' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                 ],
                 'selectors' => [
                     '{{WRAPPER}} .nav-tabs' => 'justify-content:  {{VALUE}};',
@@ -110,7 +110,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'border_color',
             [
-                'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -123,7 +123,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'tab_color',
             [
-                'label' => \IqitElementorWpHelper::__('Title Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Title Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_title_style',
@@ -152,7 +152,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'section_tab_content',
             [
-                'label' => \IqitElementorWpHelper::__('Tab Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Tab Content', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -161,7 +161,7 @@ class Widget_Tabs extends Widget_Base
         $this->add_control(
             'content_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_tab_content',

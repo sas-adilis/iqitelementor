@@ -17,7 +17,7 @@ class Widget_Button extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Button', 'elementor');
+        return \IqitElementorTranslater::get()->l('Button');
     }
 
     public function get_icon()
@@ -25,21 +25,12 @@ class Widget_Button extends Widget_Base
         return 'button';
     }
 
-    public static function get_button_sizes()
-    {
-        return [
-            'sm' => \IqitElementorWpHelper::__('Small', 'elementor'),
-            'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-            'lg' => \IqitElementorWpHelper::__('Large', 'elementor'),
-        ];
-    }
-
     protected function _register_controls()
     {
         $this->start_controls_section(
             'section_content',
             [
-                'label' => \IqitElementorWpHelper::__('Button', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Button'),
             ]
         );
 
@@ -49,7 +40,7 @@ class Widget_Button extends Widget_Base
         $this->start_controls_section(
             'section_styles',
             [
-                'label' => \IqitElementorWpHelper::__('Button', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Button'),
                 'tab' => self::TAB_STYLE,
             ]
         );

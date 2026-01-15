@@ -18,13 +18,13 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'dots',
             [
-                'label' => \IqitElementorWpHelper::__('Dots', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'return_value' => 'yes',
                 'section' => $sectionId,
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'condition' => $condition,
             ]
         );
@@ -32,13 +32,13 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'arrows',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'return_value' => 'yes',
                 'section' => $sectionId,
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'condition' => $condition,
             ]
         );
@@ -46,13 +46,13 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'scrollbar',
             [
-                'label' => \IqitElementorWpHelper::__('Scrollbar', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Scrollbar', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'return_value' => 'yes',
                 'section' => $sectionId,
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'condition' => $condition,
             ]
         );
@@ -60,7 +60,7 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'slides_to_show',
             [
-                'label' => \IqitElementorWpHelper::__('Slides to show', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Slides to show', 'elementor'),
                 'type' => 'select',
                 'default' => '5',
                 'section' => $sectionId,
@@ -72,7 +72,7 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'slides_per_page',
             [
-                'label' => \IqitElementorWpHelper::__('Slides per scroll', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Slides per scroll', 'elementor'),
                 'type' => 'select',
                 'default' => '5',
                 'section' => $sectionId,
@@ -84,7 +84,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'additional_options_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Additional options', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Additional options', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'section' => $sectionId,
             ]
@@ -93,10 +93,10 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'yes',
                 'section' => $sectionId,
                 'default' => 'yes',
@@ -107,10 +107,10 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'pause_on_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Pause on mouseover', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Pause on mouseover', 'elementor'),
                 'type' => 'switcher',
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'return_value' => 'yes',
                 'section' => $sectionId,
                 'default' => 'yes',
@@ -124,7 +124,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'autoplay_speed',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay Speed (ms)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay Speed (ms)', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 5000,
                 'section' => $sectionId,
@@ -138,13 +138,13 @@ trait IqitElementorCarouselTrait
         $this->add_responsive_control(
             'loop',
             [
-                'label' => \IqitElementorWpHelper::__('Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Loop', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
                 'default' => '',
                 'return_value' => 'yes',
                 'section' => $sectionId,
-                'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 'condition' => $condition,
             ]
         );
@@ -152,7 +152,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'animation_speed',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Speed (ms)', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Speed (ms)', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 300,
                 'section' => $sectionId,
@@ -163,13 +163,13 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'direction',
             [
-                'label' => \IqitElementorWpHelper::__('Direction', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Direction', 'elementor'),
                 'type' => 'select',
                 'default' => 'left',
                 'section' => $sectionId,
                 'options' => [
-                    'left' => \IqitElementorWpHelper::__('Left to Right', 'elementor'),
-                    'right' => \IqitElementorWpHelper::__('Right to Left', 'elementor'),
+                    'left' => \IqitElementorTranslater::get()->l('Left to Right', 'elementor'),
+                    'right' => \IqitElementorTranslater::get()->l('Right to Left', 'elementor'),
                 ],
                 'condition' => $condition,
             ]
@@ -196,7 +196,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'arrows_position',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows position', 'elementor'),
                 'type' => 'select',
                 'default' => 'middle',
                 'tab' => 'style',
@@ -206,8 +206,8 @@ trait IqitElementorCarouselTrait
                 ),
                 'section' => $sectionId,
                 'options' => [
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'above' => \IqitElementorWpHelper::__('Above', 'elementor'),
+                    'middle' => \IqitElementorTranslater::get()->l('Middle', 'elementor'),
+                    'above' => \IqitElementorTranslater::get()->l('Above', 'elementor'),
                 ],
             ]
         );
@@ -215,7 +215,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'arrows_position_top',
             [
-                'label' => \IqitElementorWpHelper::__('Position top', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Position top', 'elementor'),
                 'type' => 'number',
                 'default' => '-20',
                 'min' => '-100',
@@ -235,7 +235,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'arrows_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Color', 'elementor'),
                 'type' => 'color',
                 'tab' => 'style',
                 'condition' => array_merge(
@@ -252,7 +252,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'arrows_bg_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows background', 'elementor'),
                 'type' => 'color',
                 'tab' => 'style',
                 'condition' => array_merge(
@@ -269,7 +269,7 @@ trait IqitElementorCarouselTrait
         $this->add_control(
             'dots_color',
             [
-                'label' => \IqitElementorWpHelper::__('Dots color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots color', 'elementor'),
                 'type' => 'color',
                 'tab' => 'style',
                 'section' => $sectionId,
@@ -290,12 +290,12 @@ trait IqitElementorCarouselTrait
             'arrows_position' => $settings['arrows_position'] ?? 'middle',
             'carousel_options' => [
                 'autoplay' => ('yes' === ($settings['autoplay'] ?? 'no')),
-                'slidesToShow' => \IqitElementorWpHelper::absint($settings['slides_to_show'] ?? 4),
-                'slidesToShowTablet' => \IqitElementorWpHelper::absint($settings['slides_to_show_tablet'] ?? 4),
-                'slidesToShowMobile' => \IqitElementorWpHelper::absint($settings['slides_to_show_mobile'] ?? 4),
-                'slidesPerPageToShow' => \IqitElementorWpHelper::absint($settings['slides_per_page'] ?? 4),
-                'slidesPerPageToShowTablet' => \IqitElementorWpHelper::absint($settings['slides_per_page_tablet'] ?? 4),
-                'slidesPerPageToShowMobile' => \IqitElementorWpHelper::absint($settings['slides_per_page_mobile'] ?? 4),
+                'slidesToShow' => \IqitElementorHelper::absint($settings['slides_to_show'] ?? 4),
+                'slidesToShowTablet' => \IqitElementorHelper::absint($settings['slides_to_show_tablet'] ?? 4),
+                'slidesToShowMobile' => \IqitElementorHelper::absint($settings['slides_to_show_mobile'] ?? 4),
+                'slidesPerPageToShow' => \IqitElementorHelper::absint($settings['slides_per_page'] ?? 4),
+                'slidesPerPageToShowTablet' => \IqitElementorHelper::absint($settings['slides_per_page_tablet'] ?? 4),
+                'slidesPerPageToShowMobile' => \IqitElementorHelper::absint($settings['slides_per_page_mobile'] ?? 4),
                 'scrollbar' => ($settings['scrollbar'] ?? '') === 'yes',
                 'scrollbarTablet' => ($settings['scrollbar'] ?? '') === 'yes',
                 'scrollbarMobile' => ($settings['scrollbar'] ?? '') === 'yes',
@@ -308,8 +308,8 @@ trait IqitElementorCarouselTrait
                 'loop' => ($settings['loop'] ?? '') === 'yes',
                 'loopTablet' => ($settings['loop_tablet'] ?? '') === 'yes',
                 'loopMobile' => ($settings['loop_mobile'] ?? '') === 'yes',
-                'autoplaySpeed' => \IqitElementorWpHelper::absint($settings['autoplay_speed'] ?? 5000),
-                'animationSpeed' => \IqitElementorWpHelper::absint($settings['animation_speed'] ?? 300),
+                'autoplaySpeed' => \IqitElementorHelper::absint($settings['autoplay_speed'] ?? 5000),
+                'animationSpeed' => \IqitElementorHelper::absint($settings['animation_speed'] ?? 300),
                 'pauseOnHover' => ($settings['pause_on_hover'] ?? '') === 'yes',
                 'direction' => ($settings['direction'] ?? 'left'),
             ],

@@ -15,7 +15,7 @@ class Element_Column extends Element_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Column', 'elementor');
+        return \IqitElementorTranslater::get()->l('Column', 'elementor');
     }
 
     public function get_icon()
@@ -28,9 +28,9 @@ class Element_Column extends Element_Base
         $this->add_control(
             'width_auto'.($device ? "_$device" : ''),
             [
-                'label' => \IqitElementorWpHelper::__('Auto Width'),
+                'label' => \IqitElementorTranslater::get()->l('Auto Width'),
                 'type' => Controls_Manager::SWITCHER,
-                'description' => \IqitElementorWpHelper::__('Column width will be defined by its content width.'),
+                'description' => \IqitElementorTranslater::get()->l('Column width will be defined by its content width.'),
                 /*'selectors' => [
                     '{{WRAPPER}}' => 'width: auto !important; flex: 0 0 auto;',
                 ],*/
@@ -44,9 +44,9 @@ class Element_Column extends Element_Base
         $this->add_control(
             'width_dynamic'.($device ? "_$device" : ''),
             [
-                'label' => \IqitElementorWpHelper::__('Dynamic Width'),
+                'label' => \IqitElementorTranslater::get()->l('Dynamic Width'),
                 'type' => Controls_Manager::SWITCHER,
-                'description' => \IqitElementorWpHelper::__('The column will fill the remaining space in the row.'),
+                'description' => \IqitElementorTranslater::get()->l('The column will fill the remaining space in the row.'),
                 /*'selectors' => [
                     '{{WRAPPER}}' => 'width: 100% !important; max-width: 100%; flex: 1 0 0; min-width: 0;',
                 ],*/
@@ -60,7 +60,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'width'.($device ? "_$device" : ''),
             [
-                'label' => \IqitElementorWpHelper::__('Column Width') . ' (%)',
+                'label' => \IqitElementorTranslater::get()->l('Column Width') . ' (%)',
                 'type' => Controls_Manager::NUMBER,
                 'min' => 2,
                 'max' => 98,
@@ -97,22 +97,22 @@ class Element_Column extends Element_Base
         $this->start_controls_section(
             'layout',
             [
-                'label' => \IqitElementorWpHelper::__('Layout'),
+                'label' => \IqitElementorTranslater::get()->l('Layout'),
                 'tab' => self::TAB_LAYOUT,
             ]
         );
 
         $this->start_controls_tabs('column_size_tabs');
 
-        $this->start_controls_tab('column_size_desktop_tab', ['label' => \IqitElementorWpHelper::__('Desktop')]);
+        $this->start_controls_tab('column_size_desktop_tab', ['label' => \IqitElementorTranslater::get()->l('Desktop')]);
         $this->add_width_controls();
         $this->end_controls_tab();
 
-        $this->start_controls_tab('column_size_tablet_tab', ['label' => \IqitElementorWpHelper::__('Tablet')]);
+        $this->start_controls_tab('column_size_tablet_tab', ['label' => \IqitElementorTranslater::get()->l('Tablet')]);
         $this->add_width_controls('tablet');
         $this->end_controls_tab();
 
-        $this->start_controls_tab('column_size_mobile_tab', ['label' => \IqitElementorWpHelper::__('Mobile')]);
+        $this->start_controls_tab('column_size_mobile_tab', ['label' => \IqitElementorTranslater::get()->l('Mobile')]);
         $this->add_width_controls('mobile');
         $this->end_controls_tab();
 
@@ -121,13 +121,13 @@ class Element_Column extends Element_Base
         /*$this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Horizontal Align'),
+                'label' => \IqitElementorTranslater::get()->l('Horizontal Align'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('Default'),
-                    'flex-start' => \IqitElementorWpHelper::__('Start'),
-                    'center' => \IqitElementorWpHelper::__('Center'),
-                    'flex-end' => \IqitElementorWpHelper::__('End'),
+                    '' => \IqitElementorTranslater::get()->l('Default'),
+                    'flex-start' => \IqitElementorTranslater::get()->l('Start'),
+                    'center' => \IqitElementorTranslater::get()->l('Center'),
+                    'flex-end' => \IqitElementorTranslater::get()->l('End'),
                 ],
                 'selectors' => [
                     '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'align-items: {{VALUE}}',
@@ -138,7 +138,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'layout_vertical',
             [
-                'label' => \IqitElementorWpHelper::__('Vertical behavior'),
+                'label' => \IqitElementorTranslater::get()->l('Vertical behavior'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -147,7 +147,7 @@ class Element_Column extends Element_Base
         $this->add_responsive_control(
             'row_gap',
             [
-                'label' => \IqitElementorWpHelper::__('Widgets Space') . ' (px)',
+                'label' => \IqitElementorTranslater::get()->l('Widgets Space') . ' (px)',
                 'type' => Controls_Manager::NUMBER,
                 'placeholder' => 20,
                 'selectors' => [
@@ -160,7 +160,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'layout_horizontal',
             [
-                'label' => \IqitElementorWpHelper::__('Horizontal behavior'),
+                'label' => \IqitElementorTranslater::get()->l('Horizontal behavior'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -169,16 +169,16 @@ class Element_Column extends Element_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Horizontal Align'),
+                'label' => \IqitElementorTranslater::get()->l('Horizontal Align'),
                 'type' => Controls_Manager::SELECT,
                 'options' => [
-                    '' => \IqitElementorWpHelper::__('Default'),
-                    'flex-start' => \IqitElementorWpHelper::__('Start'),
-                    'center' => \IqitElementorWpHelper::__('Center'),
-                    'flex-end' => \IqitElementorWpHelper::__('End'),
-                    'space-between' => \IqitElementorWpHelper::__('Space Between'),
-                    'space-around' => \IqitElementorWpHelper::__('Space Around'),
-                    'space-evenly' => \IqitElementorWpHelper::__('Space Evenly'),
+                    '' => \IqitElementorTranslater::get()->l('Default'),
+                    'flex-start' => \IqitElementorTranslater::get()->l('Start'),
+                    'center' => \IqitElementorTranslater::get()->l('Center'),
+                    'flex-end' => \IqitElementorTranslater::get()->l('End'),
+                    'space-between' => \IqitElementorTranslater::get()->l('Space Between'),
+                    'space-around' => \IqitElementorTranslater::get()->l('Space Around'),
+                    'space-evenly' => \IqitElementorTranslater::get()->l('Space Evenly'),
                 ],
                 'selectors' => [
                     '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'justify-content: {{VALUE}}',
@@ -189,7 +189,7 @@ class Element_Column extends Element_Base
         $this->add_responsive_control(
             'column_gap',
             [
-                'label' => \IqitElementorWpHelper::__('Widgets Space') . ' (px)',
+                'label' => \IqitElementorTranslater::get()->l('Widgets Space') . ' (px)',
                 'type' => Controls_Manager::NUMBER,
                 'placeholder' => 20,
                 'selectors' => [
@@ -203,7 +203,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'section_style',
             [
-                'label' => \IqitElementorWpHelper::__('Background & Border', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background & Border', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'type' => Controls_Manager::SECTION,
             ]
@@ -233,7 +233,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_STYLE,
@@ -258,7 +258,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'section_typo',
             [
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
                 'tab' => self::TAB_STYLE,
                 'type' => Controls_Manager::SECTION,
             ]
@@ -267,7 +267,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'heading_color',
             [
-                'label' => \IqitElementorWpHelper::__('Heading Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Heading Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'default' => '',
                 'selectors' => [
@@ -281,7 +281,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'color_text',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'section' => 'section_typo',
                 'default' => '',
@@ -295,7 +295,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'color_link',
             [
-                'label' => \IqitElementorWpHelper::__('Link Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'section' => 'section_typo',
                 'default' => '',
@@ -309,7 +309,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'color_link_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Link Hover Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link Hover Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'section' => 'section_typo',
                 'default' => '',
@@ -323,21 +323,21 @@ class Element_Column extends Element_Base
         $this->add_control(
             'text_align',
             [
-                'label' => \IqitElementorWpHelper::__('Text Align', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Align', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_typo',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -351,7 +351,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'section_advanced',
             [
-                'label' => \IqitElementorWpHelper::__('Advanced', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Advanced', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_ADVANCED,
             ]
@@ -360,7 +360,7 @@ class Element_Column extends Element_Base
         $this->add_responsive_control(
             'margin',
             [
-                'label' => \IqitElementorWpHelper::__('Margin', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Margin', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'section' => 'section_advanced',
@@ -374,7 +374,7 @@ class Element_Column extends Element_Base
         $this->add_responsive_control(
             'padding',
             [
-                'label' => \IqitElementorWpHelper::__('Padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'section' => 'section_advanced',
@@ -388,7 +388,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'animation',
             [
-                'label' => \IqitElementorWpHelper::__('Entrance Animation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Entrance Animation', 'elementor'),
                 'type' => Controls_Manager::ANIMATION,
                 'default' => '',
                 'prefix_class' => 'animated ',
@@ -401,13 +401,13 @@ class Element_Column extends Element_Base
         $this->add_control(
             'animation_duration',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Duration', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Duration', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => '',
                 'options' => [
-                    'slow' => \IqitElementorWpHelper::__('Slow', 'elementor'),
-                    '' => \IqitElementorWpHelper::__('Normal', 'elementor'),
-                    'fast' => \IqitElementorWpHelper::__('Fast', 'elementor'),
+                    'slow' => \IqitElementorTranslater::get()->l('Slow', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('Normal', 'elementor'),
+                    'fast' => \IqitElementorTranslater::get()->l('Fast', 'elementor'),
                 ],
                 'prefix_class' => 'animated-',
                 'tab' => self::TAB_ADVANCED,
@@ -421,21 +421,21 @@ class Element_Column extends Element_Base
         $this->add_control(
             'css_classes',
             [
-                'label' => \IqitElementorWpHelper::__('CSS Classes', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('CSS Classes', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'section' => 'section_advanced',
                 'tab' => self::TAB_ADVANCED,
                 'default' => '',
                 'prefix_class' => '',
                 'label_block' => true,
-                'title' => \IqitElementorWpHelper::__('Add your custom class WITHOUT the dot. e.g: my-class', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Add your custom class WITHOUT the dot. e.g: my-class', 'elementor'),
             ]
         );
 
         $this->add_control(
             'z_index',
             [
-                'label' => \IqitElementorWpHelper::__('Z-index', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Z-index', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'min' => 0,
                 'default' => '',
@@ -451,7 +451,7 @@ class Element_Column extends Element_Base
         $this->add_control(
             'section_responsive',
             [
-                'label' => \IqitElementorWpHelper::__('Responsive', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Responsive', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_ADVANCED,
             ]
@@ -459,13 +459,13 @@ class Element_Column extends Element_Base
 
         $responsive_points = [
             'screen_sm' => [
-                'title' => \IqitElementorWpHelper::__('Mobile Width', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Mobile Width', 'elementor'),
                 'class_prefix' => 'elementor-sm-',
                 'classes' => '',
                 'description' => '',
             ],
             'screen_md' => [
-                'title' => \IqitElementorWpHelper::__('Tablet Width', 'elementor'),
+                'title' => \IqitElementorTranslater::get()->l('Tablet Width', 'elementor'),
                 'class_prefix' => 'elementor-md-',
                 'classes' => '',
                 'description' => '',
@@ -481,8 +481,8 @@ class Element_Column extends Element_Base
                     'section' => 'section_responsive',
                     'default' => 'default',
                     'options' => [
-                        'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                        'custom' => \IqitElementorWpHelper::__('Custom', 'elementor'),
+                        'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                        'custom' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
                     ],
                     'tab' => self::TAB_ADVANCED,
                     'description' => $point_data['description'],
@@ -493,7 +493,7 @@ class Element_Column extends Element_Base
             $this->add_control(
                 $point_name . '_width',
                 [
-                    'label' => \IqitElementorWpHelper::__('Column Width', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Column Width', 'elementor'),
                     'type' => Controls_Manager::SELECT,
                     'section' => 'section_responsive',
                     'options' => [
@@ -536,26 +536,26 @@ class Element_Column extends Element_Base
             <div class="elementor-editor-element-settings elementor-editor-column-settings">
                 <ul class="elementor-editor-element-settings-list elementor-editor-column-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-trigger">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Drag Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Column', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Drag Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Column', 'elementor'); ?></span>
                             <i class="fa fa-columns"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Duplicate Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Duplicate', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Duplicate Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-add">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Add New Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Add', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Add New Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
                             <i class="fa fa-plus"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorWpHelper::_e('Remove Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorWpHelper::_e('Remove', 'elementor'); ?></span>
+                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Remove Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
                             <i class="fa fa-times"></i>
                         </a>
                     </li>

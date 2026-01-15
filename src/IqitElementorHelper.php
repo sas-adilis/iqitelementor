@@ -16,33 +16,13 @@ use PrestaShop\PrestaShop\Adapter\Presenter\Product\ProductListingPresenter;
 use PrestaShop\PrestaShop\Adapter\Product\PriceFormatter;
 use PrestaShop\PrestaShop\Adapter\Product\ProductColorsRetriever;
 
-class IqitElementorWpHelper
+class IqitElementorHelper
 {
     public static $WIDGETS_INSTANCES = [];
 
-    public static function _e($text, $domain = 'default')
+    public static function esc_attr($text): string
     {
-        echo self::translate($text);
-    }
-
-    public static function __($text, $domain = 'default')
-    {
-        return self::translate($text);
-    }
-
-    public static function _x($text, $context, $domain = 'default')
-    {
-        return self::translate($text);
-    }
-
-    public static function esc_attr_e($text, $domain = 'default')
-    {
-        return self::translate($text);
-    }
-
-    private static function translate($text, $domain = 'default')
-    {
-        return $text;
+        return Tools::safeOutput($text);
     }
 
     public static function getIqitElementorWidgets()
@@ -113,19 +93,14 @@ class IqitElementorWpHelper
         return self::$WIDGETS_INSTANCES[$name];
     }
 
-    public static function esc_attr($text)
-    {
-        return Tools::safeOutput($text);
-    }
-
-    public static function wp_parse_args($args, $defaults = '')
+    public static function parse_args($args, $defaults = ''): array
     {
         if (is_object($args)) {
             $r = get_object_vars($args);
         } elseif (is_array($args)) {
             $r = &$args;
         } else {
-            IqitElementorWpHelper::wp_parse_str($args, $r);
+            IqitElementorHelper::parse_str($args, $r);
         }
 
         if (is_array($defaults)) {
@@ -135,11 +110,11 @@ class IqitElementorWpHelper
         return $r;
     }
 
-    public static function wp_parse_str($string, &$array)
+    public static function parse_str($string, &$array)
     {
         parse_str($string, $array);
         if (get_magic_quotes_gpc()) {
-            $array = IqitElementorWpHelper::stripslashes_deep($array);
+            $array = IqitElementorHelper::stripslashes_deep($array);
         }
 
         return $array;
@@ -147,19 +122,19 @@ class IqitElementorWpHelper
 
     public static function stripslashes_deep($value)
     {
-        return IqitElementorWpHelper::map_deep($value, 'stripslashes_from_strings_only');
+        return IqitElementorHelper::map_deep($value, 'stripslashes_from_strings_only');
     }
 
     public static function map_deep($value, $callback)
     {
         if (is_array($value)) {
             foreach ($value as $index => $item) {
-                $value[$index] = IqitElementorWpHelper::map_deep($item, $callback);
+                $value[$index] = IqitElementorHelper::map_deep($item, $callback);
             }
         } elseif (is_object($value)) {
             $object_vars = get_object_vars($value);
             foreach ($object_vars as $property_name => $property_value) {
-                $value->$property_name = IqitElementorWpHelper::map_deep($property_value, $callback);
+                $value->$property_name = IqitElementorHelper::map_deep($property_value, $callback);
             }
         } else {
             $value = call_user_func($callback, $value);
@@ -168,7 +143,7 @@ class IqitElementorWpHelper
         return $value;
     }
 
-    public static function wp_send_json_success($data = null)
+    public static function send_json_success($data = null)
     {
         @header('Content-Type: application/json; charset=utf-8');
         $response = ['success' => true];
@@ -183,7 +158,7 @@ class IqitElementorWpHelper
         return abs(intval($maybeint));
     }
 
-    public static function is_rtl()
+    public static function is_rtl(): bool
     {
         if (Context::getContext()->language->is_rtl) {
             return true;
@@ -204,12 +179,7 @@ class IqitElementorWpHelper
 
     public static function get_option($option, $default = false)
     {
-        $value = Configuration::get('iqitelementor_' . $option);
-
-        if ($value == '') {
-            return $default;
-        } else {
-        }
+        return Configuration::get('iqitelementor_' . $option, null, null, null, $default);
     }
 
     public static function getImage($image = '')
@@ -218,7 +188,6 @@ class IqitElementorWpHelper
             return $image;
         } else {
             $http = Tools::getCurrentUrlProtocolPrefix();
-
             return $http . Tools::getMediaServer($image) . $image;
         }
     }

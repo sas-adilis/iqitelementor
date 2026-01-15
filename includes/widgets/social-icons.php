@@ -15,7 +15,7 @@ class Widget_Social_Icons extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Social Icons', 'elementor');
+        return \IqitElementorTranslater::get()->l('Social Icons', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'section_social_icon',
             [
-                'label' => \IqitElementorWpHelper::__('Social Icons', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Social Icons', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -36,7 +36,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'social_icon_list',
             [
-                'label' => \IqitElementorWpHelper::__('Social Icons', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Social Icons', 'elementor'),
                 'type' => Controls_Manager::REPEATER,
                 'default' => [
                     [
@@ -53,7 +53,7 @@ class Widget_Social_Icons extends Widget_Base
                 'fields' => [
                     [
                         'name' => 'social',
-                        'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                         'type' => Controls_Manager::ICON,
                         'label_block' => true,
                         'default' => 'fa fa-wordpress',
@@ -88,14 +88,14 @@ class Widget_Social_Icons extends Widget_Base
                     ],
                     [
                         'name' => 'link',
-                        'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                         'type' => Controls_Manager::URL,
                         'label_block' => true,
                         'default' => [
                             'url' => '',
                             'is_external' => 'true',
                         ],
-                        'placeholder' => \IqitElementorWpHelper::__('http://your-link.com', 'elementor'),
+                        'placeholder' => \IqitElementorTranslater::get()->l('http://your-link.com', 'elementor'),
                     ],
                 ],
                 'title_field' => 'social',
@@ -105,14 +105,14 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'shape',
             [
-                'label' => \IqitElementorWpHelper::__('Shape', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Shape', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_social_icon',
                 'default' => 'rounded',
                 'options' => [
-                    'rounded' => \IqitElementorWpHelper::__('Rounded', 'elementor'),
-                    'square' => \IqitElementorWpHelper::__('Square', 'elementor'),
-                    'circle' => \IqitElementorWpHelper::__('Circle', 'elementor'),
+                    'rounded' => \IqitElementorTranslater::get()->l('Rounded', 'elementor'),
+                    'square' => \IqitElementorTranslater::get()->l('Square', 'elementor'),
+                    'circle' => \IqitElementorTranslater::get()->l('Circle', 'elementor'),
                 ],
                 'prefix_class' => 'elementor-shape-',
             ]
@@ -121,20 +121,20 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'section' => 'section_social_icon',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -148,7 +148,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_icon',
@@ -158,7 +158,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'section_social_style',
             [
-                'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -167,14 +167,14 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'icon_color',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
                 'default' => 'default',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Official Color', 'elementor'),
-                    'custom' => \IqitElementorWpHelper::__('Custom', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Official Color', 'elementor'),
+                    'custom' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
                 ],
             ]
         );
@@ -182,7 +182,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'icon_primary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
@@ -198,7 +198,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'icon_secondary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
@@ -212,7 +212,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'icon_size',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
@@ -231,7 +231,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'icon_padding',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Padding', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
@@ -249,12 +249,12 @@ class Widget_Social_Icons extends Widget_Base
             ]
         );
 
-        $icon_spacing = \IqitElementorWpHelper::is_rtl() ? 'margin-left: {{SIZE}}{{UNIT}};' : 'margin-right: {{SIZE}}{{UNIT}};';
+        $icon_spacing = \IqitElementorHelper::is_rtl() ? 'margin-left: {{SIZE}}{{UNIT}};' : 'margin-right: {{SIZE}}{{UNIT}};';
 
         $this->add_control(
             'icon_spacing',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Spacing', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Spacing', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_social_style',
@@ -283,7 +283,7 @@ class Widget_Social_Icons extends Widget_Base
         $this->add_control(
             'border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_STYLE,
@@ -303,7 +303,7 @@ class Widget_Social_Icons extends Widget_Base
                 $social = str_replace('fa-brands fa-', '', $item['social']);
                 $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
                 ?>
-                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo \IqitElementorWpHelper::esc_attr($social); ?>" href="<?php echo \IqitElementorWpHelper::esc_attr($item['link']['url']); ?>"<?php echo $target; ?>>
+                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo \IqitElementorHelper::esc_attr($social); ?>" href="<?php echo \IqitElementorHelper::esc_attr($item['link']['url']); ?>"<?php echo $target; ?>>
                     <i class="<?php echo $item['social']; ?>"></i>
                 </a>
             <?php } ?>

@@ -15,7 +15,7 @@ class Widget_Icon extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Icon', 'elementor');
+        return \IqitElementorTranslater::get()->l('Icon', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'section_icon',
             [
-                'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -36,13 +36,13 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_icon',
                 'options' => [
-                    'default' => \IqitElementorWpHelper::__('Default', 'elementor'),
-                    'stacked' => \IqitElementorWpHelper::__('Stacked', 'elementor'),
-                    'framed' => \IqitElementorWpHelper::__('Framed', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    'stacked' => \IqitElementorTranslater::get()->l('Stacked', 'elementor'),
+                    'framed' => \IqitElementorTranslater::get()->l('Framed', 'elementor'),
                 ],
                 'default' => 'default',
                 'prefix_class' => 'elementor-view-',
@@ -52,7 +52,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'icon',
             [
-                'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                 'type' => Controls_Manager::ICON,
                 'label_block' => true,
                 'default' => 'fa fa-star',
@@ -63,12 +63,12 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'shape',
             [
-                'label' => \IqitElementorWpHelper::__('Shape', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Shape', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_icon',
                 'options' => [
-                    'circle' => \IqitElementorWpHelper::__('Circle', 'elementor'),
-                    'square' => \IqitElementorWpHelper::__('Square', 'elementor'),
+                    'circle' => \IqitElementorTranslater::get()->l('Circle', 'elementor'),
+                    'square' => \IqitElementorTranslater::get()->l('Square', 'elementor'),
                 ],
                 'default' => 'circle',
                 'condition' => [
@@ -81,7 +81,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'link',
             [
-                'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Link', 'elementor'),
                 'type' => Controls_Manager::URL,
                 'placeholder' => 'http://your-link.com',
                 'section' => 'section_icon',
@@ -91,20 +91,20 @@ class Widget_Icon extends Widget_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'section' => 'section_icon',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -118,7 +118,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'section_style_icon',
             [
-                'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -127,7 +127,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'primary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Primary Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Primary Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_icon',
@@ -146,7 +146,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'secondary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Secondary Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Secondary Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_icon',
@@ -164,7 +164,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'size',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Size', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Size', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'range' => [
                     'px' => [
@@ -183,7 +183,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'icon_padding',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Padding', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_icon',
@@ -208,7 +208,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'rotate',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Rotate', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Rotate', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 0,
@@ -225,7 +225,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'border_width',
             [
-                'label' => \IqitElementorWpHelper::__('Border Width', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Width', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_icon',
@@ -241,7 +241,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_STYLE,
@@ -258,7 +258,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'section_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Icon Hover', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Icon Hover', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -267,7 +267,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'hover_primary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Primary Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Primary Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_hover',
@@ -282,7 +282,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'hover_secondary_color',
             [
-                'label' => \IqitElementorWpHelper::__('Secondary Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Secondary Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_hover',
@@ -300,7 +300,7 @@ class Widget_Icon extends Widget_Base
         $this->add_control(
             'hover_animation',
             [
-                'label' => \IqitElementorWpHelper::__('Animation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation', 'elementor'),
                 'type' => Controls_Manager::HOVER_ANIMATION,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_hover',

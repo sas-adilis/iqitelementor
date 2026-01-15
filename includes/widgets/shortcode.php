@@ -24,7 +24,7 @@ class Widget_Shortcode extends Widget_Base
     public function get_title()
     {
         // Remplace par ton helper de traduction si tu en as un ($this->l(), etc.)
-        return \IqitElementorWpHelper::__('Shortcode');
+        return \IqitElementorTranslater::get()->l('Shortcode');
     }
 
     /**
@@ -53,14 +53,14 @@ class Widget_Shortcode extends Widget_Base
         $this->start_controls_section(
             'section_shortcode',
             [
-                'label' => \IqitElementorWpHelper::__('Shortcode'),
+                'label' => \IqitElementorTranslater::get()->l('Shortcode'),
             ]
         );
 
         $this->add_control(
             'shortcode',
             [
-                'label' => \IqitElementorWpHelper::__('Enter your shortcode'),
+                'label' => \IqitElementorTranslater::get()->l('Enter your shortcode'),
                 'type' => Controls_Manager::TEXTAREA, // ou Controls_Manager selon ta version
                 'dynamic' => [
                     'active' => true,

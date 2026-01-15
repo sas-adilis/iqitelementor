@@ -18,7 +18,7 @@ class Widget_Testimonial extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Testimonial', 'elementor');
+        return \IqitElementorTranslater::get()->l('Testimonial', 'elementor');
     }
 
     public function get_icon(): string
@@ -33,7 +33,7 @@ class Widget_Testimonial extends Widget_Base
         $this->start_controls_section(
             'section_testimonial',
             [
-                'label' => \IqitElementorWpHelper::__('Testimonial', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Testimonial', 'elementor'),
             ]
         );
 
@@ -46,27 +46,27 @@ class Widget_Testimonial extends Widget_Base
                 'fields' => [
                     [
                         'name' => 'name',
-                        'label' => \IqitElementorWpHelper::__('Name', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Name', 'elementor'),
                         'type' => Controls_Manager::TEXT,
                         'default' => 'John Doe',
                     ],
                     [
-                        'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                         'type' => Controls_Manager::WYSIWYG,
                         'rows' => '10',
                         'name' => 'content',
                         'default' => 'Click edit button to change this text. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.',
                     ],
                     [
-                        'label' => \IqitElementorWpHelper::__('Note', 'elementor'),
+                        'label' => \IqitElementorTranslater::get()->l('Note', 'elementor'),
                         'type' => Controls_Manager::SELECT,
                         'name' => 'note',
                         'options' => [
-                            '5' => '5 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
-                            '4' => '4 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
-                            '3' => '3 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
-                            '2' => '2 ' . \IqitElementorWpHelper::__('Stars', 'elementor'),
-                            '1' => '1 ' . \IqitElementorWpHelper::__('Star', 'elementor'),
+                            '5' => '5 ' . \IqitElementorTranslater::get()->l('Stars', 'elementor'),
+                            '4' => '4 ' . \IqitElementorTranslater::get()->l('Stars', 'elementor'),
+                            '3' => '3 ' . \IqitElementorTranslater::get()->l('Stars', 'elementor'),
+                            '2' => '2 ' . \IqitElementorTranslater::get()->l('Stars', 'elementor'),
+                            '1' => '1 ' . \IqitElementorTranslater::get()->l('Star', 'elementor'),
                         ],
                         'default' => '5',
                     ]
@@ -78,10 +78,10 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'testimonial_notes',
             [
-                'label' => \IqitElementorWpHelper::__('Show Notes', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Show Notes', 'elementor'),
                 'type' => Controls_Manager::SWITCHER,
-                'label_on' => \IqitElementorWpHelper::__('Show', 'elementor'),
-                'label_off' => \IqitElementorWpHelper::__('Hide', 'elementor'),
+                'label_on' => \IqitElementorTranslater::get()->l('Show', 'elementor'),
+                'label_off' => \IqitElementorTranslater::get()->l('Hide', 'elementor'),
                 'return_value' => 'yes',
                 'default' => 'yes',
             ]
@@ -90,21 +90,21 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'testimonial_alignment',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'default' => 'center',
                 'section' => 'section_additional_options',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -116,7 +116,7 @@ class Widget_Testimonial extends Widget_Base
         $this->start_controls_section(
             'section_carousel_options',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
             ]
         );
 
@@ -128,7 +128,7 @@ class Widget_Testimonial extends Widget_Base
         $this->start_controls_section(
             'section_style_testimonial_box',
             [
-                'label' => \IqitElementorWpHelper::__('Testimonial box', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Testimonial box', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -136,7 +136,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'note_color',
             [
-                'label' => \IqitElementorWpHelper::__('Note Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Note Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
@@ -152,7 +152,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'background_color',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
@@ -169,7 +169,7 @@ class Widget_Testimonial extends Widget_Base
             Group_Control_Border::get_type(),
             [
                 'name' => 'testimonial_border',
-                'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border', 'elementor'),
                 'selector' => '{{WRAPPER}} .elementor-testimonial-wrapper',
             ]
         );
@@ -177,7 +177,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'testimonial_border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'selectors' => [
@@ -189,7 +189,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'testimonial_padding',
             [
-                'label' => \IqitElementorWpHelper::__('Box padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Box padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'separator' => 'before',
@@ -202,7 +202,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'testimonial_margin',
             [
-                'label' => \IqitElementorWpHelper::__('Box Margin', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Box Margin', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
@@ -226,7 +226,7 @@ class Widget_Testimonial extends Widget_Base
         $this->start_controls_section(
             'section_style_content',
             [
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'tab' => self::TAB_STYLE,
             ]
         );
@@ -234,7 +234,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'section_style_content_content',
             [
-                'label' => \IqitElementorWpHelper::__('Content', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
                 'type' => Controls_Manager::HEADING,
             ]
         );
@@ -242,7 +242,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'content_content_color',
             [
-                'label' => \IqitElementorWpHelper::__('Content Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Content Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
@@ -259,7 +259,7 @@ class Widget_Testimonial extends Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'content_typography',
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
                 'scheme' => Scheme_Typography::TYPOGRAPHY_3,
                 'selector' => '{{WRAPPER}} .elementor-testimonial-content',
             ]
@@ -268,7 +268,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'section_style_content_name',
             [
-                'label' => \IqitElementorWpHelper::__('Name', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Name', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'separator' => 'before',
             ]
@@ -277,7 +277,7 @@ class Widget_Testimonial extends Widget_Base
         $this->add_control(
             'name_text_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'scheme' => [
                     'type' => Scheme_Color::get_type(),
@@ -294,7 +294,7 @@ class Widget_Testimonial extends Widget_Base
             Group_Control_Typography::get_type(),
             [
                 'name' => 'name_typography',
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
                 'scheme' => Scheme_Typography::TYPOGRAPHY_1,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_testimonial_name',
@@ -307,7 +307,7 @@ class Widget_Testimonial extends Widget_Base
         $this->start_controls_section(
             'section_carousel_styles',
             [
-                'label' => \IqitElementorWpHelper::__('Carousel', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Carousel', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE
             ]
@@ -329,12 +329,12 @@ class Widget_Testimonial extends Widget_Base
         $show_arrows = in_array($instance['navigation'], ['arrows', 'both']);
 
         $swiper_options = [
-            'slidesToShow' => \IqitElementorWpHelper::absint($instance['slides_to_show']),
-            'autoplaySpeed' => \IqitElementorWpHelper::absint($instance['autoplay_speed']),
+            'slidesToShow' => \IqitElementorHelper::absint($instance['slides_to_show']),
+            'autoplaySpeed' => \IqitElementorHelper::absint($instance['autoplay_speed']),
             'autoplay' => ('yes' === $instance['autoplay']),
             'loop' => ('yes' === $instance['infinite']),
             'disableOnInteraction' => ('yes' === $instance['pause_on_hover']),
-            'speed' => \IqitElementorWpHelper::absint($instance['speed']),
+            'speed' => \IqitElementorHelper::absint($instance['speed']),
             'arrows' => $show_arrows,
             'dots' => $show_dots,
             'fade' => ($is_slideshow && ('fade' === $instance['effect']) ? true : false),
@@ -343,8 +343,8 @@ class Widget_Testimonial extends Widget_Base
         $carousel_classes = ['elementor-testimonial-carousel'];
 
         $cls_fix_classes[] = 'swiper-cls-fix';
-        $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['slides_to_show']);
-        $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . ((1 == \IqitElementorWpHelper::absint($instance['slides_to_show'])) ? 1 : 2);
+        $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['slides_to_show']);
+        $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . ((1 == \IqitElementorHelper::absint($instance['slides_to_show'])) ? 1 : 2);
         $cls_fix_classes[] = 'mobile-swiper-cls-fix-1';
 
         $testimonial_alignment = $instance['testimonial_alignment'] ? ' elementor-testimonial-text-align-' . $instance['testimonial_alignment'] : '';
@@ -361,8 +361,8 @@ class Widget_Testimonial extends Widget_Base
                                 $has_image = false;
                                 if ('' !== $item['image']['url']) {
                                     $image_url = $item['image']['url'];
-                                    $image_width = $item['image']['width'] ? 'width="' . \IqitElementorWpHelper::absint($item['image']['width']) . '"' : '';
-                                    $image_height = $item['image']['height'] ? 'height="' . \IqitElementorWpHelper::absint($item['image']['height']) . '"' : '';
+                                    $image_width = $item['image']['width'] ? 'width="' . \IqitElementorHelper::absint($item['image']['width']) . '"' : '';
+                                    $image_height = $item['image']['height'] ? 'height="' . \IqitElementorHelper::absint($item['image']['height']) . '"' : '';
                                     $has_image = ' elementor-has-image';
                                 }
                                 ?>
@@ -374,7 +374,7 @@ class Widget_Testimonial extends Widget_Base
                                             echo $has_image;
                                         } ?><?php echo $testimonial_image_position; ?>">
                                             <div class="elementor-testimonial-image">
-                                                <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
+                                                <img src="<?php echo \IqitElementorHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
                                             </div>
                                         </div>
                                     <?php } ?>
@@ -391,7 +391,7 @@ class Widget_Testimonial extends Widget_Base
                                         <div class="elementor-testimonial-meta-inner">
                                             <?php if (isset($image_url) && $instance['testimonial_image_position'] == 'aside') { ?>
                                                 <div class="elementor-testimonial-image">
-                                                    <img src="<?php echo \IqitElementorWpHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorWpHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
+                                                    <img src="<?php echo \IqitElementorHelper::esc_attr($image_url); ?>" <?php echo $image_width . ' ' . $image_height; ?> alt="<?php echo \IqitElementorHelper::esc_attr(Control_Media::get_image_alt($item['image'])); ?>"/>
                                                 </div>
                                             <?php } ?>
 

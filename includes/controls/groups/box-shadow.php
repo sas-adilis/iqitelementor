@@ -17,16 +17,16 @@ class Group_Control_Box_Shadow extends Group_Control_Base
         $controls = [];
 
         $controls['box_shadow_type'] = [
-            'label' => \IqitElementorWpHelper::_x('Box Shadow', 'Box Shadow Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Box Shadow'),
             'type' => Controls_Manager::SWITCHER,
             'options' => [
-                '' => \IqitElementorWpHelper::__('No', 'elementor'),
-                'outset' => \IqitElementorWpHelper::_x('Yes', 'Box Shadow Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('No'),
+                'outset' => \IqitElementorTranslater::get()->l('Yes'),
             ],
         ];
 
         $controls['box_shadow'] = [
-            'label' => \IqitElementorWpHelper::_x('Box Shadow', 'Box Shadow Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Box Shadow'),
             'type' => Controls_Manager::BOX_SHADOW,
             'selectors' => [
                 $args['selector'] => 'box-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{SPREAD}}px {{COLOR}};',

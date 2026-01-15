@@ -22,14 +22,14 @@ class Group_Control_Border extends Group_Control_Base
         }
 
         $controls['border'] = [
-            'label' => \IqitElementorWpHelper::_x('Border Type', 'Border Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Border Type', 'Border Control', 'elementor'),
             'type' => Controls_Manager::SELECT,
             'options' => [
-                '' => \IqitElementorWpHelper::__('None', 'elementor'),
-                'solid' => \IqitElementorWpHelper::_x('Solid', 'Border Control', 'elementor'),
-                'double' => \IqitElementorWpHelper::_x('Double', 'Border Control', 'elementor'),
-                'dotted' => \IqitElementorWpHelper::_x('Dotted', 'Border Control', 'elementor'),
-                'dashed' => \IqitElementorWpHelper::_x('Dashed', 'Border Control', 'elementor'),
+                '' => \IqitElementorTranslater::get()->l('None', 'elementor'),
+                'solid' => \IqitElementorTranslater::get()->l('Solid', 'Border Control', 'elementor'),
+                'double' => \IqitElementorTranslater::get()->l('Double', 'Border Control', 'elementor'),
+                'dotted' => \IqitElementorTranslater::get()->l('Dotted', 'Border Control', 'elementor'),
+                'dashed' => \IqitElementorTranslater::get()->l('Dashed', 'Border Control', 'elementor'),
             ],
             'selectors' => [
                 $args['selector'] => $property . '-style: {{VALUE}};',
@@ -41,7 +41,7 @@ class Group_Control_Border extends Group_Control_Base
         }
 
         $controls['color'] = [
-            'label' => \IqitElementorWpHelper::_x('Border color', 'Border Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Border color', 'Border Control', 'elementor'),
             'type' => Controls_Manager::COLOR,
             'default' => '',
             'tab' => $args['tab'],
@@ -54,7 +54,7 @@ class Group_Control_Border extends Group_Control_Base
         ];
 
         $controls['width'] = [
-            'label' => \IqitElementorWpHelper::_x('Border width', 'Border Control', 'elementor'),
+            'label' => \IqitElementorTranslater::get()->l('Border width', 'Border Control', 'elementor'),
             'type' => Controls_Manager::DIMENSIONS,
             'responsive' => true,
             'selectors' => [

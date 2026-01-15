@@ -161,12 +161,12 @@ class Controls_Manager
     public function register_control($control_id, $class_name)
     {
         if (!class_exists($class_name)) {
-            return \IqitElementorWpHelper::triggerError(sprintf('element_class_name_not_exists: %s', $class_name));
+            return \IqitElementorHelper::triggerError(sprintf('element_class_name_not_exists: %s', $class_name));
         }
         $instance_control = new $class_name();
 
         if (!$instance_control instanceof Control_Base) {
-            return \IqitElementorWpHelper::triggerError('wrong_instance_control');
+            return \IqitElementorHelper::triggerError('wrong_instance_control');
         }
         $this->_controls[$control_id] = $instance_control;
 

@@ -14,7 +14,7 @@ class Widget_Html extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('HTML', 'elementor');
+        return \IqitElementorTranslater::get()->l('HTML', 'elementor');
     }
 
     public function get_icon()
@@ -27,7 +27,7 @@ class Widget_Html extends Widget_Base
         $this->add_control(
             'section_title',
             [
-                'label' => \IqitElementorWpHelper::__('HTML Code', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('HTML Code', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -38,8 +38,8 @@ class Widget_Html extends Widget_Base
                 'label' => '',
                 'type' => Controls_Manager::TEXTAREA,
                 'default' => '',
-                'description' => \IqitElementorWpHelper::__('DO NOT use it for CSS or JS codes. Only clean HTML will work. For more advance code please use "custom tpl" widget', 'elementor'),
-                'placeholder' => \IqitElementorWpHelper::__('Enter your embed code here', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('DO NOT use it for CSS or JS codes. Only clean HTML will work. For more advance code please use "custom tpl" widget', 'elementor'),
+                'placeholder' => \IqitElementorTranslater::get()->l('Enter your embed code here', 'elementor'),
                 'section' => 'section_title',
                 'show_label' => false,
             ]

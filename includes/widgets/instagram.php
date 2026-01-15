@@ -16,7 +16,7 @@ class Widget_Instagram extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Instagram', 'elementor');
+        return \IqitElementorTranslater::get()->l('Instagram', 'elementor');
     }
 
     public function get_icon()
@@ -29,7 +29,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'section_instagram',
             [
-                'label' => \IqitElementorWpHelper::__('Instagram feed', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Instagram feed', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -39,8 +39,8 @@ class Widget_Instagram extends Widget_Base
         } else {
             $context = \Context::getContext();
             $html = '<div class="panel-alert panel-alert-warning">';
-            $html .= \IqitElementorWpHelper::__('Go to', 'elementor') . ' <u><a href="' . $context->link->getAdminLink('AdminIqitElementor') . '" target="_blank">'
-            . \IqitElementorWpHelper::__('backend', 'elementor') . '</a></u> ' . \IqitElementorWpHelper::__('to connect your Instagram account first. Then refresh.', 'elementor');
+            $html .= \IqitElementorTranslater::get()->l('Go to', 'elementor') . ' <u><a href="' . $context->link->getAdminLink('AdminIqitElementor') . '" target="_blank">'
+            . \IqitElementorTranslater::get()->l('backend', 'elementor') . '</a></u> ' . \IqitElementorTranslater::get()->l('to connect your Instagram account first. Then refresh.', 'elementor');
             $html .= '</div>';
         }
 
@@ -54,15 +54,15 @@ class Widget_Instagram extends Widget_Base
         );
 
         $html = '<div class="panel-alert panel-alert-warning">';
-        $html .= \IqitElementorWpHelper::__('For user feed type, best option is to use connection type with access token', 'elementor');
+        $html .= \IqitElementorTranslater::get()->l('For user feed type, best option is to use connection type with access token', 'elementor');
         $html .= '</div>';
 
         $this->add_control(
             'instagram_limit_token',
             [
-                'label' => \IqitElementorWpHelper::__('Limit', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Limit', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
-                'description' => \IqitElementorWpHelper::__('An integer that indicates the amount of photos to be feed. Max 20', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('An integer that indicates the amount of photos to be feed. Max 20', 'elementor'),
                 'min' => 1,
                 'max' => 20,
                 'default' => 10,
@@ -74,13 +74,13 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'instagram_size_token',
             [
-                'label' => \IqitElementorWpHelper::__( 'Images sizes', 'elementor' ),
+                'label' => \IqitElementorTranslater::get()->l( 'Images sizes', 'elementor' ),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_instagram',
                 'options' => [
-                    't' => \IqitElementorWpHelper::__( '150px', 'elementor' ),
-                    'm' => \IqitElementorWpHelper::__( '320px', 'elementor' ),
-                    'l' => \IqitElementorWpHelper::__( '1080px', 'elementor' ),
+                    't' => \IqitElementorTranslater::get()->l( '150px', 'elementor' ),
+                    'm' => \IqitElementorTranslater::get()->l( '320px', 'elementor' ),
+                    'l' => \IqitElementorTranslater::get()->l( '1080px', 'elementor' ),
                 ],
                 'default' => 'm',
                 'condition' => [
@@ -93,7 +93,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'section_instagram_options',
             [
-                'label' => \IqitElementorWpHelper::__('View options', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View options', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -101,12 +101,12 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'instagram_view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'slider' => \IqitElementorWpHelper::__('Slider', 'elementor'),
-                    'grid' => \IqitElementorWpHelper::__('Grid', 'elementor'),
+                    'slider' => \IqitElementorTranslater::get()->l('Slider', 'elementor'),
+                    'grid' => \IqitElementorTranslater::get()->l('Grid', 'elementor'),
                 ],
                 'default' => 'grid',
             ]
@@ -124,7 +124,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_responsive_control(
             'photos_to_show',
             [
-                'label' => \IqitElementorWpHelper::__('Show per line', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Show per line', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => true,
                 'section' => 'section_instagram_options',
@@ -142,7 +142,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_responsive_control(
             'photos_to_show_s',
             [
-                'label' => \IqitElementorWpHelper::__('Show per line', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Show per line', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => true,
                 'section' => 'section_instagram_options',
@@ -157,15 +157,15 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'navigation',
             [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Navigation', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'both',
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'both' => \IqitElementorWpHelper::__('Arrows and Dots', 'elementor'),
-                    'arrows' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
-                    'dots' => \IqitElementorWpHelper::__('Dots', 'elementor'),
-                    'none' => \IqitElementorWpHelper::__('None', 'elementor'),
+                    'both' => \IqitElementorTranslater::get()->l('Arrows and Dots', 'elementor'),
+                    'arrows' => \IqitElementorTranslater::get()->l('Arrows', 'elementor'),
+                    'dots' => \IqitElementorTranslater::get()->l('Dots', 'elementor'),
+                    'none' => \IqitElementorTranslater::get()->l('None', 'elementor'),
                 ],
                 'condition' => [
                     'instagram_view' => 'slider',
@@ -176,13 +176,13 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'autoplay',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
                 'condition' => [
                     'instagram_view' => 'slider',
@@ -192,13 +192,13 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'pause_on_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Pause on Hover', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Pause on Hover', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
                 'condition' => [
                     'instagram_view' => 'slider',
@@ -210,7 +210,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'autoplay_speed',
             [
-                'label' => \IqitElementorWpHelper::__('Autoplay Speed', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Autoplay Speed', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 5000,
                 'section' => 'section_instagram_options',
@@ -224,13 +224,13 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'infinite',
             [
-                'label' => \IqitElementorWpHelper::__('Infinite Loop', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Infinite Loop', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'yes',
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'yes' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'no' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    'no' => \IqitElementorTranslater::get()->l('No', 'elementor'),
                 ],
                 'condition' => [
                     'instagram_view' => 'slider',
@@ -241,13 +241,13 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'effect',
             [
-                'label' => \IqitElementorWpHelper::__('Effect', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Effect', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'slide',
                 'section' => 'section_instagram_options',
                 'options' => [
-                    'slide' => \IqitElementorWpHelper::__('Slide', 'elementor'),
-                    'fade' => \IqitElementorWpHelper::__('Fade', 'elementor'),
+                    'slide' => \IqitElementorTranslater::get()->l('Slide', 'elementor'),
+                    'fade' => \IqitElementorTranslater::get()->l('Fade', 'elementor'),
                 ],
                 'condition' => [
                     'slides_to_show' => '1',
@@ -259,7 +259,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'speed',
             [
-                'label' => \IqitElementorWpHelper::__('Animation Speed', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Animation Speed', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'default' => 500,
                 'section' => 'section_instagram_options',
@@ -273,7 +273,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'section_style',
             [
-                'label' => \IqitElementorWpHelper::__('Instagram photo', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Instagram photo', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
             ]
@@ -282,11 +282,11 @@ class Widget_Instagram extends Widget_Base
         $this->add_responsive_control(
             'instagram_photo_height',
             [
-                'label' => \IqitElementorWpHelper::__('Fixed height', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Fixed height', 'elementor'),
                 'type' => Controls_Manager::TEXT,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
-                'description' => \IqitElementorWpHelper::__('Helpful when you use various aspect ratio for images. To force fixed height use px value, example 200px', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('Helpful when you use various aspect ratio for images. To force fixed height use px value, example 200px', 'elementor'),
                 'default' => '100%',
                 'selectors' => [
                     '{{WRAPPER}} .il-photo__img' => 'height: {{VALUE}}; object-fit: cover;',
@@ -297,7 +297,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'instagram_text_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
@@ -311,7 +311,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'instagram_overlay_color',
             [
-                'label' => \IqitElementorWpHelper::__('Overlay background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Overlay background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style',
@@ -325,7 +325,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'instagram_padding',
             [
-                'label' => \IqitElementorWpHelper::__('Photo padding', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Photo padding', 'elementor'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'tab' => self::TAB_STYLE,
@@ -340,7 +340,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'section_style_navigation',
             [
-                'label' => \IqitElementorWpHelper::__('Navigation', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Navigation', 'elementor'),
                 'type' => Controls_Manager::SECTION,
                 'tab' => self::TAB_STYLE,
                 'condition' => [
@@ -352,7 +352,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'heading_style_arrows',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -366,15 +366,15 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'arrows_position',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'inside',
                 'section' => 'section_style_navigation',
                 'tab' => self::TAB_STYLE,
                 'options' => [
-                    'inside' => \IqitElementorWpHelper::__('Inside', 'elementor'),
-                    'middle' => \IqitElementorWpHelper::__('Middle', 'elementor'),
-                    'above' => \IqitElementorWpHelper::__('Above', 'elementor'),
+                    'inside' => \IqitElementorTranslater::get()->l('Inside', 'elementor'),
+                    'middle' => \IqitElementorTranslater::get()->l('Middle', 'elementor'),
+                    'above' => \IqitElementorTranslater::get()->l('Above', 'elementor'),
                 ],
                 'condition' => [
                     'navigation' => ['arrows', 'both'],
@@ -385,7 +385,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'arrows_position_top',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Top Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Top Position', 'elementor'),
                 'type' => Controls_Manager::NUMBER,
                 'section' => 'section_style_navigation',
                 'tab' => self::TAB_STYLE,
@@ -403,7 +403,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'arrows_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -419,7 +419,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'arrows_bg_color',
             [
-                'label' => \IqitElementorWpHelper::__('Arrows background', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Arrows background', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -435,7 +435,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'heading_style_dots',
             [
-                'label' => \IqitElementorWpHelper::__('Dots', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots', 'elementor'),
                 'type' => Controls_Manager::HEADING,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -449,14 +449,14 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'dots_position',
             [
-                'label' => \IqitElementorWpHelper::__('Dots Position', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots Position', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'default' => 'outside',
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
                 'options' => [
-                    'outside' => \IqitElementorWpHelper::__('Outside', 'elementor'),
-                    'inside' => \IqitElementorWpHelper::__('Inside', 'elementor'),
+                    'outside' => \IqitElementorTranslater::get()->l('Outside', 'elementor'),
+                    'inside' => \IqitElementorTranslater::get()->l('Inside', 'elementor'),
                 ],
                 'condition' => [
                     'navigation' => ['dots', 'both'],
@@ -467,7 +467,7 @@ class Widget_Instagram extends Widget_Base
         $this->add_control(
             'dots_color',
             [
-                'label' => \IqitElementorWpHelper::__('Dots Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Dots Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => 'section_style_navigation',
@@ -491,22 +491,22 @@ class Widget_Instagram extends Widget_Base
             $show_arrows = in_array($instance['navigation'], ['arrows', 'both']);
 
             $swiper_options = [
-                'slidesToShow' => \IqitElementorWpHelper::absint($instance['photos_to_show_s']),
-                'slidesToShowTablet' => \IqitElementorWpHelper::absint($instance['photos_to_show_s_tablet']),
-                'slidesToShowMobile' => \IqitElementorWpHelper::absint($instance['photos_to_show_s_mobile']),
-                'autoplaySpeed' => \IqitElementorWpHelper::absint($instance['autoplay_speed']),
+                'slidesToShow' => \IqitElementorHelper::absint($instance['photos_to_show_s']),
+                'slidesToShowTablet' => \IqitElementorHelper::absint($instance['photos_to_show_s_tablet']),
+                'slidesToShowMobile' => \IqitElementorHelper::absint($instance['photos_to_show_s_mobile']),
+                'autoplaySpeed' => \IqitElementorHelper::absint($instance['autoplay_speed']),
                 'autoplay' => ('yes' === $instance['autoplay']),
                 'loop' => ('yes' === $instance['infinite']),
                 'disableOnInteraction' => ('yes' === $instance['pause_on_hover']),
-                'speed' => \IqitElementorWpHelper::absint($instance['speed']),
+                'speed' => \IqitElementorHelper::absint($instance['speed']),
                 'arrows' => $show_arrows,
                 'dots' => $show_dots,
             ];
 
             $cls_fix_classes[] = 'swiper-cls-fix';
-            $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['photos_to_show_s']);
-            $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['photos_to_show_s_tablet']);
-            $cls_fix_classes[] = 'mobile-swiper-cls-fix-' . \IqitElementorWpHelper::absint($instance['photos_to_show_s_mobile']);
+            $cls_fix_classes[] = 'desktop-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['photos_to_show_s']);
+            $cls_fix_classes[] = 'tablet-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['photos_to_show_s_tablet']);
+            $cls_fix_classes[] = 'mobile-swiper-cls-fix-' . \IqitElementorHelper::absint($instance['photos_to_show_s_mobile']);
 
             $carousel_classes = ['elementor-instagram-carousel'];
 

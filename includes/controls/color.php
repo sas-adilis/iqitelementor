@@ -37,7 +37,7 @@ class Control_Color extends Control_Base
 							<# } #>
 			</label>
 			<div class="elementor-control-input-wrapper">
-				<input data-setting="{{ name }}" class="color-picker-hex" type="text" maxlength="7" placeholder="<?php \IqitElementorWpHelper::esc_attr_e('Hex Value', 'elementor'); ?>" {{ defaultValue }}{{ dataAlpha }} />
+				<input data-setting="{{ name }}" class="color-picker-hex" type="text" maxlength="7" placeholder="<?php \IqitElementorHelper::esc_attr('Hex Value', 'elementor'); ?>" {{ defaultValue }}{{ dataAlpha }} />
 			</div>
 		</div>
 		<?php

@@ -18,20 +18,20 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_type',
                 [
-                    'label' => \IqitElementorWpHelper::__('Type', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Type'),
                     'type' => Controls_Manager::SELECT,
                     'default' => 'secondary',
                     'section' => $sectionId,
                     'condition' => $condition,
                     'options' => [
-                        'primary' => \IqitElementorWpHelper::__('Primary', 'elementor'),
-                        'secondary' => \IqitElementorWpHelper::__('Secondary', 'elementor'),
-                        'info' => \IqitElementorWpHelper::__('Info', 'elementor'),
-                        'success' => \IqitElementorWpHelper::__('Success', 'elementor'),
-                        'warning' => \IqitElementorWpHelper::__('Warning', 'elementor'),
-                        'danger' => \IqitElementorWpHelper::__('Danger', 'elementor'),
-                        'light' => \IqitElementorWpHelper::__('Light', 'elementor'),
-                        'dark' => \IqitElementorWpHelper::__('Dark', 'elementor'),
+                        'primary' => \IqitElementorTranslater::get()->l('Primary'),
+                        'secondary' => \IqitElementorTranslater::get()->l('Secondary'),
+                        'info' => \IqitElementorTranslater::get()->l('Info'),
+                        'success' => \IqitElementorTranslater::get()->l('Success'),
+                        'warning' => \IqitElementorTranslater::get()->l('Warning'),
+                        'danger' => \IqitElementorTranslater::get()->l('Danger'),
+                        'light' => \IqitElementorTranslater::get()->l('Light'),
+                        'dark' => \IqitElementorTranslater::get()->l('Dark'),
                     ],
                 ]
             );
@@ -42,11 +42,11 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_outline',
                 [
-                    'label' => \IqitElementorWpHelper::__('Outline mode', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Outline mode'),
                     'type' => Controls_Manager::SWITCHER,
                     'default' => '',
-                    'label_on' => \IqitElementorWpHelper::__('Yes', 'elementor'),
-                    'label_off' => \IqitElementorWpHelper::__('No', 'elementor'),
+                    'label_on' => \IqitElementorTranslater::get()->l('Yes'),
+                    'label_off' => \IqitElementorTranslater::get()->l('No'),
                     'force_render' => true,
                     'hide_in_inner' => true,
                     'section' => $sectionId,
@@ -60,10 +60,10 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_text',
                 [
-                    'label' => \IqitElementorWpHelper::__('Text', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Text'),
                     'type' => Controls_Manager::TEXT,
-                    'default' => \IqitElementorWpHelper::__('Click me', 'elementor'),
-                    'placeholder' => \IqitElementorWpHelper::__('Click me', 'elementor'),
+                    'default' => \IqitElementorTranslater::get()->l('Click me'),
+                    'placeholder' => \IqitElementorTranslater::get()->l('Click me'),
                     'section' => $sectionId,
                     'condition' => $condition,
                     'save_empty_value' => true,
@@ -75,7 +75,7 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_link',
                 [
-                    'label' => \IqitElementorWpHelper::__('Link', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Link'),
                     'type' => Controls_Manager::URL,
                     'placeholder' => 'http://your-link.com',
                     'default' => [
@@ -91,23 +91,23 @@ trait IqitElementorButtonTrait
             $this->add_responsive_control(
                 'button_align',
                 [
-                    'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Alignment'),
                     'type' => Controls_Manager::CHOOSE,
                     'options' => [
                         'left' => [
-                            'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                            'title' => \IqitElementorTranslater::get()->l('Left'),
                             'icon' => 'fa fa-align-left',
                         ],
                         'center' => [
-                            'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                            'title' => \IqitElementorTranslater::get()->l('Center'),
                             'icon' => 'fa fa-align-center',
                         ],
                         'right' => [
-                            'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                            'title' => \IqitElementorTranslater::get()->l('Right'),
                             'icon' => 'fa fa-align-right',
                         ],
                         'justify' => [
-                            'title' => \IqitElementorWpHelper::__('Justified', 'elementor'),
+                            'title' => \IqitElementorTranslater::get()->l('Justified'),
                             'icon' => 'fa fa-align-justify',
                         ],
                     ],
@@ -124,15 +124,15 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_size',
                 [
-                    'label' => \IqitElementorWpHelper::__('Size', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Size'),
                     'type' => Controls_Manager::CHOOSE,
                     'default' => 'default',
                     'options' => [
-                        'xs' => ['title' => \IqitElementorWpHelper::__('XS', 'elementor')],
-                        'sm' => ['title' => \IqitElementorWpHelper::__('SM', 'elementor')],
-                        'default' => ['title' => \IqitElementorWpHelper::__('M', 'elementor')],
-                        'lg' => ['title' => \IqitElementorWpHelper::__('L', 'elementor')],
-                        'xl' => ['title' => \IqitElementorWpHelper::__('XL', 'elementor')],
+                        'xs' => ['title' => \IqitElementorTranslater::get()->l('XS')],
+                        'sm' => ['title' => \IqitElementorTranslater::get()->l('SM')],
+                        'default' => ['title' => \IqitElementorTranslater::get()->l('M')],
+                        'lg' => ['title' => \IqitElementorTranslater::get()->l('L')],
+                        'xl' => ['title' => \IqitElementorTranslater::get()->l('XL')],
                     ],
                     'label_block' => false,
                     'section' => $sectionId,
@@ -145,7 +145,7 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_icon',
                 [
-                    'label' => \IqitElementorWpHelper::__('Icon', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Icon'),
                     'type' => Controls_Manager::ICON,
                     'label_block' => true,
                     'default' => '',
@@ -158,12 +158,12 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_icon_align',
                 [
-                    'label' => \IqitElementorWpHelper::__('Icon Position', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Icon Position'),
                     'type' => Controls_Manager::SELECT,
                     'default' => 'left',
                     'options' => [
-                        'left' => \IqitElementorWpHelper::__('Before', 'elementor'),
-                        'right' => \IqitElementorWpHelper::__('After', 'elementor'),
+                        'left' => \IqitElementorTranslater::get()->l('Before'),
+                        'right' => \IqitElementorTranslater::get()->l('After'),
                     ],
                     'condition' => [
                         'icon!' => '',
@@ -177,7 +177,7 @@ trait IqitElementorButtonTrait
             $this->add_control(
                 'button_icon_indent',
                 [
-                    'label' => \IqitElementorWpHelper::__('Icon Spacing', 'elementor'),
+                    'label' => \IqitElementorTranslater::get()->l('Icon Spacing'),
                     'type' => Controls_Manager::SLIDER,
                     'range' => [
                         'px' => [
@@ -203,7 +203,7 @@ trait IqitElementorButtonTrait
             Group_Control_Typography::get_type(),
             [
                 'name' => 'button_typography',
-                'label' => \IqitElementorWpHelper::__('Typography', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Typography'),
                 'scheme' => Scheme_Typography::TYPOGRAPHY_4,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
@@ -216,7 +216,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_border_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border'),
                 'type' => Controls_Manager::HEADING,
                 'section' => $sectionId,
                 'condition' => $condition,
@@ -229,7 +229,7 @@ trait IqitElementorButtonTrait
             Group_Control_Border::get_type(),
             [
                 'name' => 'button_border',
-                'label' => \IqitElementorWpHelper::__('Border', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border'),
                 'tab' => self::TAB_STYLE,
                 'placeholder' => '1px',
                 'default' => '1px',
@@ -242,7 +242,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_border_radius',
             [
-                'label' => \IqitElementorWpHelper::__('Border Radius', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Radius'),
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => ['px', '%'],
                 'tab' => self::TAB_STYLE,
@@ -257,7 +257,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_colors_heading',
             [
-                'label' => \IqitElementorWpHelper::__('Colors', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Colors'),
                 'type' => Controls_Manager::HEADING,
                 'section' => $sectionId,
                 'condition' => $condition,
@@ -272,7 +272,7 @@ trait IqitElementorButtonTrait
             'condition' => $condition,
         ]);
         $this->start_controls_tab('button_colors_normal', [
-            'label' => \IqitElementorWpHelper::__('Normal'),
+            'label' => \IqitElementorTranslater::get()->l('Normal'),
             'tab' => self::TAB_STYLE,
             'section' => $sectionId,
             'condition' => $condition,
@@ -281,7 +281,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_text_color',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
@@ -296,7 +296,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_background_color',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
@@ -313,7 +313,7 @@ trait IqitElementorButtonTrait
 
         $this->end_controls_tab();
         $this->start_controls_tab('button_colors_hover', [
-            'label' => \IqitElementorWpHelper::__('Hover'),
+            'label' => \IqitElementorTranslater::get()->l('Hover'),
             'tab' => self::TAB_STYLE,
             'section' => $sectionId,
             'condition' => $condition,
@@ -322,7 +322,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_text_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Text Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Text Color'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
@@ -336,7 +336,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_background_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Background Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Background Color'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
@@ -350,7 +350,7 @@ trait IqitElementorButtonTrait
         $this->add_control(
             'button_border_color_hover',
             [
-                'label' => \IqitElementorWpHelper::__('Border Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Border Color'),
                 'type' => Controls_Manager::COLOR,
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,

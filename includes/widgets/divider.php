@@ -15,7 +15,7 @@ class Widget_Divider extends Widget_Base
 
     public function get_title()
     {
-        return \IqitElementorWpHelper::__('Divider', 'elementor');
+        return \IqitElementorTranslater::get()->l('Divider', 'elementor');
     }
 
     public function get_icon()
@@ -28,7 +28,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'section_divider',
             [
-                'label' => \IqitElementorWpHelper::__('Divider', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Divider', 'elementor'),
                 'type' => Controls_Manager::SECTION,
             ]
         );
@@ -36,14 +36,14 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'style',
             [
-                'label' => \IqitElementorWpHelper::__('Style', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Style', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'section' => 'section_divider',
                 'options' => [
-                    'solid' => \IqitElementorWpHelper::__('Solid', 'elementor'),
-                    'double' => \IqitElementorWpHelper::__('Double', 'elementor'),
-                    'dotted' => \IqitElementorWpHelper::__('Dotted', 'elementor'),
-                    'dashed' => \IqitElementorWpHelper::__('Dashed', 'elementor'),
+                    'solid' => \IqitElementorTranslater::get()->l('Solid', 'elementor'),
+                    'double' => \IqitElementorTranslater::get()->l('Double', 'elementor'),
+                    'dotted' => \IqitElementorTranslater::get()->l('Dotted', 'elementor'),
+                    'dashed' => \IqitElementorTranslater::get()->l('Dashed', 'elementor'),
                 ],
                 'default' => 'solid',
                 'selectors' => [
@@ -55,7 +55,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'weight',
             [
-                'label' => \IqitElementorWpHelper::__('Weight', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Weight', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'section' => 'section_divider',
                 'default' => [
@@ -76,7 +76,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'color',
             [
-                'label' => \IqitElementorWpHelper::__('Color', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
                 'section' => 'section_divider',
                 'default' => '',
@@ -93,7 +93,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'width',
             [
-                'label' => \IqitElementorWpHelper::__('Widtdddh', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Widtdddh', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 100,
@@ -114,20 +114,20 @@ class Widget_Divider extends Widget_Base
         $this->add_responsive_control(
             'align',
             [
-                'label' => \IqitElementorWpHelper::__('Alignment', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Alignment', 'elementor'),
                 'type' => Controls_Manager::CHOOSE,
                 'section' => 'section_divider',
                 'options' => [
                     'left' => [
-                        'title' => \IqitElementorWpHelper::__('Left', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                         'icon' => 'fa fa-align-left',
                     ],
                     'center' => [
-                        'title' => \IqitElementorWpHelper::__('Center', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Center', 'elementor'),
                         'icon' => 'fa fa-align-center',
                     ],
                     'right' => [
-                        'title' => \IqitElementorWpHelper::__('Right', 'elementor'),
+                        'title' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
@@ -141,7 +141,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'gap',
             [
-                'label' => \IqitElementorWpHelper::__('Gap', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Gap', 'elementor'),
                 'type' => Controls_Manager::SLIDER,
                 'default' => [
                     'size' => 15,
@@ -162,7 +162,7 @@ class Widget_Divider extends Widget_Base
         $this->add_control(
             'view',
             [
-                'label' => \IqitElementorWpHelper::__('View', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('View', 'elementor'),
                 'type' => Controls_Manager::HIDDEN,
                 'default' => 'traditional',
                 'section' => 'section_divider',

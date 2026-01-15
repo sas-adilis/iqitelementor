@@ -14,7 +14,7 @@ defined('_PS_VERSION_') or exit;
 <script type="text/template" id="tmpl-elementor-navigator">
     <div id="elementor-navigator__header">
         <i id="elementor-navigator__toggle-all" class="eicon-expand" data-elementor-action="expand"></i>
-        <div id="elementor-navigator__header__title"><?php \IqitElementorWpHelper::_e('Navigator'); ?></div>
+        <div id="elementor-navigator__header__title"><?php \IqitElementorTranslater::get()->l('Navigator'); ?></div>
         <i id="elementor-navigator__close" class="eicon-close"></i>
     </div>
     <div id="elementor-navigator__elements"></div>
@@ -47,12 +47,12 @@ defined('_PS_VERSION_') or exit;
 </script>
 
 <script type="text/template" id="tmpl-elementor-navigator__elements--empty">
-    <div class="elementor-empty-view__title"><?php \IqitElementorWpHelper::_e('Empty'); ?></div>
+    <div class="elementor-empty-view__title"><?php \IqitElementorTranslater::get()->l('Empty'); ?></div>
 </script>
 
 <script type="text/template" id="tmpl-elementor-navigator__root--empty">
-    <div class="elementor-nerd-box-title"><?php \IqitElementorWpHelper::_e('Easy Navigation is Here!'); ?></div>
+    <div class="elementor-nerd-box-title"><?php \IqitElementorTranslater::get()->l('Easy Navigation is Here!'); ?></div>
     <div class="elementor-nerd-box-message">
-        <?php \IqitElementorWpHelper::_e('Once you fill your page with content, this window will give you an overview display of all the page elements. This way, you can easily move around any section, column, or widget.'); ?>
+        <?php \IqitElementorTranslater::get()->l('Once you fill your page with content, this window will give you an overview display of all the page elements. This way, you can easily move around any section, column, or widget.'); ?>
     </div>
 </script>

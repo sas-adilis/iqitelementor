@@ -83,7 +83,7 @@ class Control_Animation extends Control_Base
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
 				<select data-setting="{{ data.name }}">
-					<option value=""><?php \IqitElementorWpHelper::_e('None', 'elementor'); ?></option>
+					<option value=""><?php \IqitElementorTranslater::get()->l('None', 'elementor'); ?></option>
 					<?php foreach (self::get_animations() as $animations_group_name => $animations_group) { ?>
 						<optgroup label="<?php echo $animations_group_name; ?>">
 							<?php foreach ($animations_group as $animation_name => $animation_title) { ?>

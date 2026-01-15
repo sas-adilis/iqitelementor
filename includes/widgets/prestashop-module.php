@@ -32,7 +32,7 @@ if (!defined('_PS_VERSION_')) {
 use Context;
 use Db;
 use Hook;
-use IqitElementorWpHelper;
+use IqitElementorHelper;
 use Module;
 use PrestaShop\PrestaShop\Core\Module\WidgetInterface;
 use Shop;
@@ -57,7 +57,7 @@ class Widget_Prestashop_module extends Widget_Base
 
     public function get_title()
     {
-        return IqitElementorWpHelper::__('Module', 'elementor');
+        return \IqitElementorTranslater::get()->l('Module', 'elementor');
     }
 
     public function get_icon(): string
@@ -86,18 +86,18 @@ class Widget_Prestashop_module extends Widget_Base
         $this->start_controls_section(
             'section_pswidget_options',
             [
-                'label' => IqitElementorWpHelper::__('Widget settings', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Widget settings', 'elementor'),
             ]
         );
 
         $this->add_control(
             'module',
             [
-                'label' => IqitElementorWpHelper::__('Module', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Module', 'elementor'),
                 'type' => Controls_Manager::SELECT,
                 'label_block' => true,
                 'default' => '0',
-                'description' => IqitElementorWpHelper::__('This widget is only for advanced users. Some of modules may base on id etc. Issues related with this widget are not supported.', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('This widget is only for advanced users. Some of modules may base on id etc. Issues related with this widget are not supported.', 'elementor'),
                 'options' => $availableModules,
             ]
         );
@@ -105,11 +105,11 @@ class Widget_Prestashop_module extends Widget_Base
         $this->add_control(
             'hook',
             [
-                'label' => IqitElementorWpHelper::__('Hook', 'elementor'),
+                'label' => \IqitElementorTranslater::get()->l('Hook', 'elementor'),
                 'type' => Controls_Manager::SELECT2,
                 'default' => 'displayHome',
                 'label_block' => true,
-                'description' => IqitElementorWpHelper::__('Make sure module support hook you selected.', 'elementor'),
+                'description' => \IqitElementorTranslater::get()->l('Make sure module support hook you selected.', 'elementor'),
                 'options' => $availableHooks,
             ]
         );
@@ -172,7 +172,7 @@ class Widget_Prestashop_module extends Widget_Base
 
 
         $modulesHook = [];
-        $modulesHook[0] = IqitElementorWpHelper::__('Select module', 'elementor');
+        $modulesHook[0] = \IqitElementorTranslater::get()->l('Select module', 'elementor');
         foreach ($modules as $key => $module) {
             $moduleInstance = Module::getInstanceByName($module['name']);
 

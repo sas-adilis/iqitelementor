@@ -22,7 +22,7 @@ class Control_Modules extends Control_Base
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
 				<select data-setting="{{ data.name }}">
-					<option value="0"><?php \IqitElementorTranslater::get()->l('Select module', 'elementor'); ?></option>
+					<option value="0"><?php echo \IqitElementorTranslater::get()->l('Select module', 'elementor'); ?></option>
 					<# _.each( data.options, function( module ) { #>
 						<option value="{{ module.name }}">{{{ module.name }}}</option>
 						<# } ); #>
@@ -30,7 +30,7 @@ class Control_Modules extends Control_Base
 			</div>
 		</div>
 		<div class="elementor-control-field">
-			<label class="elementor-control-title"><?php \IqitElementorTranslater::get()->l('Hook', 'elementor'); ?></label>
+			<label class="elementor-control-title"><?php echo \IqitElementorTranslater::get()->l('Hook', 'elementor'); ?></label>
 			<div class="elementor-control-input-wrapper">
 				<input type="text" class="elementor-control-autocomplete-search" placeholder="{{ data.placeholder }}" />
 			</div>

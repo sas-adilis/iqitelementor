@@ -3,10 +3,16 @@ namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
     exit;
-} // Exit if accessed directly
+}
 
 class Widget_Accordion extends Widget_Base
 {
+    /*
+    |--------------------------------------------------------------------------
+    | IDENTIFICATION
+    |--------------------------------------------------------------------------
+    */
+
     public function get_id()
     {
         return 'accordion';
@@ -22,10 +28,31 @@ class Widget_Accordion extends Widget_Base
         return 'accordion';
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | CONTROLS REGISTRATION
+    |--------------------------------------------------------------------------
+    */
+
     protected function _register_controls()
     {
+        $this->register_content_controls();
+        $this->register_options_controls();
+        $this->register_style_title_controls();
+        $this->register_style_content_controls();
+        $this->register_style_border_controls();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTENT SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function register_content_controls()
+    {
         $this->start_controls_section(
-            'section_title',
+            'section_content',
             [
                 'label' => \IqitElementorTranslater::get()->l('Accordion', 'elementor'),
             ]
@@ -76,34 +103,20 @@ class Widget_Accordion extends Widget_Base
         );
 
         $this->end_controls_section();
+    }
 
-        $this->add_control(
+    /*
+    |--------------------------------------------------------------------------
+    | OPTIONS SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function register_options_controls()
+    {
+        $this->start_controls_section(
             'section_options',
             [
                 'label' => \IqitElementorTranslater::get()->l('Options', 'elementor'),
-                'type' => Controls_Manager::SECTION,
-            ]
-        );
-        $this->add_control(
-            'faq',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Faq schema', 'elementor'),
-                'type' => Controls_Manager::SELECT,
-                'default' => '',
-                'options' => [
-                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
-                    '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
-                ],
-                'description' => \IqitElementorTranslater::get()->l('If enabled it will add FAQ rich snippentt schema data for google', 'elementor'),
-                'section' => 'section_options',
-            ]
-        );
-
-        $this->start_controls_section(
-            'section_title_style',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Accordion', 'elementor'),
-                'tab' => self::TAB_STYLE,
             ]
         );
 
@@ -121,6 +134,20 @@ class Widget_Accordion extends Widget_Base
         );
 
         $this->add_control(
+            'faq',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Faq schema', 'elementor'),
+                'type' => Controls_Manager::SELECT,
+                'default' => '',
+                'options' => [
+                    'yes' => \IqitElementorTranslater::get()->l('Yes', 'elementor'),
+                    '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
+                ],
+                'description' => \IqitElementorTranslater::get()->l('If enabled it will add FAQ rich snippet schema data for google', 'elementor'),
+            ]
+        );
+
+        $this->add_control(
             'icon_align',
             [
                 'label' => \IqitElementorTranslater::get()->l('Icon Alignment', 'elementor'),
@@ -130,6 +157,186 @@ class Widget_Accordion extends Widget_Base
                     'left' => \IqitElementorTranslater::get()->l('Left', 'elementor'),
                     'right' => \IqitElementorTranslater::get()->l('Right', 'elementor'),
                 ],
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STYLE - TITLE SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function register_style_title_controls()
+    {
+        $this->start_controls_section(
+            'section_style_title',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Title', 'elementor'),
+                'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->start_controls_tabs('title_style_tabs');
+
+        // Normal Tab
+        $this->start_controls_tab(
+            'title_style_normal',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Normal', 'elementor'),
+            ]
+        );
+
+        $this->add_control(
+            'title_color',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-button.collapsed' => 'color: {{VALUE}};',
+                ],
+                'scheme' => [
+                    'type' => Scheme_Color::get_type(),
+                    'value' => Scheme_Color::COLOR_1,
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'title_background',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Background', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-button.collapsed' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        // Active Tab
+        $this->start_controls_tab(
+            'title_style_active',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Active', 'elementor'),
+            ]
+        );
+
+        $this->add_control(
+            'title_active_color',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-button:not(.collapsed)' => 'color: {{VALUE}};',
+                ],
+                'scheme' => [
+                    'type' => Scheme_Color::get_type(),
+                    'value' => Scheme_Color::COLOR_4,
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'title_active_background',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Background', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-button:not(.collapsed)' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->end_controls_tab();
+
+        $this->end_controls_tabs();
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'label' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
+                'name' => 'title_typography',
+                'selector' => '{{WRAPPER}} .accordion .accordion-button',
+                'scheme' => Scheme_Typography::TYPOGRAPHY_1,
+                'separator' => 'before',
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STYLE - CONTENT SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function register_style_content_controls()
+    {
+        $this->start_controls_section(
+            'section_style_content',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Content', 'elementor'),
+                'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->add_control(
+            'content_background_color',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Content Background', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-body' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->add_control(
+            'content_color',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Content Color', 'elementor'),
+                'type' => Controls_Manager::COLOR,
+                'selectors' => [
+                    '{{WRAPPER}} .accordion .accordion-body' => 'color: {{VALUE}};',
+                ],
+                'scheme' => [
+                    'type' => Scheme_Color::get_type(),
+                    'value' => Scheme_Color::COLOR_3,
+                ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name' => 'content_typography',
+                'label' => \IqitElementorTranslater::get()->l('Content Typography', 'elementor'),
+                'selector' => '{{WRAPPER}} .accordion .accordion-body',
+                'scheme' => Scheme_Typography::TYPOGRAPHY_3,
+            ]
+        );
+
+        $this->end_controls_section();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STYLE - BORDER SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function register_style_border_controls()
+    {
+        $this->start_controls_section(
+            'section_style_border',
+            [
+                'label' => \IqitElementorTranslater::get()->l('Border', 'elementor'),
+                'tab' => self::TAB_STYLE,
             ]
         );
 
@@ -147,12 +354,10 @@ class Widget_Accordion extends Widget_Base
                         'max' => 10,
                     ],
                 ],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-item' => 'border-width: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-content' => 'border-width: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-wrapper .elementor-accordion-title.active > span' => 'border-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .accordion .accordion-item' => 'border-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .accordion .accordion-button' => 'border-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .accordion .accordion-body' => 'border-width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -162,127 +367,28 @@ class Widget_Accordion extends Widget_Base
             [
                 'label' => \IqitElementorTranslater::get()->l('Border Color', 'elementor'),
                 'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-item' => 'border-color: {{VALUE}};',
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-content' => 'border-top-color: {{VALUE}};',
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-wrapper .elementor-accordion-title.active > span' => 'border-bottom-color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'title_color',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Title Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-title' => 'color: {{VALUE}};',
-                ],
-                'scheme' => [
-                    'type' => Scheme_Color::get_type(),
-                    'value' => Scheme_Color::COLOR_1,
-                ],
-                'separator' => 'before',
-            ]
-        );
-
-        $this->add_control(
-            'title_background',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Title Background', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-title' => 'background-color: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->add_control(
-            'tab_active_color',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Active Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-title.active' => 'color: {{VALUE}};',
-                ],
-                'scheme' => [
-                    'type' => Scheme_Color::get_type(),
-                    'value' => Scheme_Color::COLOR_4,
-                ],
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'label' => \IqitElementorTranslater::get()->l('Title Typography', 'elementor'),
-                'name' => 'title_typography',
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selector' => '{{WRAPPER}} .elementor-accordion .elementor-accordion-title',
-                'scheme' => Scheme_Typography::TYPOGRAPHY_1,
-            ]
-        );
-
-        $this->add_control(
-            'content_background_color',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Content Background', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-content' => 'background-color: {{VALUE}};',
-                ],
-                'separator' => 'before',
-            ]
-        );
-
-        $this->add_control(
-            'content_color',
-            [
-                'label' => \IqitElementorTranslater::get()->l('Content Color', 'elementor'),
-                'type' => Controls_Manager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-accordion .elementor-accordion-content' => 'color: {{VALUE}};',
-                ],
-                'scheme' => [
-                    'type' => Scheme_Color::get_type(),
-                    'value' => Scheme_Color::COLOR_3,
+                    '{{WRAPPER}} .accordion .accordion-item' => 'border-color: {{VALUE}};',
+                    '{{WRAPPER}} .accordion .accordion-button' => 'border-color: {{VALUE}};',
+                    '{{WRAPPER}} .accordion .accordion-body' => 'border-top-color: {{VALUE}};',
                 ],
             ]
         );
 
         $this->end_controls_section();
-
-        $this->add_group_control(
-            Group_Control_Typography::get_type(),
-            [
-                'name' => 'content_typography',
-                'label' => \IqitElementorTranslater::get()->l('Content Typography', 'elementor'),
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_title_style',
-                'selector' => '{{WRAPPER}} .elementor-accordion .elementor-accordion-content',
-                'scheme' => Scheme_Typography::TYPOGRAPHY_3,
-            ]
-        );
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | OPTIONS PARSING
+    |--------------------------------------------------------------------------
+    */
 
     public function parse_options($optionsSource, $preview = false): array
     {
         return [
             'faq' => $optionsSource['faq'] == 'yes',
-            'active_first' => $optionsSource['active_first'] == 'yes',
+            'active_first' => $optionsSource['active_first'] == 1,
             'tabs' => $optionsSource['tabs'],
             'icon_align' => $optionsSource['icon_align'],
         ];

@@ -145,8 +145,12 @@ html.elementor-html {
 		// Section
 		.elementor-section {
 
-			&:hover {
+			&.elementor-element-editable {
 				outline: 2px solid $editor-accent;
+			}
+
+			&:not(.elementor-element-editable):hover {
+				outline: 1px solid $editor-accent;
 			}
 
 			&:not(.elementor-section-height-full) {

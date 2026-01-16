@@ -60,6 +60,9 @@ ControlSliderItemView = ControlBaseUnitsItemView.extend( {
 		if ( isCustom ) {
 			this._destroySliderIfNeeded();
 			this.ui.slider.hide();
+			var size = this.getControlValue( 'size' );
+			this.ui.input.val( size );
+
 			return;
 		}
 
@@ -91,6 +94,10 @@ ControlSliderItemView = ControlBaseUnitsItemView.extend( {
 			size = unitRange && null != unitRange.min ? Number( unitRange.min ) : 0;
 		}*/
 
+		console.log('Initializing slider with size:', size, this.ui.input);
+
+
+
 		this.ui.input.val( size );
 
 		this._destroySliderIfNeeded();
@@ -100,7 +107,6 @@ ControlSliderItemView = ControlBaseUnitsItemView.extend( {
 
 	resetSize: function() {
 		this.setValue( 'size', '' );
-
 		this.initSlider();
 	},
 

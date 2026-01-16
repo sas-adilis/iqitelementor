@@ -536,26 +536,26 @@ class Element_Column extends Element_Base
             <div class="elementor-editor-element-settings elementor-editor-column-settings">
                 <ul class="elementor-editor-element-settings-list elementor-editor-column-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-trigger">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Drag Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Column', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Drag Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Column', 'elementor'); ?></span>
                             <i class="fa fa-columns"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Duplicate Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Duplicate Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-add">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Add New Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Add New Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
                             <i class="fa fa-plus"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Remove Column', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Remove Column', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
                             <i class="fa fa-times"></i>
                         </a>
                     </li>

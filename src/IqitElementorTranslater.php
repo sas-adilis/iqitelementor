@@ -46,7 +46,7 @@ class IqitElementorTranslater
             $source = basename($backtrace[0]['file'] ?? '', '.php');
         }
 
-
-        return \Translate::getModuleTranslation('iqitelementor', $string, $source, null, false, $locale);
+        $translation = \Translate::getModuleTranslation('iqitelementor', $string, $source, null, false, $locale);
+        return $translation ?: $string;
     }
 }

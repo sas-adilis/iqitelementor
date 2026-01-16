@@ -65,7 +65,7 @@ class Control_Dimensions extends Control_Base_Units
 						</li>
 					<?php } ?>
 					<li>
-						<button class="elementor-link-dimensions tooltip-target" data-tooltip="<?php \IqitElementorTranslater::get()->l('Link values together', 'elementor'); ?>">
+						<button class="elementor-link-dimensions tooltip-target" data-tooltip="<?php echo \IqitElementorTranslater::get()->l('Link values together', 'elementor'); ?>">
 							<span class="elementor-linked"><i class="fa fa-link"></i></span>
 							<span class="elementor-unlinked"><i class="fa fa-chain-broken"></i></span>
 						</button>

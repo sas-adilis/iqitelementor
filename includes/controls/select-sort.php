@@ -36,9 +36,9 @@ class Control_Select_Sort extends Control_Base
 
 
 		</div>
-		<button class="elementor-button elementor-value-add"><i class="fa fa-angle-down"></i><?php \IqitElementorTranslater::get()->l('Select', 'elementor'); ?></button>
+		<button class="elementor-button elementor-value-add"><i class="fa fa-angle-down"></i><?php echo \IqitElementorTranslater::get()->l('Select', 'elementor'); ?></button>
 
-		<div class="elementor-control-field"><label class="elementor-control-title"><?php \IqitElementorTranslater::get()->l('Selected', 'elementor'); ?></label></div>
+		<div class="elementor-control-field"><label class="elementor-control-title"><?php echo \IqitElementorTranslater::get()->l('Selected', 'elementor'); ?></label></div>
 		<div class="elementor-control-field">
 			<div class="elementor-control-selected-preview">
 						<# _.each( data.controlValue, function(option_value) {

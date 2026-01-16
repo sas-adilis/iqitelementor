@@ -24,7 +24,7 @@ class Control_Autocomplete_Posts extends Control_Base
 
 				<div class="elementor-control-content elementor-selected-posts-wrapper">
 						<div class="elementor-control-field">
-							<label class="elementor-control-title"> <# if ( data.single ) { #> <?php \IqitElementorTranslater::get()->l('Selected posts', 'elementor'); ?><# } else { #> <?php \IqitElementorTranslater::get()->l('Selected posts', 'elementor'); ?><# } #></label>
+							<label class="elementor-control-title"> <# if ( data.single ) { #> <?php echo \IqitElementorTranslater::get()->l('Selected posts', 'elementor'); ?><# } else { #> <?php echo \IqitElementorTranslater::get()->l('Selected posts', 'elementor'); ?><# } #></label>
 
 							<div class="elementor-control-input-wrapper">
 

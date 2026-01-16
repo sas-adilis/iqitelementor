@@ -37,7 +37,7 @@ abstract class Control_Base_Multiple extends Control_Base
 
     public function get_style_value($css_property, $control_value)
     {
-        return $control_value[$css_property];
+        return $control_value[$css_property] ?? '';
     }
 
     public function get_replace_style_values($css_property, $control_value)

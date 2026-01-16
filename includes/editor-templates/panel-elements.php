@@ -17,17 +17,17 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 </script>
 
 <script type="text/template" id="tmpl-elementor-panel-element-languageselector">
-		<?php \IqitElementorTranslater::get()->l('Editing:', 'elementor'); ?>
+		<?php echo \IqitElementorTranslater::get()->l('Editing:', 'elementor'); ?>
 			<select>
 				<# _.each( elementor.config.languages, function( language ) { #>
 					<option value="{{{ language.id_lang }}}" <# if (elementor.config.id_lang == language.id_lang) {#> selected <# } #> >{{{ language.name }}}</option>
 					<# } ); #>
 			</select>
-			<div  title="<?php \IqitElementorTranslater::get()->l('Import from  other language', 'elementor'); ?>" id="elementor-panel-elements-language-import">
+			<div  title="<?php echo \IqitElementorTranslater::get()->l('Import from  other language', 'elementor'); ?>" id="elementor-panel-elements-language-import">
 				<span id="elementor-panel-elements-language-import-btn"><i class="fa fa-files-o elementor-panel-elements-language-clone"></i><i class="fa fa-times elementor-panel-elements-language-close"></i></span>
 
 				<div id="elementor-panel-elements-language-import-list">
-					<?php \IqitElementorTranslater::get()->l('Import content from  other language', 'elementor'); ?>
+					<?php echo \IqitElementorTranslater::get()->l('Import content from  other language', 'elementor'); ?>
 					<ul>
 					<# _.each( elementor.config.languages, function( language ) { #>
 						<# if (!(elementor.config.id_lang == language.id_lang)) {#> <li><a href="#" class="elementor-panel-elements-language-import-lng" data-language="{{{ language.id_lang }}}"  >{{{ language.name }}}</a></li><# } #>
@@ -40,7 +40,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 
 <script type="text/template" id="tmpl-elementor-panel-element-search">
-	<input id="elementor-panel-elements-search-input" placeholder="<?php \IqitElementorTranslater::get()->l('Search Widget...', 'elementor'); ?>" />
+	<input id="elementor-panel-elements-search-input" placeholder="<?php echo \IqitElementorTranslater::get()->l('Search Widget...', 'elementor'); ?>" />
 	<i class="fa fa-search"></i>
 </script>
 

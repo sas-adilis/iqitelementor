@@ -48,6 +48,7 @@ class Group_Control_Typography extends Group_Control_Base
             'selector_value' => 'font-size: {{SIZE}}{{UNIT}}',
         ];
 
+
         $default_fonts = ', Sans-serif';
 
         $fields['font_family'] = [
@@ -149,6 +150,10 @@ class Group_Control_Typography extends Group_Control_Base
     protected function _get_controls($args)
     {
         $controls = self::get_fields();
+
+        if (!empty($args['separator'])) {
+            $controls['font_size']['separator'] = $args['separator'];
+        }
 
         array_walk($controls, function (&$control, $control_name) use ($args) {
             $selector_value = !empty($control['selector_value']) ? $control['selector_value'] : str_replace('_', '-', $control_name) . ': {{VALUE}};';

@@ -66,8 +66,7 @@ abstract class Control_Base_Units extends Control_Base_Multiple
 
     public function get_style_value( $css_property, $control_value ) {
         $return_value = parent::get_style_value( $css_property, $control_value );
-
-        if ( 'UNIT' === $css_property && 'custom' === $return_value ) {
+        if ( 'unit' === $css_property && 'custom' === $return_value ) {
             $return_value = '__EMPTY__';
         }
 

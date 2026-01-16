@@ -110,28 +110,28 @@ abstract class Element_Base
             <div class="elementor-editor-element-settings elementor-editor-<?php echo \IqitElementorHelper::esc_attr($this->get_type()); ?>-settings elementor-editor-<?php echo \IqitElementorHelper::esc_attr($this->get_id()); ?>-settings">
                 <ul class="elementor-editor-element-settings-list">
                     <li class="elementor-editor-element-setting elementor-editor-element-add">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Add Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Add Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Add', 'elementor'); ?></span>
                             <i class="fa fa-plus"></i>
                         </a>
                     </li>
                     <?php /* Temp removing for better UI
                     <li class="elementor-editor-element-setting elementor-editor-element-edit">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l( 'Edit Widget', 'elementor' ); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l( 'Edit', 'elementor' ); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l( 'Edit Widget', 'elementor' ); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l( 'Edit', 'elementor' ); ?></span>
                             <i class="fa fa-pencil"></i>
                         </a>
                     </li>
                     */ ?>
                     <li class="elementor-editor-element-setting elementor-editor-element-duplicate">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Duplicate Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Duplicate Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Duplicate', 'elementor'); ?></span>
                             <i class="fa fa-copy"></i>
                         </a>
                     </li>
                     <li class="elementor-editor-element-setting elementor-editor-element-remove">
-                        <a href="#" title="<?php \IqitElementorTranslater::get()->l('Remove Widget', 'elementor'); ?>">
-                            <span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
+                        <a href="#" title="<?php echo \IqitElementorTranslater::get()->l('Remove Widget', 'elementor'); ?>">
+                            <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Remove', 'elementor'); ?></span>
                             <i class="fa fa-trash-o"></i>
                         </a>
                     </li>

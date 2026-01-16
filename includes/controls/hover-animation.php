@@ -59,7 +59,7 @@ class Control_Hover_Animation extends Control_Base
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
 				<select data-setting="{{ data.name }}">
-					<option value=""><?php \IqitElementorTranslater::get()->l('None', 'elementor'); ?></option>
+					<option value=""><?php echo \IqitElementorTranslater::get()->l('None', 'elementor'); ?></option>
 					<?php foreach (self::get_animations() as $animation_name => $animation_title) { ?>
 						<option value="<?php echo $animation_name; ?>"><?php echo $animation_title; ?></option>
 					<?php } ?>

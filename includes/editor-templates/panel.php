@@ -33,22 +33,22 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 </script>
 
 <script type="text/template" id="tmpl-elementor-panel-footer-content">
-	<div id="elementor-panel-footer-exit" class="elementor-panel-footer-tool" title="<?php \IqitElementorTranslater::get()->l('Exit', 'elementor'); ?>">
+	<div id="elementor-panel-footer-exit" class="elementor-panel-footer-tool" title="<?php echo \IqitElementorTranslater::get()->l('Exit', 'elementor'); ?>">
 		<i class="fa fa-times"></i>
 		<div class="elementor-panel-footer-sub-menu-wrapper">
 			<div class="elementor-panel-footer-sub-menu">
 				<a id="elementor-panel-footer-view-edit-page" class="elementor-panel-footer-sub-menu-item" href="./">
 					<i class="elementor-icon fa fa-arrow-left"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Go to Backoffice', 'elementor'); ?></span>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Go to Backoffice', 'elementor'); ?></span>
 				</a>
 			</div>
 		</div>
 	</div>
-    <div class="elementor-panel-footer-tool tooltip-target" data-tooltip="<?php echo \IqitElementorHelper::esc_attr('Structure', 'elementor'); ?>" aria-label="<?php echo \IqitElementorHelper::esc_attr('Structure', 'elementor'); ?>">
+    <!--<div class="elementor-panel-footer-tool tooltip-target" data-tooltip="<?php echo \IqitElementorHelper::esc_attr('Structure', 'elementor'); ?>" aria-label="<?php echo \IqitElementorHelper::esc_attr('Structure', 'elementor'); ?>">
         <button id="elementor-panel-footer-navigator" >
             <i class="eicon-navigator" aria-hidden="true"></i>
         </button>
-    </div>
+    </div>-->
 
 	<div id="elementor-panel-footer-responsive" class="elementor-panel-footer-tool" title="<?php \IqitElementorHelper::esc_attr('Responsive Mode', 'elementor'); ?>">
 		<i class="eicon-device-desktop"></i>
@@ -56,61 +56,44 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 			<div class="elementor-panel-footer-sub-menu">
 				<div class="elementor-panel-footer-sub-menu-item" data-device-mode="desktop">
 					<i class="elementor-icon eicon-device-desktop"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Desktop', 'elementor'); ?></span>
-					<span class="elementor-description"><?php \IqitElementorTranslater::get()->l('Default Preview', 'elementor'); ?></span>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Desktop', 'elementor'); ?></span>
+					<span class="elementor-description"><?php echo \IqitElementorTranslater::get()->l('Default Preview', 'elementor'); ?></span>
 				</div>
 				<div class="elementor-panel-footer-sub-menu-item" data-device-mode="tablet">
 					<i class="elementor-icon eicon-device-tablet"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Tablet', 'elementor'); ?></span>
-					<span class="elementor-description"><?php \IqitElementorTranslater::get()->l('Preview for 768px', 'elementor'); ?></span>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Tablet', 'elementor'); ?></span>
+					<span class="elementor-description"><?php echo \IqitElementorTranslater::get()->l('Preview for 768px', 'elementor'); ?></span>
 				</div>
 				<div class="elementor-panel-footer-sub-menu-item" data-device-mode="mobile">
 					<i class="elementor-icon eicon-device-mobile"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Mobile', 'elementor'); ?></span>
-					<span class="elementor-description"><?php \IqitElementorTranslater::get()->l('Preview for 360px', 'elementor'); ?></span>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div id="elementor-panel-footer-help" class="elementor-panel-footer-tool" title="<?php \IqitElementorHelper::esc_attr('Help', 'elementor'); ?>">
-		<span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Help', 'elementor'); ?></span>
-		<i class="fa fa-question-circle"></i>
-		<div class="elementor-panel-footer-sub-menu-wrapper">
-			<div class="elementor-panel-footer-sub-menu">
-				<div id="elementor-panel-footer-help-title"><?php \IqitElementorTranslater::get()->l('Need help?', 'elementor'); ?></div>
-				<div id="elementor-panel-footer-watch-tutorial" class="elementor-panel-footer-sub-menu-item">
-					<i class="elementor-icon fa fa-video-camera"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Take a tour', 'elementor'); ?></span>
-				</div>
-				<div class="elementor-panel-footer-sub-menu-item">
-					<i class="elementor-icon fa fa-external-link"></i>
-					<a class="elementor-title" href="https://iqit-commerce.com/xdocs/warehouse-theme-documentation/#iqitelementor" target="_blank"><?php \IqitElementorTranslater::get()->l('Go to the Documentation', 'elementor'); ?></a>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Mobile', 'elementor'); ?></span>
+					<span class="elementor-description"><?php echo \IqitElementorTranslater::get()->l('Preview for 360px', 'elementor'); ?></span>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div id="elementor-panel-footer-templates" class="elementor-panel-footer-tool" title="<?php \IqitElementorHelper::esc_attr('Templates', 'elementor'); ?>">
-		<span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Templates', 'elementor'); ?></span>
+		<span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Templates', 'elementor'); ?></span>
 		<i class="fa fa-folder"></i>
 		<div class="elementor-panel-footer-sub-menu-wrapper">
 			<div class="elementor-panel-footer-sub-menu">
 				<div id="elementor-panel-footer-templates-modal" class="elementor-panel-footer-sub-menu-item">
 					<i class="elementor-icon fa fa-folder"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Templates Library', 'elementor'); ?></span>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Templates Library', 'elementor'); ?></span>
 				</div>
 				<div id="elementor-panel-footer-save-template" class="elementor-panel-footer-sub-menu-item">
 					<i class="elementor-icon fa fa-save"></i>
-					<span class="elementor-title"><?php \IqitElementorTranslater::get()->l('Save Template', 'elementor'); ?></span>
+					<span class="elementor-title"><?php echo \IqitElementorTranslater::get()->l('Save Template', 'elementor'); ?></span>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div id="elementor-panel-footer-save" class="elementor-panel-footer-tool" title="<?php \IqitElementorHelper::esc_attr('Save', 'elementor'); ?>">
+	<div id="elementor-panel-footer-save" class="elementor-panel-footer-tool" title="<?php echo \IqitElementorHelper::esc_attr('Save', 'elementor'); ?>">
 		<button class="elementor-button">
 			<span class="elementor-state-icon">
 				<i class="fa fa-spin fa-circle-o-notch "></i>
 			</span>
-			<?php \IqitElementorTranslater::get()->l('Save', 'elementor'); ?>
+			<?php echo \IqitElementorTranslater::get()->l('Save', 'elementor'); ?>
 		</button>
 	</div>
 </script>
@@ -118,7 +101,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 <script type="text/template" id="tmpl-elementor-mode-switcher-content">
 	<input id="elementor-mode-switcher-preview-input" type="checkbox">
 	<label for="elementor-mode-switcher-preview-input" id="elementor-mode-switcher-preview" title="<?php \IqitElementorHelper::esc_attr('Preview', 'elementor'); ?>">
-		<span class="elementor-screen-only"><?php \IqitElementorTranslater::get()->l('Preview', 'elementor'); ?></span>
+		<span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Preview', 'elementor'); ?></span>
 		<i class="fa"></i>
 	</label>
 </script>
@@ -143,17 +126,17 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-reset">
 			<button class="elementor-button">
 				<i class="fa fa-undo"></i>
-				<?php \IqitElementorTranslater::get()->l('Reset', 'elementor'); ?>
+				<?php echo \IqitElementorTranslater::get()->l('Reset', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-discard">
 			<button class="elementor-button">
 				<i class="fa fa-times"></i>
-				<?php \IqitElementorTranslater::get()->l('Discard', 'elementor'); ?>
+				<?php echo \IqitElementorTranslater::get()->l('Discard', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-save">
-			<button class="elementor-button elementor-button-success" disabled><?php \IqitElementorTranslater::get()->l('Apply', 'elementor'); ?></button>
+			<button class="elementor-button elementor-button-success" disabled><?php echo \IqitElementorTranslater::get()->l('Apply', 'elementor'); ?></button>
 		</div>
 	</div>
 	<div class="elementor-panel-scheme-items"></div>
@@ -164,28 +147,28 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-reset">
 			<button class="elementor-button">
 				<i class="fa fa-undo"></i>
-				<?php \IqitElementorTranslater::get()->l('Reset', 'elementor'); ?>
+				<?php echo \IqitElementorTranslater::get()->l('Reset', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-discard">
 			<button class="elementor-button">
 				<i class="fa fa-times"></i>
-				<?php \IqitElementorTranslater::get()->l('Discard', 'elementor'); ?>
+				<?php echo \IqitElementorTranslater::get()->l('Discard', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-save">
-			<button class="elementor-button elementor-button-success" disabled><?php \IqitElementorTranslater::get()->l('Apply', 'elementor'); ?></button>
+			<button class="elementor-button elementor-button-success" disabled><?php echo \IqitElementorTranslater::get()->l('Apply', 'elementor'); ?></button>
 		</div>
 	</div>
 	<div class="elementor-panel-scheme-content elementor-panel-box">
 		<div class="elementor-panel-heading">
-			<div class="elementor-panel-heading-title"><?php \IqitElementorTranslater::get()->l('Color Palette', 'elementor'); ?></div>
+			<div class="elementor-panel-heading-title"><?php echo \IqitElementorTranslater::get()->l('Color Palette', 'elementor'); ?></div>
 		</div>
 		<div class="elementor-panel-scheme-items elementor-panel-box-content"></div>
 	</div>
 	<div class="elementor-panel-scheme-colors-more-palettes elementor-panel-box">
 		<div class="elementor-panel-heading">
-			<div class="elementor-panel-heading-title"><?php \IqitElementorTranslater::get()->l('More Palettes', 'elementor'); ?></div>
+			<div class="elementor-panel-heading-title"><?php echo \IqitElementorTranslater::get()->l('More Palettes', 'elementor'); ?></div>
 		</div>
 		<div class="elementor-panel-box-content">
 			<?php foreach (Scheme_Color::get_system_schemes() as $scheme_name => $scheme) { ?>
@@ -252,15 +235,15 @@ foreach ($scheme_fields as $option_name => $option) { ?>
 						</select>
 					<?php } elseif ('font' === $option['type']) { ?>
 						<select name="<?php echo $option_name; ?>" class="elementor-panel-scheme-typography-item-field">
-							<option value=""><?php \IqitElementorTranslater::get()->l('Default', 'elementor'); ?></option>
+							<option value=""><?php echo \IqitElementorTranslater::get()->l('Default', 'elementor'); ?></option>
 
-							<optgroup label="<?php \IqitElementorTranslater::get()->l('System', 'elementor'); ?>">
+							<optgroup label="<?php echo \IqitElementorTranslater::get()->l('System', 'elementor'); ?>">
 								<?php foreach (Fonts::get_fonts_by_groups([Fonts::SYSTEM]) as $font_title => $font_type) { ?>
 									<option value="<?php echo \IqitElementorHelper::esc_attr($font_title); ?>"><?php echo $font_title; ?></option>
 								<?php } ?>
 							</optgroup>
 
-							<optgroup label="<?php \IqitElementorTranslater::get()->l('Google', 'elementor'); ?>">
+							<optgroup label="<?php echo \IqitElementorTranslater::get()->l('Google', 'elementor'); ?>">
 								<?php foreach (Fonts::get_fonts_by_groups([Fonts::GOOGLE, Fonts::EARLYACCESS]) as $font_title => $font_type) { ?>
 									<option value="<?php echo \IqitElementorHelper::esc_attr($font_title); ?>"><?php echo $font_title; ?></option>
 								<?php } ?>

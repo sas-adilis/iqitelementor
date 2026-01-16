@@ -1764,7 +1764,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin: 15px -20px 0;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets-title:before {
-  height: 3px;
+  height: 1px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets {
   display: flex;
@@ -2144,18 +2144,23 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   background-color: #495157;
 }
 #elementor-panel #elementor-panel-footer-tools {
-  display: table;
-  table-layout: fixed;
-  width: 100%;
-  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-evenly;
+  padding-inline: 10px;
 }
 #elementor-panel .elementor-panel-footer-tool {
-  display: table-cell;
-  vertical-align: middle;
   text-align: center;
   cursor: pointer;
   color: #a4afb7;
   transition: all 0.5s;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: 40px;
 }
 #elementor-panel .elementor-panel-footer-tool.elementor-open {
   color: #fff;
@@ -2225,14 +2230,13 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   color: #d5dadf;
 }
 #elementor-panel #elementor-panel-footer-save {
-  width: 90px;
-  padding: 0 10px;
+  max-width: 150px;
 }
 #elementor-panel #elementor-panel-footer-save .elementor-button {
   font-size: 11px;
   text-transform: uppercase;
   width: 100%;
-  height: 26px;
+  padding: 6px 8px;
   background-color: #556068;
   color: #a4afb7;
 }

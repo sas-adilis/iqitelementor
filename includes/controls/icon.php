@@ -2078,8 +2078,8 @@ class Control_Icon extends Control_Base
 		<div class="elementor-control-field">
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
-				<select class="elementor-control-icon" data-setting="{{ data.name }}" data-placeholder="<?php \IqitElementorTranslater::get()->l('Select Icon', 'elementor'); ?>">
-					<option value=""><?php \IqitElementorTranslater::get()->l('Select Icon', 'elementor'); ?></option>
+				<select class="elementor-control-icon" data-setting="{{ data.name }}" data-placeholder="<?php echo \IqitElementorTranslater::get()->l('Select Icon', 'elementor'); ?>">
+					<option value=""><?php echo \IqitElementorTranslater::get()->l('Select Icon', 'elementor'); ?></option>
 					<# _.each( data.icons, function( option_title, option_value ) { #>
 					<option value="{{ option_value }}">{{{ option_title }}}</option>
 					<# } ); #>

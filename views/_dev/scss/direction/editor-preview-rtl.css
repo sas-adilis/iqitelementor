@@ -104,8 +104,11 @@ html.elementor-html {
 .elementor-editor-active #elementor .elementor-element[data-side=bottom]:last-child {
   border-bottom: 4px solid #3c90a8;
 }
-.elementor-editor-active #elementor .elementor-section:hover {
+.elementor-editor-active #elementor .elementor-section.elementor-element-editable {
   outline: 2px solid #9b0a46;
+}
+.elementor-editor-active #elementor .elementor-section:not(.elementor-element-editable):hover {
+  outline: 1px solid #9b0a46;
 }
 @media (min-width: 768px) {
   .elementor-editor-active #elementor .elementor-section:not(.elementor-section-height-full) .elementor-column-wrap.elementor-element-empty, .elementor-editor-active #elementor .elementor-section:not(.elementor-section-height-full) .elementor-column-wrap.elementor-element-empty .elementor-widget-wrap {

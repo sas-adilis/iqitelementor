@@ -35,12 +35,12 @@ class Control_URL extends Control_Base_Multiple
 			<label class="elementor-control-title">{{{ data.label }}}</label>
 			<div class="elementor-control-input-wrapper">
 				<input type="url" data-setting="url" placeholder="{{ data.placeholder }}" id="elementor-control-url-field-{{ data._cid }}" />
-				<button class="elementor-control-url-target tooltip-target" data-tooltip="<?php \IqitElementorTranslater::get()->l('Open Link in new Tab', 'elementor'); ?>" title="<?php \IqitElementorHelper::esc_attr('Open Link in new Tab', 'elementor'); ?>">
+				<button class="elementor-control-url-target tooltip-target" data-tooltip="<?php echo \IqitElementorTranslater::get()->l('Open Link in new Tab', 'elementor'); ?>" title="<?php \IqitElementorHelper::esc_attr('Open Link in new Tab', 'elementor'); ?>">
 					<span class="elementor-control-url-external" title="<?php \IqitElementorHelper::esc_attr('New Window', 'elementor'); ?>"><i class="fa fa-external-link"></i></span>
 				</button>
 
 
-				<button class="elementor-control-url-media tooltip-target" data-tooltip="<?php \IqitElementorTranslater::get()->l('Media link', 'elementor'); ?>" title="<?php \IqitElementorHelper::esc_attr('Choose media link', 'elementor'); ?>">
+				<button class="elementor-control-url-media tooltip-target" data-tooltip="<?php echo \IqitElementorTranslater::get()->l('Media link', 'elementor'); ?>" title="<?php \IqitElementorHelper::esc_attr('Choose media link', 'elementor'); ?>">
 					<span class="elementor-control-url-external" title="<?php \IqitElementorHelper::esc_attr('Media link', 'elementor'); ?>"><i class="fa fa-paperclip"></i></span>
 				</button>
 

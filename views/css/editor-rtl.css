@@ -1059,11 +1059,21 @@ select {
   display: block;
   margin-bottom: 6px;
 }
-#elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-control:not(.elementor-active-tab) {
+#elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper:not(.elementor-active-tab) {
   display: none;
 }
-#elementor-panel #elementor-panel-page-editor .elementor-control {
+#elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper .elementor-section-header {
   background-color: #fff;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper .elementor-section-content {
+  display: none;
+  padding-block: 15px;
+  background-color: #fff;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper.elementor-open .elementor-section-content {
+  display: block;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control {
   position: relative;
   padding: 0 20px 15px;
 }
@@ -1107,9 +1117,6 @@ select {
   margin-top: 0;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-hidden-control {
-  display: none;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-under-section:not(.elementor-open) {
   display: none;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control.elementor-control-type-heading .elementor-control-title {
@@ -1478,12 +1485,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-section {
   margin-top: 10px;
   padding: 0;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-section + .elementor-control:not(.elementor-control-type-section) {
-  padding-top: 15px;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-section + .elementor-control:not(.elementor-control-type-section):before {
-  display: none;
 }
 #elementor-panel #elementor-panel-page-editor .wp-picker-container:not(.wp-picker-active) {
   float: left;

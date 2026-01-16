@@ -2672,6 +2672,9 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 	onRender: function() {
 		this.getOption( 'editedElementView' ).$el.addClass( 'elementor-element-editable' );
 
+		// Wrap section controls in a container
+		this.wrapSectionsControls();
+
 		// Set the first tab as active
 		this.ui.tabs.eq( 0 ).find( 'a' ).trigger( 'click' );
 
@@ -2692,6 +2695,29 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 			}
 		} );
 
+	},
+
+	wrapSectionsControls: function() {
+		var $controlsContainer = this.$( 'div.elementor-controls' ),
+			$sections = $controlsContainer.find( '> .elementor-control-type-section' );
+
+		$sections.each( function() {
+			var $section = Backbone.$( this ),
+				sectionName = $section.find( '[data-collapse_id]' ).data( 'collapse_id' ),
+				$wrapper = Backbone.$( '<div class="elementor-section-wrapper elementor-section-wrapper-' + sectionName + '"></div>' ),
+				$header = Backbone.$( '<div class="elementor-section-header"></div>' ),
+				$content = Backbone.$( '<div class="elementor-section-content"></div>' ),
+				$nextControls = $section.nextUntil( '.elementor-control-type-section' );
+
+			// Insert wrapper before the section
+			$section.before( $wrapper );
+
+			// Build the structure: wrapper > header + content
+			$header.append( $section );
+			$content.append( $nextControls );
+			$wrapper.append( $header );
+			$wrapper.append( $content );
+		} );
 	},
 
 	onModelDestroy: function() {
@@ -2725,16 +2751,11 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 	},
 
 	/**
-	 * It's a temp method.
-	 *
-	 * TODO: Rewrite this method later.
+	 * Opens the first section in the current tab.
 	 */
 	openFirstSectionInCurrentTab: function( currentTab ) {
 		var openedClass = 'elementor-open',
-
-			childrenUnderSection = this.children.filter( function( view ) {
-				return ( ! _.isEmpty( view.model.get( 'section' ) ) );
-			} ),
+			self = this,
 
 			firstSectionControlView = this.children.filter( function( view ) {
 				return ( 'section' === view.model.get( 'type' ) ) && ( currentTab === view.model.get( 'tab' ) );
@@ -2745,45 +2766,30 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 			return;
 		}
 
+		// Close all sections first
+		self.$( '.elementor-section-wrapper' ).removeClass( openedClass );
+		self.$( '.elementor-control.elementor-control-type-section .elementor-panel-heading' ).removeClass( openedClass );
+
+		// Open the first section
 		firstSectionControlView = firstSectionControlView[0];
 		firstSectionControlView.ui.heading.addClass( openedClass );
-
-		_.each( childrenUnderSection, function( view ) {
-			if ( view.model.get( 'section' ) !== firstSectionControlView.model.get( 'name' ) ) {
-				view.$el.removeClass( openedClass );
-				return;
-			}
-
-			view.$el.addClass( openedClass );
-		} );
+		firstSectionControlView.$el.closest( '.elementor-section-wrapper' ).addClass( openedClass );
 	},
 
 	onChildviewControlSectionClicked: function( childView ) {
 		var openedClass = 'elementor-open',
-			sectionClicked = childView.model.get( 'name' ),
-			isSectionOpen = childView.ui.heading.hasClass( openedClass ),
+			$wrapper = childView.$el.closest( '.elementor-section-wrapper' ),
+			isSectionOpen = $wrapper.hasClass( openedClass );
 
-			childrenUnderSection = this.children.filter( function( view ) {
-				return ( ! _.isEmpty( view.model.get( 'section' ) ) );
-			} );
-
+		// Close all sections
+		this.$( '.elementor-section-wrapper' ).removeClass( openedClass );
 		this.$( '.elementor-control.elementor-control-type-section .elementor-panel-heading' ).removeClass( openedClass );
 
-		if ( isSectionOpen ) {
-			// Close all open sections
-			sectionClicked = '';
-		} else {
+		// If the clicked section was not open, open it
+		if ( ! isSectionOpen ) {
 			childView.ui.heading.addClass( openedClass );
+			$wrapper.addClass( openedClass );
 		}
-
-		_.each( childrenUnderSection, function( view ) {
-			if ( view.model.get( 'section' ) !== sectionClicked ) {
-				view.$el.removeClass( openedClass );
-				return;
-			}
-
-			view.$el.addClass( openedClass );
-		} );
 
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	}
@@ -7041,6 +7047,7 @@ ControlBaseItemView = Marionette.CompositeView.extend( {
 
 		this.listenTo( this.elementSettingsModel, 'change', this.toggleControlVisibility );
 		this.listenTo( this.elementSettingsModel, 'control:switch:tab', this.onControlSwitchTab );
+		this.listenTo( elementor.channels.deviceMode, 'change', this.toggleControlVisibility );
 	},
 
 	getControlValue: function() {
@@ -7175,13 +7182,29 @@ ControlBaseItemView = Marionette.CompositeView.extend( {
 	toggleControlVisibility: function() {
 		var isVisible = elementor.helpers.isControlVisible( this.model, this.elementSettingsModel );
 
-		this.$el.toggleClass( 'elementor-hidden-control', ! isVisible );
+		// Vérifier aussi la visibilité responsive
+		var responsiveControl = this.model.get( 'responsive' );
+		if ( isVisible && ! _.isEmpty( responsiveControl ) ) {
+			var currentDeviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+			isVisible = ( responsiveControl === currentDeviceMode );
+		}
 
+		this.$el.toggleClass( 'elementor-hidden-control', ! isVisible );
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	},
 
+
 	onControlSwitchTab: function( activeTab ) {
-		this.$el.toggleClass( 'elementor-active-tab', ( activeTab === this.model.get( 'tab' ) ) );
+		var isActiveTab = ( activeTab === this.model.get( 'tab' ) );
+		this.$el.toggleClass( 'elementor-active-tab', isActiveTab );
+
+		// If this is a section control, propagate the class to the wrapper
+		if ( 'section' === this.model.get( 'type' ) ) {
+			var $wrapper = this.$el.closest( '.elementor-section-wrapper' );
+			if ( $wrapper.length ) {
+				$wrapper.toggleClass( 'elementor-active-tab', isActiveTab );
+			}
+		}
 
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	},

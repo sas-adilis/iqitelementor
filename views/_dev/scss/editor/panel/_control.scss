@@ -6,16 +6,29 @@
 
 	.elementor-controls {
 
-		> .elementor-control {
-
+		> .elementor-section-wrapper {
+			// Hide wrappers not in active tab
 			&:not(.elementor-active-tab) {
 				display: none;
+			}
+
+			.elementor-section-header {
+				background-color: #fff;
+			}
+
+			.elementor-section-content {
+				display: none;
+				padding-block: 15px;
+				background-color: #fff;
+			}
+
+			&.elementor-open .elementor-section-content {
+				display: block;
 			}
 		}
 	}
 
 	.elementor-control {
-		background-color: #fff;
 		position: relative;
 		padding: 0 20px 15px;
 
@@ -80,12 +93,8 @@
 			display: none;
 		}
 
-		&.elementor-control-under-section {
-
-			&:not(.elementor-open) {
-				display: none;
-			}
-		}
+		// Note: elementor-control-under-section visibility is now handled
+		// by the parent .elementor-section-wrapper via .elementor-section-content
 
 		&.elementor-control-type-heading {
 
@@ -588,16 +597,6 @@
 		margin-top: 10px;
 		padding: 0;
 
-		& + .elementor-control {
-
-			&:not(.elementor-control-type-section) {
-				padding-top: 15px;
-
-				&:before {
-					display: none;
-				}
-			}
-		}
 	}
 
 	// Color Picker control

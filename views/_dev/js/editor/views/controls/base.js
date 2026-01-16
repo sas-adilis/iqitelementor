@@ -76,6 +76,7 @@ ControlBaseItemView = Marionette.CompositeView.extend( {
 
 		this.listenTo( this.elementSettingsModel, 'change', this.toggleControlVisibility );
 		this.listenTo( this.elementSettingsModel, 'control:switch:tab', this.onControlSwitchTab );
+		this.listenTo( elementor.channels.deviceMode, 'change', this.toggleControlVisibility );
 	},
 
 	getControlValue: function() {
@@ -210,13 +211,29 @@ ControlBaseItemView = Marionette.CompositeView.extend( {
 	toggleControlVisibility: function() {
 		var isVisible = elementor.helpers.isControlVisible( this.model, this.elementSettingsModel );
 
-		this.$el.toggleClass( 'elementor-hidden-control', ! isVisible );
+		// Vérifier aussi la visibilité responsive
+		var responsiveControl = this.model.get( 'responsive' );
+		if ( isVisible && ! _.isEmpty( responsiveControl ) ) {
+			var currentDeviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+			isVisible = ( responsiveControl === currentDeviceMode );
+		}
 
+		this.$el.toggleClass( 'elementor-hidden-control', ! isVisible );
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	},
 
+
 	onControlSwitchTab: function( activeTab ) {
-		this.$el.toggleClass( 'elementor-active-tab', ( activeTab === this.model.get( 'tab' ) ) );
+		var isActiveTab = ( activeTab === this.model.get( 'tab' ) );
+		this.$el.toggleClass( 'elementor-active-tab', isActiveTab );
+
+		// If this is a section control, propagate the class to the wrapper
+		if ( 'section' === this.model.get( 'type' ) ) {
+			var $wrapper = this.$el.closest( '.elementor-section-wrapper' );
+			if ( $wrapper.length ) {
+				$wrapper.toggleClass( 'elementor-active-tab', isActiveTab );
+			}
+		}
 
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	},

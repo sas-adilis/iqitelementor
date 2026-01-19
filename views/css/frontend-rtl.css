@@ -18,9 +18,7 @@
 }
 
 .elementor {
-  -webkit-hyphens: manual;
-      -ms-hyphens: manual;
-          hyphens: manual;
+  hyphens: manual;
 }
 .elementor *, .elementor *:before, .elementor *:after {
   box-sizing: border-box;
@@ -69,16 +67,14 @@
   max-width: none;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateY(-50%) translateX(-50%);
-          transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
 }
 .elementor .elementor-background-video-fallback {
   background-size: cover;
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateY(-50%) translateX(-50%);
-          transform: translateY(-50%) translateX(-50%);
+  transform: translateY(-50%) translateX(-50%);
   max-width: 100%;
   width: 100%;
   margin: 0;
@@ -185,21 +181,18 @@
 .elementor-section {
   position: relative;
   -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 .elementor-section .elementor-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   margin-right: auto;
   margin-left: auto;
   position: relative;
 }
 .elementor-section.elementor-section-stretched {
-  margin-inline: -webkit-calc(-50vw + var(--scrollbar-width, 0px) / 2);
   margin-inline: calc(-50vw + var(--scrollbar-width, 0px) / 2);
-  width: -webkit-calc(100vw - var(--scrollbar-width, 0px));
   width: calc(100vw - var(--scrollbar-width, 0px));
   position: relative;
   left: 50%;
@@ -207,46 +200,22 @@
   max-width: 100vw;
 }
 .elementor-section.elementor-section-items-top > .elementor-container {
-  -webkit-box-align: start;
-  -webkit-align-items: flex-start;
-      -ms-flex-align: start;
-              -ms-grid-row-align: flex-start;
-          align-items: flex-start;
+  align-items: flex-start;
 }
 .elementor-section.elementor-section-items-middle > .elementor-container {
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-              -ms-grid-row-align: center;
-          align-items: center;
+  align-items: center;
 }
 .elementor-section.elementor-section-items-bottom > .elementor-container {
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-      -ms-flex-align: end;
-              -ms-grid-row-align: flex-end;
-          align-items: flex-end;
+  align-items: flex-end;
 }
 .elementor-section.elementor-section-content-top .elementor-column-wrap {
-  -webkit-box-align: start;
-  -webkit-align-items: flex-start;
-      -ms-flex-align: start;
-              -ms-grid-row-align: flex-start;
-          align-items: flex-start;
+  align-items: flex-start;
 }
 .elementor-section.elementor-section-content-middle .elementor-column-wrap {
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-              -ms-grid-row-align: center;
-          align-items: center;
+  align-items: center;
 }
 .elementor-section.elementor-section-content-bottom .elementor-column-wrap {
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-      -ms-flex-align: end;
-              -ms-grid-row-align: flex-end;
-          align-items: flex-end;
+  align-items: flex-end;
 }
 @media (min-width: 768px) {
   .elementor-section.elementor-section-height-full {
@@ -258,43 +227,28 @@
 }
 
 .elementor-row {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   width: 100%;
   /* In dragging mode it's causing a columns fall */
 }
 @media (max-width: 1023px) {
   .elementor-row {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
+    flex-wrap: wrap;
   }
 }
 
 .elementor-column-wrap {
   width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 }
 
 .elementor-widget-wrap {
   position: relative;
   width: 100%;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   gap: 20px;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-align-content: flex-start;
-      -ms-flex-line-pack: start;
-          align-content: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
 }
 .elementor-widget-wrap > .elementor-widget {
   width: 100%;
@@ -311,9 +265,6 @@
 .elementor-column {
   position: relative;
   min-height: 1px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
 }
 
@@ -331,8 +282,7 @@
 
 .elementor-section-slidered .swiper-wrapper {
   -ms-flex-wrap: initial !important;
-  -webkit-flex-wrap: initial !important;
-          flex-wrap: initial !important;
+  flex-wrap: initial !important;
 }
 .elementor-section-slidered .elementor-row-slidered-backend {
   display: block;
@@ -602,11 +552,7 @@
     width: 100%;
   }
   .elementor-reverse-mobile > .elementor-container > .elementor-row {
-    -webkit-box-orient: vertical;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: column-reverse;
-        -ms-flex-direction: column-reverse;
-            flex-direction: column-reverse;
+    flex-direction: column-reverse;
   }
 }
 .modal-open .elementor-widget-wrap {
@@ -616,54 +562,36 @@
 @media (max-width: 575px) {
   .col-mobile-auto-yes {
     width: auto !important;
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
+    flex: 0 0 auto;
   }
   .col-mobile-dynamic-yes {
     width: 100% !important;
     max-width: 100%;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1 0 0;
-        -ms-flex: 1 0 0;
-            flex: 1 0 0;
+    flex: 1 0 0;
     min-width: 0;
   }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
   .col-tablet-auto-yes {
     width: auto !important;
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
+    flex: 0 0 auto;
   }
   .col-tablet-dynamic-yes {
     width: 100% !important;
     max-width: 100%;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1 0 0;
-        -ms-flex: 1 0 0;
-            flex: 1 0 0;
+    flex: 1 0 0;
     min-width: 0;
   }
 }
 @media (min-width: 1024px) {
   .col-auto-yes {
     width: auto !important;
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
+    flex: 0 0 auto;
   }
   .col-dynamic-yes {
     width: 100% !important;
     max-width: 100%;
-    -webkit-box-flex: 1;
-    -webkit-flex: 1 0 0;
-        -ms-flex: 1 0 0;
-            flex: 1 0 0;
+    flex: 1 0 0;
     min-width: 0;
   }
 }
@@ -784,7 +712,6 @@
 .elementor-button {
   display: inline-block;
   text-align: center;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 .elementor-button.elementor-size-small {
@@ -838,29 +765,16 @@
 
 .elementor-cta {
   position: relative;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   /*overflow: hidden;*/
 }
 .elementor-cta-content {
   z-index: 2;
   overflow: hidden;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-align-content: center;
-      -ms-flex-line-pack: center;
-          align-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  align-content: center;
   padding: 35px;
   width: 100%;
   position: relative;
@@ -876,7 +790,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  -webkit-transition: all 0.4s;
   transition: all 0.4s;
 }
 .elementor-cta-bg-wrapper {
@@ -895,9 +808,7 @@
 }
 .elementor-cta .elementor-button {
   cursor: pointer;
-  -webkit-align-self: center;
-      -ms-flex-item-align: center;
-          align-self: center;
+  align-self: center;
   margin-left: auto;
   margin-right: auto;
 }
@@ -905,50 +816,29 @@
   font-size: 23px;
 }
 .elementor-cta-valign-top .elementor-cta-content {
-  -webkit-align-content: flex-start;
-      -ms-flex-line-pack: start;
-          align-content: flex-start;
-  -webkit-box-align: start;
-  -webkit-align-items: flex-start;
-      -ms-flex-align: start;
-              -ms-grid-row-align: flex-start;
-          align-items: flex-start;
+  align-content: flex-start;
+  align-items: flex-start;
 }
 .elementor-cta-valign-middle .elementor-cta-content {
-  -webkit-align-content: center;
-      -ms-flex-line-pack: center;
-          align-content: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-              -ms-grid-row-align: center;
-          align-items: center;
+  align-content: center;
+  align-items: center;
 }
 .elementor-cta-valign-bottom .elementor-cta-content {
-  -webkit-align-content: flex-end;
-      -ms-flex-line-pack: end;
-          align-content: flex-end;
-  -webkit-box-align: end;
-  -webkit-align-items: flex-end;
-      -ms-flex-align: end;
-              -ms-grid-row-align: flex-end;
-          align-items: flex-end;
+  align-content: flex-end;
+  align-items: flex-end;
 }
 .elementor-cta:hover .elementor-cta-bg-overlay {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
 .elementor-cta-skin-classic .elementor-cta {
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .elementor-cta-skin-classic .elementor-cta-bg-wrapper {
   position: relative;
   width: 100%;
 }
 .elementor-cta-skin-classic .elementor-cta-content {
-  -webkit-transition: all 0.4s;
   transition: all 0.4s;
   width: 100%;
 }
@@ -962,7 +852,6 @@
   left: 0;
   right: 0;
   bottom: 0;
-  -webkit-transition: all 0.4s;
   transition: all 0.4s;
   width: 100%;
 }
@@ -972,9 +861,7 @@
 }
 
 .elementor-cta-layout-image-above .elementor-cta {
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 .elementor-cta-layout-image-above .elementor-cta-bg-wrapper {
   width: 100%;
@@ -982,9 +869,7 @@
 
 .elementor-cta-layout-image-left .elementor-cta,
 .elementor-cta-layout-image-right .elementor-cta {
-  -webkit-flex-wrap: nowrap;
-      -ms-flex-wrap: nowrap;
-          flex-wrap: nowrap;
+  flex-wrap: nowrap;
 }
 .elementor-cta-layout-image-left .elementor-cta-bg-wrapper,
 .elementor-cta-layout-image-right .elementor-cta-bg-wrapper {
@@ -993,42 +878,27 @@
 }
 .elementor-cta-layout-image-left .elementor-cta-content,
 .elementor-cta-layout-image-right .elementor-cta-content {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 
 .elementor-cta-layout-image-left .elementor-cta {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-      -ms-flex-direction: row;
-          flex-direction: row;
+  flex-direction: row;
 }
 
 .elementor-cta-layout-image-right .elementor-cta {
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: reverse;
-  -webkit-flex-direction: row-reverse;
-      -ms-flex-direction: row-reverse;
-          flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 @media (min-width: 1025px) {
   .elementor-cta-desktop-layout-image-above .elementor-cta {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
+    flex-wrap: wrap;
   }
   .elementor-cta-desktop-layout-image-above .elementor-cta-bg-wrapper {
     width: 100%;
   }
   .elementor-cta-desktop-layout-image-left .elementor-cta,
   .elementor-cta-desktop-layout-image-right .elementor-cta {
-    -webkit-flex-wrap: nowrap;
-        -ms-flex-wrap: nowrap;
-            flex-wrap: nowrap;
+    flex-wrap: nowrap;
   }
   .elementor-cta-desktop-layout-image-left .elementor-cta-bg-wrapper,
   .elementor-cta-desktop-layout-image-right .elementor-cta-bg-wrapper {
@@ -1037,40 +907,25 @@
   }
   .elementor-cta-desktop-layout-image-left .elementor-cta-content,
   .elementor-cta-desktop-layout-image-right .elementor-cta-content {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    flex-grow: 1;
   }
   .elementor-cta-desktop-layout-image-left .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .elementor-cta-desktop-layout-image-right .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 }
 @media (max-width: 1024px) {
   .elementor-cta-tablet-layout-image-above .elementor-cta {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
+    flex-wrap: wrap;
   }
   .elementor-cta-tablet-layout-image-above .elementor-cta-bg-wrapper {
     width: 100%;
   }
   .elementor-cta-tablet-layout-image-left .elementor-cta,
   .elementor-cta-tablet-layout-image-right .elementor-cta {
-    -webkit-flex-wrap: nowrap;
-        -ms-flex-wrap: nowrap;
-            flex-wrap: nowrap;
+    flex-wrap: nowrap;
   }
   .elementor-cta-tablet-layout-image-left .elementor-cta-bg-wrapper,
   .elementor-cta-tablet-layout-image-right .elementor-cta-bg-wrapper {
@@ -1079,40 +934,25 @@
   }
   .elementor-cta-tablet-layout-image-left .elementor-cta-content,
   .elementor-cta-tablet-layout-image-right .elementor-cta-content {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    flex-grow: 1;
   }
   .elementor-cta-tablet-layout-image-left .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .elementor-cta-tablet-layout-image-right .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 }
 @media (max-width: 767px) {
   .elementor-cta-mobile-layout-image-above .elementor-cta {
-    -webkit-flex-wrap: wrap;
-        -ms-flex-wrap: wrap;
-            flex-wrap: wrap;
+    flex-wrap: wrap;
   }
   .elementor-cta-mobile-layout-image-above .elementor-cta-bg-wrapper {
     width: 100%;
   }
   .elementor-cta-mobile-layout-image-left .elementor-cta,
   .elementor-cta-mobile-layout-image-right .elementor-cta {
-    -webkit-flex-wrap: nowrap;
-        -ms-flex-wrap: nowrap;
-            flex-wrap: nowrap;
+    flex-wrap: nowrap;
   }
   .elementor-cta-mobile-layout-image-left .elementor-cta-bg-wrapper,
   .elementor-cta-mobile-layout-image-right .elementor-cta-bg-wrapper {
@@ -1121,24 +961,13 @@
   }
   .elementor-cta-mobile-layout-image-left .elementor-cta-content,
   .elementor-cta-mobile-layout-image-right .elementor-cta-content {
-    -webkit-box-flex: 1;
-    -webkit-flex-grow: 1;
-        -ms-flex-positive: 1;
-            flex-grow: 1;
+    flex-grow: 1;
   }
   .elementor-cta-mobile-layout-image-left .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .elementor-cta-mobile-layout-image-right .elementor-cta {
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 }
 .elementor-widget-divider .elementor-divider {
@@ -1168,7 +997,6 @@
 .elementor-icon {
   display: inline-block;
   line-height: 1;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 .elementor-icon i {
@@ -1259,22 +1087,19 @@
 }
 .elementor-widget-video .elementor-video-open-modal i {
   font-size: 80px;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 .elementor-widget-video .elementor-custom-embed-play {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 .elementor-widget-video .elementor-custom-embed-play i {
   font-size: 100px;
   color: #fff;
   opacity: 0.7;
   text-shadow: 3px 2px 24px rgba(0, 0, 0, 0.5);
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 
@@ -1303,50 +1128,27 @@
 }
 @media (min-width: 768px) {
   .elementor-widget-image-box.elementor-position-left .elementor-image-box-wrapper, .elementor-widget-image-box.elementor-position-right .elementor-image-box-wrapper {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
   }
   .elementor-widget-image-box.elementor-position-right .elementor-image-box-wrapper {
     text-align: left;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .elementor-widget-image-box.elementor-position-left .elementor-image-box-wrapper {
     text-align: right;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
   .elementor-widget-image-box.elementor-position-top .elementor-image-box-img {
     margin: auto;
   }
   .elementor-widget-image-box.elementor-vertical-align-top .elementor-image-box-wrapper {
-    -webkit-box-align: start;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-                -ms-grid-row-align: flex-start;
-            align-items: flex-start;
+    align-items: flex-start;
   }
   .elementor-widget-image-box.elementor-vertical-align-middle .elementor-image-box-wrapper {
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-                -ms-grid-row-align: center;
-            align-items: center;
+    align-items: center;
   }
   .elementor-widget-image-box.elementor-vertical-align-bottom .elementor-image-box-wrapper {
-    -webkit-box-align: end;
-    -webkit-align-items: flex-end;
-        -ms-flex-align: end;
-                -ms-grid-row-align: flex-end;
-            align-items: flex-end;
+    align-items: flex-end;
   }
 }
 @media (max-width: 767px) {
@@ -1371,56 +1173,30 @@
 
 @media (min-width: 768px) {
   .elementor-widget-icon-box.elementor-position-left .elementor-icon-box-wrapper, .elementor-widget-icon-box.elementor-position-right .elementor-icon-box-wrapper {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
     display: flex;
   }
   .elementor-widget-icon-box.elementor-position-left .elementor-icon-box-icon, .elementor-widget-icon-box.elementor-position-right .elementor-icon-box-icon {
-    -webkit-box-flex: 0;
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
+    flex: 0 0 auto;
   }
   .elementor-widget-icon-box.elementor-position-right .elementor-icon-box-wrapper {
     text-align: left;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: normal;
-    -webkit-flex-direction: row;
-        -ms-flex-direction: row;
-            flex-direction: row;
+    flex-direction: row;
   }
   .elementor-widget-icon-box.elementor-position-left .elementor-icon-box-wrapper {
     text-align: right;
-    -webkit-box-orient: horizontal;
-    -webkit-box-direction: reverse;
-    -webkit-flex-direction: row-reverse;
-        -ms-flex-direction: row-reverse;
-            flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
   .elementor-widget-icon-box.elementor-position-top .elementor-icon-box-img {
     margin: auto;
   }
   .elementor-widget-icon-box.elementor-vertical-align-top .elementor-icon-box-wrapper {
-    -webkit-box-align: start;
-    -webkit-align-items: flex-start;
-        -ms-flex-align: start;
-                -ms-grid-row-align: flex-start;
-            align-items: flex-start;
+    align-items: flex-start;
   }
   .elementor-widget-icon-box.elementor-vertical-align-middle .elementor-icon-box-wrapper {
-    -webkit-box-align: center;
-    -webkit-align-items: center;
-        -ms-flex-align: center;
-                -ms-grid-row-align: center;
-            align-items: center;
+    align-items: center;
   }
   .elementor-widget-icon-box.elementor-vertical-align-bottom .elementor-icon-box-wrapper {
-    -webkit-box-align: end;
-    -webkit-align-items: flex-end;
-        -ms-flex-align: end;
-                -ms-grid-row-align: flex-end;
-            align-items: flex-end;
+    align-items: flex-end;
   }
 }
 @media (max-width: 767px) {
@@ -1449,14 +1225,8 @@
 }
 .elementor-testimonial-wrapper .elementor-testimonial-name {
   line-height: 1.5;
-  display: -webkit-inline-box;
-  display: -webkit-inline-flex;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   gap: 0.15rem;
 }
 .elementor-testimonial-wrapper.elementor-testimonial-text-align-left {
@@ -1500,13 +1270,11 @@ body.elementor-page .elementor-widget-menu-anchor {
   border: none;
 }
 .elementor-search .search-btn {
-  -webkit-transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .animated {
-  -webkit-animation-duration: 1.055s;
-          animation-duration: 1.055s;
+  animation-duration: 1.055s;
   /*
   &.hinge {
   	animation-duration: 2s;
@@ -1521,1053 +1289,513 @@ body.elementor-page .elementor-widget-menu-anchor {
   */
 }
 .animated.animated-slow {
-  -webkit-animation-duration: 2s;
-          animation-duration: 2s;
+  animation-duration: 2s;
 }
 .animated.animated-fast {
-  -webkit-animation-duration: 0.75s;
-          animation-duration: 0.75s;
+  animation-duration: 0.75s;
 }
 .animated.infinite {
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 }
 
 .elementor-bg-transform-zoom-in:hover .elementor-bg {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .elementor-bg-transform-zoom-out .elementor-bg {
-  -webkit-transform: scale(1.05);
-          transform: scale(1.05);
+  transform: scale(1.05);
 }
 .elementor-bg-transform-zoom-out:hover .elementor-bg {
-  -webkit-transform: scale(1);
-          transform: scale(1);
+  transform: scale(1);
 }
 
 .elementor-bg-transform-move-left .elementor-bg {
-  -webkit-transform: scale(1.05) translateX(8%);
-          transform: scale(1.05) translateX(8%);
+  transform: scale(1.05) translateX(8%);
 }
 .elementor-bg-transform-move-left:hover .elementor-bg {
-  -webkit-transform: scale(1.05) translateX(-8%);
-          transform: scale(1.05) translateX(-8%);
+  transform: scale(1.05) translateX(-8%);
 }
 
 .elementor-bg-transform-move-right .elementor-bg {
-  -webkit-transform: scale(1.05) translateX(-8%);
-          transform: scale(1.05) translateX(-8%);
+  transform: scale(1.05) translateX(-8%);
 }
 .elementor-bg-transform-move-right:hover .elementor-bg {
-  -webkit-transform: scale(1.05) translateX(8%);
-          transform: scale(1.05) translateX(8%);
+  transform: scale(1.05) translateX(8%);
 }
 
 .elementor-bg-transform-move-up .elementor-bg {
-  -webkit-transform: scale(1.05) translateY(8%);
-          transform: scale(1.05) translateY(8%);
+  transform: scale(1.05) translateY(8%);
 }
 .elementor-bg-transform-move-up:hover .elementor-bg {
-  -webkit-transform: scale(1.05) translateY(-8%);
-          transform: scale(1.05) translateY(-8%);
+  transform: scale(1.05) translateY(-8%);
 }
 
 .elementor-bg-transform-move-down .elementor-bg {
-  -webkit-transform: scale(1.05) translateY(-8%);
-          transform: scale(1.05) translateY(-8%);
+  transform: scale(1.05) translateY(-8%);
 }
 .elementor-bg-transform-move-down:hover .elementor-bg {
-  -webkit-transform: scale(1.05) translateY(8%);
-          transform: scale(1.05) translateY(8%);
+  transform: scale(1.05) translateY(8%);
 }
 
 .elementor-animation-grow {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
 }
 .elementor-animation-grow:active, .elementor-animation-grow:focus, .elementor-animation-grow:hover {
-  -webkit-transform: scale(1.1);
-          transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .elementor-animation-shrink {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
 }
 .elementor-animation-shrink:active, .elementor-animation-shrink:focus, .elementor-animation-shrink:hover {
-  -webkit-transform: scale(0.9);
-          transform: scale(0.9);
-}
-
-@-webkit-keyframes elementor-animation-pulse {
-  25% {
-    -webkit-transform: scale(1.1);
-            transform: scale(1.1);
-  }
-  75% {
-    -webkit-transform: scale(0.9);
-            transform: scale(0.9);
-  }
+  transform: scale(0.9);
 }
 
 @keyframes elementor-animation-pulse {
   25% {
-    -webkit-transform: scale(1.1);
-            transform: scale(1.1);
+    transform: scale(1.1);
   }
   75% {
-    -webkit-transform: scale(0.9);
-            transform: scale(0.9);
+    transform: scale(0.9);
   }
 }
 .elementor-animation-pulse:active, .elementor-animation-pulse:focus, .elementor-animation-pulse:hover {
-  -webkit-animation-name: elementor-animation-pulse;
-          animation-name: elementor-animation-pulse;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-}
-
-@-webkit-keyframes elementor-animation-pulse-grow {
-  to {
-    -webkit-transform: scale(1.1);
-            transform: scale(1.1);
-  }
+  animation-name: elementor-animation-pulse;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @keyframes elementor-animation-pulse-grow {
   to {
-    -webkit-transform: scale(1.1);
-            transform: scale(1.1);
+    transform: scale(1.1);
   }
 }
 .elementor-animation-pulse-grow:active, .elementor-animation-pulse-grow:focus, .elementor-animation-pulse-grow:hover {
-  -webkit-animation-name: elementor-animation-pulse-grow;
-          animation-name: elementor-animation-pulse-grow;
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-  -webkit-animation-direction: alternate;
-          animation-direction: alternate;
-}
-
-@-webkit-keyframes elementor-animation-pulse-shrink {
-  to {
-    -webkit-transform: scale(0.9);
-            transform: scale(0.9);
-  }
+  animation-name: elementor-animation-pulse-grow;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 @keyframes elementor-animation-pulse-shrink {
   to {
-    -webkit-transform: scale(0.9);
-            transform: scale(0.9);
+    transform: scale(0.9);
   }
 }
 .elementor-animation-pulse-shrink:active, .elementor-animation-pulse-shrink:focus, .elementor-animation-pulse-shrink:hover {
-  -webkit-animation-name: elementor-animation-pulse-shrink;
-          animation-name: elementor-animation-pulse-shrink;
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-  -webkit-animation-direction: alternate;
-          animation-direction: alternate;
-}
-
-@-webkit-keyframes elementor-animation-push {
-  50% {
-    -webkit-transform: scale(0.8);
-            transform: scale(0.8);
-  }
-  100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
-  }
+  animation-name: elementor-animation-pulse-shrink;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 @keyframes elementor-animation-push {
   50% {
-    -webkit-transform: scale(0.8);
-            transform: scale(0.8);
+    transform: scale(0.8);
   }
   100% {
-    -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
   }
 }
 .elementor-animation-push:active, .elementor-animation-push:focus, .elementor-animation-push:hover {
-  -webkit-animation-name: elementor-animation-push;
-          animation-name: elementor-animation-push;
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-pop {
-  50% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
-  }
+  animation-name: elementor-animation-push;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-pop {
   50% {
-    -webkit-transform: scale(1.2);
-            transform: scale(1.2);
+    transform: scale(1.2);
   }
 }
 .elementor-animation-pop:active, .elementor-animation-pop:focus, .elementor-animation-pop:hover {
-  -webkit-animation-name: elementor-animation-pop;
-          animation-name: elementor-animation-pop;
-  -webkit-animation-duration: 0.3s;
-          animation-duration: 0.3s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
+  animation-name: elementor-animation-pop;
+  animation-duration: 0.3s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 .elementor-animation-bounce-in {
-  -webkit-transition-duration: 0.5s;
-          transition-duration: 0.5s;
+  transition-duration: 0.5s;
 }
 .elementor-animation-bounce-in:active, .elementor-animation-bounce-in:focus, .elementor-animation-bounce-in:hover {
-  -webkit-transform: scale(1.2);
-          transform: scale(1.2);
-  -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
-          transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+  transform: scale(1.2);
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 
 .elementor-animation-bounce-out {
-  -webkit-transition-duration: 0.5s;
-          transition-duration: 0.5s;
+  transition-duration: 0.5s;
 }
 .elementor-animation-bounce-out:active, .elementor-animation-bounce-out:focus, .elementor-animation-bounce-out:hover {
-  -webkit-transform: scale(0.8);
-          transform: scale(0.8);
-  -webkit-transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
-          transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
+  transform: scale(0.8);
+  transition-timing-function: cubic-bezier(0.47, 2.02, 0.31, -0.36);
 }
 
 .elementor-animation-rotate {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
 }
 .elementor-animation-rotate:active, .elementor-animation-rotate:focus, .elementor-animation-rotate:hover {
-  -webkit-transform: rotate(4deg);
-          transform: rotate(4deg);
+  transform: rotate(4deg);
 }
 
 .elementor-animation-grow-rotate {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
 }
 .elementor-animation-grow-rotate:active, .elementor-animation-grow-rotate:focus, .elementor-animation-grow-rotate:hover {
-  -webkit-transform: scale(1.1) rotate(4deg);
-          transform: scale(1.1) rotate(4deg);
+  transform: scale(1.1) rotate(4deg);
 }
 
 .elementor-animation-float {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
-  -webkit-transition-timing-function: ease-out;
-          transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
 }
 .elementor-animation-float:active, .elementor-animation-float:focus, .elementor-animation-float:hover {
-  -webkit-transform: translateY(-8px);
-          transform: translateY(-8px);
+  transform: translateY(-8px);
 }
 
 .elementor-animation-sink {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
-  -webkit-transition-timing-function: ease-out;
-          transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
 }
 .elementor-animation-sink:active, .elementor-animation-sink:focus, .elementor-animation-sink:hover {
-  -webkit-transform: translateY(8px);
-          transform: translateY(8px);
-}
-
-@-webkit-keyframes elementor-animation-bob {
-  0% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
-  }
-  50% {
-    -webkit-transform: translateY(-4px);
-            transform: translateY(-4px);
-  }
-  100% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
-  }
+  transform: translateY(8px);
 }
 
 @keyframes elementor-animation-bob {
   0% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
+    transform: translateY(-8px);
   }
   50% {
-    -webkit-transform: translateY(-4px);
-            transform: translateY(-4px);
+    transform: translateY(-4px);
   }
   100% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
-  }
-}
-@-webkit-keyframes elementor-animation-bob-float {
-  100% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
+    transform: translateY(-8px);
   }
 }
 @keyframes elementor-animation-bob-float {
   100% {
-    -webkit-transform: translateY(-8px);
-            transform: translateY(-8px);
+    transform: translateY(-8px);
   }
 }
 .elementor-animation-bob:active, .elementor-animation-bob:focus, .elementor-animation-bob:hover {
-  -webkit-animation-name: elementor-animation-bob-float, elementor-animation-bob;
-          animation-name: elementor-animation-bob-float, elementor-animation-bob;
-  -webkit-animation-duration: 0.3s, 1.5s;
-          animation-duration: 0.3s, 1.5s;
-  -webkit-animation-delay: 0s, 0.3s;
-          animation-delay: 0s, 0.3s;
-  -webkit-animation-timing-function: ease-out, ease-in-out;
-          animation-timing-function: ease-out, ease-in-out;
-  -webkit-animation-iteration-count: 1, infinite;
-          animation-iteration-count: 1, infinite;
-  -webkit-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-  -webkit-animation-direction: normal, alternate;
-          animation-direction: normal, alternate;
-}
-
-@-webkit-keyframes elementor-animation-hang {
-  0% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
-  }
-  50% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
-  }
-  100% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
-  }
+  animation-name: elementor-animation-bob-float, elementor-animation-bob;
+  animation-duration: 0.3s, 1.5s;
+  animation-delay: 0s, 0.3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
 }
 
 @keyframes elementor-animation-hang {
   0% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
+    transform: translateY(8px);
   }
   50% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
+    transform: translateY(4px);
   }
   100% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
-  }
-}
-@-webkit-keyframes elementor-animation-hang-sink {
-  100% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
+    transform: translateY(8px);
   }
 }
 @keyframes elementor-animation-hang-sink {
   100% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
+    transform: translateY(8px);
   }
 }
 .elementor-animation-hang:active, .elementor-animation-hang:focus, .elementor-animation-hang:hover {
-  -webkit-animation-name: elementor-animation-hang-sink, elementor-animation-hang;
-          animation-name: elementor-animation-hang-sink, elementor-animation-hang;
-  -webkit-animation-duration: 0.3s, 1.5s;
-          animation-duration: 0.3s, 1.5s;
-  -webkit-animation-delay: 0s, 0.3s;
-          animation-delay: 0s, 0.3s;
-  -webkit-animation-timing-function: ease-out, ease-in-out;
-          animation-timing-function: ease-out, ease-in-out;
-  -webkit-animation-iteration-count: 1, infinite;
-          animation-iteration-count: 1, infinite;
-  -webkit-animation-fill-mode: forwards;
-          animation-fill-mode: forwards;
-  -webkit-animation-direction: normal, alternate;
-          animation-direction: normal, alternate;
+  animation-name: elementor-animation-hang-sink, elementor-animation-hang;
+  animation-duration: 0.3s, 1.5s;
+  animation-delay: 0s, 0.3s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-iteration-count: 1, infinite;
+  animation-fill-mode: forwards;
+  animation-direction: normal, alternate;
 }
 
 .elementor-animation-skew {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
 }
 .elementor-animation-skew:active, .elementor-animation-skew:focus, .elementor-animation-skew:hover {
-  -webkit-transform: skew(-10deg);
-          transform: skew(-10deg);
+  transform: skew(-10deg);
 }
 
 .elementor-animation-skew-forward {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
-  -webkit-transform-origin: 0 100%;
-          transform-origin: 0 100%;
+  transform-origin: 0 100%;
 }
 .elementor-animation-skew-forward:active, .elementor-animation-skew-forward:focus, .elementor-animation-skew-forward:hover {
-  -webkit-transform: skew(-10deg);
-          transform: skew(-10deg);
+  transform: skew(-10deg);
 }
 
 .elementor-animation-skew-backward {
-  -webkit-transition-duration: 0.3s;
-          transition-duration: 0.3s;
-  -webkit-transition-property: -webkit-transform;
-  transition-property: -webkit-transform;
+  transition-duration: 0.3s;
   transition-property: transform;
-  transition-property: transform, -webkit-transform;
-  -webkit-transform-origin: 0 100%;
-          transform-origin: 0 100%;
+  transform-origin: 0 100%;
 }
 .elementor-animation-skew-backward:active, .elementor-animation-skew-backward:focus, .elementor-animation-skew-backward:hover {
-  -webkit-transform: skew(10deg);
-          transform: skew(10deg);
-}
-
-@-webkit-keyframes elementor-animation-wobble-vertical {
-  16.65% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
-  }
-  33.3% {
-    -webkit-transform: translateY(-6px);
-            transform: translateY(-6px);
-  }
-  49.95% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
-  }
-  66.6% {
-    -webkit-transform: translateY(-2px);
-            transform: translateY(-2px);
-  }
-  83.25% {
-    -webkit-transform: translateY(1px);
-            transform: translateY(1px);
-  }
-  100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-  }
+  transform: skew(10deg);
 }
 
 @keyframes elementor-animation-wobble-vertical {
   16.65% {
-    -webkit-transform: translateY(8px);
-            transform: translateY(8px);
+    transform: translateY(8px);
   }
   33.3% {
-    -webkit-transform: translateY(-6px);
-            transform: translateY(-6px);
+    transform: translateY(-6px);
   }
   49.95% {
-    -webkit-transform: translateY(4px);
-            transform: translateY(4px);
+    transform: translateY(4px);
   }
   66.6% {
-    -webkit-transform: translateY(-2px);
-            transform: translateY(-2px);
+    transform: translateY(-2px);
   }
   83.25% {
-    -webkit-transform: translateY(1px);
-            transform: translateY(1px);
+    transform: translateY(1px);
   }
   100% {
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
+    transform: translateY(0);
   }
 }
 .elementor-animation-wobble-vertical:active, .elementor-animation-wobble-vertical:focus, .elementor-animation-wobble-vertical:hover {
-  -webkit-animation-name: elementor-animation-wobble-vertical;
-          animation-name: elementor-animation-wobble-vertical;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-horizontal {
-  16.65% {
-    -webkit-transform: translateX(8px);
-            transform: translateX(8px);
-  }
-  33.3% {
-    -webkit-transform: translateX(-6px);
-            transform: translateX(-6px);
-  }
-  49.95% {
-    -webkit-transform: translateX(4px);
-            transform: translateX(4px);
-  }
-  66.6% {
-    -webkit-transform: translateX(-2px);
-            transform: translateX(-2px);
-  }
-  83.25% {
-    -webkit-transform: translateX(1px);
-            transform: translateX(1px);
-  }
-  100% {
-    -webkit-transform: translateX(0);
-            transform: translateX(0);
-  }
+  animation-name: elementor-animation-wobble-vertical;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-horizontal {
   16.65% {
-    -webkit-transform: translateX(8px);
-            transform: translateX(8px);
+    transform: translateX(8px);
   }
   33.3% {
-    -webkit-transform: translateX(-6px);
-            transform: translateX(-6px);
+    transform: translateX(-6px);
   }
   49.95% {
-    -webkit-transform: translateX(4px);
-            transform: translateX(4px);
+    transform: translateX(4px);
   }
   66.6% {
-    -webkit-transform: translateX(-2px);
-            transform: translateX(-2px);
+    transform: translateX(-2px);
   }
   83.25% {
-    -webkit-transform: translateX(1px);
-            transform: translateX(1px);
+    transform: translateX(1px);
   }
   100% {
-    -webkit-transform: translateX(0);
-            transform: translateX(0);
+    transform: translateX(0);
   }
 }
 .elementor-animation-wobble-horizontal:active, .elementor-animation-wobble-horizontal:focus, .elementor-animation-wobble-horizontal:hover {
-  -webkit-animation-name: elementor-animation-wobble-horizontal;
-          animation-name: elementor-animation-wobble-horizontal;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-to-bottom-right {
-  16.65% {
-    -webkit-transform: translate(8px, 8px);
-            transform: translate(8px, 8px);
-  }
-  33.3% {
-    -webkit-transform: translate(-6px, -6px);
-            transform: translate(-6px, -6px);
-  }
-  49.95% {
-    -webkit-transform: translate(4px, 4px);
-            transform: translate(4px, 4px);
-  }
-  66.6% {
-    -webkit-transform: translate(-2px, -2px);
-            transform: translate(-2px, -2px);
-  }
-  83.25% {
-    -webkit-transform: translate(1px, 1px);
-            transform: translate(1px, 1px);
-  }
-  100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
-  }
+  animation-name: elementor-animation-wobble-horizontal;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-to-bottom-right {
   16.65% {
-    -webkit-transform: translate(8px, 8px);
-            transform: translate(8px, 8px);
+    transform: translate(8px, 8px);
   }
   33.3% {
-    -webkit-transform: translate(-6px, -6px);
-            transform: translate(-6px, -6px);
+    transform: translate(-6px, -6px);
   }
   49.95% {
-    -webkit-transform: translate(4px, 4px);
-            transform: translate(4px, 4px);
+    transform: translate(4px, 4px);
   }
   66.6% {
-    -webkit-transform: translate(-2px, -2px);
-            transform: translate(-2px, -2px);
+    transform: translate(-2px, -2px);
   }
   83.25% {
-    -webkit-transform: translate(1px, 1px);
-            transform: translate(1px, 1px);
+    transform: translate(1px, 1px);
   }
   100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 .elementor-animation-wobble-to-bottom-right:active, .elementor-animation-wobble-to-bottom-right:focus, .elementor-animation-wobble-to-bottom-right:hover {
-  -webkit-animation-name: elementor-animation-wobble-to-bottom-right;
-          animation-name: elementor-animation-wobble-to-bottom-right;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-to-top-right {
-  16.65% {
-    -webkit-transform: translate(8px, -8px);
-            transform: translate(8px, -8px);
-  }
-  33.3% {
-    -webkit-transform: translate(-6px, 6px);
-            transform: translate(-6px, 6px);
-  }
-  49.95% {
-    -webkit-transform: translate(4px, -4px);
-            transform: translate(4px, -4px);
-  }
-  66.6% {
-    -webkit-transform: translate(-2px, 2px);
-            transform: translate(-2px, 2px);
-  }
-  83.25% {
-    -webkit-transform: translate(1px, -1px);
-            transform: translate(1px, -1px);
-  }
-  100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
-  }
+  animation-name: elementor-animation-wobble-to-bottom-right;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-to-top-right {
   16.65% {
-    -webkit-transform: translate(8px, -8px);
-            transform: translate(8px, -8px);
+    transform: translate(8px, -8px);
   }
   33.3% {
-    -webkit-transform: translate(-6px, 6px);
-            transform: translate(-6px, 6px);
+    transform: translate(-6px, 6px);
   }
   49.95% {
-    -webkit-transform: translate(4px, -4px);
-            transform: translate(4px, -4px);
+    transform: translate(4px, -4px);
   }
   66.6% {
-    -webkit-transform: translate(-2px, 2px);
-            transform: translate(-2px, 2px);
+    transform: translate(-2px, 2px);
   }
   83.25% {
-    -webkit-transform: translate(1px, -1px);
-            transform: translate(1px, -1px);
+    transform: translate(1px, -1px);
   }
   100% {
-    -webkit-transform: translate(0, 0);
-            transform: translate(0, 0);
+    transform: translate(0, 0);
   }
 }
 .elementor-animation-wobble-to-top-right:active, .elementor-animation-wobble-to-top-right:focus, .elementor-animation-wobble-to-top-right:hover {
-  -webkit-animation-name: elementor-animation-wobble-to-top-right;
-          animation-name: elementor-animation-wobble-to-top-right;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-top {
-  16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
-  }
-  33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
-  }
-  49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
-  }
-  66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
-  }
-  83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
-  }
-  100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
-  }
+  animation-name: elementor-animation-wobble-to-top-right;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-top {
   16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
+    transform: skew(-12deg);
   }
   33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
+    transform: skew(10deg);
   }
   49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
+    transform: skew(-6deg);
   }
   66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
+    transform: skew(4deg);
   }
   83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
+    transform: skew(-2deg);
   }
   100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
+    transform: skew(0);
   }
 }
 .elementor-animation-wobble-top {
-  -webkit-transform-origin: 0 100%;
-          transform-origin: 0 100%;
+  transform-origin: 0 100%;
 }
 .elementor-animation-wobble-top:active, .elementor-animation-wobble-top:focus, .elementor-animation-wobble-top:hover {
-  -webkit-animation-name: elementor-animation-wobble-top;
-          animation-name: elementor-animation-wobble-top;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-bottom {
-  16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
-  }
-  33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
-  }
-  49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
-  }
-  66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
-  }
-  83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
-  }
-  100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
-  }
+  animation-name: elementor-animation-wobble-top;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-bottom {
   16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
+    transform: skew(-12deg);
   }
   33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
+    transform: skew(10deg);
   }
   49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
+    transform: skew(-6deg);
   }
   66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
+    transform: skew(4deg);
   }
   83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
+    transform: skew(-2deg);
   }
   100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
+    transform: skew(0);
   }
 }
 .elementor-animation-wobble-bottom {
-  -webkit-transform-origin: 100% 0;
-          transform-origin: 100% 0;
+  transform-origin: 100% 0;
 }
 .elementor-animation-wobble-bottom:active, .elementor-animation-wobble-bottom:focus, .elementor-animation-wobble-bottom:hover {
-  -webkit-animation-name: elementor-animation-wobble-bottom;
-          animation-name: elementor-animation-wobble-bottom;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-wobble-skew {
-  16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
-  }
-  33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
-  }
-  49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
-  }
-  66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
-  }
-  83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
-  }
-  100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
-  }
+  animation-name: elementor-animation-wobble-bottom;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-wobble-skew {
   16.65% {
-    -webkit-transform: skew(-12deg);
-            transform: skew(-12deg);
+    transform: skew(-12deg);
   }
   33.3% {
-    -webkit-transform: skew(10deg);
-            transform: skew(10deg);
+    transform: skew(10deg);
   }
   49.95% {
-    -webkit-transform: skew(-6deg);
-            transform: skew(-6deg);
+    transform: skew(-6deg);
   }
   66.6% {
-    -webkit-transform: skew(4deg);
-            transform: skew(4deg);
+    transform: skew(4deg);
   }
   83.25% {
-    -webkit-transform: skew(-2deg);
-            transform: skew(-2deg);
+    transform: skew(-2deg);
   }
   100% {
-    -webkit-transform: skew(0);
-            transform: skew(0);
+    transform: skew(0);
   }
 }
 .elementor-animation-wobble-skew:active, .elementor-animation-wobble-skew:focus, .elementor-animation-wobble-skew:hover {
-  -webkit-animation-name: elementor-animation-wobble-skew;
-          animation-name: elementor-animation-wobble-skew;
-  -webkit-animation-duration: 1s;
-          animation-duration: 1s;
-  -webkit-animation-timing-function: ease-in-out;
-          animation-timing-function: ease-in-out;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
-}
-
-@-webkit-keyframes elementor-animation-buzz {
-  50% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
-  }
-  100% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
-  }
+  animation-name: elementor-animation-wobble-skew;
+  animation-duration: 1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
 }
 
 @keyframes elementor-animation-buzz {
   50% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
   }
   100% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
   }
 }
 .elementor-animation-buzz:active, .elementor-animation-buzz:focus, .elementor-animation-buzz:hover {
-  -webkit-animation-name: elementor-animation-buzz;
-          animation-name: elementor-animation-buzz;
-  -webkit-animation-duration: 0.15s;
-          animation-duration: 0.15s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-}
-
-@-webkit-keyframes elementor-animation-buzz-out {
-  10% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
-  }
-  20% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
-  }
-  30% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
-  }
-  40% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
-  }
-  50% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-            transform: translateX(2px) rotate(1deg);
-  }
-  60% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-            transform: translateX(-2px) rotate(-1deg);
-  }
-  70% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-            transform: translateX(2px) rotate(1deg);
-  }
-  80% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-            transform: translateX(-2px) rotate(-1deg);
-  }
-  90% {
-    -webkit-transform: translateX(1px) rotate(0);
-            transform: translateX(1px) rotate(0);
-  }
-  100% {
-    -webkit-transform: translateX(-1px) rotate(0);
-            transform: translateX(-1px) rotate(0);
-  }
+  animation-name: elementor-animation-buzz;
+  animation-duration: 0.15s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
 @keyframes elementor-animation-buzz-out {
   10% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
   }
   20% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
   }
   30% {
-    -webkit-transform: translateX(3px) rotate(2deg);
-            transform: translateX(3px) rotate(2deg);
+    transform: translateX(3px) rotate(2deg);
   }
   40% {
-    -webkit-transform: translateX(-3px) rotate(-2deg);
-            transform: translateX(-3px) rotate(-2deg);
+    transform: translateX(-3px) rotate(-2deg);
   }
   50% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-            transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
   }
   60% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-            transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
   }
   70% {
-    -webkit-transform: translateX(2px) rotate(1deg);
-            transform: translateX(2px) rotate(1deg);
+    transform: translateX(2px) rotate(1deg);
   }
   80% {
-    -webkit-transform: translateX(-2px) rotate(-1deg);
-            transform: translateX(-2px) rotate(-1deg);
+    transform: translateX(-2px) rotate(-1deg);
   }
   90% {
-    -webkit-transform: translateX(1px) rotate(0);
-            transform: translateX(1px) rotate(0);
+    transform: translateX(1px) rotate(0);
   }
   100% {
-    -webkit-transform: translateX(-1px) rotate(0);
-            transform: translateX(-1px) rotate(0);
+    transform: translateX(-1px) rotate(0);
   }
 }
 .elementor-animation-buzz-out:active, .elementor-animation-buzz-out:focus, .elementor-animation-buzz-out:hover {
-  -webkit-animation-name: elementor-animation-buzz-out;
-          animation-name: elementor-animation-buzz-out;
-  -webkit-animation-duration: 0.75s;
-          animation-duration: 0.75s;
-  -webkit-animation-timing-function: linear;
-          animation-timing-function: linear;
-  -webkit-animation-iteration-count: 1;
-          animation-iteration-count: 1;
+  animation-name: elementor-animation-buzz-out;
+  animation-duration: 0.75s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
 }
 
 @media (max-width: 767px) {

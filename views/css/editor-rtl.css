@@ -100,7 +100,6 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
 }
 
 #elementor-preview:not(.ui-resizable-resizing), #elementor-panel:not(.ui-resizable-resizing) {
-  -webkit-transition: right 0.5s, width 0.5s;
   transition: right 0.5s, width 0.5s;
 }
 
@@ -118,8 +117,7 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
   width: 100px;
 }
 .elementor-loader-wrapper .elementor-loader {
@@ -131,8 +129,7 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
 }
 .elementor-loader-wrapper .elementor-loader-box {
   position: absolute;
-  -webkit-animation: load 1.8s linear infinite;
-          animation: load 1.8s linear infinite;
+  animation: load 1.8s linear infinite;
 }
 .elementor-loader-wrapper .elementor-loader-box:nth-of-type(1) {
   width: 20%;
@@ -147,29 +144,15 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
 }
 .elementor-loader-wrapper .elementor-loader-box:nth-of-type(2) {
   top: 0;
-  -webkit-animation-delay: 0.45s;
-          animation-delay: 0.45s;
+  animation-delay: 0.45s;
 }
 .elementor-loader-wrapper .elementor-loader-box:nth-of-type(3) {
   top: 40%;
-  -webkit-animation-delay: 0.9s;
-          animation-delay: 0.9s;
+  animation-delay: 0.9s;
 }
 .elementor-loader-wrapper .elementor-loader-box:nth-of-type(4) {
   bottom: 0;
-  -webkit-animation-delay: 1.35s;
-          animation-delay: 1.35s;
-}
-@-webkit-keyframes load {
-  0% {
-    opacity: 0.3;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.3;
-  }
+  animation-delay: 1.35s;
 }
 @keyframes load {
   0% {
@@ -190,19 +173,7 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   margin-top: 30px;
   letter-spacing: 7px;
   font-size: 10px;
-  -webkit-animation: load-title 1.5s linear infinite;
-          animation: load-title 1.5s linear infinite;
-}
-@-webkit-keyframes load-title {
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-  100% {
-    opacity: 1;
-  }
+  animation: load-title 1.5s linear infinite;
 }
 @keyframes load-title {
   0% {
@@ -235,7 +206,6 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   border: none;
   cursor: pointer;
   border-radius: 3px;
-  -webkit-transition: box-shadow 0.5s, opacity 0.5s;
   transition: box-shadow 0.5s, opacity 0.5s;
   outline: none;
 }
@@ -308,7 +278,6 @@ input[type=radio] {
   vertical-align: middle;
   width: 16px;
   min-width: 16px;
-  -webkit-transition: 0.05s border-color ease-in-out;
   transition: 0.05s border-color ease-in-out;
 }
 input[type=checkbox]:focus,
@@ -362,9 +331,14 @@ select {
   display: none;
   position: absolute;
   /* please don't change 'position' */
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
   border-radius: 4px;
   opacity: 0;
   -webkit-transition: background-color 0.2s linear, opacity 0.2s linear;
+  -moz-transition: background-color 0.2s linear, opacity 0.2s linear;
+  -o-transition: background-color 0.2s linear, opacity 0.2s linear;
   transition: background-color 0.2s linear, opacity 0.2s linear;
   bottom: 3px;
   /* there must be 'bottom' for ps-scrollbar-x-rail */
@@ -375,8 +349,13 @@ select {
   position: absolute;
   /* please don't change 'position' */
   background-color: #aaa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
   border-radius: 4px;
   -webkit-transition: background-color 0.2s linear;
+  -moz-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
   transition: background-color 0.2s linear;
   bottom: 0;
   /* there must be 'bottom' for ps-scrollbar-x */
@@ -387,9 +366,14 @@ select {
   display: none;
   position: absolute;
   /* please don't change 'position' */
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
   border-radius: 4px;
   opacity: 0;
   -webkit-transition: background-color 0.2s linear, opacity 0.2s linear;
+  -moz-transition: background-color 0.2s linear, opacity 0.2s linear;
+  -o-transition: background-color 0.2s linear, opacity 0.2s linear;
   transition: background-color 0.2s linear, opacity 0.2s linear;
   right: 3px;
   /* there must be 'right' for ps-scrollbar-y-rail */
@@ -400,8 +384,13 @@ select {
   position: absolute;
   /* please don't change 'position' */
   background-color: #aaa;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
   border-radius: 4px;
   -webkit-transition: background-color 0.2s linear;
+  -moz-transition: background-color 0.2s linear;
+  -o-transition: background-color 0.2s linear;
   transition: background-color 0.2s linear;
   right: 0;
   /* there must be 'right' for ps-scrollbar-y */
@@ -477,8 +466,7 @@ select {
   height: 100%;
   box-shadow: 0 0 10px #39b54a, 0 0 5px #39b54a;
   opacity: 1;
-  -webkit-transform: rotate(3deg) translate(0px, -4px);
-          transform: rotate(3deg) translate(0px, -4px);
+  transform: rotate(3deg) translate(0px, -4px);
 }
 
 /* Remove these to get rid of the spinner */
@@ -498,8 +486,7 @@ select {
   border-top-color: #39b54a;
   border-left-color: #39b54a;
   border-radius: 50%;
-  -webkit-animation: nprogress-spinner 400ms linear infinite;
-          animation: nprogress-spinner 400ms linear infinite;
+  animation: nprogress-spinner 400ms linear infinite;
 }
 
 .nprogress-custom-parent {
@@ -512,25 +499,12 @@ select {
   position: absolute;
 }
 
-@-webkit-keyframes nprogress-spinner {
-  0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-}
-
 @keyframes nprogress-spinner {
   0% {
-    -webkit-transform: rotate(0deg);
-            transform: rotate(0deg);
+    transform: rotate(0deg);
   }
   100% {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }
 #nprogress .bar,
@@ -555,7 +529,6 @@ select {
 }
 #elementor-panel a {
   color: #9b0a46;
-  -webkit-transition: none;
   transition: none;
 }
 #elementor-panel a:visited {
@@ -719,7 +692,6 @@ select {
   font-size: 19px;
   height: 40px;
   line-height: 40px;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 #elementor-panel .elementor-header-button .elementor-icon:hover {
@@ -771,7 +743,7 @@ select {
 }
 #elementor-panel #elementor-panel-elements-languageselector-wrapper {
   position: relative;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#fff));
+  background-image: -webkit-linear-gradient(top, #f3f3f3, #fff);
   background-image: linear-gradient(180deg, #f3f3f3, #fff);
   font-size: 11px;
   padding: 5px 15px 5px 15px;
@@ -780,15 +752,9 @@ select {
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
   margin-bottom: 2px;
   line-height: 23px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-elements-language-import {
   display: inline-block;
@@ -843,8 +809,7 @@ select {
   left: 15px;
   top: 50%;
   color: #a4afb7;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 #elementor-panel #elementor-panel-elements-search-input {
   width: 100%;
@@ -912,8 +877,7 @@ select {
   margin-left: 13px;
 }
 #elementor-panel #elementor-panel-scheme-color .wp-picker-container.wp-picker-active {
-  -webkit-transform: translateY(-37px);
-          transform: translateY(-37px);
+  transform: translateY(-37px);
 }
 #elementor-panel #elementor-panel-scheme-color .wp-picker-container.wp-picker-active .wp-color-result {
   margin-right: 7px;
@@ -951,7 +915,6 @@ select {
   margin-top: 5px;
 }
 #elementor-panel .elementor-panel-scheme-color-system-items {
-  -webkit-transition: border 0.5s;
   transition: border 0.5s;
   overflow: hidden;
   padding: 3px;
@@ -1042,7 +1005,6 @@ select {
   content: "\f0db";
 }
 #elementor-panel #elementor-panel-page-editor .elementor-tabs-controls ul li.active {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#fff));
   background-image: linear-gradient(to bottom, #f3f3f3, #fff);
   border-bottom: 3px solid #9b0a46;
 }
@@ -1139,40 +1101,21 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin: 15px 0;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-block .elementor-control-field {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  flex-wrap: wrap;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-block .elementor-control-input-wrapper {
-  -webkit-flex-basis: 100%;
-      -ms-flex-preferred-size: 100%;
-          flex-basis: 100%;
+  flex-basis: 100%;
   margin-top: 10px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-field {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-title {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-description {
   margin-top: 10px;
@@ -1185,26 +1128,16 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   color: #a4afb7;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   text-align: center;
   border-radius: 3px;
   border: 1px solid #a4afb7;
   overflow: hidden;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-choices .elementor-choices-label {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
   font-size: 12px;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
   cursor: pointer;
   line-height: 26px;
@@ -1226,10 +1159,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   border-left: none;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-units-choices {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
   text-align: left;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-units-choices input {
@@ -1248,9 +1178,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   font-size: 9px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-responsive-switchers {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   margin-right: 5px;
 }
@@ -1266,7 +1193,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   color: #fff;
   font-size: 8px;
   text-align: center;
-  -webkit-transition: background-color 0.5s;
   transition: background-color 0.5s;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-responsive-switcher:hover {
@@ -1320,8 +1246,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
   color: #fff;
   font-size: 20px;
 }
@@ -1490,8 +1415,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   float: left;
 }
 #elementor-panel #elementor-panel-page-editor .wp-picker-container.wp-picker-active {
-  -webkit-transform: translateY(-18px);
-          transform: translateY(-18px);
+  transform: translateY(-18px);
 }
 #elementor-panel #elementor-panel-page-editor .wp-picker-container.wp-picker-active .wp-color-result {
   margin-right: 3px;
@@ -1823,8 +1747,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-title:before, #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets-title:before {
   top: 0;
   background-color: #e6e9ec;
-  -webkit-transform: translateY(-100%);
-          transform: translateY(-100%);
+  transform: translateY(-100%);
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-title:after, #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets-title:after {
   bottom: 0;
@@ -1845,17 +1768,9 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   height: 1px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-flex-wrap: wrap;
-      -ms-flex-wrap: wrap;
-          flex-wrap: wrap;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-structure .elementor-control-structure-more-presets input {
   display: none;
@@ -1939,7 +1854,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   background-color: #d5dadf;
   height: 40px;
   border-spacing: 1px;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-repeater .elementor-repeater-row-tools:hover {
@@ -2014,35 +1928,21 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:before {
   top: 0;
-  background: -webkit-gradient(linear, left bottom, left top, from(transparent), to(rgba(0, 0, 0, 0.1)));
   background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
   border-top: 1px solid #d5dadf;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:after {
   bottom: 15px;
-  background: -webkit-gradient(linear, left top, left bottom, from(transparent), to(rgba(0, 0, 0, 0.1)));
   background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
   border-bottom: 1px solid #d5dadf;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  align-items: center;
+  justify-content: space-between;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field .elementor-control-title {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch {
   position: relative;
@@ -2069,9 +1969,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   background: #eceeef;
   border-radius: inherit;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.15);
-  -webkit-transition: 0.15s ease-out;
   transition: 0.15s ease-out;
-  -webkit-transition-property: opacity, background;
   transition-property: opacity, background;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-label:before, #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-label:after {
@@ -2080,7 +1978,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   width: 50%;
   text-align: center;
   line-height: 20px;
-  -webkit-transition: inherit;
   transition: inherit;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-label:before {
@@ -2114,7 +2011,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   height: 18px;
   background: white;
   border-radius: 10px;
-  -webkit-transition: left 0.15s ease-out;
   transition: left 0.15s ease-out;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-switch-input:checked ~ .elementor-switch-handle {
@@ -2122,23 +2018,13 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   box-shadow: -1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-tabs {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   text-align: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-tabs .elementor-control-type-tab {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
   font-size: 12px;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
   cursor: pointer;
   line-height: 26px;
@@ -2161,15 +2047,9 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   display: none !important;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   gap: 10px;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider {
   display: inline-block;
@@ -2185,18 +2065,14 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   background-color: #fff;
   display: inline-block;
   top: 50%;
-  -webkit-transform: translateY(-50%) translateX(-8px);
-          transform: translateY(-50%) translateX(-8px);
+  transform: translateY(-50%) translateX(-8px);
   position: absolute;
   box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.3);
   border-radius: 50%;
   cursor: pointer;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider-input {
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 #elementor-panel .wp-picker-container.wp-picker-active {
   position: absolute;
@@ -2225,7 +2101,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   width: 48px;
   height: 25px;
   box-shadow: inset 0 0 0 3px white;
-  -webkit-transition: border 0.5s;
   transition: border 0.5s;
   padding: 0;
   border-radius: 3px;
@@ -2270,44 +2145,22 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   background-color: #495157;
 }
 #elementor-panel #elementor-panel-footer-tools {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
   gap: 10px;
-  -webkit-box-pack: space-evenly;
-  -webkit-justify-content: space-evenly;
-      -ms-flex-pack: space-evenly;
-          justify-content: space-evenly;
+  justify-content: space-evenly;
   padding-inline: 10px;
 }
 #elementor-panel .elementor-panel-footer-tool {
   text-align: center;
   cursor: pointer;
   color: #a4afb7;
-  -webkit-transition: all 0.5s;
   transition: all 0.5s;
   height: 40px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-flex: 1;
-  -webkit-flex-grow: 1;
-      -ms-flex-positive: 1;
-          flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
   max-width: 40px;
 }
 #elementor-panel .elementor-panel-footer-tool.elementor-open {
@@ -2344,8 +2197,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin-bottom: 1px;
 }
 #elementor-panel .elementor-panel-footer-sub-menu-item[data-device-mode=mobile-landscape] .fa-mobile {
-  -webkit-transform: rotate(-90deg);
-          transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 #elementor-panel .elementor-panel-footer-sub-menu-item:hover {
   background-color: rgba(0, 0, 0, 0.2);
@@ -2402,8 +2254,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   top: 50%;
   width: 15px;
   height: 50px;
-  -webkit-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   background-color: #e6e9ec;
   font-size: 15px;
   box-shadow: -3px 1px 5px rgba(0, 0, 0, 0.1);
@@ -2434,8 +2285,7 @@ body.elementor-editor-preview #elementor-mode-switcher {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 
 #elementor-mode-switcher-preview-input {
@@ -2455,36 +2305,18 @@ body.elementor-editor-preview #elementor-mode-switcher {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
   font-size: 12px;
   line-height: 1.4;
-  -webkit-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
-  -webkit-animation: contextMenuFadeIn 0.08s ease-out;
-          animation: contextMenuFadeIn 0.08s ease-out;
-}
-
-@-webkit-keyframes contextMenuFadeIn {
-  from {
-    opacity: 0;
-    -webkit-transform: translateY(-2px);
-            transform: translateY(-2px);
-  }
-  to {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
-  }
+  user-select: none;
+  animation: contextMenuFadeIn 0.08s ease-out;
 }
 
 @keyframes contextMenuFadeIn {
   from {
     opacity: 0;
-    -webkit-transform: translateY(-2px);
-            transform: translateY(-2px);
+    transform: translateY(-2px);
   }
   to {
     opacity: 1;
-    -webkit-transform: translateY(0);
-            transform: translateY(0);
+    transform: translateY(0);
   }
 }
 .iqit-context-menu-list {
@@ -2494,20 +2326,13 @@ body.elementor-editor-preview #elementor-mode-switcher {
 }
 
 .iqit-context-menu-item {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
   padding: 6px 12px;
   cursor: pointer;
   white-space: nowrap;
-  -webkit-transition: background-color 0.1s ease;
   transition: background-color 0.1s ease;
   gap: 1rem;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  align-items: center;
 }
 .iqit-context-menu-item:hover {
   background-color: rgba(0, 0, 0, 0.05);
@@ -2848,7 +2673,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   color: inherit;
 }
 #elementor-template-library-modal a.elementor-template-library-blank-footer-link {
-  -webkit-transition: color 0.5s;
   transition: color 0.5s;
 }
 #elementor-template-library-modal a.elementor-template-library-blank-footer-link:hover {
@@ -2906,7 +2730,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   cursor: pointer;
 }
 .elementor-template-library-menu-item.elementor-active {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#f3f3f3), to(#fff));
   background-image: linear-gradient(to bottom, #f3f3f3, #fff);
   border-bottom: 3px solid #9b0a46;
 }
@@ -2928,7 +2751,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   height: 50px;
   box-sizing: content-box;
   cursor: pointer;
-  -webkit-transition: color 0.5s;
   transition: color 0.5s;
 }
 .elementor-template-library-header-item:not(:hover) {
@@ -2938,8 +2760,7 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 .elementor-template-library-header-item > i {
   font-size: 18px;
@@ -2950,8 +2771,7 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
 }
 
 #elementor-template-library-header-load > .icon-upload {
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 
 #elementor-template-library-header-preview > * {
@@ -2972,7 +2792,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   padding: 16.5px 0 15px 16.5px;
   border-left: 1px solid #e6e9ec;
   cursor: pointer;
-  -webkit-transition: color 0.5s;
   transition: color 0.5s;
 }
 #elementor-template-library-header-preview-back:not(:hover) {
@@ -3031,7 +2850,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
-  -webkit-transition: opacity 0.5s;
   transition: opacity 0.5s;
 }
 .elementor-template-library-template-remote .elementor-template-library-template-insert {
@@ -3049,8 +2867,7 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   position: absolute;
   top: 50%;
   left: 50%;
-  -webkit-transform: translateX(-50%) translateY(-50%);
-          transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 .elementor-template-library-template-remote .elementor-template-library-template-insert {
   padding: 11px;
@@ -3072,7 +2889,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   width: 100%;
   border-bottom: 1px solid #d5dadf;
   height: 50px;
-  -webkit-transition: background-color 0.3s linear;
   transition: background-color 0.3s linear;
 }
 .elementor-template-library-template-local:hover {
@@ -3110,7 +2926,6 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   margin-right: 15px;
   cursor: pointer;
   font-weight: 500;
-  -webkit-transition: color 0.5s;
   transition: color 0.5s;
 }
 .elementor-template-library-template-local .elementor-template-library-template-controls > div:not(:hover) {
@@ -3134,8 +2949,7 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
 #elementor-template-library-preview iframe {
   width: 1440px;
   height: 150%;
-  -webkit-transform: scale(0.666) translateX(25%) translateY(-25%);
-          transform: scale(0.666) translateX(25%) translateY(-25%);
+  transform: scale(0.666) translateX(25%) translateY(-25%);
 }
 
 .elementor-template-library-blank-title {
@@ -3152,18 +2966,9 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
 
 #elementor-template-library-save-template-form, #elementor-template-library-load-template-form {
   margin-top: 55px;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  align-items: center;
+  justify-content: center;
 }
 #elementor-template-library-save-template-form > *, #elementor-template-library-load-template-form > * {
   height: 60px;
@@ -3222,8 +3027,7 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   position: absolute;
   bottom: 90px;
   left: 50%;
-  -webkit-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
   color: #a4afb7;
   font-size: 13px;
   font-style: italic;

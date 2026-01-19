@@ -7193,7 +7193,6 @@ ControlBaseItemView = Marionette.CompositeView.extend( {
 		elementor.channels.data.trigger( 'scrollbar:update' );
 	},
 
-
 	onControlSwitchTab: function( activeTab ) {
 		var isActiveTab = ( activeTab === this.model.get( 'tab' ) );
 		this.$el.toggleClass( 'elementor-active-tab', isActiveTab );

@@ -51,6 +51,10 @@ class Group_Control_Text_Shadow extends Group_Control_Base
             ],
         ];
 
+        if (!empty($args['separator'])) {
+            $controls['text_shadow_type']['separator'] = $args['separator'];
+        }
+
         $controls['text_shadow'] = [
             'label' => \IqitElementorTranslater::get()->l('Text Shadow', 'Text Shadow Control'),
             'type' => Controls_Manager::TEXT_SHADOW,

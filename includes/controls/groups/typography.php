@@ -179,8 +179,13 @@ class Group_Control_Typography extends Group_Control_Base
                 'default' => 'default',
                 'label_block' => false,
                 'options' => [
-                    'default' => ['title' => \IqitElementorTranslater::get()->l('Default', 'elementor')],
-                    'custom' => ['title' => \IqitElementorTranslater::get()->l('Custom', 'elementor')],
+                    'default' => [
+                        'title' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
+                    ],
+                    'custom' => [
+                        'title' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
+                        'icon' => 'eicon-edit',
+                    ],
                 ],
             ],
         ];

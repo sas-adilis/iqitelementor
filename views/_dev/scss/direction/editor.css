@@ -1029,7 +1029,7 @@ select {
 }
 #elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper .elementor-section-content {
   display: none;
-  padding-block: 15px;
+  padding-top: 15px;
   background-color: #fff;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper.elementor-open .elementor-section-content {

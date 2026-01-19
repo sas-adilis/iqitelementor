@@ -2,24 +2,72 @@
 // Visibility by Devices (based on breakpoints)
 //
 
-@media (max-width: $screen-sm-max) {
-	.elementor-hidden-phone {
+// Visibility (for preview mode or front-end)
+body:not(.elementor-editor-active) {
+	@media (max-width: $screen-sm-max) {
+		.elementor-hidden-phone {
+			display: none;
+		}
+	}
+
+	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+		.elementor-hidden-tablet {
+			display: none;
+		}
+	}
+
+	@media (min-width: $screen-lg-min) {
+		.elementor-hidden-desktop {
+			display: none;
+		}
+	}
+
+	.elementor-hidden {
 		display: none;
 	}
 }
 
-@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-	.elementor-hidden-tablet {
-		display: none;
+@mixin editor-visibility-overlay($z: 1000) {
+	position: relative;
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: repeating-linear-gradient(
+			-45deg,
+			rgba(255, 0, 0, 0.1),
+			rgba(255, 0, 0, 0.1) 5px,
+			rgba(255, 0, 0, 0.05) 5px,
+			rgba(255, 0, 0, 0.05) 10px
+		);
+		border: 1px dashed rgba(255, 0, 0, 0.3);
+		z-index: $z;
 	}
 }
 
-@media (min-width: $screen-lg-min) {
-	.elementor-hidden-desktop {
-		display: none;
-	}
-}
 
-.elementor-hidden {
-	display: none;
+body.elementor-editor-active {
+	@media (max-width: $screen-sm-max) {
+		.elementor-hidden-phone {
+			@include editor-visibility-overlay();
+		}
+	}
+
+	@media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
+		.elementor-hidden-tablet {
+			@include editor-visibility-overlay();
+		}
+	}
+
+	@media (min-width: $screen-lg-min) {
+		.elementor-hidden-desktop {
+			@include editor-visibility-overlay();
+		}
+	}
+
+	.elementor-hidden {
+		@include editor-visibility-overlay();
+	}
 }

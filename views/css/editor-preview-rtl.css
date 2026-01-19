@@ -3,7 +3,8 @@ body.layout-section .entry-content {
 }
 
 #elementor .animated {
-  animation-fill-mode: none !important;
+  -webkit-animation-fill-mode: none !important;
+          animation-fill-mode: none !important;
 }
 #elementor .elementor-editor-element-settings-list {
   word-break: normal;
@@ -95,8 +96,10 @@ html.elementor-html {
   }
 }
 .elementor-editor-active #elementor .elementor-element[data-side] {
-  animation: increase-border 0.6s;
-  animation-timing-function: ease-out;
+  -webkit-animation: increase-border 0.6s;
+          animation: increase-border 0.6s;
+  -webkit-animation-timing-function: ease-out;
+          animation-timing-function: ease-out;
 }
 .elementor-editor-active #elementor .elementor-element[data-side=top], .elementor-editor-active #elementor .elementor-element[data-side=bottom] + .elementor-element {
   border-top: 4px solid #3c90a8;
@@ -174,7 +177,8 @@ html.elementor-html {
 }
 .elementor-editor-active #elementor .elementor-editor-section-settings {
   left: 50%;
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
   z-index: 1;
   bottom: 100%;
   border-radius: 3px 3px 0 0;
@@ -336,6 +340,7 @@ html.elementor-html {
   opacity: 0.3;
 }
 .elementor-editor-active #elementor .elementor-widget:not(.elementor-loading):not(.elementor-widget-menu-anchor) {
+  -webkit-transition: all 0.1s;
   transition: all 0.1s;
 }
 .elementor-editor-active #elementor .elementor-widget.elementor-element-editable, .elementor-editor-active #elementor .elementor-widget:hover {
@@ -352,7 +357,8 @@ html.elementor-html {
 }
 .elementor-editor-active .elementor-sortable-placeholder {
   background: #3c90a8;
-  transition-timing-function: ease-out;
+  -webkit-transition-timing-function: ease-out;
+          transition-timing-function: ease-out;
   opacity: 0.3;
 }
 .elementor-editor-active .elementor-sortable-placeholder:not(.elementor-column) {

@@ -7,7 +7,7 @@
     {assign var='button_tag' value=$button.button_tag}
 {/if}
 <div class="{if !empty($wrapper_classes)}{$wrapper_classes}{/if}">
-    <{$button_tag} class="{if !empty($button_classes)}{$button_classes}{/if}"{if !empty($button_link.url)} href="{$button_link.url}"{if !empty($button_link.url)} target="_blank"{/if}{/if}>
+    <{$button_tag} class="{if !empty($button_classes)}{$button_classes}{/if}"{if !empty($button_link.url)} href="{$button_link.url}"{if !empty($button_link.is_external) && $button_link.is_external} target="_blank"{/if}{/if}>
         {if !empty($button_icon)}
             <i class="{$button_icon}"></i>
         {/if}

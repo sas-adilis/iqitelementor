@@ -309,6 +309,10 @@ class IqitElementorEditorController extends ModuleAdminController
             _MODULE_DIR_ . 'iqitelementor/views/js/frontend.js?ver=0.9.3',
             _MODULE_DIR_ . 'iqitelementor/views/js/editor.js?ver=0.9.3',
             _MODULE_DIR_ . 'iqitelementor/views/js/navigator.js?ver=0.9.3',
+            'https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/ace.min.js',
+            'https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/mode-css.min.js',
+            'https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/theme-tomorrow.min.js',
+            'https://cdn.jsdelivr.net/npm/ace-builds@1.43.5/src-min-noconflict/ext-language_tools.min.js',
         ]);
 
         $base_url = Tools::getHttpHost(true);  // DON'T TOUCH (base url (only domain) of site (without final /)).

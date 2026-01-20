@@ -38,6 +38,13 @@ class Frontend
     private $column_widths = [];
 
     /**
+     * Custom CSS collected from elements.
+     *
+     * @var array
+     */
+    private $custom_css = [];
+
+    /**
      * Stylesheet object.
      *
      * @var Stylesheet|null
@@ -102,6 +109,10 @@ class Frontend
 
         if (!empty($this->column_widths)) {
             $css_code .= '@media (min-width: 768px) {' . implode('', $this->column_widths) . '}';
+        }
+
+        if (!empty($this->custom_css)) {
+            $css_code .= implode('', $this->custom_css);
         }
 
         if (empty($css_code)) {
@@ -289,6 +300,7 @@ class Frontend
 
         $this->_handle_column_width($element_obj, $element_instance, $element_unique_class);
         $this->_process_style_controls($element_obj, $element_instance, $element_unique_class, $values);
+        $this->_collect_custom_css($element_instance, $element['id']);
 
         // Recursively process child elements
         if (!empty($element['elements'])) {
@@ -296,6 +308,31 @@ class Frontend
                 $this->_parse_style_item($child_element);
             }
         }
+    }
+
+    /**
+     * Collect custom CSS from element settings.
+     *
+     * @param array $element_instance The element instance
+     * @param string $element_id The element ID
+     *
+     * @return void
+     */
+    private function _collect_custom_css(array $element_instance, string $element_id): void
+    {
+        if (empty($element_instance['_custom_css'])) {
+            return;
+        }
+
+        $css = trim($element_instance['_custom_css']);
+
+        if (empty($css)) {
+            return;
+        }
+
+        // Replace "selector" placeholder with the unique element selector
+        $unique_selector = '.elementor-element-' . $element_id;
+        $this->custom_css[] = str_replace('selector', $unique_selector, $css);
     }
 
     /**

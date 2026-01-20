@@ -6,8 +6,11 @@ if (!defined('ELEMENTOR_ABSPATH')) {
     exit;
 }
 
+require_once dirname(__DIR__) . '/traits/advanced-controls.php';
+
 class Element_Section extends Element_Base
 {
+    use IqitElementorAdvancedControlsTrait;
     private static $presets = [];
 
     public function get_id()
@@ -95,6 +98,8 @@ class Element_Section extends Element_Base
         $this->_register_typography_controls();
         $this->_register_advanced_controls();
         $this->_register_responsive_controls();
+        $this->register_custom_attributes_controls(self::TAB_ADVANCED);
+        $this->register_custom_css_controls(self::TAB_ADVANCED);
     }
 
     /**
@@ -830,6 +835,8 @@ class Element_Section extends Element_Base
             'elementor-' . $section_type . '-section',
         ]);
 
+        $this->applyCustomAttributes($instance);
+
         foreach ($this->get_class_controls() as $control) {
             if (empty($instance[$control['name']])) {
                 continue;
@@ -847,6 +854,11 @@ class Element_Section extends Element_Base
         }
 
         $this->add_render_attribute('wrapper', 'data-element_type', $this->get_id());
+
+        // Rend le CSS personnalisé en mode éditeur
+        if (PluginElementor::instance()->editor->is_edit_mode()) {
+            $this->renderCustomCss($instance, $element_id);
+        }
         ?>
         <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
         <?php

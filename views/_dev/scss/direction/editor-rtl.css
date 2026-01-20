@@ -295,6 +295,35 @@ select {
   height: 26px;
 }
 
+.elementor-control-code-wrapper .elementor-code-editor {
+  width: 100%;
+  min-height: 150px;
+  border: 1px solid #d5dadf;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.elementor-control-code-wrapper .elementor-code-editor .ace_gutter {
+  background: #e6e9ec;
+}
+.elementor-control-code-wrapper .elementor-code-editor .ace_selector_highlight {
+  color: #9b0a46;
+}
+
+.elementor-control-_custom_css_description pre {
+  padding: 15px;
+  border-left: 3px solid #9b0a46;
+  position: relative;
+  font-size: 10px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.5;
+  text-align: left;
+  border-radius: 0 3px 3px 0;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.07);
+  background-color: #e6e9ec;
+  overflow: hidden;
+}
+
 .ps-container {
   -ms-touch-action: none;
   overflow: hidden !important;

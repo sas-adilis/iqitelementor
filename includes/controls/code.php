@@ -17,10 +17,14 @@ class Control_Code extends Control_Base
         ?>
 		<div class="elementor-control-field">
 			<label class="elementor-control-title">{{{ data.label }}}</label>
-			<div class="elementor-control-input-wrapper">
-				<textarea rows="{{ data.rows || 5 }}" data-setting="{{ data.name }}" placeholder="{{ data.placeholder }}"></textarea>
+			<div class="elementor-control-input-wrapper elementor-control-code-wrapper">
+				<div class="elementor-code-editor" data-mode="{{ data.language || 'css' }}"></div>
+				<textarea class="elementor-code-editor-value" data-setting="{{ data.name }}" style="display:none;"></textarea>
 			</div>
 		</div>
+		<# if ( data.description ) { #>
+		<div class="elementor-control-description">{{{ data.description }}}</div>
+		<# } #>
 		<?php
     }
 
@@ -28,6 +32,8 @@ class Control_Code extends Control_Base
     {
         return [
             'label_block' => true,
+            'language' => 'css',
+            'rows' => 10,
         ];
     }
 }

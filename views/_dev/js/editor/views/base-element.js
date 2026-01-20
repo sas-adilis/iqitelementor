@@ -188,6 +188,43 @@ BaseElementView = Marionette.CompositeView.extend( {
 		}
 
 		self.addStyleToDocument();
+
+		// Render custom CSS
+		self.renderCustomCSS();
+	},
+
+	renderCustomCSS: function() {
+		var customCSS = this.model.getSetting( '_custom_css' ),
+			styleId = 'elementor-style-' + this.model.get( 'id' ) + '-custom';
+
+		// Find existing element in DOM if not cached
+		if ( ! this.$customCSSElement ) {
+			this.$customCSSElement = elementor.$previewContents.find( '#' + styleId );
+			if ( ! this.$customCSSElement.length ) {
+				this.$customCSSElement = null;
+			}
+		}
+
+		if ( _.isEmpty( customCSS ) ) {
+			// Remove existing custom CSS element if exists
+			if ( this.$customCSSElement ) {
+				this.$customCSSElement.remove();
+				this.$customCSSElement = null;
+			}
+			return;
+		}
+
+		// Replace "selector" placeholder with the unique element selector
+		var selector = '.elementor-element.elementor-element-' + this.model.get( 'id' );
+		customCSS = customCSS.replace( /selector/g, selector );
+
+		// Create the element only if it doesn't exist
+		if ( ! this.$customCSSElement ) {
+			this.$customCSSElement = Backbone.$( '<style>', { id: styleId } );
+			elementor.$previewContents.find( 'head' ).append( this.$customCSSElement );
+		}
+
+		this.$customCSSElement.text( customCSS );
 	},
 
 	addStyleRules: function( controls, values, placeholders, replacements ) {
@@ -320,27 +357,33 @@ BaseElementView = Marionette.CompositeView.extend( {
 	*/
 
 	addStyleToDocument: function() {
-		var styleText = this.stylesheet.toString();
+		var styleText = this.stylesheet.toString(),
+			styleId = 'elementor-style-' + this.model.get( 'id' );
+
+		// Find existing element in DOM if not cached
+		if ( ! this.$stylesheetElement ) {
+			this.$stylesheetElement = elementor.$previewContents.find( '#' + styleId );
+			if ( ! this.$stylesheetElement.length ) {
+				this.$stylesheetElement = null;
+			}
+		}
 
 		if ( _.isEmpty( styleText ) && ! this.$stylesheetElement ) {
 			return;
 		}
 
 		if ( ! this.$stylesheetElement ) {
-			this.createStylesheetElement();
+			this.$stylesheetElement = Backbone.$( '<style>', { id: styleId } );
+			elementor.$previewContents.find( 'head' ).append( this.$stylesheetElement );
 		}
 
 		this.$stylesheetElement.text( styleText );
 	},
 
-	createStylesheetElement: function() {
-		this.$stylesheetElement = Backbone.$( '<style>', { id: 'elementor-style-' + this.model.cid } );
-
-		elementor.$previewContents.find( 'head' ).append( this.$stylesheetElement );
-	},
-
 	renderCustomClasses: function() {
+		// Add base class and unique element class (same as ID for CSS selector compatibility)
 		this.$el.addClass( 'elementor-element' );
+		this.$el.addClass( this.getElementUniqueClass() );
 
 		var settings = this.model.get( 'settings' );
 
@@ -363,7 +406,69 @@ BaseElementView = Marionette.CompositeView.extend( {
 	renderUI: function() {
 		this.renderStyles();
 		this.renderCustomClasses();
+		this.renderCustomAttributes();
 		this.enqueueFonts();
+	},
+
+	// Attributes blacklist (same as PHP)
+	_attributesBlacklist: [
+		'id', 'class', 'data-id', 'data-settings', 'data-element_type',
+		'data-widget_type', 'data-model-cid'
+	],
+
+	// Store previous custom attributes to remove them on change
+	_previousCustomAttributes: [],
+
+	renderCustomAttributes: function() {
+		var self = this,
+			customAttributes = this.model.getSetting( '_custom_attributes' );
+
+		// Remove previous custom attributes
+		_.each( this._previousCustomAttributes, function( attrName ) {
+			self.$el.removeAttr( attrName );
+		});
+		this._previousCustomAttributes = [];
+
+		if ( _.isEmpty( customAttributes ) ) {
+			return;
+		}
+
+		// Parse attributes (format: key|value per line)
+		var lines = customAttributes.split( '\n' );
+
+		_.each( lines, function( line ) {
+			line = line.trim();
+			if ( _.isEmpty( line ) ) {
+				return;
+			}
+
+			var parts = line.split( '|' ),
+				attrKey = parts[0].trim().toLowerCase(),
+				attrValue = parts[1] ? parts[1].trim() : '';
+
+			// Validate attribute name (only valid characters)
+			if ( ! /^[a-z][-_a-z0-9]*$/.test( attrKey ) ) {
+				var match = attrKey.match( /[-_a-z0-9]+/ );
+				if ( ! match ) {
+					return;
+				}
+				attrKey = match[0];
+			}
+
+			// Block dangerous attributes (on* events, href)
+			if ( attrKey === 'href' || attrKey.indexOf( 'on' ) === 0 ) {
+				return;
+			}
+
+			// Block blacklisted attributes
+			if ( _.contains( self._attributesBlacklist, attrKey ) ) {
+				return;
+			}
+
+			// Apply attribute
+			self.$el.attr( attrKey, attrValue );
+			self._previousCustomAttributes.push( attrKey );
+		});
 	},
 
 	runReadyTrigger: function() {
@@ -425,6 +530,14 @@ BaseElementView = Marionette.CompositeView.extend( {
 		event.stopPropagation();
 
 		this.getRemoveDialog().show();
+	},
+
+	onBeforeDestroy: function() {
+		// Remove custom CSS style from the DOM
+		if ( this.$customCSSElement ) {
+			this.$customCSSElement.remove();
+			this.$customCSSElement = null;
+		}
 	}
 }, {
 	addControlStyleRules: function( stylesheet, control, controlsStack, valueCallback, placeholders, replacements ) {

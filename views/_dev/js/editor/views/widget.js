@@ -74,7 +74,10 @@ WidgetView = BaseElementView.extend( {
 
 	onBeforeDestroy: function() {
 		// Remove old style from the DOM.
-		elementor.$previewContents.find( '#elementor-style-' + this.model.cid ).remove();
+		elementor.$previewContents.find( '#elementor-style-' + this.model.get( 'id' ) ).remove();
+
+		// Call parent method to clean up custom CSS
+		BaseElementView.prototype.onBeforeDestroy.apply( this, arguments );
 	},
 
 	onModelRemoteRender: function() {

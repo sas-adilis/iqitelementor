@@ -67,3 +67,38 @@ input[disabled] {
 select {
 	height: 26px;
 }
+
+// ACE Code Editor
+.elementor-control-code-wrapper {
+	.elementor-code-editor {
+		width: 100%;
+		min-height: 150px;
+		border: 1px solid $editor-lightest;
+		border-radius: 3px;
+		font-size: 12px;
+
+		.ace_gutter {
+			background: $editor-background;
+		}
+
+		// Highlight for "selector" keyword
+		.ace_selector_highlight {
+			color: $editor-accent;
+		}
+	}
+}
+
+.elementor-control-_custom_css_description pre {
+	padding: 15px;
+	border-left: 3px solid $editor-accent;
+	position: relative;
+	font-size: 10px;
+	font-weight: 300;
+	font-style: italic;
+	line-height: 1.5;
+	text-align: left;
+	border-radius: 0 3px 3px 0;
+	box-shadow: 0 1px 4px 0 rgba(0, 0, 0, .07);
+	background-color: $editor-background;
+	overflow: hidden;
+}

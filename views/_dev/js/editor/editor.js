@@ -99,7 +99,8 @@ App = Marionette.Application.extend( {
 				structure: require( 'elementor-views/controls/structure' ),
 				animation: require( 'elementor-views/controls/animation' ),
 				hover_animation: require( 'elementor-views/controls/animation' ),
-				datetime: require( 'elementor-views/controls/datetime')
+				datetime: require( 'elementor-views/controls/datetime'),
+				code: require( 'elementor-views/controls/code' )
 			};
 
 			this.channels.editor.trigger( 'editor:controls:initialize' );

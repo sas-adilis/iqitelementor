@@ -1,12 +1,16 @@
 <?php
+
 namespace Elementor;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
+require_once dirname(__DIR__) . '/traits/advanced-controls.php';
+
 abstract class Widget_Base extends Element_Base
 {
+    use IqitElementorAdvancedControlsTrait;
     public function get_type()
     {
         return 'widget';
@@ -414,6 +418,14 @@ abstract class Widget_Base extends Element_Base
                 'return_value' => 'hidden-phone',
             ]
         );
+
+        $this->end_controls_section();
+
+        // Custom Attributes
+        $this->register_custom_attributes_controls(self::TAB_ADVANCED);
+
+        // Custom CSS
+        $this->register_custom_css_controls(self::TAB_ADVANCED);
     }
 
     final public function print_template()
@@ -511,7 +523,15 @@ abstract class Widget_Base extends Element_Base
             $this->add_render_attribute('wrapper', 'data-animation', $instance['_animation']);
         }
 
+        // Applique les attributs personnalisés
+        $this->applyCustomAttributes($instance);
+
         $this->add_render_attribute('wrapper', 'data-element_type', $this->get_id());
+
+        // Rend le CSS personnalisé en mode éditeur (en frontend, c'est géré par Frontend::_collect_custom_css)
+        if (PluginElementor::instance()->editor->is_edit_mode()) {
+            $this->renderCustomCss($instance, $element_id);
+        }
         ?>
     <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
         <?php

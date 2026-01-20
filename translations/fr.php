@@ -254,3 +254,12 @@ $_MODULE['<{iqitelementor}prestashop>carousel_1696aca49cc41a4aa39715283ad43838']
 $_MODULE['<{iqitelementor}prestashop>carousel_ae883e7f138310cb2500afa6bc053ec0'] = 'Superposé (en bas)';
 $_MODULE['<{iqitelementor}prestashop>carousel_4ac7497079f7bb9025c8a111aa663ddb'] = 'Couleur inactive';
 
+// Advanced controls trait (Custom CSS & Attributes)
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_42e6feb7f76e910efcda54034ecc83ce'] = 'CSS personnalisé';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_690c6e22d9a3b56d19e83710af87da0a'] = 'Ajoutez votre propre CSS personnalisé ici';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_15d50bfe7c2b0fbd54a538e03f948bba'] = 'Utilisez "selector" pour cibler l\'élément wrapper.';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_e36da181a28f84b3bd9fcab5e7234174'] = 'Pour l\'élément principal';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_ae5c564da2b0d8cfb843f323ca557f28'] = 'Pour un élément enfant';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_287234a1ff35a314b5b6bc4e5828e745'] = 'Attributs';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_ba333933886b07c9384523873559a3fd'] = 'Attributs personnalisés';
+$_MODULE['<{iqitelementor}prestashop>advanced-controls_7b267b873265af233f25f4567610e9f0'] = 'Définissez des attributs personnalisés pour l\'élément wrapper. Un attribut par ligne. Séparez la clé de la valeur avec le caractère %s.';

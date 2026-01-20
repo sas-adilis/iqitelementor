@@ -6,8 +6,11 @@ if (!defined('ELEMENTOR_ABSPATH')) {
     exit;
 } // Exit if accessed directly
 
+require_once dirname(__DIR__) . '/traits/advanced-controls.php';
+
 class Element_Column extends Element_Base
 {
+    use IqitElementorAdvancedControlsTrait;
     public function get_id()
     {
         return 'column';
@@ -526,6 +529,9 @@ class Element_Column extends Element_Base
                 ]
             );
         }
+
+        $this->register_custom_attributes_controls(self::TAB_ADVANCED);
+        $this->register_custom_css_controls(self::TAB_ADVANCED);
     }
 
     protected function render_settings()
@@ -586,6 +592,8 @@ class Element_Column extends Element_Base
             'elementor-' . $column_type . '-column',
         ]);
 
+        $this->applyCustomAttributes($instance);
+
         foreach ($this->get_class_controls() as $control) {
             if (empty($instance[$control['name']])) {
                 continue;
@@ -603,6 +611,11 @@ class Element_Column extends Element_Base
         }
 
         $this->add_render_attribute('wrapper', 'data-element_type', $this->get_id());
+
+        // Rend le CSS personnalisé en mode éditeur
+        if (PluginElementor::instance()->editor->is_edit_mode()) {
+            $this->renderCustomCss($instance, $element_id);
+        }
         ?>
         <div <?php echo $this->get_render_attribute_string('wrapper'); ?>>
         <div class="elementor-column-wrap<?php if (!empty($element_data['elements'])) {

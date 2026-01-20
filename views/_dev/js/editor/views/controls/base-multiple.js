@@ -66,10 +66,8 @@ ControlBaseMultipleItemView = ControlBaseItemView.extend( {
 			return cssProperty.replace( /\{\{([A-Z]+)}}/g, function( fullMatch, pureMatch ) {
 				var value = controlValue[ pureMatch.toLowerCase() ];
 
-				console.log(fullMatch, pureMatch, value);
-
-
-				if ( '' === value ) {
+				// Skip if value is empty, undefined or null
+				if ( '' === value || undefined === value || null === value ) {
 					throw '';
 				}
 
@@ -84,7 +82,14 @@ ControlBaseMultipleItemView = ControlBaseItemView.extend( {
 			return ''; // invalid
 		}
 
-		return controlValue[ placeholder ];
+		var value = controlValue[ placeholder ];
+
+		// Return empty string if value is undefined or null
+		if ( undefined === value || null === value ) {
+			return '';
+		}
+
+		return value;
 	}
 } );
 

@@ -565,8 +565,8 @@ BaseElementView = Marionette.CompositeView.extend( {
 
                     var parsedValue = elementor.getControlItemView( parserControl.type ).getStyleValue( placeholder.toLowerCase(), valueToInsert );
 
-
-                    if ( '' === parsedValue ) {
+                    // Skip if value is empty, undefined or null
+                    if ( '' === parsedValue || undefined === parsedValue || null === parsedValue ) {
                         throw '';
                     }
 

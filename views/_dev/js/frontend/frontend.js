@@ -126,4 +126,4 @@ jQuery( function() {
 	if ( ! elementorFrontend.isEditMode() ) {
 		elementorFrontend.init();
 	}
-} );
+});

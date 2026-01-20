@@ -1050,6 +1050,42 @@ select {
   display: block;
   margin-bottom: 6px;
 }
+#elementor-panel #elementor-panel-page-editor {
+  /*.elementor-control-type-text_shadow {
+  	padding-block: 15px 40px;
+
+  	.elementor-control-input-wrapper {
+  		overflow: hidden;
+  	}
+
+  	.elementor-text-shadow-slider {
+  		margin-top: 10px;
+  	}
+
+  	&:before,
+  	&:after {
+  		content: "";
+  		height: 15px;
+  		position: absolute;
+  		left: 0;
+  		width: 100%;
+  		pointer-events: none;
+  	}
+
+  	&:before {
+  		top: 0;
+  		background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
+  		border-top: 1px solid $editor-lightest;
+  	}
+
+  	&:after {
+  		bottom: 15px;
+  		background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  		border-bottom: 1px solid $editor-lightest;
+  	}
+  }
+  */
+}
 #elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper:not(.elementor-active-tab) {
   display: none;
 }
@@ -1140,7 +1176,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-field {
   display: flex;
-  gap: 10px;
+  column-gap: 10px;
   align-items: center;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-label-inline .elementor-control-title {
@@ -1939,31 +1975,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   margin-top: 10px;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow {
-  padding-block: 15px 40px;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow .elementor-control-input-wrapper {
-  overflow: hidden;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow .elementor-text-shadow-slider {
-  margin-top: 10px;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:before, #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:after {
-  content: "";
-  height: 15px;
-  position: absolute;
-  left: 0;
-  width: 100%;
-  pointer-events: none;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:before {
-  top: 0;
-  background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
-  border-top: 1px solid #d5dadf;
-}
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow:after {
-  bottom: 15px;
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
-  border-bottom: 1px solid #d5dadf;
+  padding: 0;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-switcher .elementor-control-field {
   display: flex;

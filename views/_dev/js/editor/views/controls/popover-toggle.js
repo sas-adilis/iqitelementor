@@ -41,6 +41,8 @@ var ControlPopoverToggleView = ControlBaseView.extend( {
 
 	togglePopover: function( show ) {
 		const $popover = this.$el.next('.elementor-controls-popover');
+		console.log( this.$el, $popover );
+
 		if ( ! $popover.length ) {
 			return;
 		}

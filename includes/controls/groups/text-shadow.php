@@ -29,6 +29,26 @@ class Group_Control_Text_Shadow extends Group_Control_Base
     }
 
     /**
+     * Get default options for text shadow group control.
+     * Enables the popover with custom settings.
+     *
+     * @return array
+     */
+    protected function get_default_options()
+    {
+        return [
+            'popover' => [
+                'starter_name' => 'text_shadow_type',
+                'starter_title' => \IqitElementorTranslater::get()->l('Text Shadow', 'elementor'),
+                'starter_value' => 'yes',
+                'settings' => [
+                    'render_type' => 'ui',
+                ],
+            ],
+        ];
+    }
+
+    /**
      * Init fields.
      *
      * Initialize text shadow control fields.
@@ -41,28 +61,11 @@ class Group_Control_Text_Shadow extends Group_Control_Base
     {
         $controls = [];
 
-
-        $controls['text_shadow_type'] = [
-            'label' => \IqitElementorTranslater::get()->l('Text Shadow', 'Text Shadow Control', 'elementor'),
-            'type' => Controls_Manager::SWITCHER,
-            'options' => [
-                '' => \IqitElementorTranslater::get()->l('No', 'elementor'),
-                'outset' => \IqitElementorTranslater::get()->l('Yes', 'Text Shadow Control', 'elementor'),
-            ],
-        ];
-
-        if (!empty($args['separator'])) {
-            $controls['text_shadow_type']['separator'] = $args['separator'];
-        }
-
         $controls['text_shadow'] = [
             'label' => \IqitElementorTranslater::get()->l('Text Shadow', 'Text Shadow Control'),
             'type' => Controls_Manager::TEXT_SHADOW,
             'selectors' => [
                 $args['selector'] => 'text-shadow: {{HORIZONTAL}}px {{VERTICAL}}px {{BLUR}}px {{COLOR}};',
-            ],
-            'condition' => [
-                'text_shadow_type!' => '',
             ],
         ];
 

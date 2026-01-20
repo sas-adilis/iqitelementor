@@ -44,33 +44,22 @@ class Control_Popover_Toggle extends Control_Base
      */
     public function content_template()
     {
-        $control_uid = $this->get_control_uid();
         ?>
         <div class="elementor-control-field">
             <label class="elementor-control-title">{{{ data.label }}}</label>
             <div class="elementor-control-input-wrapper">
-                <input id="<?php echo $control_uid; ?>-custom" class="elementor-control-popover-toggle-toggle" type="radio" name="elementor-choose-{{ data.name }}-{{ data._cid }}" value="{{ data.return_value }}">
-                <label class="elementor-control-popover-toggle-toggle-label" for="<?php echo $control_uid; ?>-custom">
+                <input id="elementor-control-popover-toggle-{{ data._cid }}-custom" class="elementor-control-popover-toggle-toggle" type="radio" name="elementor-choose-{{ data.name }}-{{ data._cid }}" value="{{ data.return_value }}">
+                <label class="elementor-control-popover-toggle-toggle-label" for="elementor-control-popover-toggle-{{ data._cid }}-custom">
                     <i class="eicon-edit" aria-hidden="true"></i>
                     <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Edit', 'elementor'); ?></span>
                 </label>
-                <input id="<?php echo $control_uid; ?>-default" type="radio" name="elementor-choose-{{ data.name }}-{{ data._cid }}" value="">
-                <label class="elementor-control-popover-toggle-reset-label tooltip-target" for="<?php echo $control_uid; ?>-default" data-tooltip="<?php echo \IqitElementorTranslater::get()->l('Back to default', 'elementor'); ?>" data-tooltip-pos="s">
+                <input id="elementor-control-popover-toggle-{{ data._cid }}-default" type="radio" name="elementor-choose-{{ data.name }}-{{ data._cid }}" value="">
+                <label class="elementor-control-popover-toggle-reset-label tooltip-target" for="elementor-control-popover-toggle-{{ data._cid }}-default" data-tooltip="<?php echo \IqitElementorTranslater::get()->l('Back to default', 'elementor'); ?>" data-tooltip-pos="s">
                     <i class="fa fa-repeat" aria-hidden="true"></i>
                     <span class="elementor-screen-only"><?php echo \IqitElementorTranslater::get()->l('Back to default', 'elementor'); ?></span>
                 </label>
             </div>
         </div>
         <?php
-    }
-
-    /**
-     * Get control unique ID.
-     *
-     * @return string Control UID.
-     */
-    protected function get_control_uid()
-    {
-        return 'elementor-control-popover-toggle-' . uniqid();
     }
 }

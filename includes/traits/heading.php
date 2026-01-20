@@ -217,7 +217,6 @@ trait IqitElementorHeadingTrait
                     'tab' => self::TAB_STYLE,
                     'section' => $sectionId,
                     'condition' => $condition,
-                    'separator' => 'before',
                 ]
             );
         }

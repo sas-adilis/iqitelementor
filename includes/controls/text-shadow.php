@@ -100,14 +100,17 @@ class Control_Text_Shadow extends Control_Base_Multiple
         }
         #>
         <div class="elementor-shadow-box">
-            <div class="elementor-control-field">
-                <label class="elementor-control-title"><?php echo \IqitElementorTranslater::get()->l('Color', 'elementor'); ?></label>
-                <div class="elementor-control-input-wrapper">
-                    <input data-setting="color" class="elementor-text-shadow-color-picker" type="text" maxlength="7" placeholder="<?php \IqitElementorHelper::esc_attr('Hex Value', 'elementor'); ?>" data-alpha="true"{{{ defaultColorValue }}} />
+            <div class="elementor-control">
+                <div class="elementor-control-field">
+                    <label class="elementor-control-title"><?php echo \IqitElementorTranslater::get()->l('Color', 'elementor'); ?></label>
+                    <div class="elementor-control-input-wrapper">
+                        <input data-setting="color" class="elementor-text-shadow-color-picker" type="text" maxlength="7" placeholder="<?php \IqitElementorHelper::esc_attr('Hex Value', 'elementor'); ?>" data-alpha="true"{{{ defaultColorValue }}} />
+                    </div>
                 </div>
             </div>
+            <div class="elementor-control elementor-control-type-slider elementor-label-block">
             <?php foreach ($this->get_sliders() as $slider) { ?>
-            <div class="elementor-text-shadow-slider">
+            <div class="elementor-control-field">
                 <label class="elementor-control-title"><?php echo $slider['label']; ?></label>
                 <div class="elementor-control-input-wrapper">
                     <div class="elementor-slider" data-input="<?php echo $slider['type']; ?>"></div>
@@ -116,7 +119,8 @@ class Control_Text_Shadow extends Control_Base_Multiple
                     </div>
                 </div>
             </div>
-        <?php } ?>
+                    <?php } ?>
+            </div>
         </div>
         <?php
     }

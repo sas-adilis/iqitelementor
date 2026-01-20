@@ -2103,6 +2103,84 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-slider .elementor-control-input-wrapper .elementor-slider-input {
   flex-grow: 1;
 }
+#elementor-panel #elementor-panel-page-editor .elementor-controls-popover {
+  display: none;
+  position: absolute;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  left: 0;
+  right: 0;
+  margin: -4px auto 5px;
+  padding-top: 15px;
+  width: 90%;
+  z-index: 10000;
+  background-color: #fff;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls-popover.elementor-open {
+  display: block;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls-popover:before {
+  content: "";
+  position: absolute;
+  top: -16px;
+  right: 22px;
+  border: 8px solid transparent;
+  border-bottom-color: #fff;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls-popover .elementor-control {
+  background-color: transparent;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-controls-popover .elementor-control:before {
+  content: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle input {
+  display: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle label {
+  cursor: pointer;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-field {
+  display: flex;
+  align-items: center;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-title {
+  flex-grow: 1;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-input-wrapper {
+  direction: rtl;
+  display: flex;
+  align-items: center;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-toggle:checked + .elementor-control-popover-toggle-toggle-label {
+  color: #3c90a8;
+  border-color: #3c90a8;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-toggle:not(:checked) ~ .elementor-control-popover-toggle-reset-label {
+  display: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-reset-label {
+  color: #c2cbd2;
+  padding-right: 5px;
+  font-size: 12px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-reset-label:hover {
+  color: #a4afb7;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-toggle-label {
+  width: 50px;
+  height: 27px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  border: 1px solid #d5dadf;
+  color: #a4afb7;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-toggle-label:hover {
+  border-color: #a4afb7;
+}
 #elementor-panel .wp-picker-container.wp-picker-active {
   position: absolute;
   z-index: 1;
@@ -2650,6 +2728,10 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   right: 20px;
   font-size: 16px;
   color: #a4afb7;
+}
+
+.dialog-elementor-modal-close-button:hover {
+  color: #6d7882;
 }
 
 #elementor-introduction .dialog-widget-header {

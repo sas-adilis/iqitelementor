@@ -1,0 +1,105 @@
+//
+// Popover Toggle Control
+//
+
+// Popover container (created by JS handlePopovers)
+.elementor-controls-popover {
+	display: none;
+	position: absolute;
+	box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+	border-radius: 3px;
+	left: 0;
+	right: 0;
+	margin: -4px auto 5px;
+	padding-top: 15px;
+	width: 90%;
+	z-index: 10000;
+	background-color: #fff;
+
+	&.elementor-open {
+		display: block;
+	}
+
+	&:before {
+		content: '';
+		position: absolute;
+		top: -16px;
+		right: 22px;
+		border: 8px solid transparent;
+		border-bottom-color: #fff;
+	}
+
+	.elementor-control {
+		background-color: transparent;
+
+		&:before {
+			content: none;
+		}
+	}
+}
+
+// Popover toggle control
+.elementor-control-type-popover_toggle {
+	input {
+		display: none;
+	}
+
+	label {
+		cursor: pointer;
+	}
+
+	.elementor-control-field {
+		display: flex;
+		align-items: center;
+	}
+
+	.elementor-control-title {
+		flex-grow: 1;
+	}
+
+	.elementor-control-input-wrapper {
+		direction: rtl;
+		display: flex;
+		align-items: center;
+	}
+
+	// Active toggle button (blue when checked)
+	.elementor-control-popover-toggle-toggle:checked + .elementor-control-popover-toggle-toggle-label {
+		color: $editor-info;
+		border-color: $editor-info;
+	}
+
+	// Hide reset button when toggle is not checked
+	.elementor-control-popover-toggle-toggle:not(:checked) ~ .elementor-control-popover-toggle-reset-label {
+		display: none;
+	}
+
+	// Reset button
+	.elementor-control-popover-toggle-reset-label {
+		color: $editor-lighter;
+		padding-right: 5px;
+		font-size: 12px;
+
+		&:hover {
+			color: $editor-light;
+		}
+	}
+
+	// Toggle button
+	.elementor-control-popover-toggle-toggle-label {
+		width: 50px;
+		height: 27px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 3px;
+		border: 1px solid $editor-lightest;
+		color: $editor-light;
+		font-size: 12px;
+		transition: all 0.3s;
+
+		&:hover {
+			border-color: $editor-light;
+		}
+	}
+}

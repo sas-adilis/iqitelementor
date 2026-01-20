@@ -86,7 +86,7 @@
 				timeout = null;
 				result = func.apply( context, args );
 
-				if ( ! timeout ) {
+				if ( !timeout ) {
 					context = args = null;
 				}
 			};

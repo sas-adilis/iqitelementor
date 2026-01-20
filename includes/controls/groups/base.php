@@ -9,6 +9,13 @@ abstract class Group_Control_Base implements Group_Control_Interface
 {
     private $_args = [];
 
+    /**
+     * Options for the group control.
+     *
+     * @var array|null
+     */
+    private $options;
+
     public function __construct()
     {
         $this->_init();
@@ -38,6 +45,11 @@ abstract class Group_Control_Base implements Group_Control_Interface
         // Add prefixes to all control conditions
         $filtered_controls = $this->add_prefixes($filtered_controls);
 
+        // Check if popover is enabled
+        if ($this->get_options('popover')) {
+            $this->start_popover($element);
+        }
+
         foreach ($filtered_controls as $control_id => $control_args) {
             // Add the global group args to the control
             $control_args = $this->_add_group_args_to_control($control_id, $control_args);
@@ -52,6 +64,10 @@ abstract class Group_Control_Base implements Group_Control_Interface
             } else {
                 $element->add_control($id, $control_args);
             }
+        }
+
+        if ($this->get_options('popover')) {
+            $element->end_popover();
         }
     }
 
@@ -70,6 +86,99 @@ abstract class Group_Control_Base implements Group_Control_Interface
     }
 
     abstract protected function _get_controls($args);
+
+    /**
+     * Get default options for the group control.
+     * Override in child classes to customize.
+     *
+     * @return array
+     */
+    protected function get_default_options()
+    {
+        return [];
+    }
+
+    /**
+     * Initialize options.
+     */
+    private function init_options()
+    {
+        $default_options = [
+            'popover' => false,
+        ];
+
+        $this->options = array_replace_recursive($default_options, $this->get_default_options());
+    }
+
+    /**
+     * Get options.
+     *
+     * @param string|null $option Option name.
+     * @return mixed
+     */
+    final public function get_options($option = null)
+    {
+        if (null === $this->options) {
+            $this->init_options();
+        }
+
+        if ($option) {
+            if (isset($this->options[$option])) {
+                return $this->options[$option];
+            }
+            return null;
+        }
+
+        return $this->options;
+    }
+
+    /**
+     * Start popover for the group control.
+     * Adds a popover toggle control first.
+     *
+     * @param Element_Base $element
+     */
+    private function start_popover($element)
+    {
+        $popover_options = $this->get_options('popover');
+        $settings = $this->get_args();
+
+        if (!empty($settings['label'])) {
+            $label = $settings['label'];
+        } elseif (!empty($popover_options['starter_title'])) {
+            $label = $popover_options['starter_title'];
+        } else {
+            $label = '';
+        }
+
+        $control_params = [
+            'type' => Controls_Manager::POPOVER_TOGGLE,
+            'label' => $label,
+            'return_value' => $popover_options['starter_value'] ?? 'yes',
+        ];
+
+        if (!empty($popover_options['settings'])) {
+            $control_params = array_replace_recursive($control_params, $popover_options['settings']);
+        }
+
+        // Handle conditions
+        foreach (['condition', 'conditions'] as $key) {
+            if (!empty($settings[$key])) {
+                $control_params[$key] = $settings[$key];
+            }
+        }
+
+        $control_params['tab'] = $settings['tab'] ?? Element_Base::TAB_CONTENT;
+        $control_params['section'] = $settings['section'] ?? '';
+
+        $starter_name = $popover_options['starter_name'] ?? 'popover_toggle';
+
+        // Add popover toggle control
+        $element->add_control($this->get_controls_prefix() . $starter_name, $control_params);
+
+        // Start the popover
+        $element->start_popover();
+    }
 
     private function _get_default_args()
     {
@@ -93,6 +202,9 @@ abstract class Group_Control_Base implements Group_Control_Interface
 
         $controls = $this->_get_controls($args);
 
+        // Prepare fields (add popover condition)
+        $controls = $this->prepare_fields($controls);
+
         if (!is_array($args['fields'])) {
             return $controls;
         }
@@ -111,6 +223,38 @@ abstract class Group_Control_Base implements Group_Control_Interface
         }
 
         return $filtered_controls;
+    }
+
+    /**
+     * Prepare fields by adding popover conditions.
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function prepare_fields($fields)
+    {
+        $popover_options = $this->get_options('popover');
+
+        if (!$popover_options) {
+            return $fields;
+        }
+
+        $popover_name = $popover_options['starter_name'] ?? 'popover_toggle';
+
+        foreach ($fields as $field_key => &$field) {
+            // Skip the popover toggle control itself
+            if ($field_key === $popover_name) {
+                continue;
+            }
+
+            // Add condition: field is visible only when popover toggle is not empty
+            if (!isset($field['condition'])) {
+                $field['condition'] = [];
+            }
+            $field['condition'][$popover_name . '!'] = '';
+        }
+
+        return $fields;
     }
 
     private function add_conditions_prefix($control)

@@ -100,7 +100,8 @@ App = Marionette.Application.extend( {
 				animation: require( 'elementor-views/controls/animation' ),
 				hover_animation: require( 'elementor-views/controls/animation' ),
 				datetime: require( 'elementor-views/controls/datetime'),
-				code: require( 'elementor-views/controls/code' )
+				code: require( 'elementor-views/controls/code' ),
+				popover_toggle: require( 'elementor-views/controls/popover-toggle' )
 			};
 
 			this.channels.editor.trigger( 'editor:controls:initialize' );
@@ -121,9 +122,6 @@ App = Marionette.Application.extend( {
 
 		const initContextMenu = require("./components/context-menu");
 		initContextMenu(this);
-
-		const initTypographyGroup = require("./components/typography-group");
-		initTypographyGroup(this);
 	},
 
 	initDialogsManager: function() {

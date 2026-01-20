@@ -52,6 +52,7 @@ class Controls_Manager
     public const ANIMATION = 'animation';
     public const HOVER_ANIMATION = 'hover_animation';
     public const TEXT_SHADOW = 'text_shadow';
+    public const POPOVER_TOGGLE = 'popover_toggle';
 
     /**
      * @var Control_Base[]
@@ -118,6 +119,7 @@ class Controls_Manager
 
             self::TABS,
             self::TAB,
+            self::POPOVER_TOGGLE,
         ];
 
         foreach ($available_controls as $control_id) {

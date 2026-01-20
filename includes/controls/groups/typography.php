@@ -21,6 +21,26 @@ class Group_Control_Typography extends Group_Control_Base
         return 'typography';
     }
 
+    /**
+     * Get default options for typography group control.
+     * Enables the popover with custom settings.
+     *
+     * @return array
+     */
+    protected function get_default_options()
+    {
+        return [
+            'popover' => [
+                'starter_name' => 'typography',
+                'starter_title' => \IqitElementorTranslater::get()->l('Typography', 'elementor'),
+                'starter_value' => 'custom',
+                'settings' => [
+                    'render_type' => 'ui',
+                ],
+            ],
+        ];
+    }
+
     public static function get_fields()
     {
         if (null === self::$_fields) {
@@ -161,36 +181,14 @@ class Group_Control_Typography extends Group_Control_Base
             $control['selectors'] = [
                 $args['selector'] => $selector_value,
             ];
-
-            $control['condition'] = [
-                'typography' => ['custom'],
-            ];
         });
 
+        // Special condition for custom font family
         $controls['font_family_custom']['condition'] = [
-            'typography' => ['custom'],
             'font_family' => ['custom'],
         ];
 
-        $typography_control = [
-            'typography' => [
-                'label' => \IqitElementorTranslater::get()->l('Typography'),
-                'type' => Controls_Manager::CHOOSE,
-                'default' => 'default',
-                'label_block' => false,
-                'options' => [
-                    'default' => [
-                        'title' => \IqitElementorTranslater::get()->l('Default', 'elementor'),
-                    ],
-                    'custom' => [
-                        'title' => \IqitElementorTranslater::get()->l('Custom', 'elementor'),
-                        'icon' => 'eicon-edit',
-                    ],
-                ],
-            ],
-        ];
-
-        return $typography_control + $controls;
+        return $controls;
     }
 
     protected function _add_group_args_to_control($control_id, $control_args)

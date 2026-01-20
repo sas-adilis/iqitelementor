@@ -5,6 +5,10 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 
 	id: 'elementor-panel-page-editor',
 
+	classes: {
+		popover: 'elementor-controls-popover'
+	},
+
 	behaviors: {
 		HandleInnerTabs: {
 			behaviorClass: InnerTabsBehavior
@@ -71,6 +75,9 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 		// Wrap section controls in a container
 		this.wrapSectionsControls();
 
+		// Handle popovers
+		this.handlePopovers();
+
 		// Set the first tab as active
 		this.ui.tabs.eq( 0 ).find( 'a' ).trigger( 'click' );
 
@@ -114,6 +121,53 @@ var EditorCompositeView = Marionette.CompositeView.extend( {
 			$wrapper.append( $header );
 			$wrapper.append( $content );
 		} );
+	},
+
+	/**
+	 * Handle popovers.
+	 *
+	 * Groups controls that belong to a popover into a container div.
+	 */
+	handlePopovers: function() {
+		var self = this,
+			popoverStarted = false,
+			$popover;
+
+		self.removePopovers();
+
+		self.children.each( function( child ) {
+			if ( popoverStarted ) {
+				$popover.append( child.$el );
+			}
+
+			var popover = child.model.get( 'popover' );
+
+			if ( ! popover ) {
+				return;
+			}
+
+			if ( popover.start ) {
+				popoverStarted = true;
+				$popover = Backbone.$( '<div>', {
+					'class': self.classes.popover
+				} );
+				child.$el.before( $popover );
+				$popover.append( child.$el );
+			}
+
+			if ( popover.end ) {
+				popoverStarted = false;
+			}
+		} );
+	},
+
+	/**
+	 * Remove popovers.
+	 *
+	 * Removes all popover containers from the DOM.
+	 */
+	removePopovers: function() {
+		this.$el.find( '.' + this.classes.popover ).remove();
 	},
 
 	onModelDestroy: function() {

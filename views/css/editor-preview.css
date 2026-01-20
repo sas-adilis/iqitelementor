@@ -247,7 +247,7 @@ html.elementor-html {
   padding: 6px 8px;
 }
 .elementor-editor-active #elementor .elementor-editor-widget-settings .elementor-editor-element-setting > a:hover {
-  background-color: #2f7082;
+  background-color: rgb(46.5789473684, 111.7894736842, 130.4210526316);
 }
 .elementor-editor-active #elementor .elementor-editor-widget-settings .elementor-editor-element-remove .fa {
   color: #ffffff;

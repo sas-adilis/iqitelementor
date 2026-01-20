@@ -41,6 +41,15 @@ abstract class Element_Base
      */
     private $current_tab;
 
+    /**
+     * Current popover.
+     *
+     * Holds the current popover while inserting a set of controls.
+     *
+     * @var array|null
+     */
+    private $current_popover;
+
     abstract public function get_id();
 
     abstract public function get_title();
@@ -406,6 +415,15 @@ abstract class Element_Base
         }
         $this->_tabs_controls[$args['tab']] = $available_tabs[$args['tab']];
 
+        // Handle popover: if we're inside a popover and it hasn't been initialized,
+        // mark this control as the start of the popover
+        if ($this->current_popover && !$this->current_popover['initialized']) {
+            $args['popover'] = [
+                'start' => true,
+            ];
+            $this->current_popover['initialized'] = true;
+        }
+
         $this->_controls[$id] = array_merge($default_args, $args);
 
         return true;
@@ -636,6 +654,59 @@ abstract class Element_Base
     public function end_controls_tab()
     {
         unset($this->current_tab['inner_tab']);
+    }
+
+    /**
+     * Start popover.
+     *
+     * Used to add a new set of controls in a popover. When you use this method,
+     * all the registered controls from this point will be assigned to this
+     * popover, until you close the popover using `end_popover()` method.
+     *
+     * This method should be used inside `_register_controls()`.
+     */
+    final public function start_popover()
+    {
+        $this->current_popover = [
+            'initialized' => false,
+        ];
+    }
+
+    /**
+     * End popover.
+     *
+     * Used to close an open popover. When you use this method it stops
+     * assigning controls to the popover.
+     *
+     * This method should be used inside `_register_controls()`.
+     */
+    final public function end_popover()
+    {
+        $this->current_popover = null;
+
+        // Get the last control key
+        $control_keys = array_keys($this->_controls);
+        if (empty($control_keys)) {
+            return;
+        }
+
+        $last_control_key = end($control_keys);
+
+        // Mark the last control as end of popover
+        $this->_controls[$last_control_key]['popover'] = array_merge(
+            $this->_controls[$last_control_key]['popover'] ?? [],
+            ['end' => true]
+        );
+    }
+
+    /**
+     * Get current popover state.
+     *
+     * @return array|null
+     */
+    public function get_current_popover()
+    {
+        return $this->current_popover;
     }
 
 }

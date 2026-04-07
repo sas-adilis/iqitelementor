@@ -208,6 +208,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'isRtl' => (bool) $this->context->language->is_rtl,
                 'introduction' => Plugin::instance()->getCurrentIntroduction(),
                 'viewportBreakpoints' => Responsive::getBreakpoints(),
+                'widgetDefaults' => $this->loadWidgetDefaults(),
                 'i18n' => [
                     'elementor' => $this->module->getTranslator()->trans('Elementor', [], 'Modules.Iqitelementor.Admin'),
                     'dialog_confirm_delete' => $this->module->getTranslator()->trans('Are you sure you want to remove this?', [], 'Modules.Iqitelementor.Admin') . ' {0}',
@@ -258,6 +259,10 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'revisions_min_ago' => $this->module->getTranslator()->trans('min ago', [], 'Modules.Iqitelementor.Admin'),
                     'revisions_hours_ago' => $this->module->getTranslator()->trans('hours ago', [], 'Modules.Iqitelementor.Admin'),
                     'revisions_days_ago' => $this->module->getTranslator()->trans('days ago', [], 'Modules.Iqitelementor.Admin'),
+                    'save_as_default' => $this->module->getTranslator()->trans('Save as default', [], 'Modules.Iqitelementor.Admin'),
+                    'reset_default' => $this->module->getTranslator()->trans('Reset default', [], 'Modules.Iqitelementor.Admin'),
+                    'default_saved' => $this->module->getTranslator()->trans('Default settings saved', [], 'Modules.Iqitelementor.Admin'),
+                    'default_reset' => $this->module->getTranslator()->trans('Default settings reset', [], 'Modules.Iqitelementor.Admin'),
                 ],
             ]]);
 
@@ -1268,6 +1273,57 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         }
     }
 
+    /**
+     * Save widget settings as the default for this widget type (per shop).
+     */
+    public function ajaxProcessSaveWidgetDefault(): void
+    {
+        $widgetType = Tools::getValue('widget_type');
+        $settings = Tools::getValue('settings');
+
+        if (!$widgetType || !$settings) {
+            exit(json_encode(['success' => false, 'data' => 'Missing parameters']));
+        }
+
+        $idShop = (int) $this->context->shop->id;
+
+        // Upsert: delete existing then insert
+        Db::getInstance()->delete(
+            'iqit_elementor_widget_default',
+            '`id_shop` = ' . $idShop . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
+        );
+
+        $result = Db::getInstance()->insert('iqit_elementor_widget_default', [
+            'id_shop' => $idShop,
+            'widget_type' => pSQL($widgetType),
+            'settings' => pSQL($settings, true),
+            'date_upd' => date('Y-m-d H:i:s'),
+        ]);
+
+        exit(json_encode(['success' => (bool) $result]));
+    }
+
+    /**
+     * Delete the saved default for a widget type.
+     */
+    public function ajaxProcessDeleteWidgetDefault(): void
+    {
+        $widgetType = Tools::getValue('widget_type');
+
+        if (!$widgetType) {
+            exit(json_encode(['success' => false, 'data' => 'Missing widget_type']));
+        }
+
+        $idShop = (int) $this->context->shop->id;
+
+        $result = Db::getInstance()->delete(
+            'iqit_elementor_widget_default',
+            '`id_shop` = ' . $idShop . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
+        );
+
+        exit(json_encode(['success' => (bool) $result]));
+    }
+
     public function getTemplatePreviewLink($templateId): string
     {
         return $previewLink = $this->context->link->getModuleLink('iqitelementor', 'Preview', [
@@ -1296,6 +1352,40 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         }
 
         return $value;
+    }
+
+    /**
+     * Load all saved widget defaults for the current shop.
+     *
+     * @return array<string, array> Keyed by widget_type
+     */
+    private function loadWidgetDefaults(): array
+    {
+        $idShop = (int) $this->context->shop->id;
+        $tableName = _DB_PREFIX_ . 'iqit_elementor_widget_default';
+
+        // Check table exists (graceful during upgrade before SQL runs)
+        try {
+            $rows = Db::getInstance()->executeS(
+                'SELECT `widget_type`, `settings` FROM `' . $tableName . '` WHERE `id_shop` = ' . $idShop
+            );
+        } catch (\Exception $e) {
+            return [];
+        }
+
+        if (!$rows) {
+            return [];
+        }
+
+        $defaults = [];
+        foreach ($rows as $row) {
+            $decoded = json_decode($row['settings'], true);
+            if (is_array($decoded)) {
+                $defaults[$row['widget_type']] = $decoded;
+            }
+        }
+
+        return $defaults;
     }
 
     /**

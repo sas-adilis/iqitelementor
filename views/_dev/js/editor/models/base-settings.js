@@ -23,6 +23,27 @@ BaseSettingsModel = Backbone.Model.extend( {
 
 		this.defaults = defaults;
 
+		// Apply saved widget defaults when creating a new widget (empty settings)
+		var widgetType = attrs.widgetType;
+		var isNewWidget = widgetType && this._countUserKeys( attrs ) === 0;
+
+		if (
+			isNewWidget &&
+			elementor.config &&
+			elementor.config.widgetDefaults &&
+			elementor.config.widgetDefaults[ widgetType ]
+		) {
+			attrs = _.defaults( {}, elementor.config.widgetDefaults[ widgetType ], defaults );
+			// Restore meta keys needed by the system
+			attrs.widgetType = widgetType;
+			if ( data && data.elType ) {
+				attrs.elType = data.elType;
+			}
+			if ( data && data.isInner ) {
+				attrs.isInner = data.isInner;
+			}
+		}
+
 		// TODO: Change method to recursive
 		attrs = _.defaults( {}, attrs, defaults );
 
@@ -35,6 +56,23 @@ BaseSettingsModel = Backbone.Model.extend( {
 		} );
 
 		this.set( attrs );
+	},
+
+	/**
+	 * Count keys in settings data that are not system/meta keys.
+	 * Used to detect if a widget was just created (empty user settings).
+	 */
+	_countUserKeys: function( data ) {
+		var metaKeys = [ 'widgetType', 'elType', 'isInner' ];
+		var count = 0;
+
+		_.each( data, function( value, key ) {
+			if ( ! _.contains( metaKeys, key ) ) {
+				count++;
+			}
+		} );
+
+		return count;
 	},
 
 	getFontControls: function() {

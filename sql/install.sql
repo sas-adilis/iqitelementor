@@ -100,6 +100,16 @@ CREATE TABLE IF NOT EXISTS `PREFIXiqit_elementor_content_shop` (
   PRIMARY KEY (`id_elementor`, `id_shop`)
 ) ENGINE=ENGINE_TYPE  DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `PREFIXiqit_elementor_widget_default` (
+  `id_widget_default` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_shop` int(10) unsigned NOT NULL DEFAULT 1,
+  `widget_type` varchar(128) NOT NULL,
+  `settings` longtext NOT NULL,
+  `date_upd` datetime NOT NULL,
+  PRIMARY KEY (`id_widget_default`),
+  UNIQUE KEY `idx_shop_widget` (`id_shop`, `widget_type`)
+) ENGINE=ENGINE_TYPE DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS `PREFIXiqit_elementor_revision` (
   `id_iqit_elementor_revision` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `entity_type`                varchar(50)      NOT NULL,

@@ -125,6 +125,7 @@ WidgetView = BaseElementView.extend( {
 	},
 	getContextMenuGroups() {
 		const groups = [];
+		const defaultActions = require( 'elementor-utils/actions/save-default' );
 
 		const $settings = this.$el.find(
 			'.elementor-editor-element-settings'
@@ -167,6 +168,17 @@ WidgetView = BaseElementView.extend( {
 			actions.push(
 				require( 'elementor-utils/actions/paste-styles' )( this)
 			);
+
+			// Save as default / Reset default
+			actions.push(
+				defaultActions.getSaveDefaultAction( this, { separator: 'before' } )
+			);
+
+			if ( defaultActions.hasDefault( this.model.get( 'widgetType' ) ) ) {
+				actions.push(
+					defaultActions.getResetDefaultAction( this )
+				);
+			}
 
 			if ($remove.length) {
 				actions.push({

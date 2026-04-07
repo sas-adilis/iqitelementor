@@ -11,3 +11,4 @@ DROP TABLE IF EXISTS PREFIXiqit_elementor_content;
 DROP TABLE IF EXISTS PREFIXiqit_elementor_content_lang;
 DROP TABLE IF EXISTS PREFIXiqit_elementor_content_shop;
 DROP TABLE IF EXISTS PREFIXiqit_elementor_revision;
+DROP TABLE IF EXISTS PREFIXiqit_elementor_widget_default;

@@ -17,6 +17,7 @@ class AdminIqitElementorContentController extends ModuleAdminController
 
         $hookId = Hook::getIdByName('displayManufacturerElementor');
 
+        $this->_select = '"" as elementor_link';
         $this->_where = 'AND a.`hook` != ' . (int) $hookId;
 
         $this->addRowAction('edit');
@@ -25,23 +26,47 @@ class AdminIqitElementorContentController extends ModuleAdminController
 
         $this->_orderBy = 'id_elementor';
         $this->identifier = 'id_elementor';
-        $test = [];
-        $test[0] = [
-            'id' => 0,
-            'name' => $this->module->getTranslator()->trans('No results were found for your search.', [], 'Modules.Iqitelementor.Admin'),
-        ];
 
         $this->fields_list = [
             'id_elementor' => ['title' => $this->module->getTranslator()->trans('ID', [], 'Modules.Iqitelementor.Admin'), 'align' => 'center', 'class' => 'fixed-width-xs'],
             'title' => ['title' => $this->module->getTranslator()->trans('Name', [], 'Modules.Iqitelementor.Admin'), 'width' => 'auto'],
             'hook' => ['title' => $this->module->getTranslator()->trans('Hook', [], 'Modules.Iqitelementor.Admin'), 'width' => 'auto', 'callback' => 'formatHook'],
             'active' => ['title' => $this->module->getTranslator()->trans('Active', [], 'Modules.Iqitelementor.Admin'), 'width' => 'auto', 'align' => 'center', 'type' => 'bool', 'class' => 'fixed-width-xs'],
+            'elementor_link' => [
+                'title' => 'Elementor',
+                'align' => 'center',
+                'class' => 'fixed-width-sm',
+                'search' => false,
+                'orderby' => false,
+                'callback' => 'renderElementorGridIcon',
+            ],
         ];
 
         if (!$this->module->active) {
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminHome'));
         }
         $this->name = 'IqitElementorContent';
+    }
+
+    public function renderElementorGridIcon($value, $row)
+    {
+        $id = isset($row['id_elementor']) ? (int) $row['id_elementor'] : 0;
+        if (!$id) {
+            return '';
+        }
+
+        $url = $this->context->link->getAdminLink('AdminIqitElementorEditor')
+            . '&pageType=content&contentType=default&newContent=0'
+            . '&idLang=' . (int) $this->context->language->id
+            . '&pageId=' . $id;
+
+        $logoUrl = _MODULE_DIR_ . 'iqitelementor/logo.png';
+
+        return '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" '
+            . 'title="' . htmlspecialchars($this->module->getTranslator()->trans('Edit with Elementor', [], 'Modules.Iqitelementor.Admin'), ENT_QUOTES, 'UTF-8') . '" '
+            . 'class="elementor-grid-link">'
+            . '<img src="' . htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8') . '" alt="Elementor" class="elementor-grid-logo" style="width:20px;height:20px;">'
+            . '</a>';
     }
 
     public static function formatHook($idHook)

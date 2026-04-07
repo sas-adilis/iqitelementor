@@ -360,12 +360,10 @@ BaseElementView = Marionette.CompositeView.extend( {
 		var styleText = this.stylesheet.toString(),
 			styleId = 'elementor-style-' + this.model.get( 'id' );
 
-		// Find existing element in DOM if not cached
-		if ( ! this.$stylesheetElement ) {
-			this.$stylesheetElement = elementor.$previewContents.find( '#' + styleId );
-			if ( ! this.$stylesheetElement.length ) {
-				this.$stylesheetElement = null;
-			}
+		// Always look up in DOM — cached reference may be stale after drag-and-drop
+		this.$stylesheetElement = elementor.$previewContents.find( '#' + styleId );
+		if ( ! this.$stylesheetElement.length ) {
+			this.$stylesheetElement = null;
 		}
 
 		if ( _.isEmpty( styleText ) && ! this.$stylesheetElement ) {
@@ -533,6 +531,12 @@ BaseElementView = Marionette.CompositeView.extend( {
 	},
 
 	onBeforeDestroy: function() {
+		// Remove element stylesheet from the DOM
+		if ( this.$stylesheetElement ) {
+			this.$stylesheetElement.remove();
+			this.$stylesheetElement = null;
+		}
+
 		// Remove custom CSS style from the DOM
 		if ( this.$customCSSElement ) {
 			this.$customCSSElement.remove();

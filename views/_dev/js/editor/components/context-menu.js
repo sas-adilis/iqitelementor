@@ -37,19 +37,27 @@ var ContextMenuView = Marionette.ItemView.extend( {
         this.context = { event: event, view: view, groups: groups };
         this.renderMenu();
 
-        // Ajuster la position si le panel latéral est ouvert
-        var $panel = Backbone.$('#elementor-panel');
-
-        if ($panel.length && $panel.is(':visible')) {
-            var panelWidth = $panel.outerWidth() || 0;
-            menuX += panelWidth;
-        }
-
+        // Positionner en fixed puis vérifier les limites de l'écran
         this.$el.css( {
             left: menuX,
             top: menuY,
-            position: 'absolute'
+            position: 'fixed'
         } ).show();
+
+        // Empêcher le menu de sortir de l'écran
+        var menuWidth = this.$el.outerWidth(),
+            menuHeight = this.$el.outerHeight(),
+            winWidth = Backbone.$(window).width(),
+            winHeight = Backbone.$(window).height();
+
+        if (menuX + menuWidth > winWidth) {
+            menuX = winWidth - menuWidth - 5;
+        }
+        if (menuY + menuHeight > winHeight) {
+            menuY = winHeight - menuHeight - 5;
+        }
+
+        this.$el.css({ left: menuX, top: menuY });
     },
 
     hide: function() {

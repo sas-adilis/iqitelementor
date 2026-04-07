@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .elementor-video-wrapper {
   position: relative;
   height: 0;
@@ -288,7 +289,6 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display: flex;
-  gap: 20px;
   -webkit-flex-wrap: wrap;
       -ms-flex-wrap: wrap;
           flex-wrap: wrap;
@@ -298,6 +298,10 @@
 }
 .elementor-widget-wrap > .elementor-widget {
   width: 100%;
+}
+.elementor-widget-wrap > .elementor-widget:not(:last-child) {
+  -webkit-margin-after: 10px;
+          margin-block-end: 10px;
 }
 
 .elementor-editor-active .elementor-widget-wrap {
@@ -667,7 +671,7 @@
     min-width: 0;
   }
 }
-.elementor-column .elementor-section.elementor-section-full_width {
+.elementor-column .elementor-section {
   width: 100%;
 }
 
@@ -1165,6 +1169,245 @@
   line-height: 2.5;
 }
 
+.elementor-accordion {
+  text-align: left;
+}
+.elementor-accordion .elementor-accordion-item {
+  border: 1px solid #D4D4D4;
+}
+.elementor-accordion .elementor-accordion-item + .elementor-accordion-item {
+  border-top: none;
+}
+.elementor-accordion .elementor-accordion-title {
+  padding: 15px 20px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon {
+  display: inline-block;
+  width: 1.5em;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon.elementor-accordion-icon-right {
+  float: right;
+  text-align: right;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon.elementor-accordion-icon-left {
+  float: left;
+  text-align: left;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon .fa:before {
+  content: "\f067";
+}
+.elementor-accordion .elementor-accordion-title.active .elementor-accordion-icon .fa:before {
+  content: "\f068";
+}
+.elementor-accordion .elementor-accordion-content {
+  display: none;
+  padding: 15px 20px;
+  border-top: 1px solid #D4D4D4;
+}
+
+.accordion-custom-icon .accordion-button::after {
+  display: none;
+}
+.accordion-custom-icon .accordion-button {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 10px;
+}
+.accordion-custom-icon .accordion-icon {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  font-size: 1em;
+  line-height: 1;
+}
+.accordion-custom-icon .accordion-icon svg {
+  width: 1em;
+  height: 1em;
+}
+.accordion-custom-icon .accordion-icon-close {
+  display: none;
+}
+.accordion-custom-icon .accordion-icon-open {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+.accordion-custom-icon .accordion-icon-left .accordion-icon {
+  -webkit-box-ordinal-group: 0;
+  -webkit-order: -1;
+      -ms-flex-order: -1;
+          order: -1;
+}
+.accordion-custom-icon .accordion-icon-right .accordion-button {
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+.accordion-custom-icon .accordion-icon-right .accordion-icon {
+  -webkit-box-ordinal-group: 2;
+  -webkit-order: 1;
+      -ms-flex-order: 1;
+          order: 1;
+  margin-left: auto;
+}
+.accordion-custom-icon .accordion-button:not(.collapsed) .accordion-icon-open {
+  display: none;
+}
+.accordion-custom-icon .accordion-button:not(.collapsed) .accordion-icon-close {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+.accordion-style-none .accordion-item {
+  border: none;
+}
+.accordion-style-none .accordion-button {
+  border: none;
+}
+.accordion-style-none .accordion-button:not(.collapsed) {
+  box-shadow: none;
+}
+.accordion-style-none .accordion-body {
+  border-top: none;
+}
+
+.accordion-style-boxed {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+.accordion-style-boxed .accordion-item {
+  border-style: solid;
+}
+.accordion-style-boxed .accordion-item:not(:first-of-type) {
+  border-top-width: inherit;
+}
+.accordion-style-boxed .accordion-button:not(.collapsed) {
+  border-bottom: 1px solid;
+  border-bottom-color: inherit;
+  box-shadow: none;
+}
+
+.accordion.accordion-style-separator .accordion-item {
+  border: none;
+  border-top-style: solid;
+  border-radius: 0;
+}
+.accordion.accordion-style-separator .accordion-item:first-child {
+  border-top: none !important;
+}
+.accordion.accordion-style-separator .accordion-button {
+  border: none;
+  border-radius: 0;
+}
+.accordion.accordion-style-separator .accordion-button:not(.collapsed) {
+  box-shadow: none;
+}
+.accordion.accordion-style-separator .accordion-body {
+  border-top: none;
+}
+
+.accordion-icon-type-plus_minus .accordion-icon-open,
+.accordion-icon-type-plus_minus .accordion-icon-close {
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+@media (max-width: 767px) {
+  .elementor-accordion .elementor-accordion-title {
+    padding: 12px 15px;
+  }
+  .elementor-accordion .elementor-accordion-title .elementor-accordion-icon {
+    width: 1.2em;
+  }
+  .elementor-accordion .elementor-accordion-content {
+    padding: 7px 15px;
+  }
+}
+.swiper-elementor > .swiper-navigation,
+.swiper-elementor > .swiper-pagination,
+.swiper-elementor > .swiper-scrollbar,
+.swiper-elementor > .swiper-bottom > .swiper-navigation,
+.swiper-elementor > .swiper-bottom > .swiper-pagination,
+.swiper-elementor > .swiper-bottom > .swiper-scrollbar {
+  display: none;
+}
+.swiper-elementor.swiper-elementor-nav-on > .swiper-navigation,
+.swiper-elementor.swiper-elementor-nav-on > .swiper-bottom > .swiper-navigation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+.swiper-elementor.swiper-elementor-pag-on > .swiper-pagination,
+.swiper-elementor.swiper-elementor-pag-on > .swiper-bottom > .swiper-pagination {
+  display: block;
+}
+.swiper-elementor.swiper-elementor-scr-on > .swiper-scrollbar,
+.swiper-elementor.swiper-elementor-scr-on > .swiper-bottom > .swiper-scrollbar {
+  display: block;
+}
+
+.elementor-swiper-button.has-custom-icon {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.elementor-swiper-button.has-custom-icon::after {
+  display: none;
+}
+.elementor-swiper-button.has-custom-icon svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+.elementor-swiper-button.has-custom-icon i {
+  font-size: inherit;
+}
+.elementor-swiper-button.has-custom-icon .elementor-icon-svg {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  line-height: 1;
+}
+
 .elementor-icon {
   display: inline-block;
   line-height: 1;
@@ -1503,6 +1746,171 @@ body.elementor-page .elementor-widget-menu-anchor {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
+/* ==========================================================================
+   Table of Contents widget
+   ========================================================================== */
+.elementor-toc {
+  border: 0 solid #ddd;
+  /* Toggle buttons */
+  /* Body */
+  /* Spinner (shown before JS builds the list) */
+  /* List */
+  /* Bullets marker via pseudo-element */
+  /* Active state */
+  /* No headings message */
+  /* Collapse subitems: nested lists hidden until parent is active */
+}
+.elementor-toc__header {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 2px solid #ddd;
+}
+.elementor-toc__header-title {
+  margin: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  font-size: 1.1em;
+  line-height: 1.3;
+}
+.elementor-toc__toggle-button {
+  cursor: pointer;
+  display: none; /* hidden by default, shown when collapsible */
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  font-size: 14px;
+  line-height: 1;
+  padding: 4px 8px;
+}
+.elementor-toc--collapsible .elementor-toc__toggle-button--collapse {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+.elementor-toc--collapsible.elementor-toc--collapsed .elementor-toc__toggle-button--collapse {
+  display: none;
+}
+.elementor-toc--collapsible.elementor-toc--collapsed .elementor-toc__toggle-button--expand {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+.elementor-toc__body {
+  padding: 10px;
+  -webkit-transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+  transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+  overflow: hidden;
+}
+.elementor-toc--collapsed .elementor-toc__body {
+  max-height: 0 !important;
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+.elementor-toc__spinner-container {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 15px 0;
+}
+.elementor-toc__spinner {
+  font-size: 20px;
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+}
+.elementor-toc__list-wrapper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.elementor-toc--marker-numbers .elementor-toc__list-wrapper {
+  list-style: decimal;
+  padding-left: 1.5em;
+}
+.elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+  padding-left: 1.2em;
+}
+.elementor-toc__list-item {
+  padding: 3px 0;
+}
+.elementor-toc__list-item-text {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  -webkit-transition: color 0.15s ease;
+  transition: color 0.15s ease;
+}
+.elementor-toc__list-item-text:hover {
+  text-decoration: underline;
+}
+.elementor-toc--marker-bullets .elementor-toc__list-item-text::before {
+  content: "•"; /* bullet • */
+  display: inline-block;
+  margin-right: 0.5em;
+  font-size: 0.8em;
+}
+.elementor-toc__list-item--active > .elementor-toc__list-item-text {
+  font-weight: 600;
+}
+.elementor-toc__no-headings {
+  padding: 10px 0;
+  color: #999;
+  font-style: italic;
+}
+.elementor-toc--collapse-subitems .elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+  display: none;
+}
+.elementor-toc--collapse-subitems .elementor-toc__list-item--active > .elementor-toc__list-wrapper {
+  display: block;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .animated {
   -webkit-animation-duration: 1.055s;
           animation-duration: 1.055s;

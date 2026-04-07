@@ -5,6 +5,8 @@ if (!defined('_PS_VERSION_')) {
 
 class AdminIqitElementorController extends ModuleAdminController
 {
+    use \IqitElementor\Traits\AdminControllerTrait;
+
     public $name;
 
     public function __construct()
@@ -20,20 +22,12 @@ class AdminIqitElementorController extends ModuleAdminController
         $this->_where = 'AND a.`id_shop` = ' . (int) Context::getContext()->shop->id;
         $this->_orderBy = 'id_iqit_elementor_landing';
         $this->identifier = 'id_iqit_elementor_landing';
+        $this->_select = '"" as elementor_link';
         $test = [];
         $test[0] = [
             'id' => 0,
             'name' => $this->module->getTranslator()->trans('No results were found for your search.', [], 'Modules.Iqitelementor.Admin'),
         ];
-
-        // instagram generator url
-        $urlInsagramConnect = $this->context->link->getAdminLink('AdminIqitElementor') . '&instagamIntegration=1';
-        $urlInsagramRemove = $this->context->link->getAdminLink('AdminIqitElementor') . '&instagamTokenRemove=1';
-
-        // instagram profile
-        $instagramToken = Configuration::get('iqit_elementor_inst_token');
-        $instagramUsername = Configuration::get('iqit_elementor_inst_username');
-        $instagramExpDate = date('Y-m-d', (int) Configuration::get('iqit_elementor_inst_token_exp'));
 
         $this->fields_options = [
             'general' => [
@@ -64,16 +58,6 @@ class AdminIqitElementorController extends ModuleAdminController
                         ],
                         'identifier' => 'id',
                     ],
-
-                    'iqit_elementor_instagram_connect' => [
-                        'title' => $this->module->getTranslator()->trans('Instagram account', [], 'Modules.Iqitelementor.Admin'),
-                        'type' => 'instagram_connect',
-                        'url' => $urlInsagramConnect,
-                        'token' => $instagramToken,
-                        'username' => $instagramUsername,
-                        'urlRemove' => $urlInsagramRemove,
-                        'instagramExpDate' => $instagramExpDate,
-                    ],
                 ],
                 'submit' => ['title' => $this->module->getTranslator()->trans('Save', [], 'Modules.Iqitelementor.Admin')],
             ],
@@ -82,6 +66,15 @@ class AdminIqitElementorController extends ModuleAdminController
         $this->fields_list = [
             'id_iqit_elementor_landing' => ['title' => $this->module->getTranslator()->trans('ID', [], 'Modules.Iqitelementor.Admin'), 'align' => 'center', 'class' => 'fixed-width-xs'],
             'title' => ['title' => $this->module->getTranslator()->trans('Name', [], 'Modules.Iqitelementor.Admin'), 'width' => 'auto'],
+            'active' => ['title' => $this->module->getTranslator()->trans('Active', [], 'Modules.Iqitelementor.Admin'), 'align' => 'center', 'active' => 'status', 'type' => 'bool', 'class' => 'fixed-width-sm'],
+            'elementor_link' => [
+                'title' => 'Elementor',
+                'align' => 'center',
+                'class' => 'fixed-width-sm',
+                'search' => false,
+                'orderby' => false,
+                'callback' => 'renderElementorGridIcon'
+            ],
         ];
 
         if (!$this->module->active) {
@@ -90,18 +83,8 @@ class AdminIqitElementorController extends ModuleAdminController
         $this->name = 'IqitElementor';
     }
 
-    public function setMedia($isNewTheme = false)
-    {
-        parent::setMedia($isNewTheme);
-    }
-
     public function init()
     {
-        if (Tools::getValue('instagamTokenRemove')) {
-            $this->removeInstagramProfile();
-            Tools::redirectAdmin($this->context->link->getAdminLink('AdminIqitElementor'));
-        }
-
         if (Tools::isSubmit('edit' . $this->className)) {
             $this->display = 'edit';
         } elseif (Tools::isSubmit('addiqit_elementor_landing')) {
@@ -109,65 +92,6 @@ class AdminIqitElementorController extends ModuleAdminController
         }
 
         parent::init();
-    }
-
-    private function makeApiRequest($url)
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        $response = curl_exec($ch);
-        curl_close($ch);
-
-        return json_decode($response, true);
-    }
-
-    public function addInstagramProfile($accessToken)
-    {
-        // Endpoint do pobrania danych użytkownika
-        $userInfoEndpoint = 'https://graph.instagram.com/v22.0/me?fields=user_id,username&id&access_token=' . $accessToken;
-
-        // Wywołanie API
-        $userInfoResponse = $this->makeApiRequest($userInfoEndpoint);
-        if (!$userInfoResponse || !isset($userInfoResponse['user_id'], $userInfoResponse['username'])) {
-            $this->errors[] = 'Nie udało się pobrać danych użytkownika Instagrama.';
-
-            return;
-        }
-
-        // Pobranie danych z odpowiedzi
-        $userId = $userInfoResponse['user_id'];
-        $username = $userInfoResponse['username'];
-
-        // Opcjonalne odświeżenie tokena
-        $refreshEndpoint = 'https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=' . $accessToken;
-        $refreshResponse = $this->makeApiRequest($refreshEndpoint);
-        if (!$refreshResponse || !isset($refreshResponse['access_token'], $refreshResponse['expires_in'])) {
-            $this->errors[] = new Exception('Nie udało się odświeżyć tokena.');
-
-            return;
-        }
-
-        // Aktualizacja tokena i daty jego wygaśnięcia
-        $newAccessToken = $refreshResponse['access_token'];
-        $expiresIn = $refreshResponse['expires_in']; // W sekundach
-
-        // Zapis do bazy danych
-        Configuration::updateValue('iqit_elementor_inst_token', $newAccessToken);
-        Configuration::updateValue('iqit_elementor_inst_username', $username);
-        Configuration::updateValue('iqit_elementor_inst_user_id', $userId);
-        Configuration::updateValue('iqit_elementor_inst_token_exp', IqitElementor::instaTokenExpirationDate($expiresIn));
-
-        Tools::redirectAdmin($this->context->link->getAdminLink('AdminIqitElementor'));
-    }
-
-    public function removeInstagramProfile()
-    {
-        Configuration::deleteByName('iqit_elementor_inst_token');
-        Configuration::deleteByName('iqit_elementor_inst_token_exp');
-        Configuration::deleteByName('iqit_elementor_inst_username');
-        Configuration::deleteByName('iqit_elementor_inst_user_id');
     }
 
     public function initContent()
@@ -178,11 +102,7 @@ class AdminIqitElementorController extends ModuleAdminController
             return;
         }
 
-        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL) {
-            $this->context->smarty->assign([
-                'content' => $this->getWarningMultishopHtml(),
-            ]);
-
+        if ($this->initMultishopContent()) {
             return;
         }
 
@@ -192,21 +112,51 @@ class AdminIqitElementorController extends ModuleAdminController
     public function postProcess()
     {
         if (Tools::isSubmit('submit' . $this->className)) {
-            $returnObject = $this->processSave();
-            if (!$returnObject) {
+            $id = (int) Tools::getValue('id_iqit_elementor_landing');
+            $landing = new IqitElementorLanding($id);
+
+            $landing->title = Tools::getValue('title');
+            $landing->active = (int) Tools::getValue('active');
+            $landing->id_shop = (int) $this->context->shop->id;
+
+            $languages = Language::getLanguages(false);
+            $idShop = (int) $this->context->shop->id;
+
+            foreach ($languages as $lang) {
+                $idLang = (int) $lang['id_lang'];
+
+                $landing->data[$idLang] = Tools::getValue('data_' . $idLang);
+                $landing->meta_title[$idLang] = Tools::getValue('meta_title_' . $idLang);
+                $landing->meta_description[$idLang] = Tools::getValue('meta_description_' . $idLang);
+
+                $linkRewrite = Tools::getValue('link_rewrite_' . $idLang);
+                if (empty($linkRewrite)) {
+                    $linkRewrite = Tools::str2url($landing->title);
+                }
+                if ($linkRewrite) {
+                    $linkRewrite = IqitElementorLanding::getUniqueRewrite($linkRewrite, $idLang, $idShop, $id);
+                }
+                $landing->link_rewrite[$idLang] = $linkRewrite;
+            }
+
+            if ($landing->id) {
+                $success = $landing->update();
+            } else {
+                $success = $landing->add();
+            }
+
+            if (!$success) {
+                $this->errors[] = Tools::displayError('An error occurred while saving the landing page.');
                 return false;
             }
-            Tools::redirectAdmin($this->context->link->getAdminLink('Admin' . $this->name) . '&id_iqit_elementor_landing=' . $returnObject->id . '&updateiqit_elementor_landing');
+
+            Tools::redirectAdmin(
+                $this->context->link->getAdminLink('Admin' . $this->name)
+                . '&id_iqit_elementor_landing=' . $landing->id
+                . '&updateiqit_elementor_landing'
+            );
         }
 
-        if (Tools::isSubmit('submitInstagramConnect')) {
-            $instagramToken = Tools::getValue('iqit_elementor_inst_token');
-            if ($instagramToken) {
-                $this->addInstagramProfile($instagramToken);
-            } else {
-                $this->errors[] = Tools::displayError('Please fill instagram access token first');
-            }
-        }
         if (Tools::isSubmit('submitOptions' . $this->table)) {
             $this->module->clearHomeCache();
         }
@@ -219,37 +169,100 @@ class AdminIqitElementorController extends ModuleAdminController
         $landing = new IqitElementorLanding((int) Tools::getValue('id_iqit_elementor_landing'));
 
         if ($landing->id) {
-            $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=landing&pageId=' . $landing->id;
+            $editorUrl = $this->context->link->getAdminLink('AdminIqitElementorEditor') . '&pageType=landing&pageId=' . $landing->id;
         } else {
-            $url = false;
+            $editorUrl = false;
         }
+
+        // Build front URL preview HTML
+        $pageUrlHtml = '';
+        if ($landing->id) {
+            $idLang = (int) $this->context->language->id;
+            $frontUrl = $landing->getLink($idLang);
+            $isHomepage = $landing->isHomepage();
+            $homeBadge = $isHomepage
+                ? ' <span class="label label-info">'
+                    . $this->module->getTranslator()->trans('Homepage — redirects to /', [], 'Modules.Iqitelementor.Admin')
+                    . '</span>'
+                : '';
+            $pageUrlHtml = '<div class="form-group">'
+                . '<a href="' . htmlspecialchars($frontUrl, ENT_QUOTES, 'UTF-8') . '" target="_blank" class="btn btn-default">'
+                . '<i class="icon-external-link"></i> '
+                . htmlspecialchars($frontUrl, ENT_QUOTES, 'UTF-8')
+                . '</a>'
+                . $homeBadge
+                . '</div>';
+        }
+
+        // --- Form: General ---
+        $generalInputs = [
+            [
+                'type' => 'hidden',
+                'name' => 'id_iqit_elementor_landing',
+            ],
+            [
+                'type' => 'text',
+                'label' => $this->module->getTranslator()->trans('Title', [], 'Modules.Iqitelementor.Admin'),
+                'name' => 'title',
+                'required' => true,
+            ],
+            [
+                'type' => 'switch',
+                'label' => $this->module->getTranslator()->trans('Active', [], 'Modules.Iqitelementor.Admin'),
+                'name' => 'active',
+                'is_bool' => true,
+                'values' => [
+                    [
+                        'id' => 'active_on',
+                        'value' => 1,
+                        'label' => $this->module->getTranslator()->trans('Yes', [], 'Modules.Iqitelementor.Admin'),
+                    ],
+                    [
+                        'id' => 'active_off',
+                        'value' => 0,
+                        'label' => $this->module->getTranslator()->trans('No', [], 'Modules.Iqitelementor.Admin'),
+                    ],
+                ],
+            ],
+            [
+                'type' => 'text',
+                'label' => $this->module->getTranslator()->trans('Friendly URL', [], 'Modules.Iqitelementor.Admin'),
+                'name' => 'link_rewrite',
+                'lang' => true,
+                'required' => true,
+                'hint' => $this->module->getTranslator()->trans('Auto-generated from title if left empty.', [], 'Modules.Iqitelementor.Admin'),
+            ],
+        ];
+
+        // Insert page URL after link_rewrite (only on edit)
+        if ($landing->id && $pageUrlHtml) {
+            $generalInputs[] = [
+                'type' => 'html',
+                'label' => $this->module->getTranslator()->trans('Page URL', [], 'Modules.Iqitelementor.Admin'),
+                'name' => 'page_url_preview',
+                'html_content' => $pageUrlHtml,
+            ];
+        }
+
+        $generalInputs[] = [
+            'type' => 'elementor_trigger',
+            'label' => $this->module->getTranslator()->trans('Page content', [], 'Modules.Iqitelementor.Admin'),
+            'url' => $editorUrl,
+        ];
+
+        $generalInputs[] = [
+            'type' => 'hidden',
+            'name' => 'id_shop',
+        ];
 
         $this->fields_form[0]['form'] = [
             'legend' => [
-                'title' => isset($landing->id) ? $this->module->getTranslator()->trans('Edit layout.', [], 'Modules.Iqitelementor.Admin') : $this->module->getTranslator()->trans('New layout', [], 'Modules.Iqitelementor.Admin'),
-                'icon' => isset($landing->id) ? 'icon-edit' : 'icon-plus-square',
+                'title' => $landing->id
+                    ? $this->module->getTranslator()->trans('Edit landing page', [], 'Modules.Iqitelementor.Admin')
+                    : $this->module->getTranslator()->trans('New landing page', [], 'Modules.Iqitelementor.Admin'),
+                'icon' => $landing->id ? 'icon-edit' : 'icon-plus-square',
             ],
-            'input' => [
-                [
-                    'type' => 'hidden',
-                    'name' => 'id_iqit_elementor_landing',
-                ],
-                [
-                    'type' => 'text',
-                    'label' => $this->module->getTranslator()->trans('Title of layout', [], 'Modules.Iqitelementor.Admin'),
-                    'name' => 'title',
-                    'required' => true,
-                ],
-                [
-                    'type' => 'elementor_trigger',
-                    'label' => $this->module->getTranslator()->trans('Title of layout', [], 'Modules.Iqitelementor.Admin'),
-                    'url' => $url,
-                ],
-                [
-                    'type' => 'hidden',
-                    'name' => 'id_shop',
-                ],
-            ],
+            'input' => $generalInputs,
             'buttons' => [
                 'cancelBlock' => [
                     'title' => $this->module->getTranslator()->trans('Cancel', [], 'Modules.Iqitelementor.Admin'),
@@ -261,6 +274,30 @@ class AdminIqitElementorController extends ModuleAdminController
             'submit' => [
                 'name' => 'submit' . $this->className,
                 'title' => $this->module->getTranslator()->trans('Save and stay', [], 'Modules.Iqitelementor.Admin'),
+            ],
+        ];
+
+        // --- Form: SEO ---
+        $this->fields_form[1]['form'] = [
+            'legend' => [
+                'title' => $this->module->getTranslator()->trans('SEO', [], 'Modules.Iqitelementor.Admin'),
+                'icon' => 'icon-search',
+            ],
+            'input' => [
+                [
+                    'type' => 'text',
+                    'label' => $this->module->getTranslator()->trans('Meta title', [], 'Modules.Iqitelementor.Admin'),
+                    'name' => 'meta_title',
+                    'lang' => true,
+                    'hint' => $this->module->getTranslator()->trans('Displayed in browser tab and search results. Falls back to title if empty.', [], 'Modules.Iqitelementor.Admin'),
+                ],
+                [
+                    'type' => 'textarea',
+                    'label' => $this->module->getTranslator()->trans('Meta description', [], 'Modules.Iqitelementor.Admin'),
+                    'name' => 'meta_description',
+                    'lang' => true,
+                    'hint' => $this->module->getTranslator()->trans('Displayed in search engine results.', [], 'Modules.Iqitelementor.Admin'),
+                ],
             ],
         ];
 
@@ -279,33 +316,55 @@ class AdminIqitElementorController extends ModuleAdminController
         $helper->fields_value = (array) $landing;
         $helper->fields_value['id_shop'] = $this->context->shop->id;
 
-        return $helper->generateForm($this->fields_form);
-    }
+        // Populate multilang field values
+        $languages = Language::getLanguages(false);
+        foreach ($languages as $lang) {
+            $idLang = (int) $lang['id_lang'];
+            $helper->fields_value['meta_title'][$idLang] = isset($landing->meta_title[$idLang]) ? $landing->meta_title[$idLang] : '';
+            $helper->fields_value['meta_description'][$idLang] = isset($landing->meta_description[$idLang]) ? $landing->meta_description[$idLang] : '';
+            $helper->fields_value['link_rewrite'][$idLang] = isset($landing->link_rewrite[$idLang]) ? $landing->link_rewrite[$idLang] : '';
+        }
 
-    protected function buildHelper()
-    {
-        $helper = new HelperForm();
+        $formHtml = $helper->generateForm($this->fields_form);
 
-        $helper->module = $this->module;
-        $helper->override_folder = 'iqitelementor/';
-        $helper->identifier = $this->className;
-        $helper->token = Tools::getAdminTokenLite('Admin' . $this->name);
-        $helper->languages = $this->_languages;
-        $helper->currentIndex = $this->context->link->getAdminLink('Admin' . $this->name);
-        $helper->default_form_language = $this->default_form_language;
-        $helper->allow_employee_form_lang = $this->allow_employee_form_lang;
-        $helper->toolbar_scroll = true;
-        $helper->toolbar_btn = $this->initToolbar();
+        // Append revision panel and autosave banner
+        if ($landing->id) {
+            $formHtml .= $this->renderRevisionPanel(
+                \IqitElementor\Enum\EntityType::LANDING,
+                (int) $landing->id
+            );
+        }
 
-        return $helper;
+        return $formHtml;
     }
 
     public function initToolBarTitle()
     {
-        $this->toolbar_title[] = $this->module->getTranslator()->trans('Homepage layouts', [], 'Modules.Iqitelementor.Admin');
+        $this->toolbar_title[] = $this->module->getTranslator()->trans('Landing pages', [], 'Modules.Iqitelementor.Admin');
     }
 
-    public function ajaxProcessCategoryLayout()
+    public function renderElementorGridIcon($value, $row)
+    {
+        $id = isset($row['id_iqit_elementor_landing']) ? (int) $row['id_iqit_elementor_landing'] : 0;
+        if (!$id) {
+            return '';
+        }
+
+        $url = $this->context->link->getAdminLink('AdminIqitElementorEditor')
+            . '&pageType=landing&contentType=default&newContent=0'
+            . '&idLang=' . (int) $this->context->language->id
+            . '&pageId=' . $id;
+
+        $logoUrl = _MODULE_DIR_ . 'iqitelementor/logo.png';
+
+        return '<a href="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '" '
+            . 'title="' . htmlspecialchars($this->module->getTranslator()->trans('Edit with Elementor', [], 'Modules.Iqitelementor.Admin'), ENT_QUOTES, 'UTF-8') . '" '
+            . 'class="elementor-grid-link">'
+            . '<img src="' . htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8') . '" alt="Elementor" class="elementor-grid-logo" style="width:20px;height:20px;">'
+            . '</a>';
+    }
+
+    public function ajaxProcessCategoryLayout(): void
     {
         header('Content-Type: application/json');
         $categoryId = (int) Tools::getValue('categoryId');
@@ -321,14 +380,4 @@ class AdminIqitElementorController extends ModuleAdminController
         exit(json_encode($return));
     }
 
-    protected function getWarningMultishopHtml()
-    {
-        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL) {
-            return '<p class="alert alert-warning">'
-            . $this->l('You cannot manage module from a "All Shops" or a "Group Shop" context, select directly the shop you want to edit')
-            . '</p>';
-        } else {
-            return '';
-        }
-    }
 }

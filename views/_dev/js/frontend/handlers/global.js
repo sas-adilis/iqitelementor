@@ -1,19 +1,18 @@
-module.exports = function() {
-	if ( elementorFrontend.isEditMode() ) {
-		return;
-	}
+/* global $ */
 
-	var $element = this,
-		animation = $element.data( 'animation' );
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-	if ( ! animation ) {
-		return;
-	}
+ElementsHandler.addHandler('.elementor-element[data-animation]', function () {
+    var $element = $(this);
+    var animation = $element.data('animation');
 
-	$element.addClass( 'elementor-invisible' ).removeClass( animation );
+    if (!animation) {
+        return;
+    }
 
-	$element.waypoint( function() {
-		$element.removeClass( 'elementor-invisible' ).addClass( animation );
-	}, { offset: '90%' } );
+    $element.addClass('elementor-invisible').removeClass(animation);
 
-};
+    $element.waypoint(function () {
+        $element.removeClass('elementor-invisible').addClass(animation);
+    }, {offset: '90%'});
+});

@@ -1,38 +1,30 @@
-var activateSection = function( sectionIndex, $accordionTitles ) {
-	var $activeTitle = $accordionTitles.filter( '.active' ),
-		$requestedTitle = $accordionTitles.filter( '[data-section="' + sectionIndex + '"]' ),
-		isRequestedActive = $requestedTitle.hasClass( 'active' );
+/* global $ */
 
-	$activeTitle
-		.removeClass( 'active' )
-		.next()
-		.slideUp();
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-	if ( ! isRequestedActive ) {
-		$requestedTitle
-			.addClass( 'active' )
-			.next()
-			.slideDown();
-	}
-};
+ElementsHandler.addHandler('.elementor-accordion', function () {
+    var $accordion = $(this);
+    var defaultActiveSection = $accordion.data('active-section') || 1;
+    var activeFirst = $accordion.data('active-first');
+    var $titles = $accordion.find('.elementor-accordion-title');
 
-module.exports = function( $ ) {
-	var $this = $( this ),
-		$accordionDiv = $this.find( '.elementor-accordion' ),
-		defaultActiveSection = $accordionDiv.data( 'active-section' ),
-		activeFirst =  $accordionDiv.data( 'active-first' ),
-		$accordionTitles = $this.find( '.elementor-accordion-title' );
+    function activateSection(sectionIndex) {
+        var $active = $titles.filter('.active');
+        var $requested = $titles.filter('[data-section="' + sectionIndex + '"]');
+        var isRequestedActive = $requested.hasClass('active');
 
-	if ( ! defaultActiveSection ) {
-		defaultActiveSection = 1;
-	}
+        $active.removeClass('active').next().slideUp();
 
-	if(activeFirst){
-		activateSection( defaultActiveSection, $accordionTitles );
-	}
+        if (!isRequestedActive) {
+            $requested.addClass('active').next().slideDown();
+        }
+    }
 
+    if (activeFirst) {
+        activateSection(defaultActiveSection);
+    }
 
-	$accordionTitles.on( 'click', function() {
-		activateSection( this.dataset.section, $accordionTitles );
-	} );
-};
+    $titles.on('click', function () {
+        activateSection(this.dataset.section);
+    });
+});

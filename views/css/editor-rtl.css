@@ -1008,7 +1008,7 @@ select {
 }
 #elementor-panel #elementor-panel-content-wrapper {
   position: absolute;
-  bottom: 40px;
+  bottom: 0;
   top: 40px;
   left: 0;
   width: 100%;
@@ -1528,6 +1528,126 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-url input:focus + .elementor-control-url-target.active {
   background-color: #a4afb7;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-wrapper {
+  position: relative;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-input-wrap {
+  position: relative;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown {
+  position: absolute;
+  z-index: 1000;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #d5dadf;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 2px;
+  border-radius: 3px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  cursor: pointer;
+  font-size: 12px;
+  -webkit-transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-item:hover {
+  background-color: #f1f3f5;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-item-type {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #fff;
+  background: #a4afb7;
+  padding: 2px 5px;
+  border-radius: 2px;
+  line-height: 1.3;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-item-name {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #495157;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-empty, #elementor-panel #elementor-panel-page-editor .elementor-control-url-dropdown-loading {
+  text-align: center;
+  padding: 12px;
+  color: #a4afb7;
+  font-size: 12px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-entity-preview {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #3c90a8;
+  border-radius: 3px;
+  background: #cde6ed;
+  min-height: 36px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-entity-type {
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #fff;
+  background: #3c90a8;
+  padding: 2px 5px;
+  border-radius: 2px;
+  line-height: 1.3;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-entity-label {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  font-size: 12px;
+  color: #495157;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-entity-clear {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #a4afb7;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-control-url-entity-clear:hover {
+  color: #b01b1b;
 }
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-select_big select, #elementor-panel #elementor-panel-page-editor .elementor-control-type-select_sort select {
   height: 350px;
@@ -2341,6 +2461,174 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-popover_toggle .elementor-control-popover-toggle-toggle-label:hover {
   border-color: #a4afb7;
 }
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker {
+  position: relative;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-preview {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border: 1px solid #d5dadf;
+  border-radius: 3px;
+  cursor: pointer;
+  background: #fff;
+  min-height: 36px;
+  -webkit-transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-preview:hover {
+  border-color: #a4afb7;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-preview-icon {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+  -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+          flex-shrink: 0;
+  line-height: 1;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-preview-icon .elementor-icon-svg svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-preview-label {
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  font-size: 12px;
+  color: #a4afb7;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-clear {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #a4afb7;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  display: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-clear:hover {
+  color: #b01b1b;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-panel {
+  position: absolute;
+  z-index: 1000;
+  top: 100%;
+  left: -20px;
+  right: -20px;
+  background: #fff;
+  border: 1px solid #d5dadf;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-top: 4px;
+  border-radius: 3px;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-tabs {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  border-bottom: 1px solid #d5dadf;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-tabs:empty {
+  display: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-tab {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  color: #a4afb7;
+  -webkit-transition: color 0.15s ease, border-color 0.15s ease;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-tab:hover {
+  color: #6d7882;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-tab.active {
+  border-bottom-color: #3c90a8;
+  color: #495157;
+  font-weight: 500;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-search {
+  padding: 8px;
+  border-bottom: 1px solid #d5dadf;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-search input {
+  width: 100%;
+  padding: 5px 8px;
+  border: 1px solid #d5dadf;
+  border-radius: 3px;
+  font-size: 12px;
+  box-sizing: border-box;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-search input:focus {
+  border-color: #3c90a8;
+  outline: none;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-grid {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (1fr)[5];
+      grid-template-columns: repeat(5, 1fr);
+  gap: 2px;
+  padding: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  aspect-ratio: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  font-size: 20px;
+  color: #495157;
+  -webkit-transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-item:hover {
+  background-color: #f1f3f5;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-item.selected {
+  background-color: #3c90a8;
+  color: #fff;
+}
+#elementor-panel #elementor-panel-page-editor .elementor-icon-picker-empty, #elementor-panel #elementor-panel-page-editor .elementor-icon-picker-loading {
+  grid-column: 1/-1;
+  text-align: center;
+  padding: 20px;
+  color: #a4afb7;
+  font-size: 12px;
+}
 #elementor-panel .wp-picker-container.wp-picker-active {
   position: absolute;
   z-index: 1;
@@ -2538,6 +2826,138 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-footer-discard .elementor-icon, #elementor-panel #elementor-panel-footer-discard .elementor-title {
   color: #b01b1b;
 }
+#elementor-panel #elementor-panel-page-revisions {
+  padding: 0;
+  color: #d5dadf;
+}
+#elementor-panel .elementor-revisions-actions {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+}
+#elementor-panel .elementor-revisions-actions .elementor-button {
+  padding: 6px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+#elementor-panel .elementor-revisions-actions .elementor-button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+#elementor-panel .elementor-revisions-counter {
+  padding: 8px 15px;
+  font-size: 11px;
+  color: #a4afb7;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+#elementor-panel .elementor-revisions-empty {
+  padding: 40px 20px;
+  text-align: center;
+  color: #a4afb7;
+  font-size: 13px;
+}
+#elementor-panel .elementor-revisions-list {
+  padding: 5px 0;
+}
+#elementor-panel .elementor-revision-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 12px 15px;
+  cursor: pointer;
+  -webkit-transition: background-color 0.15s;
+  transition: background-color 0.15s;
+  position: relative;
+  gap: 12px;
+}
+#elementor-panel .elementor-revision-item:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+#elementor-panel .elementor-revision-item.elementor-revision-selected {
+  background-color: rgba(0, 0, 0, 0.25);
+}
+#elementor-panel .elementor-revision-avatar {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 36px;
+      -ms-flex: 0 0 36px;
+          flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #6d7882;
+  color: #d5dadf;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+#elementor-panel .elementor-revision-meta {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+#elementor-panel .elementor-revision-date {
+  font-size: 12px;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 3px;
+}
+#elementor-panel .elementor-revision-author {
+  font-size: 11px;
+  color: #a4afb7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#elementor-panel .elementor-revision-current-icon {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+  color: #39b54a;
+  font-size: 14px;
+}
+#elementor-panel .elementor-revision-autosave {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+#elementor-panel .elementor-revision-autosave .elementor-revision-author {
+  color: #3c90a8;
+}
+#elementor-panel .elementor-revision-avatar--autosave {
+  background-color: #3c90a8;
+  color: #fff;
+}
 
 #elementor-mode-switcher {
   position: absolute;
@@ -2586,7 +3006,7 @@ body.elementor-editor-preview #elementor-mode-switcher {
 }
 
 .iqit-context-menu {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 2;
@@ -2714,6 +3134,250 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
   width: 100%;
   height: 100%;
   background-color: #fff;
+}
+
+#elementor-topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background-color: #495157;
+  z-index: 10000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#elementor-topbar-tools {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 100%;
+  padding: 0 12px;
+}
+
+.elementor-topbar-zone {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 8px;
+}
+.elementor-topbar-zone--left {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.elementor-topbar-zone--center {
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+      -ms-flex: 0 0 auto;
+          flex: 0 0 auto;
+}
+.elementor-topbar-zone--right {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-pack: end;
+  -webkit-justify-content: flex-end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+#elementor-topbar-logo {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  -webkit-transition: background-color 0.2s;
+  transition: background-color 0.2s;
+}
+#elementor-topbar-logo:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#elementor-topbar-logo img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.elementor-topbar-btn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #a4afb7;
+  font-size: 13px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  line-height: 1;
+  white-space: nowrap;
+}
+.elementor-topbar-btn i {
+  font-size: 15px;
+}
+.elementor-topbar-btn:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+.elementor-topbar-btn.active {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.elementor-topbar-btn-label {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.elementor-topbar-devices {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  background-color: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.elementor-topbar-device-btn {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  width: 36px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #a4afb7;
+  font-size: 16px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.elementor-topbar-device-btn:hover {
+  color: #fff;
+}
+.elementor-topbar-device-btn.active {
+  background-color: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+#elementor-topbar-save {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #556068;
+  color: #a4afb7;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  line-height: 1;
+}
+#elementor-topbar-save .elementor-topbar-save-icon {
+  display: none;
+}
+#elementor-topbar-save.elementor-topbar-save-active {
+  background-color: #39b54a;
+  color: #fff;
+}
+#elementor-topbar-save.elementor-topbar-save-loading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+#elementor-topbar-save.elementor-topbar-save-loading .elementor-topbar-save-icon {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
+
+#elementor-topbar-inspect.active {
+  color: #3c90a8;
+  background-color: rgba(60, 144, 168, 0.15);
+}
+
+#elementor-topbar-preview.active {
+  color: #3c90a8;
+}
+
+body.elementor-editor-active #elementor-panel,
+body.elementor-editor-preview #elementor-panel {
+  top: 48px;
+  height: -webkit-calc(100% - 48px);
+  height: calc(100% - 48px);
+}
+body.elementor-editor-active #elementor-preview,
+body.elementor-editor-preview #elementor-preview {
+  top: 48px;
+  height: -webkit-calc(100% - 48px);
+  height: calc(100% - 48px);
+}
+
+#elementor-panel-footer {
+  display: none !important;
 }
 
 .tipsy {

@@ -1,31 +1,29 @@
-module.exports = function( $ ) {
-	var $this = $( this ),
-		defaultActiveTab = $this.find( '.elementor-tabs' ).data( 'active-tab' ),
-		$tabsTitles = $this.find( '.elementor-tab-title' ),
-		$tabs = $this.find( '.elementor-tab-content' ),
-		$active,
-		$content;
+/* global $ */
 
-	if ( ! defaultActiveTab ) {
-		defaultActiveTab = 1;
-	}
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-	var activateTab = function( tabIndex ) {
-		if ( $active ) {
-			$active.removeClass( 'active' );
+ElementsHandler.addHandler('.elementor-tabs', function () {
+    var $tabs = $(this);
+    var defaultActiveTab = $tabs.data('active-tab') || 1;
+    var $tabsTitles = $tabs.find('.elementor-tab-title');
+    var $tabsContents = $tabs.find('.elementor-tab-content');
+    var $active, $content;
 
-			$content.removeClass( 'active' );
-		}
+    function activateTab(tabIndex) {
+        if ($active) {
+            $active.removeClass('active');
+            $content.removeClass('active');
+        }
 
-		$active = $tabsTitles.filter( '[data-tab="' + tabIndex + '"]' );
-		$active.addClass( 'active' );
-		$content = $tabs.filter( '[data-tab="' + tabIndex + '"]' );
-		$content.addClass( 'active' );
-	};
+        $active = $tabsTitles.filter('[data-tab="' + tabIndex + '"]');
+        $active.addClass('active');
+        $content = $tabsContents.filter('[data-tab="' + tabIndex + '"]');
+        $content.addClass('active');
+    }
 
-	activateTab( defaultActiveTab );
+    activateTab(defaultActiveTab);
 
-	$tabsTitles.on( 'click', function() {
-		activateTab( this.dataset.tab );
-	} );
-};
+    $tabsTitles.on('click', function () {
+        activateTab(this.dataset.tab);
+    });
+});

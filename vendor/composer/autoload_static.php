@@ -6,13 +6,35 @@ namespace Composer\Autoload;
 
 class ComposerStaticInitccb7db10cf6371fd5515d19c2c4d7279
 {
+    public static $prefixLengthsPsr4 = array (
+        'I' => 
+        array (
+            'IqitElementor\\' => 14,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'IqitElementor\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'IqitElementorCategory' => __DIR__ . '/../..' . '/classes/IqitElementorCategory.php',
+        'IqitElementorContent' => __DIR__ . '/../..' . '/classes/IqitElementorContent.php',
+        'IqitElementorLanding' => __DIR__ . '/../..' . '/classes/IqitElementorLanding.php',
+        'IqitElementorProduct' => __DIR__ . '/../..' . '/classes/IqitElementorProduct.php',
+        'IqitElementorRevision' => __DIR__ . '/../..' . '/classes/IqitElementorRevision.php',
+        'IqitElementorTemplate' => __DIR__ . '/../..' . '/classes/IqitElementorTemplate.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
+            $loader->prefixLengthsPsr4 = ComposerStaticInitccb7db10cf6371fd5515d19c2c4d7279::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitccb7db10cf6371fd5515d19c2c4d7279::$prefixDirsPsr4;
             $loader->classMap = ComposerStaticInitccb7db10cf6371fd5515d19c2c4d7279::$classMap;
 
         }, null, ClassLoader::class);

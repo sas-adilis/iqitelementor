@@ -1,10 +1,13 @@
-module.exports = function( $ ) {
+/* global $ */
 
-	var $number = $( this ).find(  '.elementor-counter-number' );
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-	$number.waypoint( function() {
-		$number.numerator( {
-			duration: $number.data( 'duration' )
-		} );
-	}, { offset: '90%' } );
-};
+ElementsHandler.addHandler('.elementor-counter-number', function () {
+    var $number = $(this);
+
+    $number.waypoint(function () {
+        $number.numerator({
+            duration: $number.data('duration')
+        });
+    }, {offset: '90%'});
+});

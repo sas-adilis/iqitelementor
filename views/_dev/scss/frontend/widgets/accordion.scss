@@ -65,6 +65,148 @@
 	}
 }
 
+// Custom icon accordion (Bootstrap 5)
+.accordion-custom-icon {
+
+	// Hide Bootstrap's default chevron
+	.accordion-button::after {
+		display: none;
+	}
+
+	.accordion-button {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.accordion-icon {
+		display: inline-flex;
+		align-items: center;
+		flex-shrink: 0;
+		font-size: 1em;
+		line-height: 1;
+
+		svg {
+			width: 1em;
+			height: 1em;
+		}
+
+		&-close {
+			display: none;
+		}
+
+		&-open {
+			display: inline-flex;
+		}
+	}
+
+	// Icon alignment
+	.accordion-icon-left {
+		.accordion-icon {
+			order: -1;
+		}
+	}
+
+	.accordion-icon-right {
+		.accordion-button {
+			justify-content: space-between;
+		}
+
+		.accordion-icon {
+			order: 1;
+			margin-left: auto;
+		}
+	}
+
+	// When expanded: swap icons
+	.accordion-button:not(.collapsed) {
+		.accordion-icon-open {
+			display: none;
+		}
+		.accordion-icon-close {
+			display: inline-flex;
+		}
+	}
+}
+
+// ============================================
+// BORDER STYLES
+// ============================================
+
+// None: remove all borders
+.accordion-style-none {
+	.accordion-item {
+		border: none;
+	}
+
+	.accordion-button {
+		border: none;
+
+		&:not(.collapsed) {
+			box-shadow: none;
+		}
+	}
+
+	.accordion-body {
+		border-top: none;
+	}
+}
+
+// Boxed: border around each item
+.accordion-style-boxed {
+	display: flex;
+	flex-direction: column;
+
+	.accordion-item {
+		border-style: solid;
+
+		&:not(:first-of-type) {
+			border-top-width: inherit;
+		}
+	}
+
+	.accordion-button:not(.collapsed) {
+		border-bottom: 1px solid;
+		border-bottom-color: inherit;
+		box-shadow: none;
+	}
+}
+
+// Separator: only a line between items
+.accordion.accordion-style-separator {
+	.accordion-item {
+		border: none;
+		border-top-style: solid;
+		border-radius: 0;
+
+		&:first-child {
+			border-top: none !important;
+		}
+	}
+
+	.accordion-button {
+		border: none;
+		border-radius: 0;
+
+		&:not(.collapsed) {
+			box-shadow: none;
+		}
+	}
+
+	.accordion-body {
+		border-top: none;
+	}
+}
+
+// Plus/minus specific sizing
+.accordion-icon-type-plus_minus {
+	.accordion-icon-open,
+	.accordion-icon-close {
+		font-size: 1.2em;
+		font-weight: 300;
+	}
+}
+
 // Responsive mode
 @media (max-width: $screen-sm-max) {
 

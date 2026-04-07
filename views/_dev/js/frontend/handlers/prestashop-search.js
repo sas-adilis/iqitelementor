@@ -1,17 +1,15 @@
-module.exports = function( $ ) {
-    var $searchWidget = $( this ).find( '.search-widget-autocomplete' );
-    if ( ! $searchWidget.length ) {
+/* global $, prestashop */
+
+var ElementsHandler = require('elementor-frontend/elements-handler');
+
+ElementsHandler.addHandler('.search-widget-autocomplete', function () {
+    var $searchWidget = $(this);
+    var $searchBox = $searchWidget.find('input[type=text]');
+    var searchURL = $searchWidget.attr('data-search-controller-url');
+
+    if (typeof prestashop === 'undefined' || !prestashop.blocksearch || !prestashop.blocksearch.initAutocomplete) {
         return;
     }
 
-    if (elementorFrontendConfig.isEditMode) {
-        return;
-    }
-    
-    let $searchBox = $searchWidget.find('input[type=text]');
-    let searchURL = $searchWidget.attr('data-search-controller-url');
-    var initAutocomplete = prestashop.blocksearch.initAutocomplete || function ($searchWidget, $searchBox, searchURL) {};
-
-    initAutocomplete($searchWidget, $searchBox, searchURL);
-
-};
+    prestashop.blocksearch.initAutocomplete($searchWidget, $searchBox, searchURL);
+});

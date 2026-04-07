@@ -1,38 +1,33 @@
-module.exports = function( $ ) {
+/* global $, LottieInteractivity */
 
-    var $lottiePlayer = $( this ).find( '.lottie-animation' );
-    var offset =  $lottiePlayer.data('offset') / 100;
-    var container =  null;
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-    if ($lottiePlayer.data('container') == 'body'){
-        container = 'body';
+ElementsHandler.addHandler('.lottie-animation', function () {
+    var $player = $(this);
+
+    if ($player.data('play') !== 'scroll') {
+        return;
     }
 
-    if (elementorFrontendConfig.isEditMode) {
-        if($lottiePlayer.data('play') == 'scroll'){
-            window.frames[0].frameElement.contentWindow.lottieInteractivyBackofficeRun(offset, $lottiePlayer[0], container);
+    var offset = $player.data('offset') / 100;
+    var container = $player.data('container') === 'body' ? 'body' : null;
+
+    document.addEventListener('lottieLoaded', function () {
+        if (typeof LottieInteractivity === 'undefined') {
+            return;
         }
-    } else{
-        if($lottiePlayer.data('play') == 'scroll'){
-        document.addEventListener("lottieLoaded", function(e) {
 
-            LottieInteractivity.create({
-                mode:'scroll',
-                player: $lottiePlayer[0],
-                container: container,
-                actions: [
-                    {
-                        visibility:[offset,1],
-                        type: 'seek',
-                        frames: [0, '100%']
-                    }
-                ]
-            });
-
+        LottieInteractivity.create({
+            mode: 'scroll',
+            player: $player[0],
+            container: container,
+            actions: [
+                {
+                    visibility: [offset, 1],
+                    type: 'seek',
+                    frames: [0, '100%']
+                }
+            ]
         });
-        }
-    }
-};
-
-
-
+    });
+});

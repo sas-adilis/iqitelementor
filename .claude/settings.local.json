@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Read",
+      "Edit",
+      "Write",
+      "MultiEdit",
+      "Glob",
+      "Grep",
+      "Bash(*)",
+      "WebSearch",
+      "WebFetch(domain:devdocs.prestashop-project.org)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:cdn.jsdelivr.net)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(sudo:*)"
+    ]
+  }
+}

@@ -65,8 +65,8 @@
                             {/if}
                         </div>
                         {if $tab.options.arrows}
-                            <div class="swiper-button-prev swiper-button elementor-swiper-button elementor-swiper-button-prev"></div>
-                            <div class="swiper-button-next swiper-button elementor-swiper-button elementor-swiper-button-next"></div>
+                            <div class="swiper-button-prev swiper-button elementor-swiper-button elementor-swiper-button-prev{if !empty($tab.options.arrow_prev_html)} has-custom-icon{/if}">{if !empty($tab.options.arrow_prev_html)}{$tab.options.arrow_prev_html nofilter}{/if}</div>
+                            <div class="swiper-button-next swiper-button elementor-swiper-button elementor-swiper-button-next{if !empty($tab.options.arrow_next_html)} has-custom-icon{/if}">{if !empty($tab.options.arrow_next_html)}{$tab.options.arrow_next_html nofilter}{/if}</div>
                         {/if}
                         {/if}
 

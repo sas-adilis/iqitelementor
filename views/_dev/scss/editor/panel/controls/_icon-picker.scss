@@ -1,0 +1,163 @@
+//
+// Icon Picker Control
+//
+
+.elementor-icon-picker {
+	position: relative;
+
+	&-preview {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		padding: 6px 10px;
+		border: 1px solid $editor-lightest;
+		border-radius: 3px;
+		cursor: pointer;
+		background: #fff;
+		min-height: 36px;
+		transition: border-color .15s ease;
+
+		&:hover {
+			border-color: $editor-light;
+		}
+
+		&-icon {
+			font-size: 18px;
+			width: 24px;
+			text-align: center;
+			flex-shrink: 0;
+			line-height: 1;
+
+			.elementor-icon-svg svg {
+				width: 18px;
+				height: 18px;
+				display: block;
+			}
+		}
+
+		&-label {
+			flex-grow: 1;
+			font-size: 12px;
+			color: $editor-light;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	&-clear {
+		background: none;
+		border: none;
+		font-size: 16px;
+		color: $editor-light;
+		cursor: pointer;
+		padding: 0 4px;
+		line-height: 1;
+		display: none;
+
+		&:hover {
+			color: $editor-warning;
+		}
+	}
+
+	&-panel {
+		position: absolute;
+		z-index: 1000;
+		top: 100%;
+		left: -20px;
+		right: -20px;
+		background: #fff;
+		border: 1px solid $editor-lightest;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+		margin-top: 4px;
+		border-radius: 3px;
+	}
+
+	&-tabs {
+		display: flex;
+		border-bottom: 1px solid $editor-lightest;
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	&-tab {
+		flex: 1;
+		padding: 8px 4px;
+		text-align: center;
+		font-size: 11px;
+		cursor: pointer;
+		border-bottom: 2px solid transparent;
+		color: $editor-light;
+		transition: color .15s ease, border-color .15s ease;
+
+		&:hover {
+			color: $editor-dark;
+		}
+
+		&.active {
+			border-bottom-color: $editor-info;
+			color: $editor-darkest;
+			font-weight: 500;
+		}
+	}
+
+	&-search {
+		padding: 8px;
+		border-bottom: 1px solid $editor-lightest;
+
+		input {
+			width: 100%;
+			padding: 5px 8px;
+			border: 1px solid $editor-lightest;
+			border-radius: 3px;
+			font-size: 12px;
+			box-sizing: border-box;
+
+			&:focus {
+				border-color: $editor-info;
+				outline: none;
+			}
+		}
+	}
+
+	&-grid {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		gap: 2px;
+		padding: 8px;
+		max-height: 250px;
+		overflow-y: auto;
+	}
+
+	&-item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		aspect-ratio: 1;
+		cursor: pointer;
+		border-radius: 3px;
+		font-size: 20px;
+		color: $editor-darkest;
+		transition: background-color .1s ease;
+
+		&:hover {
+			background-color: $editor-background-light;
+		}
+
+		&.selected {
+			background-color: $editor-info;
+			color: #fff;
+		}
+	}
+
+	&-empty,
+	&-loading {
+		grid-column: 1 / -1;
+		text-align: center;
+		padding: 20px;
+		color: $editor-light;
+		font-size: 12px;
+	}
+}

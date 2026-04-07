@@ -38,17 +38,6 @@
                 {/if}
             </div>
         </div>
-    {elseif $input.type == 'instagram_connect'}
-        <div class="form-group">
-            <label class="control-label col-lg-3"></label>
-            <div class="col-lg-9">
-                {if $input.url}
-                    <a href="{$input.url|escape:'html':'UTF-8'}" class="m-b-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Edit with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-                {else}
-                    {l s=' Save page first to enable page builder' mod='iqitelementor'}
-                {/if}
-            </div>
-        </div>
     {else}
         {$smarty.block.parent}
     {/if}

@@ -12,6 +12,10 @@
  *  @copyright 2017 IQIT-COMMERCE.COM
  *  @license   Commercial license (You can not resell or redistribute this software.)
  */
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
+
 class IqitElementorActionsModuleFrontController extends ModuleFrontController
 {
     public function postProcess()
@@ -23,7 +27,7 @@ class IqitElementorActionsModuleFrontController extends ModuleFrontController
         }
     }
 
-    protected function ajaxProcessHandleWidget()
+    protected function ajaxProcessHandleWidget(): void
     {
         ob_end_clean();
         header('Content-Type: application/json');
@@ -32,7 +36,7 @@ class IqitElementorActionsModuleFrontController extends ModuleFrontController
         ]));
     }
 
-    protected function ajaxProcessHandleCsfrToken()
+    protected function ajaxProcessHandleCsfrToken(): void
     {
         ob_end_clean();
         header('Content-Type: application/json');

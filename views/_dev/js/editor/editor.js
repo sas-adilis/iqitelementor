@@ -1,6 +1,45 @@
 /* global ElementorConfig */
 var App;
 
+/**
+ * Render an icon value in content_template (underscore.js) contexts.
+ * Handles both new JSON format and legacy plain CSS class strings.
+ *
+ * Usage in content_template: {{{ elementorRenderIcon(settings.icon) }}}
+ */
+window.elementorRenderIcon = function( value ) {
+	if ( ! value ) {
+		return '';
+	}
+
+	var parsed = null;
+
+	if ( typeof value === 'object' && value !== null ) {
+		parsed = value;
+	} else if ( typeof value === 'string' ) {
+		if ( value.charAt( 0 ) === '{' ) {
+			try {
+				parsed = JSON.parse( value );
+			} catch ( e ) {
+				parsed = null;
+			}
+		}
+	}
+
+	if ( parsed ) {
+		if ( parsed.value ) {
+			return '<i class="' + parsed.value + '"></i>';
+		}
+	}
+
+	// Legacy: plain CSS class string
+	if ( typeof value === 'string' && value.length > 0 ) {
+		return '<i class="' + value + '"></i>';
+	}
+
+	return '';
+};
+
 Marionette.TemplateCache.prototype.compileTemplate = function( rawTemplate, options ) {
 	options = {
 		evaluate: /<#([\s\S]+?)#>/g,
@@ -260,7 +299,8 @@ App = Marionette.Application.extend( {
 
 		this.addRegions( {
 			sections: iframeRegion,
-			panel: '#elementor-panel'
+			panel: '#elementor-panel',
+			topBar: '#elementor-topbar'
 		} );
 
 		this.getRegion( 'sections' ).show( new SectionsCollectionView( {
@@ -268,6 +308,9 @@ App = Marionette.Application.extend( {
 		} ) );
 
 		this.getRegion( 'panel' ).show( new PanelLayoutView() );
+
+		var TopBarItemView = require( 'elementor-layouts/panel/topbar' );
+		this.getRegion( 'topBar' ).show( new TopBarItemView() );
 
 		this.$previewContents
 		    .children() // <html>

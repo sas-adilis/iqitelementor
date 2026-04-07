@@ -1,12 +1,11 @@
 <?php
 
-use Elementor\PluginElementor;
+use IqitElementor\Core\Plugin;
+use IqitElementor\Helper\OutputHelper;
 
 if (!defined('_PS_VERSION_')) {
     exit;
 }
-require_once _PS_MODULE_DIR_ . '/iqitelementor/src/IqitElementorHelper.php';
-require_once dirname(__FILE__) . '/../../includes/plugin-elementor.php';
 
 class IqitElementorPreviewModuleFrontController extends ModuleFrontController
 {
@@ -26,9 +25,8 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
                 ['elementorFrontendConfig' => [
                     'isEditMode' => '1',
                     'stretchedSectionContainer' => '',
-                    'instagramToken' => Configuration::get('iqit_elementor_inst_token'),
                     'ajax_csfr_token_url' => $this->context->link->getModuleLink($this->module->name, 'Actions', ['process' => 'handleCsfrToken', 'ajax' => 1], true),
-                    'is_rtl' => $this->context->language->is_rtl,
+                    'isRtl' => $this->context->language->is_rtl,
                 ]]);
         }
     }
@@ -45,9 +43,10 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
             $templateId = (int)Tools::getValue('template_id');
             $template = new IqitElementorTemplate($templateId);
 
-            ob_start();
-            PluginElementor::instance()->get_frontend((array)json_decode($template->data, true));
-            $content = ob_get_clean();
+            $templateData = (array)json_decode($template->data, true);
+            $content = OutputHelper::capture(function () use ($templateData) {
+                Plugin::instance()->getFrontend($templateData);
+            });
             $this->context->smarty->assign([
                 'content' => $content,
             ]);

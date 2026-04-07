@@ -1,16 +1,19 @@
-module.exports = function( $ ) {
-	var $toggleTitles = $( this ).find( '.elementor-toggle-title' );
+/* global $ */
 
-	$toggleTitles.on( 'click', function() {
-		var $active = $( this ),
-			$content = $active.next();
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-		if ( $active.hasClass( 'active' ) ) {
-			$active.removeClass( 'active' );
-			$content.slideUp();
-		} else {
-			$active.addClass( 'active' );
-			$content.slideDown();
-		}
-	} );
-};
+ElementsHandler.addHandler('.elementor-toggle-title', function () {
+    var $title = $(this);
+
+    $title.on('click', function () {
+        var $content = $title.next();
+
+        if ($title.hasClass('active')) {
+            $title.removeClass('active');
+            $content.slideUp();
+        } else {
+            $title.addClass('active');
+            $content.slideDown();
+        }
+    });
+});

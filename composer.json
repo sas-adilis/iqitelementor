@@ -4,10 +4,18 @@
         "prepend-autoloader": false
     },
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.1"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.42"
+    },
+    "autoload": {
+        "psr-4": {
+            "IqitElementor\\": "src/"
+        },
+        "classmap": [
+            "classes/"
+        ]
     },
     "authors": [
         {

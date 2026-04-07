@@ -1,0 +1,216 @@
+//
+// Top Bar
+//
+
+$topbar-height: 48px;
+
+#elementor-topbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: $topbar-height;
+	background-color: $editor-darkest;
+	z-index: $editor-layer + 1;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+#elementor-topbar-tools {
+	display: flex;
+	align-items: center;
+	height: 100%;
+	padding: 0 12px;
+}
+
+// --- Zones ---
+
+.elementor-topbar-zone {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+
+	&--left {
+		flex: 1;
+		justify-content: flex-start;
+	}
+
+	&--center {
+		flex: 0 0 auto;
+	}
+
+	&--right {
+		flex: 1;
+		justify-content: flex-end;
+	}
+}
+
+// --- Logo ---
+
+#elementor-topbar-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: 6px;
+	transition: background-color 0.2s;
+
+	&:hover {
+		background-color: rgba(255, 255, 255, 0.1);
+	}
+
+	img {
+		width: 22px;
+		height: 22px;
+		display: block;
+	}
+}
+
+// --- Generic button ---
+
+.elementor-topbar-btn {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 10px;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	color: $editor-light;
+	font-size: 13px;
+	cursor: pointer;
+	transition: all 0.2s;
+	line-height: 1;
+	white-space: nowrap;
+
+	i {
+		font-size: 15px;
+	}
+
+	&:hover {
+		color: #fff;
+		background-color: rgba(255, 255, 255, 0.1);
+	}
+
+	&.active {
+		color: #fff;
+		background-color: rgba(255, 255, 255, 0.15);
+	}
+}
+
+.elementor-topbar-btn-label {
+	font-size: 12px;
+	font-weight: 500;
+}
+
+// --- Device Switcher ---
+
+.elementor-topbar-devices {
+	display: flex;
+	align-items: center;
+	background-color: rgba(0, 0, 0, 0.25);
+	border-radius: 8px;
+	padding: 3px;
+	gap: 2px;
+}
+
+.elementor-topbar-device-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 32px;
+	border: none;
+	border-radius: 6px;
+	background: transparent;
+	color: $editor-light;
+	font-size: 16px;
+	cursor: pointer;
+	transition: all 0.2s;
+
+	&:hover {
+		color: #fff;
+	}
+
+	&.active {
+		background-color: rgba(255, 255, 255, 0.15);
+		color: #fff;
+	}
+}
+
+// --- Save Button ---
+
+#elementor-topbar-save {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 7px 16px;
+	border: none;
+	border-radius: 6px;
+	background-color: $editor-darker;
+	color: $editor-light;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	cursor: pointer;
+	transition: all 0.2s;
+	line-height: 1;
+
+	.elementor-topbar-save-icon {
+		display: none;
+	}
+
+	&.elementor-topbar-save-active {
+		background-color: $editor-success;
+		color: #fff;
+	}
+
+	&.elementor-topbar-save-loading {
+		pointer-events: none;
+		opacity: 0.7;
+
+		.elementor-topbar-save-icon {
+			display: inline-flex;
+		}
+	}
+}
+
+// --- Inspect button active state ---
+
+#elementor-topbar-inspect {
+	&.active {
+		color: $editor-info;
+		background-color: rgba($editor-info, 0.15);
+	}
+}
+
+// --- Preview button active state ---
+
+#elementor-topbar-preview {
+	&.active {
+		color: $editor-info;
+	}
+}
+
+// --- Offsets for panel and preview ---
+
+body.elementor-editor-active,
+body.elementor-editor-preview {
+
+	#elementor-panel {
+		top: $topbar-height;
+		height: calc(100% - #{$topbar-height});
+	}
+
+	#elementor-preview {
+		top: $topbar-height;
+		height: calc(100% - #{$topbar-height});
+	}
+}
+
+// --- Hide old panel footer ---
+
+#elementor-panel-footer {
+	display: none !important;
+}

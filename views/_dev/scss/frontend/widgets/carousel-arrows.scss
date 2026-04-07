@@ -1,0 +1,75 @@
+//
+// Responsive visibility for Swiper navigation/pagination/scrollbar.
+//
+// Classes are set automatically by the swiper.js handler:
+//   - .swiper-elementor-has-{navigation|pagination|scrollbar} : at least one breakpoint enables it
+//   - .swiper-elementor-{nav|pag|scr}-on                       : CURRENT active breakpoint enables it
+//
+// By default, controls are hidden; they are revealed only when the matching
+// "-on" class is present. This keeps the DOM stable while honoring per-
+// breakpoint settings without relying on inline styles.
+//
+.swiper-elementor {
+	> .swiper-navigation,
+	> .swiper-pagination,
+	> .swiper-scrollbar,
+	> .swiper-bottom > .swiper-navigation,
+	> .swiper-bottom > .swiper-pagination,
+	> .swiper-bottom > .swiper-scrollbar {
+		display: none;
+	}
+
+	&.swiper-elementor-nav-on {
+		> .swiper-navigation,
+		> .swiper-bottom > .swiper-navigation {
+			display: flex;
+		}
+	}
+
+	&.swiper-elementor-pag-on {
+		> .swiper-pagination,
+		> .swiper-bottom > .swiper-pagination {
+			display: block;
+		}
+	}
+
+	&.swiper-elementor-scr-on {
+		> .swiper-scrollbar,
+		> .swiper-bottom > .swiper-scrollbar {
+			display: block;
+		}
+	}
+}
+
+//
+// Custom carousel arrows (Swiper)
+//
+
+// When a custom icon is injected, hide Swiper's default arrow character
+.elementor-swiper-button.has-custom-icon {
+
+	// Hide Swiper's default ::after arrow
+	&::after {
+		display: none;
+	}
+
+	// Style the injected SVG/icon
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	svg {
+		width: 1em;
+		height: 1em;
+		fill: currentColor;
+	}
+
+	i {
+		font-size: inherit;
+	}
+
+	.elementor-icon-svg {
+		display: inline-flex;
+		line-height: 1;
+	}
+}

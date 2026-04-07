@@ -1,0 +1,132 @@
+//
+// Panel Revisions Page
+//
+
+#elementor-panel-page-revisions {
+	padding: 0;
+	color: $editor-lightest;
+}
+
+// Actions bar
+.elementor-revisions-actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 15px;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+
+	.elementor-button {
+		padding: 6px 14px;
+		font-size: 11px;
+		text-transform: uppercase;
+		border-radius: 3px;
+
+		&:disabled {
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
+	}
+}
+
+// Counter
+.elementor-revisions-counter {
+	padding: 8px 15px;
+	font-size: 11px;
+	color: $editor-light;
+	text-align: center;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+// Empty state
+.elementor-revisions-empty {
+	padding: 40px 20px;
+	text-align: center;
+	color: $editor-light;
+	font-size: 13px;
+}
+
+// List
+.elementor-revisions-list {
+	padding: 5px 0;
+}
+
+// Single item
+.elementor-revision-item {
+	display: flex;
+	align-items: center;
+	padding: 12px 15px;
+	cursor: pointer;
+	transition: background-color 0.15s;
+	position: relative;
+	gap: 12px;
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.15);
+	}
+
+	&.elementor-revision-selected {
+		background-color: rgba(0, 0, 0, 0.25);
+	}
+
+	&.elementor-revision-current {
+		// subtle indicator for most recent
+	}
+}
+
+// Avatar circle
+.elementor-revision-avatar {
+	flex: 0 0 36px;
+	width: 36px;
+	height: 36px;
+	border-radius: 50%;
+	background-color: $editor-dark;
+	color: $editor-lightest;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+// Meta block
+.elementor-revision-meta {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.elementor-revision-date {
+	font-size: 12px;
+	font-weight: 500;
+	color: #fff;
+	margin-bottom: 3px;
+}
+
+.elementor-revision-author {
+	font-size: 11px;
+	color: $editor-light;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+// Current check icon
+.elementor-revision-current-icon {
+	flex: 0 0 auto;
+	color: $editor-success;
+	font-size: 14px;
+}
+
+// Autosave item
+.elementor-revision-autosave {
+	border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+	.elementor-revision-author {
+		color: $editor-info;
+	}
+}
+
+.elementor-revision-avatar--autosave {
+	background-color: $editor-info;
+	color: #fff;
+}

@@ -105,12 +105,15 @@
 	position: relative;
 	width: 100%;
 	display: flex;
-	gap: 20px;
 	flex-wrap: wrap;
 	align-content: flex-start;
 
 	& > .elementor-widget {
 		width: 100%;
+
+		&:not(:last-child) {
+			margin-block-end: 10px;
+		}
 	}
 }
 
@@ -297,6 +300,6 @@
 	}
 }
 
-.elementor-column .elementor-section.elementor-section-full_width {
+.elementor-column .elementor-section {
 	width: 100%;
 }

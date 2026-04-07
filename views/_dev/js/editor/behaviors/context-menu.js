@@ -46,10 +46,23 @@ const ContextMenuBehavior = Marionette.Behavior.extend({
             clientY: event.clientY,
         };
 
-        // Si le menu est rendu dans la fenêtre parente, on translate
-        if (window.frameElement && window.parent) {
-            const iframeRect = window.frameElement.getBoundingClientRect();
+        // Translater les coordonnées de l'iframe vers la fenêtre parente
+        // Les vues Marionette tournent dans le contexte parent mais gèrent
+        // des éléments dans l'iframe — window.frameElement est donc null.
+        // On récupère l'iframe via elementor.$preview ou via le target de l'événement.
+        var iframeEl = null;
 
+        if (elementor && elementor.$preview && elementor.$preview.length) {
+            iframeEl = elementor.$preview[0];
+        } else if (event.target && event.target.ownerDocument && event.target.ownerDocument.defaultView) {
+            var iframeWin = event.target.ownerDocument.defaultView;
+            if (iframeWin.frameElement) {
+                iframeEl = iframeWin.frameElement;
+            }
+        }
+
+        if (iframeEl) {
+            var iframeRect = iframeEl.getBoundingClientRect();
             coords = {
                 clientX: event.clientX + iframeRect.left,
                 clientY: event.clientY + iframeRect.top,

@@ -5,6 +5,8 @@ if (!defined('_PS_VERSION_')) {
 
 class AdminIqitElementorContentController extends ModuleAdminController
 {
+    use \IqitElementor\Traits\AdminControllerTrait;
+
     public $name;
 
     public function __construct()
@@ -66,11 +68,7 @@ class AdminIqitElementorContentController extends ModuleAdminController
             return;
         }
 
-        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL) {
-            $this->context->smarty->assign([
-                'content' => $this->getWarningMultishopHtml(),
-            ]);
-
+        if ($this->initMultishopContent()) {
             return;
         }
 
@@ -120,7 +118,7 @@ class AdminIqitElementorContentController extends ModuleAdminController
         $landing = new IqitElementorContent((int) Tools::getValue('id_elementor'));
 
         if ($landing->id) {
-            $url = $this->context->link->getAdminLink('IqitElementorEditor') . '&pageType=content&pageId=' . $landing->id;
+            $url = $this->context->link->getAdminLink('AdminIqitElementorEditor') . '&pageType=content&pageId=' . $landing->id;
         } else {
             $url = false;
             $landing->active = 1;
@@ -214,25 +212,17 @@ class AdminIqitElementorContentController extends ModuleAdminController
             $helper->fields_value['id_elementor'] = $landing->id;
         }
 
-        return $helper->generateForm($this->fields_form);
-    }
+        $formHtml = $helper->generateForm($this->fields_form);
 
-    protected function buildHelper()
-    {
-        $helper = new HelperForm();
+        // Append revision panel and autosave banner
+        if ($landing->id) {
+            $formHtml .= $this->renderRevisionPanel(
+                \IqitElementor\Enum\EntityType::CONTENT,
+                (int) $landing->id
+            );
+        }
 
-        $helper->module = $this->module;
-        $helper->override_folder = 'iqitelementor/';
-        $helper->identifier = $this->className;
-        $helper->token = Tools::getAdminTokenLite('Admin' . $this->name);
-        $helper->languages = $this->_languages;
-        $helper->currentIndex = $this->context->link->getAdminLink('Admin' . $this->name);
-        $helper->default_form_language = $this->default_form_language;
-        $helper->allow_employee_form_lang = $this->allow_employee_form_lang;
-        $helper->toolbar_scroll = true;
-        $helper->toolbar_btn = $this->initToolbar();
-
-        return $helper;
+        return $formHtml;
     }
 
     public function initToolBarTitle()
@@ -240,30 +230,23 @@ class AdminIqitElementorContentController extends ModuleAdminController
         $this->toolbar_title[] = $this->module->getTranslator()->trans('Content on hooks', [], 'Modules.Iqitelementor.Admin');
     }
 
-    protected function getWarningMultishopHtml()
-    {
-        if (Shop::getContext() == Shop::CONTEXT_GROUP || Shop::getContext() == Shop::CONTEXT_ALL) {
-            return '<p class="alert alert-warning">'
-            . $this->l('You cannot manage module from a "All Shops" or a "Group Shop" context, select directly the shop you want to edit')
-            . '</p>';
-        } else {
-            return '';
-        }
-    }
-
     /**
+     * @param object $object
+     *
      * @throws PrestaShopDatabaseException
      */
     protected function afterAdd($object): void
     {
-        $this->module->updateHookRegistrations();
+        \IqitElementor\Core\HookRegistrar::synchronize($this->module);
     }
 
     /**
+     * @param object $object
+     *
      * @throws PrestaShopDatabaseException
      */
     protected function afterUpdate($object): void
     {
-        $this->module->updateHookRegistrations();
+        \IqitElementor\Core\HookRegistrar::synchronize($this->module);
     }
 }

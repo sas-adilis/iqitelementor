@@ -7,4 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'IqitElementorCategory' => $baseDir . '/classes/IqitElementorCategory.php',
+    'IqitElementorContent' => $baseDir . '/classes/IqitElementorContent.php',
+    'IqitElementorLanding' => $baseDir . '/classes/IqitElementorLanding.php',
+    'IqitElementorProduct' => $baseDir . '/classes/IqitElementorProduct.php',
+    'IqitElementorRevision' => $baseDir . '/classes/IqitElementorRevision.php',
+    'IqitElementorTemplate' => $baseDir . '/classes/IqitElementorTemplate.php',
 );

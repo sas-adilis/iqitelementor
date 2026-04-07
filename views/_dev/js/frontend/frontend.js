@@ -1,129 +1,99 @@
-/* global elementorFrontendConfig */
-( function( $ ) {
-	var ElementsHandler = require( 'elementor-frontend/elements-handler' ),
-	    Utils = require( 'elementor-frontend/utils' );
+/* global elementorFrontendConfig, jQuery, $ */
 
-	var ElementorFrontend = function() {
-		var self = this,
-			scopeWindow = window;
+var ElementsHandler = require('elementor-frontend/elements-handler');
 
-		var elementsDefaultHandlers = {
-			accordion: require( 'elementor-frontend/handlers/accordion' ),
-			alert: require( 'elementor-frontend/handlers/alert' ),
-			counter: require( 'elementor-frontend/handlers/counter' ),
-			//'image-hotspots': require( 'elementor-frontend/handlers/image-hotspots' ),
-			'image-carousel': require( 'elementor-frontend/handlers/image-carousel' ),
-			instagram: require( 'elementor-frontend/handlers/instagram' ),
-			testimonial: require( 'elementor-frontend/handlers/testimonial' ),
-			progress: require( 'elementor-frontend/handlers/progress' ),
-			section: require( 'elementor-frontend/handlers/section' ),
-			tabs: require( 'elementor-frontend/handlers/tabs' ),
-			lottie: require( 'elementor-frontend/handlers/lottie' ),
-			'prestashop-widget-Blog': require( 'elementor-frontend/handlers/prestashop-blog' ),
-			'prestashop-widget-ProductsList': require( 'elementor-frontend/handlers/prestashop-productlist' ),
-			'prestashop-widget-ProductsListTabs': require( 'elementor-frontend/handlers/prestashop-productlisttabs' ),
-			'prestashop-widget-Brands': require( 'elementor-frontend/handlers/prestashop-brands' ),
-			'prestashop-widget-Search': require( 'elementor-frontend/handlers/prestashop-search' ),
-			'prestashop-widget-ContactForm': require( 'elementor-frontend/handlers/prestashop-contactform' ),
-			//'prestashop-widget-RevolutionSlider': require( 'elementor-frontend/handlers/prestashop-revolutionslider' ),
-			toggle: require( 'elementor-frontend/handlers/toggle' ),
-			video: require( 'elementor-frontend/handlers/video' )
-		};
+// Load all handlers (each one self-registers via ElementsHandler.addHandler)
+require('elementor-frontend/handlers/swiper');
+require('elementor-frontend/handlers/global');
+require('elementor-frontend/handlers/accordion');
+require('elementor-frontend/handlers/alert');
+require('elementor-frontend/handlers/counter');
+require('elementor-frontend/handlers/tabs');
+require('elementor-frontend/handlers/toggle');
+require('elementor-frontend/handlers/progress');
+require('elementor-frontend/handlers/video');
+require('elementor-frontend/handlers/section');
+require('elementor-frontend/handlers/lottie');
+require('elementor-frontend/handlers/prestashop-search');
+require('elementor-frontend/handlers/prestashop-contactform');
+require('elementor-frontend/handlers/table-of-contents');
 
-		var addGlobalHandlers = function() {
-			self.elementsHandler.addGlobalHandler( require( 'elementor-frontend/handlers/global' ) );
-		};
+// YouTube API loader (used by section background video)
+var isYTInserted = false;
 
-		var addElementsHandlers = function() {
-			$.each( elementsDefaultHandlers, function( elementName ) {
-				self.elementsHandler.addHandler( elementName, this );
-			} );
-		};
+function onYoutubeApiReady(callback) {
+    if (!isYTInserted) {
+        isYTInserted = true;
+        var script = document.createElement('script');
+        script.src = 'https://www.youtube.com/iframe_api';
+        var first = document.getElementsByTagName('script')[0];
+        if (first && first.parentNode) {
+            first.parentNode.insertBefore(script, first);
+        }
+    }
 
-		var runElementsHandlers = function() {
-			$( '.elementor-element' ).each( function() {
-				self.elementsHandler.runReadyTrigger( $( this ) );
-			} );
-		};
+    if (window.YT && YT.loaded) {
+        callback(YT);
+    } else {
+        setTimeout(function () {
+            onYoutubeApiReady(callback);
+        }, 350);
+    }
+}
 
-		this.config = elementorFrontendConfig;
+// Backward compatibility — some templates/editor code reference window.elementorFrontend
+window.elementorFrontend = {
+    config: window.elementorFrontendConfig || {},
+    isEditMode: function () {
+        return !!(window.elementorFrontendConfig && window.elementorFrontendConfig.isEditMode);
+    },
+    getScopeWindow: function () {
+        return this._scopeWindow || window;
+    },
+    setScopeWindow: function (scopeWindow) {
+        this._scopeWindow = scopeWindow;
+    },
+    init: function () {
+        this.config = window.elementorFrontendConfig || {};
+    },
+    elementsHandler: ElementsHandler,
+    utils: {
+        onYoutubeApiReady: onYoutubeApiReady
+    },
+    throttle: function (func, wait) {
+        var timeout, context, args, result, previous = 0;
 
-		this.getScopeWindow = function() {
-			return scopeWindow;
-		};
+        var later = function () {
+            previous = Date.now();
+            timeout = null;
+            result = func.apply(context, args);
+            if (!timeout) {
+                context = args = null;
+            }
+        };
 
-		this.setScopeWindow = function( window ) {
-			scopeWindow = window;
-		};
+        return function () {
+            var now = Date.now(),
+                remaining = wait - (now - previous);
 
-		this.isEditMode = function() {
-			return self.config.isEditMode;
-		};
+            context = this;
+            args = arguments;
 
-		this.elementsHandler = new ElementsHandler( $ );
+            if (remaining <= 0 || remaining > wait) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                previous = now;
+                result = func.apply(context, args);
+                if (!timeout) {
+                    context = args = null;
+                }
+            } else if (!timeout) {
+                timeout = setTimeout(later, remaining);
+            }
 
-		this.utils = new Utils( $ );
-
-		this.init = function() {
-			addGlobalHandlers();
-
-			addElementsHandlers();
-
-
-			runElementsHandlers();
-		};
-
-		// Based on underscore function
-		this.throttle = function( func, wait ) {
-			var timeout,
-				context,
-				args,
-				result,
-				previous = 0;
-
-			var later = function() {
-				previous = Date.now();
-				timeout = null;
-				result = func.apply( context, args );
-
-				if ( !timeout ) {
-					context = args = null;
-				}
-			};
-
-			return function() {
-				var now = Date.now(),
-					remaining = wait - ( now - previous );
-
-				context = this;
-				args = arguments;
-
-				if ( remaining <= 0 || remaining > wait ) {
-					if ( timeout ) {
-						clearTimeout( timeout );
-						timeout = null;
-					}
-
-					previous = now;
-					result = func.apply( context, args );
-
-					if ( ! timeout ) {
-						context = args = null;
-					}
-				} else if ( ! timeout ) {
-					timeout = setTimeout( later, remaining );
-				}
-
-				return result;
-			};
-		};
-	};
-
-	window.elementorFrontend = new ElementorFrontend();
-} )( jQuery );
-
-jQuery( function() {
-	if ( ! elementorFrontend.isEditMode() ) {
-		elementorFrontend.init();
-	}
-});
+            return result;
+        };
+    }
+};

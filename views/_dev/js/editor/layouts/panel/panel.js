@@ -50,6 +50,10 @@ PanelLayoutView = Marionette.LayoutView.extend( {
 			},
 			typographyScheme: {
 				view: require( 'elementor-panel/pages/schemes/typography' )
+			},
+			revisions: {
+				view: require( 'elementor-panel/pages/revisions' ),
+				title: 'Revisions'
 			}
 		};
 

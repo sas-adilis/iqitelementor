@@ -42,3 +42,28 @@
         {$smarty.block.parent}
     {/if}
 {/block}
+
+{block name="script"}
+    {$smarty.block.parent}
+    <script type="text/javascript">
+        (function() {
+            var hookSelect = document.getElementById('hook');
+            var customField = document.querySelector('.custom-hook-field');
+            if (!hookSelect || !customField) return;
+
+            function toggleCustomField() {
+                if (hookSelect.value === 'custom') {
+                    customField.style.display = '';
+                } else {
+                    customField.style.display = 'none';
+                }
+            }
+
+            toggleCustomField();
+            hookSelect.addEventListener('change', toggleCustomField);
+
+            // Also handle chosen plugin refresh
+            $(hookSelect).on('change', toggleCustomField);
+        })();
+    </script>
+{/block}

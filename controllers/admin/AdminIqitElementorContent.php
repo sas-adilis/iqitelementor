@@ -78,6 +78,16 @@ class AdminIqitElementorContentController extends ModuleAdminController
     public function postProcess()
     {
         if (Tools::isSubmit('submit' . $this->className)) {
+            // Validate custom hook before save
+            if (Tools::getValue('hook') === 'custom') {
+                $customHookName = trim(Tools::getValue('custom_hook_name'));
+                if (empty($customHookName)) {
+                    $this->errors[] = $this->module->getTranslator()->trans('Please enter a custom hook name.', [], 'Modules.Iqitelementor.Admin');
+
+                    return false;
+                }
+            }
+
             if (Tools::getValue('submitEdit' . $this->className)) {
                 if (Validate::isLoadedObject($object = $this->loadObject())) {
                     $this->module->clearHookCache($object->hook);
@@ -87,7 +97,7 @@ class AdminIqitElementorContentController extends ModuleAdminController
             if (!$returnObject) {
                 return false;
             }
-            $idHook = (int) Tools::getValue('hook');
+            $idHook = (int) $returnObject->hook;
             $hook_name = Hook::getNameById($idHook);
             if (!Hook::isModuleRegisteredOnHook($this->module, $hook_name, $this->context->shop->id)) {
                 Hook::registerHook($this->module, $hook_name);
@@ -99,6 +109,33 @@ class AdminIqitElementorContentController extends ModuleAdminController
         }
 
         return parent::postProcess();
+    }
+
+    /**
+     * @param ObjectModel $object
+     * @param string|null $table
+     */
+    protected function copyFromPost(&$object, $table = null): void
+    {
+        parent::copyFromPost($object, $table);
+
+        // Resolve custom hook name to a hook ID
+        if ($object->hook === 'custom') {
+            $customHookName = trim(Tools::getValue('custom_hook_name'));
+            $idHook = Hook::getIdByName($customHookName);
+            if (!$idHook) {
+                $hookObj = new Hook();
+                $hookObj->name = $customHookName;
+                $hookObj->title = $customHookName;
+                $hookObj->add();
+                $idHook = (int) $hookObj->id;
+            }
+            $object->hook = (int) $idHook;
+        }
+
+        // Clear autosave fields not managed by this form
+        $object->autosave_content = null;
+        $object->autosave_at = null;
     }
 
     public function processDelete()
@@ -147,10 +184,17 @@ class AdminIqitElementorContentController extends ModuleAdminController
                     'class' => 'chosen',
                     'required' => true,
                     'options' => [
-                        'query' => IqitElementorContent::getSelectableHooks(),
+                        'query' => $this->getHookOptionsWithCustom(),
                         'id' => 'id',
                         'name' => 'name',
                     ],
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->module->getTranslator()->trans('Custom hook name', [], 'Modules.Iqitelementor.Admin'),
+                    'name' => 'custom_hook_name',
+                    'desc' => $this->module->getTranslator()->trans('Enter the name of the hook (e.g. displayMyCustomHook)', [], 'Modules.Iqitelementor.Admin'),
+                    'form_group_class' => 'custom-hook-field',
                 ],
                 [
                     'type' => 'switch',
@@ -208,6 +252,17 @@ class AdminIqitElementorContentController extends ModuleAdminController
 
         $helper->fields_value = (array) $landing;
         $helper->fields_value['id_shop'] = $this->context->shop->id;
+        $helper->fields_value['custom_hook_name'] = '';
+
+        // If the current hook is not in the selectable list, treat it as custom
+        if ($landing->id && $landing->hook) {
+            $selectableIds = array_column(IqitElementorContent::getSelectableHooks(), 'id');
+            if (!in_array($landing->hook, $selectableIds)) {
+                $helper->fields_value['hook'] = 'custom';
+                $helper->fields_value['custom_hook_name'] = Hook::getNameById((int) $landing->hook);
+            }
+        }
+
         if ($landing->id) {
             $helper->fields_value['id_elementor'] = $landing->id;
         }
@@ -228,6 +283,21 @@ class AdminIqitElementorContentController extends ModuleAdminController
     public function initToolBarTitle()
     {
         $this->toolbar_title[] = $this->module->getTranslator()->trans('Content on hooks', [], 'Modules.Iqitelementor.Admin');
+    }
+
+    /**
+     * @return array
+     */
+    private function getHookOptionsWithCustom(): array
+    {
+        $hooks = IqitElementorContent::getSelectableHooks();
+
+        $hooks[] = [
+            'id' => 'custom',
+            'name' => '— ' . $this->module->getTranslator()->trans('Custom hook', [], 'Modules.Iqitelementor.Admin') . ' —',
+        ];
+
+        return $hooks;
     }
 
     /**

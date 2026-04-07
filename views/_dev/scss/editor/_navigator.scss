@@ -1,0 +1,386 @@
+//
+// Navigator — Structure tree panel
+//
+
+$navigator-width: 250px;
+$navigator-header-height: 40px;
+$navigator-item-height: 30px;
+$navigator-indent: 20px;
+$navigator-bg: #fff;
+$navigator-header-bg: $editor-darkest;
+$navigator-border: rgba(0, 0, 0, 0.08);
+
+// ---------------------------------------------------------------------------
+// Container
+// ---------------------------------------------------------------------------
+
+#elementor-navigator {
+	position: fixed;
+	top: 100px;
+	left: 60px;
+	width: $navigator-width;
+	max-height: 60vh;
+	z-index: $editor-layer + 2;
+	background: $navigator-bg;
+	border-radius: 8px;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.08);
+	display: none;
+	flex-direction: column;
+	overflow: hidden;
+	font-size: 12px;
+	user-select: none;
+
+	&.elementor-navigator--open {
+		display: flex;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Header
+// ---------------------------------------------------------------------------
+
+#elementor-navigator__header {
+	display: flex;
+	align-items: center;
+	height: $navigator-header-height;
+	padding: 0 10px;
+	background: $navigator-header-bg;
+	color: #fff;
+	cursor: move;
+	flex-shrink: 0;
+
+	#elementor-navigator__toggle-all {
+		cursor: pointer;
+		font-size: 14px;
+		opacity: 0.7;
+		transition: opacity 0.2s;
+		padding: 4px;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+
+	#elementor-navigator__header__title {
+		flex: 1;
+		text-align: center;
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.3px;
+	}
+
+	#elementor-navigator__close {
+		cursor: pointer;
+		font-size: 14px;
+		opacity: 0.7;
+		transition: opacity 0.2s;
+		padding: 4px;
+
+		&:hover {
+			opacity: 1;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Elements container (scrollable)
+// ---------------------------------------------------------------------------
+
+#elementor-navigator__elements {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	min-height: 60px;
+	max-height: calc(60vh - #{$navigator-header-height} - 32px);
+
+	// Thin scrollbar
+	&::-webkit-scrollbar {
+		width: 4px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: rgba(0, 0, 0, 0.15);
+		border-radius: 2px;
+
+		&:hover {
+			background: rgba(0, 0, 0, 0.3);
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Footer
+// ---------------------------------------------------------------------------
+
+#elementor-navigator__footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 32px;
+	border-top: 1px solid $navigator-border;
+	flex-shrink: 0;
+
+	i {
+		font-size: 16px;
+		color: $editor-light;
+		cursor: pointer;
+		transition: color 0.2s;
+
+		&:hover {
+			color: $editor-darkest;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Element node
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element {
+	position: relative;
+
+	// Nested indentation
+	.elementor-navigator__elements {
+		padding-left: $navigator-indent;
+	}
+}
+
+// Item row (icon + title + toggles)
+.elementor-navigator__item {
+	display: flex;
+	align-items: center;
+	height: $navigator-item-height;
+	padding: 0 8px;
+	cursor: pointer;
+	transition: background-color 0.12s ease;
+	border-bottom: 1px solid transparent;
+	gap: 4px;
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.04);
+	}
+}
+
+// Active / selected state
+.elementor-navigator__element--active {
+	> .elementor-navigator__item {
+		background-color: rgba($primary, 0.08);
+		border-left: 2px solid $primary;
+	}
+}
+
+// Hidden element (visibility toggled off)
+.elementor-navigator__element--hidden {
+	> .elementor-navigator__item {
+		opacity: 0.4;
+	}
+
+	.elementor-navigator__element__toggle i {
+		&::before {
+			content: "\e82c"; // eicon-preview-thin (closed eye)
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// List toggle (expand/collapse arrow)
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element__list-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+
+	i {
+		font-size: 8px;
+		color: $editor-dark;
+		transition: transform 0.15s ease;
+	}
+}
+
+// Collapsed state
+.elementor-navigator__element--collapsed {
+	> .elementor-navigator__elements {
+		display: none;
+	}
+
+	> .elementor-navigator__item .elementor-navigator__element__list-toggle i {
+		transform: rotate(-90deg);
+	}
+}
+
+// Widgets: no toggle arrow
+.elementor-navigator__element--no-children {
+	> .elementor-navigator__item .elementor-navigator__element__list-toggle {
+		visibility: hidden;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Element type icon
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element__element-type {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	flex-shrink: 0;
+
+	i {
+		font-size: 12px;
+		color: $editor-dark;
+	}
+}
+
+// Color-code by type
+.elementor-navigator__element--section {
+	> .elementor-navigator__item .elementor-navigator__element__element-type i {
+		color: $blue-flat;
+	}
+}
+
+.elementor-navigator__element--column {
+	> .elementor-navigator__item .elementor-navigator__element__element-type i {
+		color: $editor-accent;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Title
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element__title {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+}
+
+.elementor-navigator__element__title__text {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size: 12px;
+	color: $editor-darkest;
+	line-height: $navigator-item-height;
+
+	&[contenteditable="true"] {
+		background: rgba($primary, 0.06);
+		outline: 1px solid $primary;
+		border-radius: 2px;
+		padding: 0 4px;
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Visibility toggle (eye icon)
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element__toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	flex-shrink: 0;
+	opacity: 0;
+	transition: opacity 0.15s;
+
+	i {
+		font-size: 12px;
+		color: $editor-light;
+
+		&:hover {
+			color: $editor-darkest;
+		}
+	}
+}
+
+// Show eye on hover
+.elementor-navigator__item:hover .elementor-navigator__element__toggle,
+.elementor-navigator__element--hidden .elementor-navigator__element__toggle {
+	opacity: 1;
+}
+
+// ---------------------------------------------------------------------------
+// Indicators
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__element__indicators {
+	display: flex;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Drag & Drop
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__sortable-placeholder {
+	height: $navigator-item-height;
+	background: rgba($primary, 0.08);
+	border: 1px dashed rgba($primary, 0.4);
+	border-radius: 3px;
+	margin: 1px 8px;
+}
+
+.elementor-navigator__element--dragging {
+	opacity: 0.5;
+
+	> .elementor-navigator__item {
+		background-color: rgba($primary, 0.06);
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Root tree (top-level)
+// ---------------------------------------------------------------------------
+
+.elementor-navigator__elements--root {
+	padding-left: 0;
+
+	> .elementor-navigator__element {
+		border-bottom: 1px solid $navigator-border;
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+}
+
+// ---------------------------------------------------------------------------
+// Empty state
+// ---------------------------------------------------------------------------
+
+.elementor-nerd-box-title {
+	text-align: center;
+	font-size: 13px;
+	font-weight: 600;
+	color: $editor-darkest;
+	padding: 20px 16px 8px;
+}
+
+.elementor-nerd-box-message {
+	text-align: center;
+	font-size: 11px;
+	color: $editor-dark;
+	padding: 0 16px 20px;
+	line-height: 1.5;
+}
+
+.elementor-empty-view__title {
+	text-align: center;
+	font-size: 11px;
+	color: $editor-light;
+	font-style: italic;
+	padding: 6px 8px;
+}

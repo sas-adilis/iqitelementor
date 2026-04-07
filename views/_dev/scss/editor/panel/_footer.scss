@@ -123,7 +123,7 @@
 #elementor-panel-footer-save {
 	max-width: 150px;
 
-	.elementor-button {
+	.elementor-btn {
 		font-size: 11px;
 		text-transform: uppercase;
 		width: 100%;
@@ -133,8 +133,8 @@
 	}
 
 	&.elementor-save-active {
-		.elementor-button {
-			@extend .elementor-button-success;
+		.elementor-btn {
+			@extend .elementor-btn-success;
 		}
 	}
 }

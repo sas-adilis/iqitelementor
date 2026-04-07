@@ -15,9 +15,9 @@ PanelSchemeBaseView = Marionette.CompositeView.extend( {
 
 	ui: function() {
 		return {
-			saveButton: '.elementor-panel-scheme-save .elementor-button',
-			discardButton: '.elementor-panel-scheme-discard .elementor-button',
-			resetButton: '.elementor-panel-scheme-reset .elementor-button'
+			saveButton: '.elementor-panel-scheme-save .elementor-btn',
+			discardButton: '.elementor-panel-scheme-discard .elementor-btn',
+			resetButton: '.elementor-panel-scheme-reset .elementor-btn'
 		};
 	},
 

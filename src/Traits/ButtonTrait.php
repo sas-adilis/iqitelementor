@@ -196,8 +196,8 @@ trait ButtonTrait
                         'button_icon!' => '',
                     ],
                     'selectors' => [
-                        '{{WRAPPER}} .elementor-button-icon' => 'font-size: {{SIZE}}{{UNIT}};',
-                        '{{WRAPPER}} .elementor-button-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                        '{{WRAPPER}} .elementor-btn-icon' => 'font-size: {{SIZE}}{{UNIT}};',
+                        '{{WRAPPER}} .elementor-btn-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
                     ],
                     'section' => 'section_button',
                 ]
@@ -238,7 +238,7 @@ trait ButtonTrait
                 'tab' => self::TAB_STYLE,
                 'section' => $sectionId,
                 'condition' => $condition,
-                'selector' => '{{WRAPPER}} .elementor-btn',
+                'selector' => '{{WRAPPER}} .elementor-btn-text',
             ]
         );
 
@@ -396,7 +396,7 @@ trait ButtonTrait
     protected function buildButtonOptions(array $settings): array
     {
         $button_classes = ['elementor-btn', 'btn'];
-        $wrapper_classes = ['elementor-button-wrapper'];
+        $wrapper_classes = ['elementor-btn-wrapper'];
 
         $button_classes[] = sprintf('btn-%s%s',
             $settings['button_outline'] == 'yes' ? 'outline-' : '',

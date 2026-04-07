@@ -49,7 +49,7 @@ class ImageDimensions extends ControlBaseMultiple
 					<input type="text" data-setting="height" />
 					<div class="elementor-image-dimensions-field-description"><?php echo Translater::get()->l('Height'); ?></div>
 				</div>
-				<button class="elementor-button elementor-button-success elementor-image-dimensions-apply-button"><?php echo Translater::get()->l('Apply'); ?></button>
+				<button class="elementor-btn elementor-btn-success elementor-image-dimensions-apply-button"><?php echo Translater::get()->l('Apply'); ?></button>
 			</div>
 		</div>
 		<?php

@@ -125,7 +125,7 @@
 .elementor-align-left .btn-block {
   text-align: left;
 }
-.elementor-align-justify .elementor-button {
+.elementor-align-justify .elementor-btn {
   width: 100%;
 }
 
@@ -133,22 +133,22 @@
   .elementor-tablet-align-center {
     text-align: center;
   }
-  .elementor-tablet-align-center .elementor-button {
+  .elementor-tablet-align-center .elementor-btn {
     width: auto;
   }
   .elementor-tablet-align-right {
     text-align: right;
   }
-  .elementor-tablet-align-right .elementor-button {
+  .elementor-tablet-align-right .elementor-btn {
     width: auto;
   }
   .elementor-tablet-align-left {
     text-align: left;
   }
-  .elementor-tablet-align-left .elementor-button {
+  .elementor-tablet-align-left .elementor-btn {
     width: auto;
   }
-  .elementor-tablet-align-justify .elementor-button {
+  .elementor-tablet-align-justify .elementor-btn {
     width: 100%;
   }
 }
@@ -156,22 +156,22 @@
   .elementor-mobile-align-center {
     text-align: center;
   }
-  .elementor-mobile-align-center .elementor-button {
+  .elementor-mobile-align-center .elementor-btn {
     width: auto;
   }
   .elementor-mobile-align-right {
     text-align: right;
   }
-  .elementor-mobile-align-right .elementor-button {
+  .elementor-mobile-align-right .elementor-btn {
     width: auto;
   }
   .elementor-mobile-align-left {
     text-align: left;
   }
-  .elementor-mobile-align-left .elementor-button {
+  .elementor-mobile-align-left .elementor-btn {
     width: auto;
   }
-  .elementor-mobile-align-justify .elementor-button {
+  .elementor-mobile-align-justify .elementor-btn {
     width: 100%;
   }
 }
@@ -785,53 +785,61 @@
   }
 }
 
-.elementor-button {
-  display: inline-block;
+.elementor-btn {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  line-height: 1;
   text-align: center;
   -webkit-transition: all 0.5s;
   transition: all 0.5s;
 }
-.elementor-button.elementor-size-small {
+.elementor-btn.elementor-size-small {
   font-size: 13px;
   padding: 10px 20px;
 }
-.elementor-button.elementor-size-medium {
+.elementor-btn.elementor-size-medium {
   font-size: 15px;
 }
-.elementor-button.elementor-size-large {
+.elementor-btn.elementor-size-large {
   font-size: 16px;
   padding: 15px 30px;
 }
-.elementor-button.elementor-size-xl {
+.elementor-btn.elementor-size-xl {
   font-size: 18px;
   padding: 20px 40px;
 }
-.elementor-button.elementor-size-xxl {
+.elementor-btn.elementor-size-xxl {
   font-size: 20px;
   padding: 25px 50px;
 }
-.elementor-button .elementor-align-icon-right {
+.elementor-btn .elementor-align-icon-right {
   float: right;
   margin-left: 5px;
 }
-.elementor-button .elementor-align-icon-left {
+.elementor-btn .elementor-align-icon-left {
   float: left;
   margin-right: 5px;
 }
-.elementor-button .elementor-button-text {
+.elementor-btn .elementor-btn-text {
   display: inline-block;
 }
 
-.elementor-button-wrapper.elementor-align-justify > .elementor-btn {
+.elementor-btn-wrapper.elementor-align-justify > .elementor-btn {
   width: 100%;
 }
 @media (max-width: 767px) {
-  .elementor-button-wrapper.elementor-mobile-align-justify > .elementor-btn {
+  .elementor-btn-wrapper.elementor-mobile-align-justify > .elementor-btn {
     width: 100%;
   }
 }
 @media (max-width: 1023px) {
-  .elementor-button-wrapper.elementor-tablet-align-justify > .elementor-btn {
+  .elementor-btn-wrapper.elementor-tablet-align-justify > .elementor-btn {
     width: 100%;
   }
 }
@@ -897,7 +905,7 @@
 .elementor-cta-bg-overlay {
   z-index: 2;
 }
-.elementor-cta .elementor-button {
+.elementor-cta .elementor-btn {
   cursor: pointer;
   -webkit-align-self: center;
       -ms-flex-item-align: center;

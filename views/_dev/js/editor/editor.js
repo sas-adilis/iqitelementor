@@ -312,6 +312,10 @@ App = Marionette.Application.extend( {
 		var TopBarItemView = require( 'elementor-layouts/panel/topbar' );
 		this.getRegion( 'topBar' ).show( new TopBarItemView() );
 
+		// Init Navigator
+		var navigator = require( 'elementor-components/navigator' );
+		this.navigator = navigator.init();
+
 		this.$previewContents
 		    .children() // <html>
 		    .addClass( 'elementor-html' )

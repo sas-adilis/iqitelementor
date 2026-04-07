@@ -31,7 +31,7 @@ TemplateLibraryLoadTemplateView = Marionette.ItemView.extend( {
 	onFormSubmit: function( event ) {
 		event.preventDefault();
 
-		this.ui.submitButton.addClass( 'elementor-button-state' );
+		this.ui.submitButton.addClass( 'elementor-btn-state' );
 
 		elementor.ajax.send( 'importTemplate', {
 			data: new FormData( this.ui.form[ 0 ] ),

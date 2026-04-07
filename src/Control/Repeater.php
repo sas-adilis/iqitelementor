@@ -50,8 +50,8 @@ class Repeater extends ControlBase
             <span class="elementor-control-title">{{{ data.label }}}</span>
         </label>
         <div class="elementor-repeater-fields"></div>
-        <div class="elementor-button-wrapper">
-            <button class="elementor-button elementor-repeater-add"><span class="eicon-plus"></span><?php echo Translater::get()->l('Add Item'); ?></button>
+        <div class="elementor-btn-wrapper">
+            <button class="elementor-btn elementor-repeater-add"><span class="eicon-plus"></span><?php echo Translater::get()->l('Add Item'); ?></button>
         </div>
         <?php
     }

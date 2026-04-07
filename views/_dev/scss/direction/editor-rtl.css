@@ -202,34 +202,34 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   color: #6d7882;
 }
 
-.elementor-button {
+.elementor-btn {
   border: none;
   cursor: pointer;
   border-radius: 3px;
   transition: box-shadow 0.5s, opacity 0.5s;
   outline: none;
 }
-.elementor-button:not(.elementor-button-state) .elementor-state-icon {
+.elementor-btn:not(.elementor-btn-state) .elementor-state-icon {
   display: none;
 }
-.elementor-button .elementor-state-icon {
+.elementor-btn .elementor-state-icon {
   padding-left: 10px;
 }
 
-.elementor-button-success, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button {
+.elementor-btn-success, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn {
   color: #fff;
 }
-.elementor-button-success[disabled], #elementor-panel #elementor-panel-footer-save.elementor-save-active [disabled].elementor-button {
+.elementor-btn-success[disabled], #elementor-panel #elementor-panel-footer-save.elementor-save-active [disabled].elementor-btn {
   background-color: #c2cbd2;
 }
-.elementor-button-success:not([disabled]), #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]) {
+.elementor-btn-success:not([disabled]), #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn:not([disabled]) {
   background-color: #38B54A;
 }
-.elementor-button-success:not([disabled]):hover, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]):hover {
+.elementor-btn-success:not([disabled]):hover, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn:not([disabled]):hover {
   opacity: 0.85;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.2);
 }
-.elementor-button-success:not([disabled]):active, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button:not([disabled]):active {
+.elementor-btn-success:not([disabled]):active, #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn:not([disabled]):active {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.19), 0 3px 3px rgba(0, 0, 0, 0.1);
 }
 
@@ -884,11 +884,11 @@ select {
 #elementor-panel .elementor-panel-scheme .elementor-panel-scheme-save {
   text-align: center;
 }
-#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-save .elementor-button {
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-save .elementor-btn {
   padding: 6px 18px;
   text-transform: uppercase;
 }
-#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-reset .elementor-button, #elementor-panel .elementor-panel-scheme .elementor-panel-scheme-discard .elementor-button {
+#elementor-panel .elementor-panel-scheme .elementor-panel-scheme-reset .elementor-btn, #elementor-panel .elementor-panel-scheme .elementor-panel-scheme-discard .elementor-btn {
   color: #a4afb7;
   background: none;
 }
@@ -1951,7 +1951,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
   width: 10px;
   color: #fff;
 }
-#elementor-panel #elementor-panel-page-editor .elementor-control-type-repeater .elementor-button-wrapper {
+#elementor-panel #elementor-panel-page-editor .elementor-control-type-repeater .elementor-btn-wrapper {
   text-align: center;
   padding: 10px;
 }
@@ -2352,7 +2352,7 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-footer-save {
   max-width: 150px;
 }
-#elementor-panel #elementor-panel-footer-save .elementor-button {
+#elementor-panel #elementor-panel-footer-save .elementor-btn {
   font-size: 11px;
   text-transform: uppercase;
   width: 100%;
@@ -2801,10 +2801,10 @@ body:not(.elementor-device-desktop) #elementor-preview-responsive-wrapper {
 #elementor-template-library-modal a.elementor-template-library-blank-footer-link:hover {
   color: #9b0a46;
 }
-#elementor-template-library-modal .elementor-button-success, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-button {
+#elementor-template-library-modal .elementor-btn-success, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-btn {
   text-transform: uppercase;
 }
-#elementor-template-library-modal .elementor-button-success .elementor-button-title, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-button .elementor-button-title, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-button .elementor-button-title {
+#elementor-template-library-modal .elementor-btn-success .elementor-btn-title, #elementor-template-library-modal #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn .elementor-btn-title, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-template-library-modal .elementor-btn .elementor-btn-title {
   padding-right: 8px;
 }
 

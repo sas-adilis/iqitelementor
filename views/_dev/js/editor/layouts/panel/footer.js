@@ -14,7 +14,7 @@ PanelFooterItemView = Marionette.ItemView.extend( {
 		deviceModeIcon: '#elementor-panel-footer-responsive > i',
 		deviceModeButtons: '#elementor-panel-footer-responsive .elementor-panel-footer-sub-menu-item',
 		buttonSave: '#elementor-panel-footer-save',
-		buttonSaveButton: '#elementor-panel-footer-save .elementor-button',
+		buttonSaveButton: '#elementor-panel-footer-save .elementor-btn',
 		buttonPublish: '#elementor-panel-footer-publish',
 		watchTutorial: '#elementor-panel-footer-watch-tutorial',
 		showTemplates: '#elementor-panel-footer-templates-modal',
@@ -78,11 +78,11 @@ PanelFooterItemView = Marionette.ItemView.extend( {
 			onSuccess: function() {
 				self.getDialog().show();
 
-				self.ui.buttonSaveButton.removeClass( 'elementor-button-state' );
+				self.ui.buttonSaveButton.removeClass( 'elementor-btn-state' );
 			}
 		};
 
-		self.ui.buttonSaveButton.addClass( 'elementor-button-state' );
+		self.ui.buttonSaveButton.addClass( 'elementor-btn-state' );
 
 		elementor.saveBuilder( options );
 	},

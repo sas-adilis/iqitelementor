@@ -13,6 +13,7 @@ TopBarItemView = Marionette.ItemView.extend( {
 		revisions: '#elementor-topbar-revisions',
 		deviceButtons: '.elementor-topbar-device-btn',
 		templates: '#elementor-topbar-templates',
+		navigator: '#elementor-topbar-navigator',
 		inspect: '#elementor-topbar-inspect',
 		preview: '#elementor-topbar-preview',
 		save: '#elementor-topbar-save',
@@ -25,6 +26,7 @@ TopBarItemView = Marionette.ItemView.extend( {
 		'click @ui.revisions': 'onClickRevisions',
 		'click @ui.deviceButtons': 'onClickDeviceButton',
 		'click @ui.templates': 'onClickTemplates',
+		'click @ui.navigator': 'onClickNavigator',
 		'click @ui.inspect': 'onClickInspect',
 		'click @ui.preview': 'onClickPreview',
 		'click @ui.save': 'onClickSave'
@@ -135,6 +137,11 @@ TopBarItemView = Marionette.ItemView.extend( {
 	onClickDeviceButton: function( e ) {
 		var newDeviceMode = Backbone.$( e.currentTarget ).data( 'device-mode' );
 		elementor.changeDeviceMode( newDeviceMode );
+	},
+
+	onClickNavigator: function() {
+		this.ui.navigator.toggleClass( 'active' );
+		elementor.channels.editor.trigger( 'navigator:toggle' );
 	},
 
 	onClickTemplates: function() {

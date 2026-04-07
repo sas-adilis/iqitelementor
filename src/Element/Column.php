@@ -166,7 +166,7 @@ class Column extends ElementBase
                     'stretch' => Translater::get()->l('Stretch'),
                 ],
                 'selectors' => [
-                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'align-items: {{VALUE}}',
+                    '{{WRAPPER}}.elementor-column > .elementor-column-wrap > .elementor-widget-wrap' => 'align-content: {{VALUE}}',
                 ],
             ]
         );

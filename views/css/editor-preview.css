@@ -435,7 +435,7 @@ html.elementor-html {
 .elementor-editor-active #elementor-add-new-section {
   display: inline-block;
 }
-.elementor-editor-active #elementor-add-new-section .elementor-button {
+.elementor-editor-active #elementor-add-new-section .elementor-btn {
   color: #fff;
   background-image: none;
   font-size: 13px;
@@ -451,11 +451,11 @@ html.elementor-html {
   border-radius: 3px;
   cursor: pointer;
 }
-.elementor-editor-active #elementor-add-new-section .elementor-button:hover {
+.elementor-editor-active #elementor-add-new-section .elementor-btn:hover {
   opacity: 0.85;
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.12), 0 2px 2px rgba(0, 0, 0, 0.2);
 }
-.elementor-editor-active #elementor-add-new-section .elementor-button:active {
+.elementor-editor-active #elementor-add-new-section .elementor-btn:active {
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.1);
 }
 .elementor-editor-active #elementor-add-section-button {

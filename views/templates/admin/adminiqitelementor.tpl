@@ -52,9 +52,9 @@
     <div id="elementor-add-section-inner">
       <div id="elementor-add-new-section">
         <button id="elementor-add-section-button"
-                class="elementor-button">{l s='Add New Section' mod='iqitelementor'}</button>
+                class="elementor-btn">{l s='Add New Section' mod='iqitelementor'}</button>
         <button id="elementor-add-template-button"
-                class="elementor-button">{l s='Add Template' mod='iqitelementor'}</button>
+                class="elementor-btn">{l s='Add Template' mod='iqitelementor'}</button>
         <div id="elementor-add-section-drag-title">{l s='Or drag widget here' mod='iqitelementor'}</div>
       </div>
       <div id="elementor-select-preset">

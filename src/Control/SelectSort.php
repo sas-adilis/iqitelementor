@@ -39,7 +39,7 @@ class SelectSort extends ControlBase
 
 
 		</div>
-		<button class="elementor-button elementor-value-add"><i class="fa fa-angle-down"></i><?php echo Translater::get()->l('Select'); ?></button>
+		<button class="elementor-btn elementor-value-add"><i class="fa fa-angle-down"></i><?php echo Translater::get()->l('Select'); ?></button>
 
 		<div class="elementor-control-field"><label class="elementor-control-title"><?php echo Translater::get()->l('Selected'); ?></label></div>
 		<div class="elementor-control-field">

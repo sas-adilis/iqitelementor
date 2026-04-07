@@ -2,14 +2,14 @@
 // Buttons
 //
 
-.elementor-button {
+.elementor-btn {
 	border: none;
 	cursor: pointer;
 	border-radius: 3px;
 	transition: box-shadow .5s, opacity .5s;
 	outline: none;
 
-	&:not(.elementor-button-state) {
+	&:not(.elementor-btn-state) {
 
 		.elementor-state-icon {
 			display: none;
@@ -21,7 +21,7 @@
 	}
 }
 
-.elementor-button-success {
+.elementor-btn-success {
 	color: #fff;
 
 	&[disabled] {

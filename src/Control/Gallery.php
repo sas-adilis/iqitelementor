@@ -39,7 +39,7 @@ class Gallery extends ControlBase
 							<div class="elementor-control-gallery-thumbnail" style="background-image: url({{ image.url }})"></div>
 						<# } ); #>
 					</div>
-					<button class="elementor-button elementor-control-gallery-add"><?php echo Translater::get()->l('+ Add Images'); ?></button>
+					<button class="elementor-btn elementor-control-gallery-add"><?php echo Translater::get()->l('+ Add Images'); ?></button>
 				</div>
 			</div>
 		</div>

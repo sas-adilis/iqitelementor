@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
             var $wrapperCms = $('form[name="cms_page"]').first().find('.form-wrapper').first();
                 $wrapperProduct = $('#features, #product_description_description'),
-                $wrapperBlog = $('#elementor-button-blog-wrapper'),
+                $wrapperBlog = $('#elementor-btn-blog-wrapper'),
                 $wrapperCategory = $('form[name="category"], form[name="root_category"]').first().find('.form-wrapper').first();
                 $wrapperBrand = $('form[name="manufacturer"]').first().find('#manufacturer_description'),
                 $btnTemplate = $('#tmpl-btn-edit-with-elementor'),

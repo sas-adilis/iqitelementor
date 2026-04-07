@@ -59,7 +59,7 @@ PanelRevisionsPageView = Marionette.ItemView.extend( {
 
 		// Actions bar
 		html += '<div class="elementor-revisions-actions">';
-		html += '<button class="elementor-revision-apply elementor-button elementor-button-success" disabled>' + elementor.translate( 'revisions_apply' ) + '</button>';
+		html += '<button class="elementor-revision-apply elementor-btn elementor-btn-success" disabled>' + elementor.translate( 'revisions_apply' ) + '</button>';
 		html += '</div>';
 
 		// Counter

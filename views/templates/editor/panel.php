@@ -37,6 +37,9 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<button id="elementor-topbar-templates" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Templates', 'elementor'); ?>">
 			<i class="fa fa-folder"></i>
 		</button>
+		<button id="elementor-topbar-navigator" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Navigator', 'elementor'); ?>">
+			<i class="eicon-navigator"></i>
+		</button>
 		<button id="elementor-topbar-inspect" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Inspect Mode', 'elementor'); ?>">
 			<i class="fa fa-th-large"></i>
 		</button>
@@ -144,7 +147,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<i class="fa fa-th-large"></i>
 	</div>
 	<div id="elementor-panel-footer-save" class="elementor-panel-footer-tool" title="<?php echo Helper::escAttr('Save', 'elementor'); ?>">
-		<button class="elementor-button">
+		<button class="elementor-btn">
 			<span class="elementor-state-icon">
 				<i class="fa fa-spin fa-circle-o-notch "></i>
 			</span>
@@ -179,19 +182,19 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 <script type="text/template" id="tmpl-elementor-panel-schemes-typography">
 	<div class="elementor-panel-scheme-buttons">
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-reset">
-			<button class="elementor-button">
+			<button class="elementor-btn">
 				<i class="fa fa-undo"></i>
 				<?php echo Translater::get()->l('Reset', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-discard">
-			<button class="elementor-button">
+			<button class="elementor-btn">
 				<i class="fa fa-times"></i>
 				<?php echo Translater::get()->l('Discard', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-save">
-			<button class="elementor-button elementor-button-success" disabled><?php echo Translater::get()->l('Apply', 'elementor'); ?></button>
+			<button class="elementor-btn elementor-btn-success" disabled><?php echo Translater::get()->l('Apply', 'elementor'); ?></button>
 		</div>
 	</div>
 	<div class="elementor-panel-scheme-items"></div>
@@ -200,19 +203,19 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 <script type="text/template" id="tmpl-elementor-panel-schemes-color">
 	<div class="elementor-panel-scheme-buttons">
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-reset">
-			<button class="elementor-button">
+			<button class="elementor-btn">
 				<i class="fa fa-undo"></i>
 				<?php echo Translater::get()->l('Reset', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-discard">
-			<button class="elementor-button">
+			<button class="elementor-btn">
 				<i class="fa fa-times"></i>
 				<?php echo Translater::get()->l('Discard', 'elementor'); ?>
 			</button>
 		</div>
 		<div class="elementor-panel-scheme-button-wrapper elementor-panel-scheme-save">
-			<button class="elementor-button elementor-button-success" disabled><?php echo Translater::get()->l('Apply', 'elementor'); ?></button>
+			<button class="elementor-btn elementor-btn-success" disabled><?php echo Translater::get()->l('Apply', 'elementor'); ?></button>
 		</div>
 	</div>
 	<div class="elementor-panel-scheme-content elementor-panel-box">

@@ -38,8 +38,8 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 <script type="text/template" id="tmpl-elementor-template-library-header-preview">
 	<div id="elementor-template-library-header-preview-insert-wrapper" class="elementor-template-library-header-item">
-		<button id="elementor-template-library-header-preview-insert" class="elementor-template-library-template-insert elementor-button elementor-button-success">
-			<i class="eicon-file-download"></i><span class="elementor-button-title"><?php echo Translater::get()->l('Insert', 'elementor'); ?></span>
+		<button id="elementor-template-library-header-preview-insert" class="elementor-template-library-template-insert elementor-btn elementor-btn-success">
+			<i class="eicon-file-download"></i><span class="elementor-btn-title"><?php echo Translater::get()->l('Insert', 'elementor'); ?></span>
 		</button>
 	</div>
 </script>
@@ -75,8 +75,8 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 	</div>
 	<div class="elementor-template-library-template-name">{{{ title }}}</div>
 	<div class="elementor-template-library-template-controls">
-		<button class="elementor-template-library-template-insert elementor-button elementor-button-success">
-			<i class="eicon-file-download"></i><span class="elementor-button-title"><?php echo Translater::get()->l('Insert', 'elementor'); ?></span>
+		<button class="elementor-template-library-template-insert elementor-btn elementor-btn-success">
+			<i class="eicon-file-download"></i><span class="elementor-btn-title"><?php echo Translater::get()->l('Insert', 'elementor'); ?></span>
 		</button>
 		<div class="elementor-template-library-template-export">
 			<a href="{{ export_link }}">
@@ -97,7 +97,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 	<div class="elementor-template-library-blank-excerpt"><?php echo Translater::get()->l('Your designs will be available for export and reuse on any page or website', 'elementor'); ?></div>
 	<form id="elementor-template-library-save-template-form">
 		<input id="elementor-template-library-save-template-name" name="title" placeholder="<?php echo Translater::get()->l('Enter Template Name', 'elementor'); ?>" required>
-		<button id="elementor-template-library-save-template-submit" class="elementor-button elementor-button-success">
+		<button id="elementor-template-library-save-template-submit" class="elementor-btn elementor-btn-success">
 			<span class="elementor-state-icon">
 				<i class="fa fa-spin fa-circle-o-notch "></i>
 			</span>
@@ -119,7 +119,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<button id="elementor-template-library-load-btn-file"><?php echo Translater::get()->l('Select template .json file', 'elementor'); ?></button>
 		<input id="elementor-template-library-load-template-file" type="file" name="file" required>
 		</div>
-		<button id="elementor-template-library-load-template-submit" class="elementor-button elementor-button-success">
+		<button id="elementor-template-library-load-template-submit" class="elementor-btn elementor-btn-success">
 			<span class="elementor-state-icon">
 				<i class="fa fa-spin fa-circle-o-notch "></i>
 			</span>

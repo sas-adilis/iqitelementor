@@ -56,7 +56,7 @@
 .elementor-cta-bg-overlay {
   z-index: 2;
 }
-.elementor-cta .elementor-button {
+.elementor-cta .elementor-btn {
   cursor: pointer;
   align-self: center;
   margin-left: auto;
@@ -81,7 +81,7 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.elementor-button-default .elementor-cta .elementor-button:hover {
+.elementor-btn-default .elementor-cta .elementor-btn:hover {
   background: transparent;
   text-decoration: none;
 }
@@ -104,10 +104,10 @@
   color: #55595c;
   border-color: currentColor;
 }
-.elementor-cta-skin-classic.elementor-button-default a.elementor-button:not(#e) {
+.elementor-cta-skin-classic.elementor-btn-default a.elementor-btn:not(#e) {
   color: #55595c;
 }
-.elementor-cta-skin-classic.elementor-button-default .elementor-button {
+.elementor-cta-skin-classic.elementor-btn-default .elementor-btn {
   color: #55595c;
   border: solid 2px currentColor;
   background: transparent;
@@ -132,7 +132,7 @@
 .elementor-cta-skin-cover .elementor-content-item .elementor-icon {
   color: #fff;
 }
-.elementor-cta-skin-cover.elementor-button-default .elementor-button {
+.elementor-cta-skin-cover.elementor-btn-default .elementor-btn {
   color: #fff;
   border: solid 2px #fff;
   background: transparent;

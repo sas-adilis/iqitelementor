@@ -2,8 +2,10 @@
 // Button
 //
 
-.elementor-button {
-	display: inline-block;
+.elementor-btn {
+	display: inline-flex;
+	align-items: center;
+	line-height: 1;
 	text-align: center;
 	transition: $transition-hover;
 
@@ -41,12 +43,12 @@
 		}
 	}
 
-	.elementor-button-text {
+	.elementor-btn-text {
 		display: inline-block;
 	}
 }
 
-.elementor-button-wrapper {
+.elementor-btn-wrapper {
 	&.elementor-align-justify > .elementor-btn {
 		width: 100%;
 	}

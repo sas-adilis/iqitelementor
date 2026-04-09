@@ -1,9 +1,9 @@
 /* Error: Undefined mixin.
  *     ,
- * 208 |                                 @include border-end(1px solid $editor-lighter);
+ * 213 |                                 @include border-end(1px solid $editor-lighter);
  *     |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
  *     '
- *   editor-preview.scss 208:9  root stylesheet */
+ *   editor-preview.scss 213:9  root stylesheet */
 
 body::before {
   font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
@@ -13,5 +13,5 @@ body::before {
   padding: 1em;
   margin-bottom: 1em;
   border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a     \2577 \a 208 \2502                                  @include border-end(1px solid $editor-lighter);\a     \2502                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a     \2575 \a   editor-preview.scss 208:9  root stylesheet";
+  content: "Error: Undefined mixin.\a     \2577 \a 213 \2502                                  @include border-end(1px solid $editor-lighter);\a     \2502                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\a     \2575 \a   editor-preview.scss 213:9  root stylesheet";
 }

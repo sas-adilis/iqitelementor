@@ -2,43 +2,108 @@
 var App;
 
 /**
- * Render an icon value in content_template (underscore.js) contexts.
- * Handles both new JSON format and legacy plain CSS class strings.
+ * Inline SVG icon rendering for content_template (underscore.js) contexts.
  *
- * Usage in content_template: {{{ elementorRenderIcon(settings.icon) }}}
+ * Icons are stored as JSON: { library, value, svgKey }.
+ * - If svgKey is present, fetch the SVG file and inline it so CSS size/color controls work.
+ * - Otherwise fall back to a font icon <i> tag.
+ *
+ * The preview lives inside an iframe, so a MutationObserver is attached to each
+ * document root (main + iframe) via elementorIconObserve() to detect placeholders
+ * once Marionette inserts the rendered template into the DOM.
+ *
+ * Usage: {{{ elementorRenderIcon(settings.icon) }}}
  */
-window.elementorRenderIcon = function( value ) {
-	if ( ! value ) {
-		return '';
+( function() {
+	var svgCache = {};
+	var selector = '.elementor-icon-svg[data-svg-key]:not([data-svg-loaded])';
+
+	function svgBaseUrl() {
+		return ( window.elementor && elementor.config && elementor.config.assets_url || '' ) + 'data/svg-cache/';
 	}
 
-	var parsed = null;
+	function loadSvg( el ) {
+		var key = el.getAttribute( 'data-svg-key' );
+		el.setAttribute( 'data-svg-loaded', '1' );
 
-	if ( typeof value === 'object' && value !== null ) {
-		parsed = value;
-	} else if ( typeof value === 'string' ) {
-		if ( value.charAt( 0 ) === '{' ) {
-			try {
-				parsed = JSON.parse( value );
-			} catch ( e ) {
-				parsed = null;
+		if ( svgCache[ key ] ) {
+			el.innerHTML = svgCache[ key ];
+			return;
+		}
+
+		var xhr = new XMLHttpRequest();
+		xhr.open( 'GET', svgBaseUrl() + key + '.svg', true );
+		xhr.onload = function() {
+			if ( xhr.status === 200 && xhr.responseText.indexOf( '<svg' ) !== -1 ) {
+				svgCache[ key ] = xhr.responseText;
+				el.innerHTML = xhr.responseText;
+			}
+		};
+		xhr.send();
+	}
+
+	function processRoot( root ) {
+		var els = root.querySelectorAll( selector );
+		for ( var i = 0; i < els.length; i++ ) {
+			loadSvg( els[ i ] );
+		}
+	}
+
+	window.elementorIconObserve = function( root ) {
+		if ( ! root || root._svgObserved ) {
+			return;
+		}
+		root._svgObserved = true;
+
+		new MutationObserver( function( mutations ) {
+			for ( var i = 0; i < mutations.length; i++ ) {
+				var nodes = mutations[ i ].addedNodes;
+				for ( var j = 0; j < nodes.length; j++ ) {
+					if ( nodes[ j ].nodeType === 1 ) {
+						processRoot( nodes[ j ] );
+					}
+				}
+			}
+		} ).observe( root, { childList: true, subtree: true } );
+
+		processRoot( root );
+	};
+
+	elementorIconObserve( document.body || document.documentElement );
+
+	window.elementorRenderIcon = function( value ) {
+		if ( ! value ) {
+			return '';
+		}
+
+		var parsed = typeof value === 'object' ? value : null;
+
+		if ( ! parsed && typeof value === 'string' && value.charAt( 0 ) === '{' ) {
+			try { parsed = JSON.parse( value ); } catch ( e ) {}
+		}
+
+		if ( parsed ) {
+			if ( parsed.svgKey ) {
+				var safeKey = parsed.svgKey.replace( /[^a-z0-9\-\/]/g, '' );
+				if ( safeKey ) {
+					if ( svgCache[ safeKey ] ) {
+						return '<span class="elementor-icon-svg">' + svgCache[ safeKey ] + '</span>';
+					}
+					return '<span class="elementor-icon-svg" data-svg-key="' + safeKey + '"></span>';
+				}
+			}
+			if ( parsed.value ) {
+				return '<i class="' + parsed.value + '"></i>';
 			}
 		}
-	}
 
-	if ( parsed ) {
-		if ( parsed.value ) {
-			return '<i class="' + parsed.value + '"></i>';
+		if ( typeof value === 'string' && value.length ) {
+			return '<i class="' + value + '"></i>';
 		}
-	}
 
-	// Legacy: plain CSS class string
-	if ( typeof value === 'string' && value.length > 0 ) {
-		return '<i class="' + value + '"></i>';
-	}
-
-	return '';
-};
+		return '';
+	};
+} )();
 
 Marionette.TemplateCache.prototype.compileTemplate = function( rawTemplate, options ) {
 	options = {
@@ -57,6 +122,7 @@ App = Marionette.Application.extend( {
 	modals: require( 'elementor-utils/modals' ),
 	introduction: require( 'elementor-utils/introduction' ),
 	templates: require( 'elementor-templates/manager' ),
+	styleLibrary: require( 'elementor-styles/manager' ),
 	ajax: require( 'elementor-utils/ajax' ),
 
 	channels: {
@@ -229,6 +295,9 @@ App = Marionette.Application.extend( {
 		this.initFrontend();
 
 		this.$previewContents = this.$preview.contents();
+
+		// Observe the preview iframe for SVG icon placeholders
+		elementorIconObserve( ( this.$preview[0].contentDocument || this.$preview[0].contentWindow.document ).body );
 
 		var SectionsCollectionView = require( 'elementor-views/sections' ),
 			PanelLayoutView = require( 'elementor-layouts/panel/panel' );

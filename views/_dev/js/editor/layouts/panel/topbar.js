@@ -13,6 +13,7 @@ TopBarItemView = Marionette.ItemView.extend( {
 		revisions: '#elementor-topbar-revisions',
 		deviceButtons: '.elementor-topbar-device-btn',
 		templates: '#elementor-topbar-templates',
+		styles: '#elementor-topbar-styles',
 		navigator: '#elementor-topbar-navigator',
 		inspect: '#elementor-topbar-inspect',
 		preview: '#elementor-topbar-preview',
@@ -26,6 +27,7 @@ TopBarItemView = Marionette.ItemView.extend( {
 		'click @ui.revisions': 'onClickRevisions',
 		'click @ui.deviceButtons': 'onClickDeviceButton',
 		'click @ui.templates': 'onClickTemplates',
+		'click @ui.styles': 'onClickStyles',
 		'click @ui.navigator': 'onClickNavigator',
 		'click @ui.inspect': 'onClickInspect',
 		'click @ui.preview': 'onClickPreview',
@@ -147,6 +149,12 @@ TopBarItemView = Marionette.ItemView.extend( {
 	onClickTemplates: function() {
 		elementor.templates.startModal( function() {
 			elementor.templates.showTemplates();
+		} );
+	},
+
+	onClickStyles: function() {
+		elementor.styleLibrary.startModal( function() {
+			elementor.styleLibrary.showStyles();
 		} );
 	},
 

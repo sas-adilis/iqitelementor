@@ -92,7 +92,7 @@ class Heading extends WidgetBase
         $this->addRenderAttribute('heading', 'class', $heading_options['classes']);
 
         $tag = $heading_options['tag'];
-        $title_content = '<span>' . $heading_options['text'] . '</span>';
+        $title_content = '<span>' . nl2br($heading_options['text']) . '</span>';
 
         if (!empty($heading_options['link']['url'])) {
             $this->addRenderAttribute('url', 'href', $heading_options['link']['url']);
@@ -109,7 +109,7 @@ class Heading extends WidgetBase
             $title_content = sprintf(
                 '<a %s>%s</a>',
                 $this->getRenderAttributeString('url'),
-                $heading_options['text']
+                nl2br($heading_options['text'])
             );
         }
 
@@ -137,12 +137,13 @@ class Heading extends WidgetBase
         var styleClass = (settings.heading_style && settings.heading_style !== 'none') ? settings.heading_style : '';
         var classes = ['elementor-heading-title', sizeClass, styleClass].filter(Boolean).join(' ');
 
-        var titleContent = '<span>' + settings.heading_text + '</span>';
+        var headingText = settings.heading_text.replace(/\n/g, '<br>');
+        var titleContent = '<span>' + headingText + '</span>';
 
         if (settings.heading_link && settings.heading_link.url) {
             var target = settings.heading_link.is_external ? ' target="_blank"' : '';
             var rel = settings.heading_link.is_external ? ' rel="noopener noreferrer"' : '';
-            titleContent = '<a href="' + settings.heading_link.url + '"' + target + rel + '>' + settings.heading_text + '</a>';
+            titleContent = '<a href="' + settings.heading_link.url + '"' + target + rel + '>' + headingText + '</a>';
         }
         #>
         <{{{ tag }}} class="{{{ classes }}}">{{{ titleContent }}}</{{{ tag }}}>

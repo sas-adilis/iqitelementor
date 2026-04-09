@@ -208,7 +208,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'isRtl' => (bool) $this->context->language->is_rtl,
                 'introduction' => Plugin::instance()->getCurrentIntroduction(),
                 'viewportBreakpoints' => Responsive::getBreakpoints(),
-                'widgetDefaults' => $this->loadWidgetDefaults(),
+                'widgetStyles' => $this->loadWidgetStyles(),
                 'i18n' => [
                     'elementor' => $this->module->getTranslator()->trans('Elementor', [], 'Modules.Iqitelementor.Admin'),
                     'dialog_confirm_delete' => $this->module->getTranslator()->trans('Are you sure you want to remove this?', [], 'Modules.Iqitelementor.Admin') . ' {0}',
@@ -259,10 +259,23 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'revisions_min_ago' => $this->module->getTranslator()->trans('min ago', [], 'Modules.Iqitelementor.Admin'),
                     'revisions_hours_ago' => $this->module->getTranslator()->trans('hours ago', [], 'Modules.Iqitelementor.Admin'),
                     'revisions_days_ago' => $this->module->getTranslator()->trans('days ago', [], 'Modules.Iqitelementor.Admin'),
-                    'save_as_default' => $this->module->getTranslator()->trans('Save as default', [], 'Modules.Iqitelementor.Admin'),
-                    'reset_default' => $this->module->getTranslator()->trans('Reset default', [], 'Modules.Iqitelementor.Admin'),
-                    'default_saved' => $this->module->getTranslator()->trans('Default settings saved', [], 'Modules.Iqitelementor.Admin'),
-                    'default_reset' => $this->module->getTranslator()->trans('Default settings reset', [], 'Modules.Iqitelementor.Admin'),
+                    'save_style_as' => $this->module->getTranslator()->trans('Save styles as...', [], 'Modules.Iqitelementor.Admin'),
+                    'use_style' => $this->module->getTranslator()->trans('Use style', [], 'Modules.Iqitelementor.Admin'),
+                    'style_saved' => $this->module->getTranslator()->trans('Style saved', [], 'Modules.Iqitelementor.Admin'),
+                    'style_applied' => $this->module->getTranslator()->trans('Style applied', [], 'Modules.Iqitelementor.Admin'),
+                    'style_deleted' => $this->module->getTranslator()->trans('Style deleted', [], 'Modules.Iqitelementor.Admin'),
+                    'style_set_default' => $this->module->getTranslator()->trans('Default updated', [], 'Modules.Iqitelementor.Admin'),
+                    'styles_library' => $this->module->getTranslator()->trans('Styles Library', [], 'Modules.Iqitelementor.Admin'),
+                    'no_styles_yet' => $this->module->getTranslator()->trans('No saved styles yet', [], 'Modules.Iqitelementor.Admin'),
+                    'no_styles_desc' => $this->module->getTranslator()->trans('Right-click any widget and choose "Save styles as..." to save reusable styles.', [], 'Modules.Iqitelementor.Admin'),
+                    'enter_style_name' => $this->module->getTranslator()->trans('Enter style name', [], 'Modules.Iqitelementor.Admin'),
+                    'save_style' => $this->module->getTranslator()->trans('Save style', [], 'Modules.Iqitelementor.Admin'),
+                    'delete_style' => $this->module->getTranslator()->trans('Delete Style', [], 'Modules.Iqitelementor.Admin'),
+                    'delete_style_confirm' => $this->module->getTranslator()->trans('Are you sure you want to delete this style?', [], 'Modules.Iqitelementor.Admin'),
+                    'set_as_default' => $this->module->getTranslator()->trans('Set as default', [], 'Modules.Iqitelementor.Admin'),
+                    'unset_default' => $this->module->getTranslator()->trans('Unset default', [], 'Modules.Iqitelementor.Admin'),
+                    'apply' => $this->module->getTranslator()->trans('Apply', [], 'Modules.Iqitelementor.Admin'),
+                    'no_styles_for_widget' => $this->module->getTranslator()->trans('No saved styles for this widget', [], 'Modules.Iqitelementor.Admin'),
                 ],
             ]]);
 
@@ -1273,55 +1286,224 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         }
     }
 
+    // ---------------------------------------------------------------
+    //  Widget Styles Library
+    // ---------------------------------------------------------------
+
     /**
-     * Save widget settings as the default for this widget type (per shop).
+     * Return all saved widget styles for the current shop.
      */
-    public function ajaxProcessSaveWidgetDefault(): void
+    public function ajaxProcessGetWidgetStyles(): void
+    {
+        exit(json_encode(['success' => true, 'data' => $this->loadWidgetStyles()]));
+    }
+
+    /**
+     * Save a named widget style.
+     * First style for a widget type is automatically set as default.
+     */
+    public function ajaxProcessSaveWidgetStyle(): void
     {
         $widgetType = Tools::getValue('widget_type');
+        $name = Tools::getValue('name');
         $settings = Tools::getValue('settings');
 
-        if (!$widgetType || !$settings) {
+        if (!$widgetType || !$name || !$settings) {
             exit(json_encode(['success' => false, 'data' => 'Missing parameters']));
         }
 
         $idShop = (int) $this->context->shop->id;
+        $now = date('Y-m-d H:i:s');
 
-        // Upsert: delete existing then insert
-        Db::getInstance()->delete(
-            'iqit_elementor_widget_default',
-            '`id_shop` = ' . $idShop . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
+        // Check if this is the first style for this widget type → auto-default
+        $existing = Db::getInstance()->getValue(
+            'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'iqit_elementor_widget_style`'
+            . ' WHERE `id_shop` = ' . $idShop
+            . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
         );
+        $isDefault = ((int) $existing === 0) ? 1 : 0;
 
-        $result = Db::getInstance()->insert('iqit_elementor_widget_default', [
+        $result = Db::getInstance()->insert('iqit_elementor_widget_style', [
             'id_shop' => $idShop,
             'widget_type' => pSQL($widgetType),
+            'name' => pSQL($name),
             'settings' => pSQL($settings, true),
-            'date_upd' => date('Y-m-d H:i:s'),
+            'is_default' => $isDefault,
+            'date_add' => $now,
+            'date_upd' => $now,
         ]);
 
-        exit(json_encode(['success' => (bool) $result]));
+        $insertId = (int) Db::getInstance()->Insert_ID();
+
+        exit(json_encode([
+            'success' => (bool) $result,
+            'data' => [
+                'id_widget_style' => $insertId,
+                'widget_type' => $widgetType,
+                'name' => $name,
+                'is_default' => $isDefault,
+                'export_link' => $this->context->link->getAdminLink($this->name, true)
+                    . '&ajax=1&action=ExportWidgetStyle&id_widget_style=' . $insertId,
+            ],
+        ]));
     }
 
     /**
-     * Delete the saved default for a widget type.
+     * Delete a widget style by ID.
      */
-    public function ajaxProcessDeleteWidgetDefault(): void
+    public function ajaxProcessDeleteWidgetStyle(): void
     {
-        $widgetType = Tools::getValue('widget_type');
+        $id = (int) Tools::getValue('id_widget_style');
 
-        if (!$widgetType) {
-            exit(json_encode(['success' => false, 'data' => 'Missing widget_type']));
+        if (!$id) {
+            exit(json_encode(['success' => false, 'data' => 'Missing id']));
         }
 
         $idShop = (int) $this->context->shop->id;
 
         $result = Db::getInstance()->delete(
-            'iqit_elementor_widget_default',
-            '`id_shop` = ' . $idShop . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
+            'iqit_elementor_widget_style',
+            '`id_widget_style` = ' . $id . ' AND `id_shop` = ' . $idShop
         );
 
         exit(json_encode(['success' => (bool) $result]));
+    }
+
+    /**
+     * Toggle a widget style as the default for its widget type.
+     * Only one default per widget_type per shop.
+     */
+    public function ajaxProcessSetWidgetStyleDefault(): void
+    {
+        $id = (int) Tools::getValue('id_widget_style');
+
+        if (!$id) {
+            exit(json_encode(['success' => false, 'data' => 'Missing id']));
+        }
+
+        $idShop = (int) $this->context->shop->id;
+        $db = Db::getInstance();
+        $table = _DB_PREFIX_ . 'iqit_elementor_widget_style';
+
+        // Get the widget_type for this style
+        $row = $db->getRow(
+            'SELECT `widget_type`, `is_default` FROM `' . bqSQL($table) . '`'
+            . ' WHERE `id_widget_style` = ' . $id . ' AND `id_shop` = ' . $idShop
+        );
+
+        if (!$row) {
+            exit(json_encode(['success' => false, 'data' => 'Style not found']));
+        }
+
+        $widgetType = $row['widget_type'];
+        $wasDefault = (int) $row['is_default'];
+
+        // Reset all defaults for this widget type
+        $db->execute(
+            'UPDATE `' . bqSQL($table) . '` SET `is_default` = 0'
+            . ' WHERE `id_shop` = ' . $idShop
+            . ' AND `widget_type` = \'' . pSQL($widgetType) . '\''
+        );
+
+        // Toggle: if it was already default, leave it unset; otherwise set it
+        $newDefault = $wasDefault ? 0 : 1;
+
+        if ($newDefault) {
+            $db->execute(
+                'UPDATE `' . bqSQL($table) . '` SET `is_default` = 1'
+                . ' WHERE `id_widget_style` = ' . $id
+            );
+        }
+
+        exit(json_encode(['success' => true, 'data' => ['is_default' => $newDefault]]));
+    }
+
+    /**
+     * Export a widget style as a JSON file download.
+     */
+    public function ajaxProcessExportWidgetStyle(): void
+    {
+        $id = (int) Tools::getValue('id_widget_style');
+        $idShop = (int) $this->context->shop->id;
+
+        $row = Db::getInstance()->getRow(
+            'SELECT * FROM `' . _DB_PREFIX_ . 'iqit_elementor_widget_style`'
+            . ' WHERE `id_widget_style` = ' . $id . ' AND `id_shop` = ' . $idShop
+        );
+
+        if (!$row) {
+            exit;
+        }
+
+        $content = [
+            'name' => $row['name'],
+            'widget_type' => $row['widget_type'],
+            'settings' => $row['settings'],
+        ];
+
+        header('Content-disposition: attachment; filename=iqitelementor_style_' . $id . '.json');
+        header('Content-type: application/json');
+        echo json_encode($content);
+        exit;
+    }
+
+    /**
+     * Import a widget style from an uploaded JSON file.
+     */
+    public function ajaxProcessImportWidgetStyle(): void
+    {
+        header('Content-Type: application/json');
+
+        $error = [
+            'error' => true,
+            'data' => ['message' => $this->module->getTranslator()->trans('Problem with file', [], 'Modules.Iqitelementor.Admin')],
+        ];
+
+        if (!isset($_FILES['file'], $_FILES['file']['tmp_name'])) {
+            exit(json_encode($error));
+        }
+
+        $source = json_decode(Tools::file_get_contents($_FILES['file']['tmp_name']), true);
+
+        if (!$source || !isset($source['name'], $source['widget_type'], $source['settings'])) {
+            exit(json_encode($error));
+        }
+
+        $idShop = (int) $this->context->shop->id;
+        $now = date('Y-m-d H:i:s');
+        $settings = is_string($source['settings']) ? $source['settings'] : json_encode($source['settings']);
+
+        // Check first style → auto default
+        $existing = Db::getInstance()->getValue(
+            'SELECT COUNT(*) FROM `' . _DB_PREFIX_ . 'iqit_elementor_widget_style`'
+            . ' WHERE `id_shop` = ' . $idShop
+            . ' AND `widget_type` = \'' . pSQL($source['widget_type']) . '\''
+        );
+        $isDefault = ((int) $existing === 0) ? 1 : 0;
+
+        Db::getInstance()->insert('iqit_elementor_widget_style', [
+            'id_shop' => $idShop,
+            'widget_type' => pSQL($source['widget_type']),
+            'name' => pSQL($source['name']),
+            'settings' => pSQL($settings, true),
+            'is_default' => $isDefault,
+            'date_add' => $now,
+            'date_upd' => $now,
+        ]);
+
+        $insertId = (int) Db::getInstance()->Insert_ID();
+
+        exit(json_encode([
+            'success' => true,
+            'data' => [
+                'id_widget_style' => $insertId,
+                'widget_type' => $source['widget_type'],
+                'name' => $source['name'],
+                'is_default' => $isDefault,
+                'export_link' => $this->context->link->getAdminLink($this->name, true)
+                    . '&ajax=1&action=ExportWidgetStyle&id_widget_style=' . $insertId,
+            ],
+        ]));
     }
 
     public function getTemplatePreviewLink($templateId): string
@@ -1355,19 +1537,21 @@ class AdminIqitElementorEditorController extends ModuleAdminController
     }
 
     /**
-     * Load all saved widget defaults for the current shop.
+     * Load all saved widget styles for the current shop.
      *
-     * @return array<string, array> Keyed by widget_type
+     * @return array List of style records
      */
-    private function loadWidgetDefaults(): array
+    private function loadWidgetStyles(): array
     {
         $idShop = (int) $this->context->shop->id;
-        $tableName = _DB_PREFIX_ . 'iqit_elementor_widget_default';
+        $tableName = _DB_PREFIX_ . 'iqit_elementor_widget_style';
 
-        // Check table exists (graceful during upgrade before SQL runs)
         try {
             $rows = Db::getInstance()->executeS(
-                'SELECT `widget_type`, `settings` FROM `' . $tableName . '` WHERE `id_shop` = ' . $idShop
+                'SELECT `id_widget_style`, `widget_type`, `name`, `settings`, `is_default`'
+                . ' FROM `' . bqSQL($tableName) . '`'
+                . ' WHERE `id_shop` = ' . $idShop
+                . ' ORDER BY `widget_type`, `name`'
             );
         } catch (\Exception $e) {
             return [];
@@ -1377,15 +1561,21 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             return [];
         }
 
-        $defaults = [];
+        $styles = [];
         foreach ($rows as $row) {
             $decoded = json_decode($row['settings'], true);
-            if (is_array($decoded)) {
-                $defaults[$row['widget_type']] = $decoded;
-            }
+            $styles[] = [
+                'id_widget_style' => (int) $row['id_widget_style'],
+                'widget_type' => $row['widget_type'],
+                'name' => $row['name'],
+                'settings' => is_array($decoded) ? $decoded : [],
+                'is_default' => (int) $row['is_default'],
+                'export_link' => $this->context->link->getAdminLink($this->name, true)
+                    . '&ajax=1&action=ExportWidgetStyle&id_widget_style=' . (int) $row['id_widget_style'],
+            ];
         }
 
-        return $defaults;
+        return $styles;
     }
 
     /**

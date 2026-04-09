@@ -78,6 +78,11 @@ module.exports = function( grunt ) {
 							expose: 'elementor-templates'
 						},
 						{
+							cwd: 'views/_dev/js/editor/components/style-library',
+							src: '**/*.js',
+							expose: 'elementor-styles'
+						},
+						{
 							cwd: 'views/_dev/js/frontend',
 							src: '**/*.js',
 							expose: 'elementor-frontend'

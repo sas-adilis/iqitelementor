@@ -127,7 +127,7 @@ public function findById(?int $id): ?array { }
 public function getWidgetList(): array { }
 public function register(WidgetBase $widget): void { }
 ```
-
+j'j'e
 `void`, `?string`, `?int`, `?array` etc. sont **valides PHP 7.1** et doivent être utilisés.
 
 ### PHPDoc — uniquement quand le natif est insuffisant

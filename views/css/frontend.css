@@ -1427,6 +1427,25 @@
   width: 1em;
   height: 1em;
 }
+.elementor-icon .elementor-icon-svg {
+  display: -webkit-inline-box;
+  display: -webkit-inline-flex;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.elementor-icon .elementor-icon-svg svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
 
 .elementor-view-stacked .elementor-icon {
   background-color: #818a91;

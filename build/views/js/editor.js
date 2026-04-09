@@ -1,0 +1,12457 @@
+/*! iqitelementor - v1.0.0 - 08-04-2026 */
+(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const ContextMenuBehavior = Marionette.Behavior.extend({
+    events: {
+        // On écoute le clic droit sur la vue entière (tu peux restreindre si besoin)
+        'contextmenu': 'onContextMenu',
+        'click': 'onClick',
+        'keydown': 'onKeyDown',
+    },
+
+    onClick(event) {
+        if (Backbone.$(event.target).closest('.iqit-context-menu').length) {
+            return;
+        }
+        // Trigger global pour fermer
+        if (elementor.channels && elementor.channels.editor) {
+            elementor.channels.editor.trigger('context-menu:close');
+        }
+    },
+
+    onKeyDown(event) {
+        if (event.key === 'Escape' || event.keyCode === 27) {
+            if (elementor.channels && elementor.channels.editor) {
+                elementor.channels.editor.trigger('context-menu:close');
+            }
+        }
+    },
+
+    onContextMenu(event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const view = this.view;
+
+        if (typeof view.getContextMenuGroups !== 'function') {
+            return;
+        }
+        // Groupes propres à la vue
+        let groups = view.getContextMenuGroups() || [];
+
+        if (!groups.length) {
+            return;
+        }
+
+        let coords = {
+            clientX: event.clientX,
+            clientY: event.clientY,
+        };
+
+        // Translater les coordonnées de l'iframe vers la fenêtre parente
+        // Les vues Marionette tournent dans le contexte parent mais gèrent
+        // des éléments dans l'iframe — window.frameElement est donc null.
+        // On récupère l'iframe via elementor.$preview ou via le target de l'événement.
+        var iframeEl = null;
+
+        if (elementor && elementor.$preview && elementor.$preview.length) {
+            iframeEl = elementor.$preview[0];
+        } else if (event.target && event.target.ownerDocument && event.target.ownerDocument.defaultView) {
+            var iframeWin = event.target.ownerDocument.defaultView;
+            if (iframeWin.frameElement) {
+                iframeEl = iframeWin.frameElement;
+            }
+        }
+
+        if (iframeEl) {
+            var iframeRect = iframeEl.getBoundingClientRect();
+            coords = {
+                clientX: event.clientX + iframeRect.left,
+                clientY: event.clientY + iframeRect.top,
+            };
+        }
+
+        event.realClientX = coords.clientX;
+        event.realClientY = coords.clientY;
+
+        // On délègue l’affichage au manager via le channel editor
+        if (elementor.channels && elementor.channels.editor) {
+            elementor.channels.editor.trigger('context-menu:open', {
+                event,
+                view,
+                groups,
+            });
+        }
+    },
+});
+
+module.exports = ContextMenuBehavior;
+},{}],2:[function(require,module,exports){
+var HandleAddDuplicateBehavior;
+
+HandleAddDuplicateBehavior = Marionette.Behavior.extend( {
+
+	onChildviewClickNew: function( childView ) {
+		var currentIndex = childView.$el.index() + 1;
+
+		this.addChild( { at: currentIndex } );
+	},
+
+	onRequestNew: function() {
+		this.addChild();
+	},
+
+	addChild: function( options ) {
+		if ( this.view.isCollectionFilled() ) {
+			return;
+		}
+
+		options = options || {};
+
+		var newItem = {
+			id: elementor.helpers.getUniqueID(),
+			elType: this.view.getChildType()[0],
+			settings: {},
+			elements: []
+		};
+
+		this.view.addChildModel( newItem, options );
+	}
+} );
+
+module.exports = HandleAddDuplicateBehavior;
+
+},{}],3:[function(require,module,exports){
+var HandleElementsRelation;
+
+HandleElementsRelation = Marionette.Behavior.extend( {
+
+	onRequestAdd: function( itemData, options ) {
+		this._addChildElement( itemData, options );
+	},
+
+	/**
+	 *
+	 * @param {Object} itemData
+	 * @param {Object} options
+	 * @private
+	 */
+	_addChildElement: function( itemData, options ) {
+		options = options || {};
+
+		var myChildType = this.view.getChildType();
+
+		if ( -1 === myChildType.indexOf( itemData.elType ) ) {
+			delete options.at;
+
+			this.view.children.last().triggerMethod( 'request:add', itemData, options );
+
+			return;
+		}
+
+		var newModel = this.view.addChildModel( itemData, options ),
+			newView = this.view.children.findByModel( newModel );
+
+		if ( 'section' === newView.getElementType() && newView.isInner() ) {
+			newView.addEmptyColumn();
+		}
+
+		newView.triggerMethod( 'open:editor' );
+	}
+} );
+
+module.exports = HandleElementsRelation;
+
+},{}],4:[function(require,module,exports){
+var HandleDuplicateBehavior;
+
+HandleDuplicateBehavior = Marionette.Behavior.extend( {
+
+	onChildviewClickDuplicate: function( childView ) {
+		if ( this.view.isCollectionFilled() ) {
+			return;
+		}
+
+		var currentIndex = this.view.collection.indexOf( childView.model ),
+			newModel = childView.model.clone();
+
+		this.view.addChildModel( newModel, { at: currentIndex } );
+	}
+} );
+
+module.exports = HandleDuplicateBehavior;
+},{}],5:[function(require,module,exports){
+var HandleEditModeBehavior;
+
+HandleEditModeBehavior = Marionette.Behavior.extend( {
+	initialize: function() {
+		this.listenTo( elementor.channels.dataEditMode, 'switch', this.onEditModeSwitched );
+	},
+
+	onEditModeSwitched: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		this.view.$el.toggleClass( 'elementor-active-mode', 'preview' !== activeMode );
+	},
+
+	onRender: function() {
+		this.onEditModeSwitched();
+	}
+} );
+
+module.exports = HandleEditModeBehavior;
+
+},{}],6:[function(require,module,exports){
+var HandleEditorBehavior;
+
+HandleEditorBehavior = Marionette.Behavior.extend( {
+
+	onClickEdit: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		if ( 'preview' === activeMode ) {
+			return;
+		}
+
+		this.onOpenEditor();
+	},
+
+	onOpenEditor: function() {
+		var currentPanelPageName = elementor.getPanelView().getCurrentPageName();
+
+		if ( 'editor' === currentPanelPageName ) {
+			var currentPanelPageView = elementor.getPanelView().getCurrentPageView(),
+				currentEditableModel = currentPanelPageView.model;
+
+			if ( currentEditableModel === this.view.model ) {
+				return;
+			}
+		}
+
+		var elementData = elementor.getElementData( this.view.model );
+
+		elementor.getPanelView().setPage( 'editor', elementor.translate( 'edit_element', [ elementData.title ] ), {
+			model: this.view.model,
+			editedElementView: this.view
+		} );
+	}
+} );
+
+module.exports = HandleEditorBehavior;
+
+},{}],7:[function(require,module,exports){
+var ResizableBehavior;
+
+ResizableBehavior = Marionette.Behavior.extend( {
+	defaults: {
+		handles: elementor.config.is_rtl ? 'w' : 'e'
+	},
+
+	ui: {
+		columnTitle: '.column-title'
+	},
+
+	events: {
+		resizestart: 'onResizeStart',
+		resizestop: 'onResizeStop',
+		resize: 'onResize'
+	},
+
+	initialize: function() {
+		Marionette.Behavior.prototype.initialize.apply( this, arguments );
+
+		this.listenTo( elementor.channels.dataEditMode, 'switch', this.onEditModeSwitched );
+	},
+
+	active: function() {
+		var options = _.clone( this.options );
+
+		delete options.behaviorClass;
+
+		var $childViewContainer = this.getChildViewContainer(),
+			defaultResizableOptions = {},
+			resizableOptions = _.extend( defaultResizableOptions, options );
+
+		$childViewContainer.resizable( resizableOptions );
+	},
+
+	deactivate: function() {
+		if ( this.getChildViewContainer().resizable( 'instance' ) ) {
+			this.getChildViewContainer().resizable( 'destroy' );
+		}
+	},
+
+	onEditModeSwitched: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		if ( 'preview' !== activeMode ) {
+			this.active();
+		} else {
+			this.deactivate();
+		}
+	},
+
+	onRender: function() {
+		// Call this method from other thread (non-block UI)
+		_.defer( _.bind( this.onEditModeSwitched, this ) );
+	},
+
+	onDestroy: function() {
+		this.deactivate();
+	},
+
+	onResizeStart: function( event ) {
+		event.stopPropagation();
+
+		this.view.triggerMethod( 'request:resize:start' );
+	},
+
+	onResizeStop: function( event ) {
+		event.stopPropagation();
+
+		this.view.triggerMethod( 'request:resize:stop' );
+	},
+
+	onResize: function( event, ui ) {
+		event.stopPropagation();
+
+		this.view.triggerMethod( 'request:resize', ui );
+	},
+
+	getChildViewContainer: function() {
+		return this.$el;
+	}
+} );
+
+module.exports = ResizableBehavior;
+
+},{}],8:[function(require,module,exports){
+var SortableBehavior;
+
+SortableBehavior = Marionette.Behavior.extend( {
+	defaults: {
+		elChildType: 'widget'
+	},
+
+	events: {
+		'sortstart': 'onSortStart',
+		'sortreceive': 'onSortReceive',
+		'sortupdate': 'onSortUpdate',
+		'sortstop': 'onSortStop',
+		'sortover': 'onSortOver',
+		'sortout': 'onSortOut'
+	},
+
+	initialize: function() {
+		this.listenTo( elementor.channels.dataEditMode, 'switch', this.onEditModeSwitched );
+		this.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
+	},
+
+	onEditModeSwitched: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		if ( 'preview' !== activeMode ) {
+			this.active();
+		} else {
+			this.deactivate();
+		}
+	},
+
+	onDeviceModeChange: function() {
+		var deviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+
+		if ( 'desktop' === deviceMode ) {
+			this.active();
+		} else {
+			this.deactivate();
+		}
+	},
+
+	onRender: function() {
+		_.defer( _.bind( this.onEditModeSwitched, this ) );
+	},
+
+	onDestroy: function() {
+		this.deactivate();
+	},
+
+	active: function() {
+		if ( this.getChildViewContainer().sortable( 'instance' ) ) {
+			return;
+		}
+
+		var $childViewContainer = this.getChildViewContainer(),
+			defaultSortableOptions = {
+				connectWith: $childViewContainer.selector,
+				cursor: 'move',
+				placeholder: 'elementor-sortable-placeholder',
+				cursorAt: {
+					top: 20,
+					left: 25
+				},
+				helper: _.bind( this._getSortableHelper, this )
+			},
+			sortableOptions = _.extend( defaultSortableOptions, this.view.getSortableOptions() );
+
+		$childViewContainer.sortable( sortableOptions );
+	},
+
+	_getSortableHelper: function( event, $item ) {
+		var model = this.view.collection.get( {
+			cid: $item.data( 'model-cid' )
+		} );
+
+		return '<div style="height: 84px; width: 125px;" class="elementor-sortable-helper elementor-sortable-helper-' + model.get( 'elType' ) + '"><div class="icon"><i class="eicon-' + model.getIcon() + '"></i></div><div class="elementor-element-title-wrapper"><div class="title">' + model.getTitle() + '</div></div></div>';
+	},
+
+	deactivate: function() {
+		if ( this.getChildViewContainer().sortable( 'instance' ) ) {
+			this.getChildViewContainer().sortable( 'destroy' );
+		}
+	},
+
+	onSortStart: function( event, ui ) {
+		event.stopPropagation();
+
+		var model = this.view.collection.get( {
+			cid: ui.item.data( 'model-cid' )
+		} );
+
+		if ( 'column' === this.options.elChildType ) {
+			// the following code is just for touch
+			ui.placeholder.addClass( 'elementor-column' );
+
+			var uiData = ui.item.data( 'sortableItem' ),
+				uiItems = uiData.items,
+				itemHeight = 0;
+
+			uiItems.forEach( function( item ) {
+				if ( item.item[0] === ui.item[0] ) {
+					itemHeight = item.height;
+					return false;
+				}
+			} );
+
+			ui.placeholder.height( itemHeight );
+
+			// ui.placeholder.addClass( 'elementor-column elementor-col-' + model.getSetting( 'size' ) );
+		}
+
+		elementor.channels.data.trigger( model.get( 'elType' ) + ':drag:start' );
+
+		elementor.channels.data.reply( 'cache:' + model.cid, model );
+	},
+
+	onSortOver: function( event, ui ) {
+		event.stopPropagation();
+
+		var model = elementor.channels.data.request( 'cache:' + ui.item.data( 'model-cid' ) );
+
+		Backbone.$( event.target )
+			.addClass( 'elementor-draggable-over' )
+			.attr( {
+				'data-dragged-element': model.get( 'elType' ),
+				'data-dragged-is-inner': model.get( 'isInner' )
+			} );
+
+		this.$el.addClass( 'elementor-dragging-on-child' );
+	},
+
+	onSortOut: function( event ) {
+		event.stopPropagation();
+
+		Backbone.$( event.target )
+			.removeClass( 'elementor-draggable-over' )
+			.removeAttr( 'data-dragged-element data-dragged-is-inner' );
+
+		this.$el.removeClass( 'elementor-dragging-on-child' );
+	},
+
+	onSortReceive: function( event, ui ) {
+		event.stopPropagation();
+
+		if ( this.view.isCollectionFilled() ) {
+			Backbone.$( ui.sender ).sortable( 'cancel' );
+			return;
+		}
+
+		var model = elementor.channels.data.request( 'cache:' + ui.item.data( 'model-cid' ) ),
+			draggedElType = model.get( 'elType' ),
+			draggedIsInnerSection = 'section' === draggedElType && model.get( 'isInner' ),
+			targetIsInnerColumn = 'column' === this.view.getElementType() && this.view.isInner();
+
+		if ( draggedIsInnerSection && targetIsInnerColumn ) {
+			Backbone.$( ui.sender ).sortable( 'cancel' );
+			return;
+		}
+
+		var newIndex = ui.item.parent().children().index( ui.item ),
+			newModel = new this.view.collection.model( model.toJSON( { copyHtmlCache: true } ) );
+
+		this.view.addChildModel( newModel, { at: newIndex } );
+
+		elementor.channels.data.trigger( draggedElType + ':drag:end' );
+
+		model.destroy();
+	},
+
+	onSortUpdate: function( event, ui ) {
+		event.stopPropagation();
+
+		var model = this.view.collection.get( ui.item.attr( 'data-model-cid' ) );
+		if ( model ) {
+			elementor.channels.data.trigger( model.get( 'elType' ) + ':drag:end' );
+		}
+	},
+
+	onSortStop: function( event, ui ) {
+		event.stopPropagation();
+
+		var $childElement = ui.item,
+			collection = this.view.collection,
+			model = collection.get( $childElement.attr( 'data-model-cid' ) ),
+			newIndex = $childElement.parent().children().index( $childElement );
+
+		if ( this.getChildViewContainer()[0] === ui.item.parent()[0] ) {
+			if ( null === ui.sender && model ) {
+				var oldIndex = collection.indexOf( model );
+
+				if ( oldIndex !== newIndex ) {
+					collection.remove( model );
+					this.view.addChildModel( model, { at: newIndex } );
+
+					elementor.setFlagEditorChange( true );
+				}
+
+				elementor.channels.data.trigger( model.get( 'elType' ) + ':drag:end' );
+			}
+		}
+	},
+
+	onAddChild: function( view ) {
+		view.$el.attr( 'data-model-cid', view.model.cid );
+	},
+
+	getChildViewContainer: function() {
+		if ( 'function' === typeof this.view.getChildViewContainer ) {
+			// CompositeView
+			return this.view.getChildViewContainer( this.view );
+		} else {
+			// CollectionView
+			return this.$el;
+		}
+	}
+} );
+
+module.exports = SortableBehavior;
+},{}],9:[function(require,module,exports){
+var InnerTabsBehavior = Marionette.Behavior.extend({
+
+    onRenderCollection: function () {
+        this.handleInnerTabs(this.view);
+    },
+
+    handleInnerTabs: function (parent) {
+        var closedClass = 'elementor-tab-close',
+            activeClass = 'elementor-tab-active';
+
+        var tabsWrappers = parent.children.filter(function (view) {
+            return view.model.get('type') === 'tabs';
+        });
+
+        _.each(tabsWrappers, function (wrapperView) {
+            wrapperView.$el.find('.elementor-control-content').remove();
+
+            var tabsWrapperId = wrapperView.model.get('name');
+
+            var tabs = parent.children.filter(function (childView) {
+                return childView.model.get('type') === 'tab' &&
+                    childView.model.get('tabs_wrapper') === tabsWrapperId;
+            });
+
+            _.each(tabs, function (tabView, index) {
+
+                wrapperView._addChildView(tabView);
+
+                var tabId = tabView.model.get('name');
+
+                tabView.$el
+                    .off('click.iqiTab')
+                    .on('click.iqiTab', function (event) {
+                        event.preventDefault();
+                        tabView.triggerMethod('control:tab:clicked');
+                    });
+
+                var controlsUnderTab = parent.children.filter(function (controlView) {
+                    return controlView.model.get('inner_tab') === tabId;
+                });
+
+                if (index === 0) {
+                    tabView.$el.addClass(activeClass);
+                } else {
+                    _.each(controlsUnderTab, function (controlView) {
+                        controlView.$el.addClass(closedClass);
+                    });
+                }
+            });
+        });
+    },
+
+    onChildviewControlTabClicked: function (childView) {
+        var closedClass = 'elementor-tab-close';
+        var activeClass = 'elementor-tab-active';
+
+        var clickedTabName = childView.model.get('name');
+        var tabsWrapperId = childView.model.get('tabs_wrapper');
+
+        var siblingTabs = this.view.children.filter(function (view) {
+            return view.model.get('type') === 'tab' &&
+                view.model.get('tabs_wrapper') === tabsWrapperId;
+        });
+
+        var tabNames = _.map(siblingTabs, function (view) {
+            return view.model.get('name');
+        });
+
+        var childrenUnderTab = this.view.children.filter(function (view) {
+            return _.contains(tabNames, view.model.get('inner_tab'));
+        });
+
+        _.each(siblingTabs, function (view) {
+            view.$el.removeClass(activeClass);
+        });
+
+        childView.$el.addClass(activeClass);
+
+        _.each(childrenUnderTab, function (view) {
+            if (view.model.get('inner_tab') === clickedTabName) {
+                view.$el.removeClass(closedClass);
+            } else {
+                view.$el.addClass(closedClass);
+            }
+        });
+
+        elementor.getPanelView().updateScrollbar();
+    }
+});
+
+module.exports = InnerTabsBehavior;
+},{}],10:[function(require,module,exports){
+var ContextMenuView = Marionette.ItemView.extend( {
+    tagName: 'div',
+    className: 'iqit-context-menu',
+    template: false, // On gère le HTML à la main
+
+    ui: {
+        list: '.iqit-context-menu-list'
+    },
+
+    events: {
+        'click .iqit-context-menu-item': 'onItemClick'
+    },
+
+    initialize: function() {
+        // Vue Marionette => même logique que Backbone.View, mais plus cohérente avec le reste
+        this.context = null;
+
+        this.$el.html( '<ul class="iqit-context-menu-list"></ul>' );
+        Backbone.$( 'body' ).append( this.el );
+        this.hide();
+
+        // On écoute un channel de l’éditeur
+        if ( elementor.channels && elementor.channels.editor ) {
+            this.listenTo( elementor.channels.editor, 'context-menu:open', this.onOpen );
+            this.listenTo( elementor.channels.editor, 'context-menu:close', this.hide.bind( this ) );
+        }
+    },
+
+    onOpen: function( payload ) {
+        var event  = payload.event,
+            view   = payload.view,
+            groups = payload.groups,
+            menuX = event.realClientX,
+            menuY = event.realClientY
+        ;
+
+        this.context = { event: event, view: view, groups: groups };
+        this.renderMenu();
+
+        // Positionner en fixed puis vérifier les limites de l'écran
+        this.$el.css( {
+            left: menuX,
+            top: menuY,
+            position: 'fixed'
+        } ).show();
+
+        // Empêcher le menu de sortir de l'écran
+        var menuWidth = this.$el.outerWidth(),
+            menuHeight = this.$el.outerHeight(),
+            winWidth = Backbone.$(window).width(),
+            winHeight = Backbone.$(window).height();
+
+        if (menuX + menuWidth > winWidth) {
+            menuX = winWidth - menuWidth - 5;
+        }
+        if (menuY + menuHeight > winHeight) {
+            menuY = winHeight - menuHeight - 5;
+        }
+
+        this.$el.css({ left: menuX, top: menuY });
+    },
+
+    hide: function() {
+        this.$el.hide();
+        this.context = null;
+    },
+
+    renderMenu: function() {
+        var $list = this.$( '.iqit-context-menu-list' );
+        $list.empty();
+
+        if ( ! this.context || ! this.context.groups ) {
+            return;
+        }
+
+
+        this.context.groups.forEach( function( group ) {
+            ( group.actions || [] ).forEach( function( action ) {
+
+                // Ajouter un séparateur avant si demandé
+                if (action.separator === 'before') {
+                    $list.append('<li class="iqit-context-menu-separator"></li>');
+                }
+
+                var $item = Backbone.$('<li class="iqit-context-menu-item" />')
+                    .attr('data-action', action.name)
+                    .data('actionData', action);
+
+                // Construire contenu avec icône si fournie
+                var text = action.title || action.name;
+                var iconHtml = action.icon ? '<span class="iqit-context-menu-icon">' + action.icon + '</span>' : '';
+
+                $item.html(iconHtml + '<span class="iqit-context-menu-label">' + text + '</span>');
+
+                $list.append( $item );
+            } );
+        } );
+    },
+
+
+    onItemClick: function( event ) {
+        event.stopPropagation();
+
+        var $item   = this.$( event.currentTarget ),
+            action  = $item.data( 'actionData' ),
+            context = this.context;
+
+        if ( action && 'function' === typeof action.callback ) {
+            action.callback( context );
+        }
+
+        this.hide();
+    }
+} );
+
+
+let singletonInstance = null;
+
+module.exports = function initContextMenu() {
+    if (!singletonInstance) {
+        singletonInstance = new ContextMenuView();
+    }
+}
+},{}],11:[function(require,module,exports){
+/**
+ * Navigator — Structure tree panel for iqitelementor editor.
+ *
+ * Provides a floating panel that displays the hierarchical structure
+ * of sections, columns and widgets. Supports drag & drop reordering,
+ * click-to-scroll, right-click context menu and expand/collapse.
+ */
+
+var NavigatorElementView,
+	NavigatorRootView,
+	NavigatorView;
+
+// ---------------------------------------------------------------------------
+// NavigatorElementView — recursive CompositeView for each element node
+// ---------------------------------------------------------------------------
+
+NavigatorElementView = Marionette.CompositeView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-navigator__elements' ),
+
+	className: function() {
+		var elType = this.model.get( 'elType' );
+		var cls = 'elementor-navigator__element elementor-navigator__element--' + elType;
+
+		if ( 'widget' === elType ) {
+			cls += ' elementor-navigator__element--' + this.model.get( 'widgetType' );
+		}
+
+		return cls;
+	},
+
+	childViewContainer: '.elementor-navigator__elements',
+
+	// Recursive reference — must use getChildView() instead of childView
+	// because Marionette 2.4 would try to instantiate childView as a constructor.
+	getChildView: function() {
+		return NavigatorElementView;
+	},
+
+	ui: {
+		item: '> .elementor-navigator__item',
+		listToggle: '> .elementor-navigator__item .elementor-navigator__element__list-toggle',
+		title: '> .elementor-navigator__item .elementor-navigator__element__title__text',
+		toggle: '> .elementor-navigator__item .elementor-navigator__element__toggle'
+	},
+
+	events: {
+		'click @ui.item': 'onItemClick',
+		'dblclick @ui.title': 'onTitleDblClick',
+		'click @ui.listToggle': 'onListToggleClick',
+		'click @ui.toggle': 'onVisibilityToggle',
+		'contextmenu @ui.item': 'onContextMenu'
+	},
+
+	templateHelpers: function() {
+		var elementData = elementor.getElementData( this.model );
+		var elType = this.model.get( 'elType' );
+		var icon = '';
+
+		if ( elementData && elementData.icon ) {
+			icon = 'eicon-' + elementData.icon;
+		}
+
+		// No icon for sections
+		if ( 'section' === elType ) {
+			icon = '';
+		}
+
+		return {
+			title: this.model.getTitle(),
+			icon: icon,
+			elType: elType
+		};
+	},
+
+	initialize: function() {
+		var elements = this.model.get( 'elements' );
+
+		if ( elements ) {
+			this.collection = elements;
+		}
+
+		// Listen for child changes to re-render the tree
+		if ( this.collection ) {
+			this.listenTo( this.collection, 'add remove reset', this.onElementsChanged );
+		}
+
+		// Listen for title/settings changes
+		this.listenTo( this.model.get( 'settings' ), 'change', this.onSettingsChanged );
+
+		// Collapsed state (default: sections collapsed, columns expanded)
+		this._collapsed = ( 'section' === this.model.get( 'elType' ) );
+	},
+
+	onRender: function() {
+		// Apply initial collapsed state
+		if ( this._collapsed ) {
+			this.$el.addClass( 'elementor-navigator__element--collapsed' );
+		}
+
+		// Widgets have no children — hide the toggle arrow
+		if ( 'widget' === this.model.get( 'elType' ) ) {
+			this.$el.addClass( 'elementor-navigator__element--no-children' );
+		}
+
+		// Init sortable for drag & drop reordering
+		this._initSortable();
+
+		// Set data attribute for model CID (used by sortable)
+		this.$el.attr( 'data-model-cid', this.model.cid );
+	},
+
+	onBeforeDestroy: function() {
+		var $container = this.$( '> .elementor-navigator__elements' );
+		if ( $container.sortable && $container.sortable( 'instance' ) ) {
+			$container.sortable( 'destroy' );
+		}
+	},
+
+	// -- Sortable ----------------------------------------------------------
+
+	_initSortable: function() {
+		var self = this;
+		var elType = this.model.get( 'elType' );
+
+		// Only sections and columns can have sortable children
+		if ( 'widget' === elType ) {
+			return;
+		}
+
+		var $container = this.$( '> .elementor-navigator__elements' );
+		if ( ! $container.length ) {
+			return;
+		}
+
+		var childType = ( 'section' === elType ) ? 'column' : 'widget';
+
+		// connectWith: allow dragging between siblings of the same type
+		var connectSelector = '.elementor-navigator__element--' + elType + ' > .elementor-navigator__elements';
+
+		$container.sortable( {
+			items: '> .elementor-navigator__element',
+			handle: '> .elementor-navigator__item',
+			connectWith: connectSelector,
+			placeholder: 'elementor-navigator__sortable-placeholder',
+			tolerance: 'pointer',
+			axis: 'y',
+			cursor: 'move',
+			containment: '#elementor-navigator',
+			start: function( event, ui ) {
+				ui.item.addClass( 'elementor-navigator__element--dragging' );
+			},
+			stop: function( event, ui ) {
+				ui.item.removeClass( 'elementor-navigator__element--dragging' );
+				self._onSortStop( event, ui, childType );
+			},
+			receive: function( event, ui ) {
+				self._onSortReceive( event, ui, childType );
+			}
+		} );
+	},
+
+	/**
+	 * Handle reorder within the same container.
+	 * Mirrors the approach from sortable.js: remove + addChildModel.
+	 */
+	_onSortStop: function( event, ui, childType ) {
+		event.stopPropagation();
+
+		var $item = ui.item;
+		var modelCid = $item.attr( 'data-model-cid' );
+		var model = this.collection.get( { cid: modelCid } );
+
+		if ( ! model ) {
+			return; // Moved to another container — handled by _onSortReceive
+		}
+
+		var newIndex = $item.parent().children( '.elementor-navigator__element' ).index( $item );
+		var oldIndex = this.collection.indexOf( model );
+
+		if ( oldIndex === newIndex ) {
+			return;
+		}
+
+		// Find the parent editor view and use its addChildModel (same as sortable.js)
+		var parentEditorView = this._findParentEditorViewForModel( this.model );
+
+		if ( parentEditorView ) {
+			// Suppress navigator re-render during sort (DOM already correct)
+			this._suppressRefresh = true;
+			parentEditorView.collection.remove( model );
+			parentEditorView.addChildModel( model, { at: newIndex } );
+			this._suppressRefresh = false;
+		}
+
+		elementor.setFlagEditorChange( true );
+	},
+
+	/**
+	 * Handle element received from another container.
+	 */
+	_onSortReceive: function( event, ui, childType ) {
+		event.stopPropagation();
+
+		var $item = ui.item;
+		var modelCid = $item.attr( 'data-model-cid' );
+		var newIndex = $item.parent().children( '.elementor-navigator__element' ).index( $item );
+
+		// Find the model in the source collection
+		var model = this._findModelByCid( elementor.elements, modelCid );
+
+		if ( ! model ) {
+			Backbone.$( ui.sender ).sortable( 'cancel' );
+			return;
+		}
+
+		// Validate: only same-type moves allowed
+		var modelElType = model.get( 'elType' );
+		var expectedChild = ( 'section' === this.model.get( 'elType' ) ) ? 'column' : 'widget';
+
+		if ( modelElType !== expectedChild ) {
+			Backbone.$( ui.sender ).sortable( 'cancel' );
+			return;
+		}
+
+		// Find target editor view
+		var targetEditorView = this._findParentEditorViewForModel( this.model );
+
+		if ( targetEditorView ) {
+			// Remove from old collection (triggers re-render in old parent)
+			model.destroy();
+
+			// Add to new parent in the editor using addChildModel
+			var newModel = new targetEditorView.collection.model( model.toJSON( { copyHtmlCache: true } ) );
+			targetEditorView.addChildModel( newModel, { at: newIndex } );
+		}
+
+		elementor.setFlagEditorChange( true );
+
+		// Full refresh needed for cross-container moves
+		elementor.channels.editor.trigger( 'navigator:refresh' );
+	},
+
+	/**
+	 * Recursively find a model by CID in nested collections.
+	 */
+	_findModelByCid: function( collection, cid ) {
+		var found = null;
+
+		collection.each( function( model ) {
+			if ( model.cid === cid ) {
+				found = model;
+				return false;
+			}
+			var children = model.get( 'elements' );
+			if ( children && children.length ) {
+				found = this._findModelByCid( children, cid );
+				if ( found ) {
+					return false;
+				}
+			}
+		}, this );
+
+		return found;
+	},
+
+	/**
+	 * Find the editor view that is the parent of a given model.
+	 * Traverses elementor.elements to find which collection holds the model,
+	 * then returns the editor view for that parent.
+	 */
+	_findParentEditorViewForModel: function( childModel ) {
+		// Top-level sections → parent is SectionsCollectionView
+		if ( elementor.elements.get( childModel ) ) {
+			return elementor.getRegion( 'sections' ).currentView;
+		}
+
+		// Search recursively for the collection that contains this model
+		var parentModel = this._findParentModel( elementor.elements, childModel );
+
+		if ( parentModel ) {
+			return this._findEditorView( parentModel );
+		}
+
+		return null;
+	},
+
+	/**
+	 * Find the parent model whose elements collection contains childModel.
+	 */
+	_findParentModel: function( collection, childModel ) {
+		var found = null;
+
+		collection.each( function( model ) {
+			if ( found ) {
+				return;
+			}
+			var children = model.get( 'elements' );
+			if ( children ) {
+				if ( children.get( childModel ) ) {
+					found = model;
+					return;
+				}
+				found = this._findParentModel( children, childModel );
+			}
+		}, this );
+
+		return found;
+	},
+
+	/**
+	 * Find the Marionette view in the editor that corresponds to a model.
+	 */
+	_findEditorView: function( model ) {
+		var sectionsView = elementor.getRegion( 'sections' ).currentView;
+
+		if ( ! sectionsView ) {
+			return null;
+		}
+
+		// Top-level sections view
+		if ( ! model.get( 'elType' ) ) {
+			return sectionsView;
+		}
+
+		return this._findViewRecursive( sectionsView, model );
+	},
+
+	_findViewRecursive: function( parentView, targetModel ) {
+		if ( ! parentView || ! parentView.children ) {
+			return null;
+		}
+
+		var found = parentView.children.findByModel( targetModel );
+		if ( found ) {
+			return found;
+		}
+
+		var result = null;
+		parentView.children.each( function( childView ) {
+			if ( ! result ) {
+				result = this._findViewRecursive( childView, targetModel );
+			}
+		}, this );
+
+		return result;
+	},
+
+	// -- Click handlers ----------------------------------------------------
+
+	onItemClick: function( event ) {
+		event.stopPropagation();
+
+		// Don't scroll if clicking on a toggle or list-toggle
+		if ( Backbone.$( event.target ).closest( '.elementor-navigator__element__list-toggle, .elementor-navigator__element__toggle' ).length ) {
+			return;
+		}
+
+		this._scrollToElement();
+		this._selectElement();
+
+		// Highlight active element in navigator
+		Backbone.$( '#elementor-navigator .elementor-navigator__element--active' ).removeClass( 'elementor-navigator__element--active' );
+		this.$el.addClass( 'elementor-navigator__element--active' );
+	},
+
+	onListToggleClick: function( event ) {
+		event.stopPropagation();
+		this._collapsed = ! this._collapsed;
+		this.$el.toggleClass( 'elementor-navigator__element--collapsed', this._collapsed );
+	},
+
+	onVisibilityToggle: function( event ) {
+		event.stopPropagation();
+		// Toggle hidden state visually (does not affect the actual rendering)
+		this.$el.toggleClass( 'elementor-navigator__element--hidden' );
+	},
+
+	onTitleDblClick: function( event ) {
+		event.stopPropagation();
+		// Allow inline renaming via contenteditable (optional UX)
+		var $text = this.ui.title;
+		$text.attr( 'contenteditable', 'true' ).focus();
+
+		var self = this;
+		$text.one( 'blur keydown', function( e ) {
+			if ( e.type === 'keydown' && e.keyCode !== 13 ) {
+				return;
+			}
+			e.preventDefault();
+			$text.removeAttr( 'contenteditable' );
+			var newTitle = $text.text().trim();
+			if ( newTitle ) {
+				self.model.get( 'settings' ).set( '_title', newTitle );
+			}
+		} );
+	},
+
+	onContextMenu: function( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		// Find the editor view for this model to get context menu groups
+		var editorView = this._findEditorView( this.model );
+		var groups = [];
+
+		if ( editorView && 'function' === typeof editorView.getContextMenuGroups ) {
+			groups = editorView.getContextMenuGroups();
+		} else {
+			// Fallback: basic edit/delete actions
+			var self = this;
+			groups = [ {
+				name: 'navigator',
+				actions: [
+					{
+						name: 'edit',
+						title: 'Edit ' + this.model.getTitle(),
+						icon: '<i class="eicon-edit"></i>',
+						callback: function() {
+							self._selectElement();
+						}
+					},
+					{
+						name: 'delete',
+						title: 'Delete',
+						icon: '<i class="fa fa-trash"></i>',
+						separator: 'before',
+						callback: function() {
+							self.model.destroy();
+						}
+					}
+				]
+			} ];
+		}
+
+		if ( ! groups.length ) {
+			return;
+		}
+
+		// Build fake event with real coordinates for the context menu
+		event.realClientX = event.clientX;
+		event.realClientY = event.clientY;
+
+		elementor.channels.editor.trigger( 'context-menu:open', {
+			event: event,
+			view: editorView || this,
+			groups: groups
+		} );
+	},
+
+	// -- Helpers -----------------------------------------------------------
+
+	_scrollToElement: function() {
+		var elementId = this.model.get( 'id' );
+		var $el = elementor.$previewContents.find( '.elementor-element-' + elementId );
+
+		if ( $el.length ) {
+			$el[0].scrollIntoView( { behavior: 'smooth', block: 'center' } );
+		}
+	},
+
+	_selectElement: function() {
+		// Find the actual editor view in the iframe and trigger click:edit
+		// so that the element gets the selection overlay + the panel opens
+		var editorView = this._findEditorView( this.model );
+
+		if ( editorView ) {
+			editorView.triggerMethod( 'click:edit' );
+		} else {
+			// Fallback: open panel directly
+			elementor.getPanelView().setPage( 'editor', this.model.getTitle(), {
+				model: this.model
+			} );
+		}
+	},
+
+	// -- Sync with editor --------------------------------------------------
+
+	onElementsChanged: function() {
+		// Don't re-render during navigator-initiated drag (DOM is already correct)
+		if ( this._suppressRefresh ) {
+			return;
+		}
+		this.render();
+	},
+
+	onSettingsChanged: function() {
+		// Update title if settings changed
+		if ( this.ui.title && this.ui.title.length ) {
+			this.ui.title.text( this.model.getTitle() );
+		}
+	}
+} );
+
+// ---------------------------------------------------------------------------
+// NavigatorRootView — CollectionView for top-level sections
+// ---------------------------------------------------------------------------
+
+NavigatorRootView = Marionette.CollectionView.extend( {
+	childView: NavigatorElementView,
+
+	className: 'elementor-navigator__elements elementor-navigator__elements--root',
+
+	initialize: function() {
+		this.listenTo( this.collection, 'add remove reset', this.onCollectionChanged );
+	},
+
+	onRender: function() {
+		this._initSortable();
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.$el.sortable && this.$el.sortable( 'instance' ) ) {
+			this.$el.sortable( 'destroy' );
+		}
+	},
+
+	_initSortable: function() {
+		var self = this;
+
+		this.$el.sortable( {
+			items: '> .elementor-navigator__element',
+			handle: '> .elementor-navigator__item',
+			placeholder: 'elementor-navigator__sortable-placeholder',
+			tolerance: 'pointer',
+			axis: 'y',
+			cursor: 'move',
+			containment: '#elementor-navigator',
+			start: function( event, ui ) {
+				ui.item.addClass( 'elementor-navigator__element--dragging' );
+			},
+			stop: function( event, ui ) {
+				ui.item.removeClass( 'elementor-navigator__element--dragging' );
+				self._onSortStop( event, ui );
+			}
+		} );
+	},
+
+	_onSortStop: function( event, ui ) {
+		var $item = ui.item;
+		var modelCid = $item.attr( 'data-model-cid' );
+		var model = this.collection.get( { cid: modelCid } );
+
+		if ( ! model ) {
+			return;
+		}
+
+		var newIndex = $item.parent().children( '.elementor-navigator__element' ).index( $item );
+		var oldIndex = this.collection.indexOf( model );
+
+		if ( oldIndex === newIndex ) {
+			return;
+		}
+
+		// Use the same approach as sortable.js: remove + addChildModel
+		var sectionsView = elementor.getRegion( 'sections' ).currentView;
+		if ( sectionsView ) {
+			this._suppressRefresh = true;
+			sectionsView.collection.remove( model );
+			sectionsView.addChildModel( model, { at: newIndex } );
+			this._suppressRefresh = false;
+		}
+
+		elementor.setFlagEditorChange( true );
+	},
+
+	onCollectionChanged: function() {
+		if ( this._suppressRefresh ) {
+			return;
+		}
+		this.render();
+	}
+} );
+
+// ---------------------------------------------------------------------------
+// NavigatorView — main layout (header + tree + footer)
+// ---------------------------------------------------------------------------
+
+NavigatorView = Marionette.LayoutView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-navigator' ),
+
+	el: '#elementor-navigator',
+
+	regions: {
+		elements: '#elementor-navigator__elements'
+	},
+
+	ui: {
+		toggleAll: '#elementor-navigator__toggle-all',
+		close: '#elementor-navigator__close',
+		header: '#elementor-navigator__header'
+	},
+
+	events: {
+		'click @ui.toggleAll': 'onToggleAll',
+		'click @ui.close': 'onClose'
+	},
+
+	_allExpanded: false,
+
+	initialize: function() {
+		this.listenTo( elementor.channels.editor, 'navigator:toggle', this.toggle );
+		this.listenTo( elementor.channels.editor, 'navigator:refresh', this.refreshTree );
+
+		// Listen for edit mode switches — hide navigator in preview mode
+		this.listenTo( elementor.channels.dataEditMode, 'switch', this.onEditModeSwitch );
+	},
+
+	onRender: function() {
+		// Show the root tree
+		this.refreshTree();
+
+		// Make the panel draggable by the header
+		this.$el.draggable( {
+			handle: '#elementor-navigator__header',
+			containment: 'window'
+		} );
+	},
+
+	refreshTree: function() {
+		this.getRegion( 'elements' ).show( new NavigatorRootView( {
+			collection: elementor.elements
+		} ) );
+	},
+
+	toggle: function() {
+		this.$el.toggleClass( 'elementor-navigator--open' );
+	},
+
+	show: function() {
+		this.$el.addClass( 'elementor-navigator--open' );
+	},
+
+	hide: function() {
+		this.$el.removeClass( 'elementor-navigator--open' );
+	},
+
+	onToggleAll: function() {
+		this._allExpanded = ! this._allExpanded;
+
+		var action = this._allExpanded ? 'removeClass' : 'addClass';
+
+		this.$el.find( '.elementor-navigator__element' )[ action ]( 'elementor-navigator__element--collapsed' );
+
+		// Update icon
+		this.ui.toggleAll
+			.toggleClass( 'eicon-expand', ! this._allExpanded )
+			.toggleClass( 'eicon-collapse', this._allExpanded );
+	},
+
+	onClose: function() {
+		this.hide();
+
+		// Deactivate the topbar button
+		Backbone.$( '#elementor-topbar-navigator' ).removeClass( 'active' );
+	},
+
+	onEditModeSwitch: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		if ( 'preview' === activeMode ) {
+			this.hide();
+		}
+	}
+} );
+
+// ---------------------------------------------------------------------------
+// Export — init function (called from editor.js)
+// ---------------------------------------------------------------------------
+
+var navigatorInstance = null;
+
+module.exports = {
+	init: function() {
+		if ( ! navigatorInstance ) {
+			navigatorInstance = new NavigatorView();
+			navigatorInstance.render();
+		}
+		return navigatorInstance;
+	},
+
+	getInstance: function() {
+		return navigatorInstance;
+	}
+};
+
+},{}],12:[function(require,module,exports){
+var StyleModel = require( 'elementor-styles/models/style' );
+
+var StyleCollection = Backbone.Collection.extend( {
+	model: StyleModel
+} );
+
+module.exports = StyleCollection;
+
+},{"elementor-styles/models/style":14}],13:[function(require,module,exports){
+var StyleLibraryLayoutView = require( 'elementor-styles/views/layout' ),
+	StyleCollection = require( 'elementor-styles/collections/styles' ),
+	StyleLibraryManager;
+
+StyleLibraryManager = function() {
+	var self = this,
+		modal,
+		deleteDialog,
+		layout,
+		stylesCollection;
+
+	// ------------------------------------------------------------------
+	//  Collection helpers
+	// ------------------------------------------------------------------
+
+	var ensureCollection = function() {
+		if ( ! stylesCollection ) {
+			var data = ( elementor.config && elementor.config.widgetStyles ) || [];
+			stylesCollection = new StyleCollection( data );
+		}
+	};
+
+	this.getStylesCollection = function() {
+		ensureCollection();
+		return stylesCollection;
+	};
+
+	/**
+	 * Return styles filtered by widget type.
+	 */
+	this.getStylesForWidget = function( widgetType ) {
+		ensureCollection();
+		return stylesCollection.filter( function( model ) {
+			return model.get( 'widget_type' ) === widgetType;
+		} );
+	};
+
+	/**
+	 * Return the default style for a widget type, or null.
+	 */
+	this.getDefaultStyle = function( widgetType ) {
+		ensureCollection();
+		return stylesCollection.find( function( model ) {
+			return model.get( 'widget_type' ) === widgetType && model.get( 'is_default' );
+		} ) || null;
+	};
+
+	// ------------------------------------------------------------------
+	//  Modal management
+	// ------------------------------------------------------------------
+
+	this.getModal = function() {
+		if ( ! modal ) {
+			modal = elementor.dialogsManager.createWidget( 'elementor-modal', {
+				id: 'elementor-style-library-modal',
+				closeButton: false
+			} );
+		}
+		return modal;
+	};
+
+	this.getLayout = function() {
+		return layout;
+	};
+
+	var initLayout = function() {
+		layout = new StyleLibraryLayoutView();
+	};
+
+	this.startModal = function( onReady ) {
+		self.getModal().show();
+
+		if ( ! layout ) {
+			initLayout();
+		}
+
+		layout.showLoadingView();
+
+		self.requestStyles( function() {
+			if ( onReady ) {
+				onReady();
+			}
+		} );
+	};
+
+	// ------------------------------------------------------------------
+	//  AJAX
+	// ------------------------------------------------------------------
+
+	this.requestStyles = function( callback, forceUpdate ) {
+		if ( stylesCollection && ! forceUpdate ) {
+			if ( callback ) {
+				callback();
+			}
+			return;
+		}
+
+		// Build collection from config loaded at page init
+		var data = ( elementor.config && elementor.config.widgetStyles ) || [];
+		stylesCollection = new StyleCollection( data );
+
+		if ( callback ) {
+			callback();
+		}
+	};
+
+	this.saveStyle = function( widgetType, name, settings, callback ) {
+		elementor.ajax.send( 'SaveWidgetStyle', {
+			data: {
+				widget_type: widgetType,
+				name: name,
+				settings: JSON.stringify( settings )
+			},
+			success: function( data ) {
+				if ( ! stylesCollection ) {
+					stylesCollection = new StyleCollection();
+				}
+
+				var newModel = stylesCollection.add( {
+					id_widget_style: data.id_widget_style,
+					widget_type: data.widget_type,
+					name: data.name,
+					settings: settings,
+					is_default: data.is_default
+				} );
+
+				// Also update the config cache
+				if ( ! elementor.config.widgetStyles ) {
+					elementor.config.widgetStyles = [];
+				}
+				elementor.config.widgetStyles.push( {
+					id_widget_style: data.id_widget_style,
+					widget_type: data.widget_type,
+					name: data.name,
+					settings: settings,
+					is_default: data.is_default
+				} );
+
+				if ( callback ) {
+					callback( newModel );
+				}
+			}
+		} );
+	};
+
+	// ------------------------------------------------------------------
+	//  Delete
+	// ------------------------------------------------------------------
+
+	this.getDeleteDialog = function() {
+		if ( ! deleteDialog ) {
+			deleteDialog = elementor.dialogsManager.createWidget( 'confirm', {
+				id: 'elementor-style-library-delete-dialog',
+				headerMessage: elementor.translate( 'delete_style' ),
+				message: elementor.translate( 'delete_style_confirm' ),
+				strings: {
+					confirm: elementor.translate( 'delete' )
+				}
+			} );
+		}
+		return deleteDialog;
+	};
+
+	this.deleteStyle = function( styleModel ) {
+		var dialog = self.getDeleteDialog();
+
+		dialog.onConfirm = function() {
+			elementor.ajax.send( 'DeleteWidgetStyle', {
+				data: {
+					id_widget_style: styleModel.get( 'id_widget_style' )
+				},
+				success: function() {
+					// Remove from config cache
+					self._removeFromConfigCache( styleModel.get( 'id_widget_style' ) );
+
+					stylesCollection.remove( styleModel, { silent: true } );
+					self.showStyles();
+				}
+			} );
+		};
+
+		dialog.show();
+	};
+
+	// ------------------------------------------------------------------
+	//  Set / unset default
+	// ------------------------------------------------------------------
+
+	this.toggleDefault = function( styleModel ) {
+		elementor.ajax.send( 'SetWidgetStyleDefault', {
+			data: {
+				id_widget_style: styleModel.get( 'id_widget_style' )
+			},
+			success: function( data ) {
+				var widgetType = styleModel.get( 'widget_type' );
+
+				// Reset all defaults for this widget type in collection
+				stylesCollection.each( function( m ) {
+					if ( m.get( 'widget_type' ) === widgetType ) {
+						m.set( 'is_default', 0, { silent: true } );
+					}
+				} );
+
+				styleModel.set( 'is_default', data.is_default );
+
+				// Update config cache
+				self._syncConfigCache();
+
+				// Re-render if modal is open
+				if ( layout ) {
+					self.showStyles();
+				}
+			}
+		} );
+	};
+
+	// ------------------------------------------------------------------
+	//  Apply a style to a widget model
+	// ------------------------------------------------------------------
+
+	this.applyStyle = function( styleModel, targetWidgetModel ) {
+		var settings = styleModel.get( 'settings' );
+		if ( ! settings || typeof settings !== 'object' ) {
+			return;
+		}
+
+		var targetSettings = targetWidgetModel.get( 'settings' );
+		if ( ! targetSettings ) {
+			return;
+		}
+
+		// Merge style settings onto the target widget
+		Object.keys( settings ).forEach( function( key ) {
+			// Skip system keys
+			if ( key === 'widgetType' || key === 'elType' || key === 'isInner' ) {
+				return;
+			}
+			targetSettings.set( key, settings[ key ] );
+		} );
+	};
+
+	// ------------------------------------------------------------------
+	//  View display
+	// ------------------------------------------------------------------
+
+	this.showStyles = function() {
+		layout.showStylesView( stylesCollection );
+	};
+
+	this.showSaveStyleView = function( widgetType, settings ) {
+		layout.showSaveStyleView( widgetType, settings );
+	};
+
+	// ------------------------------------------------------------------
+	//  Config cache helpers
+	// ------------------------------------------------------------------
+
+	this._removeFromConfigCache = function( id ) {
+		if ( ! elementor.config.widgetStyles ) {
+			return;
+		}
+		elementor.config.widgetStyles = elementor.config.widgetStyles.filter( function( s ) {
+			return s.id_widget_style !== id;
+		} );
+	};
+
+	this._syncConfigCache = function() {
+		if ( ! stylesCollection ) {
+			return;
+		}
+		elementor.config.widgetStyles = stylesCollection.toJSON();
+	};
+};
+
+module.exports = new StyleLibraryManager();
+
+},{"elementor-styles/collections/styles":12,"elementor-styles/views/layout":15}],14:[function(require,module,exports){
+var StyleModel = Backbone.Model.extend( {
+	defaults: {
+		id_widget_style: 0,
+		widget_type: '',
+		name: '',
+		settings: {},
+		is_default: 0
+	}
+} );
+
+module.exports = StyleModel;
+
+},{}],15:[function(require,module,exports){
+var StyleLibraryHeaderView = require( 'elementor-styles/views/parts/header' ),
+	StyleLibraryHeaderLogoView = require( 'elementor-styles/views/parts/header-logo' ),
+	StyleLibraryLoadingView = require( 'elementor-styles/views/parts/loading' ),
+	StyleLibraryCollectionView = require( 'elementor-styles/views/parts/styles' ),
+	StyleLibrarySaveView = require( 'elementor-styles/views/parts/save-style' ),
+	StyleLibraryLayoutView;
+
+StyleLibraryLayoutView = Marionette.LayoutView.extend( {
+	el: '#elementor-style-library-modal',
+
+	regions: {
+		modalContent: '.dialog-message',
+		modalHeader: '.dialog-widget-header'
+	},
+
+	initialize: function() {
+		this.getRegion( 'modalHeader' ).show( new StyleLibraryHeaderView() );
+	},
+
+	getHeaderView: function() {
+		return this.getRegion( 'modalHeader' ).currentView;
+	},
+
+	showLoadingView: function() {
+		this.getRegion( 'modalContent' ).show( new StyleLibraryLoadingView() );
+	},
+
+	showStylesView: function( stylesCollection ) {
+		this.getRegion( 'modalContent' ).show( new StyleLibraryCollectionView( {
+			collection: stylesCollection
+		} ) );
+
+		var headerView = this.getHeaderView();
+		headerView.logoArea.show( new StyleLibraryHeaderLogoView() );
+	},
+
+	showSaveStyleView: function( widgetType, settings ) {
+		this.getRegion( 'modalContent' ).show( new StyleLibrarySaveView( {
+			widgetType: widgetType,
+			settings: settings
+		} ) );
+
+		var headerView = this.getHeaderView();
+		headerView.logoArea.show( new StyleLibraryHeaderLogoView() );
+	}
+} );
+
+module.exports = StyleLibraryLayoutView;
+
+},{"elementor-styles/views/parts/header":17,"elementor-styles/views/parts/header-logo":16,"elementor-styles/views/parts/loading":18,"elementor-styles/views/parts/save-style":19,"elementor-styles/views/parts/styles":22}],16:[function(require,module,exports){
+var StyleLibraryHeaderLogoView;
+
+StyleLibraryHeaderLogoView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-style-library-header-logo',
+
+	id: 'elementor-style-library-header-logo',
+
+	events: {
+		'click': 'onClick'
+	},
+
+	onClick: function() {
+		elementor.styleLibrary.showStyles();
+	}
+} );
+
+module.exports = StyleLibraryHeaderLogoView;
+
+},{}],17:[function(require,module,exports){
+var StyleLibraryHeaderView;
+
+StyleLibraryHeaderView = Marionette.LayoutView.extend( {
+	id: 'elementor-style-library-header',
+
+	template: '#tmpl-elementor-style-library-header',
+
+	regions: {
+		logoArea: '#elementor-style-library-header-logo-area',
+		menuArea: '#elementor-style-library-header-menu-area'
+	},
+
+	ui: {
+		closeModal: '#elementor-style-library-header-close-modal'
+	},
+
+	events: {
+		'click @ui.closeModal': 'onCloseModalClick'
+	},
+
+	onCloseModalClick: function() {
+		elementor.styleLibrary.getModal().hide();
+	}
+} );
+
+module.exports = StyleLibraryHeaderView;
+
+},{}],18:[function(require,module,exports){
+var StyleLibraryLoadingView;
+
+StyleLibraryLoadingView = Marionette.ItemView.extend( {
+	id: 'elementor-style-library-loading',
+
+	template: '#tmpl-elementor-style-library-loading'
+} );
+
+module.exports = StyleLibraryLoadingView;
+
+},{}],19:[function(require,module,exports){
+var StyleLibrarySaveView;
+
+StyleLibrarySaveView = Marionette.ItemView.extend( {
+	id: 'elementor-style-library-save-style',
+
+	template: '#tmpl-elementor-style-library-save-style',
+
+	ui: {
+		form: '#elementor-style-library-save-style-form',
+		submitButton: '#elementor-style-library-save-style-submit',
+		nameInput: '#elementor-style-library-save-style-name',
+		widgetTypeInput: '#elementor-style-library-save-widget-type',
+		settingsInput: '#elementor-style-library-save-settings'
+	},
+
+	events: {
+		'submit @ui.form': 'onFormSubmit'
+	},
+
+	onRender: function() {
+		var widgetType = this.getOption( 'widgetType' ) || '';
+		var settings = this.getOption( 'settings' ) || {};
+
+		this.ui.widgetTypeInput.val( widgetType );
+		this.ui.settingsInput.val( JSON.stringify( settings ) );
+	},
+
+	onFormSubmit: function( event ) {
+		event.preventDefault();
+
+		var self = this;
+		var name = this.ui.nameInput.val().trim();
+		var widgetType = this.ui.widgetTypeInput.val();
+		var settings = this.getOption( 'settings' ) || {};
+
+		if ( ! name ) {
+			return;
+		}
+
+		self.ui.submitButton.addClass( 'elementor-btn-state' );
+
+		elementor.styleLibrary.saveStyle( widgetType, name, settings, function() {
+			elementor.styleLibrary.showStyles();
+		} );
+	}
+} );
+
+module.exports = StyleLibrarySaveView;
+
+},{}],20:[function(require,module,exports){
+var StyleItemView;
+
+StyleItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-style-library-style-item',
+
+	className: 'elementor-style-library-style-item',
+
+	ui: {
+		applyBtn: '.elementor-style-library-style-apply',
+		defaultBtn: '.elementor-style-library-style-default',
+		deleteBtn: '.elementor-style-library-style-delete'
+	},
+
+	events: {
+		'click @ui.deleteBtn': 'onDeleteClick',
+		'click @ui.defaultBtn': 'onDefaultClick'
+	},
+
+	modelEvents: {
+		'change:is_default': 'render'
+	},
+
+	onDeleteClick: function() {
+		elementor.styleLibrary.deleteStyle( this.model );
+	},
+
+	onDefaultClick: function() {
+		elementor.styleLibrary.toggleDefault( this.model );
+	}
+} );
+
+module.exports = StyleItemView;
+
+},{}],21:[function(require,module,exports){
+var StyleLibraryEmptyView;
+
+StyleLibraryEmptyView = Marionette.ItemView.extend( {
+	id: 'elementor-style-library-styles-empty',
+
+	template: '#tmpl-elementor-style-library-styles-empty'
+} );
+
+module.exports = StyleLibraryEmptyView;
+
+},{}],22:[function(require,module,exports){
+var StyleItemView = require( 'elementor-styles/views/parts/style-item' ),
+	StylesEmptyView = require( 'elementor-styles/views/parts/styles-empty' ),
+	StyleLibraryCollectionView;
+
+StyleLibraryCollectionView = Marionette.CompositeView.extend( {
+	template: '#tmpl-elementor-style-library-styles',
+
+	id: 'elementor-style-library-styles',
+
+	childViewContainer: '#elementor-style-library-styles-container',
+
+	emptyView: StylesEmptyView,
+
+	childView: StyleItemView,
+
+	ui: {
+		filterInput: '#elementor-style-library-filter-text'
+	},
+
+	events: {
+		'keyup @ui.filterInput': 'onFilterChange'
+	},
+
+	filter: function( childModel ) {
+		var filterText = this._filterText;
+
+		if ( ! filterText ) {
+			return true;
+		}
+
+		filterText = filterText.toLowerCase();
+
+		var name = ( childModel.get( 'name' ) || '' ).toLowerCase();
+		var widgetType = ( childModel.get( 'widget_type' ) || '' ).toLowerCase();
+
+		return name.indexOf( filterText ) >= 0 || widgetType.indexOf( filterText ) >= 0;
+	},
+
+	onFilterChange: function() {
+		this._filterText = this.ui.filterInput.val();
+		this._renderChildren();
+	}
+} );
+
+module.exports = StyleLibraryCollectionView;
+
+},{"elementor-styles/views/parts/style-item":20,"elementor-styles/views/parts/styles-empty":21}],23:[function(require,module,exports){
+var TemplateLibraryTemplateModel = require( 'elementor-templates/models/template' ),
+	TemplateLibraryCollection;
+
+TemplateLibraryCollection = Backbone.Collection.extend( {
+	model: TemplateLibraryTemplateModel
+} );
+
+module.exports = TemplateLibraryCollection;
+
+},{"elementor-templates/models/template":25}],24:[function(require,module,exports){
+var TemplateLibraryLayoutView = require( 'elementor-templates/views/layout' ),
+	TemplateLibraryCollection = require( 'elementor-templates/collections/templates' ),
+	TemplateLibraryManager;
+
+TemplateLibraryManager = function() {
+	var self = this,
+		modal,
+		deleteDialog,
+		errorDialog,
+		layout,
+		templatesCollection;
+
+	var initLayout = function() {
+		layout = new TemplateLibraryLayoutView();
+	};
+
+	this.deleteTemplate = function( templateModel ) {
+		var dialog = self.getDeleteDialog();
+
+		dialog.onConfirm = function() {
+			elementor.ajax.send( 'deleteTemplate', {
+				data: {
+					source: templateModel.get( 'source' ),
+					template_id: templateModel.get( 'template_id' )
+				},
+				success: function() {
+					templatesCollection.remove( templateModel, { silent: true } );
+
+					self.showTemplates();
+				}
+			} );
+		};
+
+		dialog.show();
+	};
+
+	this.importTemplate = function( templateModel ) {
+		layout.showLoadingView();
+
+		elementor.ajax.send( 'getTemplateContent', {
+			data: {
+				source: templateModel.get( 'source' ),
+				post_id: elementor.config.post_id,
+				template_id: templateModel.get( 'template_id' )
+			},
+			success: function( data ) {
+				self.getModal().hide();
+				var newdata = self.generateNewTemplateIds(data);
+
+				elementor.getRegion( 'sections' ).currentView.addChildModel( newdata );
+			},
+			error: function( data ) {
+				self.showErrorDialog( data.message );
+			}
+		} );
+	};
+
+	this.generateNewTemplateIds = function( data ) {
+
+		var newCollection = [];
+
+		data.forEach( function( model, index ) {
+			model.id = elementor.helpers.getUniqueID();
+			newCollection[index] =  model;
+
+			if(model.elements){
+				self.generateNewTemplateIds(model.elements);
+			}
+		} );
+
+		return newCollection;
+
+	};
+
+
+	this.getDeleteDialog = function() {
+		if ( ! deleteDialog ) {
+			deleteDialog = elementor.dialogsManager.createWidget( 'confirm', {
+				id: 'elementor-template-library-delete-dialog',
+				headerMessage: elementor.translate( 'delete_template' ),
+				message: elementor.translate( 'delete_template_confirm' ),
+				strings: {
+					confirm: elementor.translate( 'delete' )
+				}
+			} );
+		}
+
+		return deleteDialog;
+	};
+
+	this.getErrorDialog = function() {
+		if ( ! errorDialog ) {
+			errorDialog = elementor.dialogsManager.createWidget( 'alert', {
+				id: 'elementor-template-library-error-dialog',
+				headerMessage: elementor.translate( 'an_error_occurred' )
+			} );
+		}
+
+		return errorDialog;
+	};
+
+	this.getModal = function() {
+		if ( ! modal ) {
+			modal = elementor.dialogsManager.createWidget( 'elementor-modal', {
+				id: 'elementor-template-library-modal',
+				closeButton: false
+			} );
+		}
+
+		return modal;
+	};
+
+	this.getLayout = function() {
+		return layout;
+	};
+
+	this.getTemplatesCollection = function() {
+		return templatesCollection;
+	};
+
+	this.requestRemoteTemplates = function( callback, forceUpdate ) {
+		if ( templatesCollection && ! forceUpdate ) {
+			if ( callback ) {
+				callback();
+			}
+
+			return;
+		}
+
+		elementor.ajax.send( 'GetTemplates', {
+			success: function( data ) {
+				templatesCollection = new TemplateLibraryCollection( data );
+
+				if ( callback ) {
+					callback();
+				}
+			}
+		} );
+	};
+
+	this.startModal = function( onModalReady ) {
+		self.getModal().show();
+
+		self.setTemplatesSource( 'local' );
+
+		if ( ! layout ) {
+			initLayout();
+		}
+
+		layout.showLoadingView();
+
+		self.requestRemoteTemplates( function() {
+			if ( onModalReady ) {
+				onModalReady();
+			}
+		} );
+	};
+
+	this.setTemplatesSource = function( source, trigger ) {
+		var channel = elementor.channels.templates;
+
+		channel.reply( 'filter:source', source );
+
+		if ( trigger ) {
+			channel.trigger( 'filter:change' );
+		}
+	};
+
+	this.showTemplates = function() {
+		layout.showTemplatesView( templatesCollection );
+	};
+
+	this.showErrorDialog = function( errorMessage ) {
+		self.getErrorDialog()
+		    .setMessage( elementor.translate( 'templates_request_error' ) + '<div id="elementor-template-library-error-info">' + errorMessage + '</div>' )
+		    .show();
+	};
+};
+
+module.exports = new TemplateLibraryManager();
+
+},{"elementor-templates/collections/templates":23,"elementor-templates/views/layout":26}],25:[function(require,module,exports){
+var TemplateLibraryTemplateModel;
+
+TemplateLibraryTemplateModel = Backbone.Model.extend( {
+	defaults: {
+		template_id: 0,
+		name: '',
+		title: '',
+		source: '',
+		type: '',
+		author: '',
+		thumbnail: '',
+		url: '',
+		export_link: '',
+		categories: [],
+		keywords: []
+	}
+} );
+
+module.exports = TemplateLibraryTemplateModel;
+
+},{}],26:[function(require,module,exports){
+var TemplateLibraryHeaderView = require( 'elementor-templates/views/parts/header' ),
+	TemplateLibraryHeaderLogoView = require( 'elementor-templates/views/parts/header-parts/logo' ),
+	TemplateLibraryHeaderSaveView = require( 'elementor-templates/views/parts/header-parts/save' ),
+	TemplateLibraryHeaderLoadView = require( 'elementor-templates/views/parts/header-parts/load' ),
+	TemplateLibraryHeaderMenuView = require( 'elementor-templates/views/parts/header-parts/menu' ),
+	TemplateLibraryHeaderPreviewView = require( 'elementor-templates/views/parts/header-parts/preview' ),
+	TemplateLibraryHeaderBackView = require( 'elementor-templates/views/parts/header-parts/back' ),
+	TemplateLibraryLoadingView = require( 'elementor-templates/views/parts/loading' ),
+	TemplateLibraryCollectionView = require( 'elementor-templates/views/parts/templates' ),
+	TemplateLibrarySaveTemplateView = require( 'elementor-templates/views/parts/save-template' ),
+	TemplateLibraryLoadTemplateView = require( 'elementor-templates/views/parts/load-template' ),
+	TemplateLibraryPreviewView = require( 'elementor-templates/views/parts/preview' ),
+	TemplateLibraryLayoutView;
+
+TemplateLibraryLayoutView = Marionette.LayoutView.extend( {
+	el: '#elementor-template-library-modal',
+
+	regions: {
+		modalContent: '.dialog-message',
+		modalHeader: '.dialog-widget-header'
+	},
+
+	initialize: function() {
+		this.getRegion( 'modalHeader' ).show( new TemplateLibraryHeaderView() );
+	},
+
+	getHeaderView: function() {
+		return this.getRegion( 'modalHeader' ).currentView;
+	},
+
+	showLoadingView: function() {
+		this.getRegion( 'modalContent' ).show( new TemplateLibraryLoadingView() );
+	},
+
+	showTemplatesView: function( templatesCollection ) {
+		this.getRegion( 'modalContent' ).show( new TemplateLibraryCollectionView( {
+			collection: templatesCollection
+		} ) );
+
+		var headerView = this.getHeaderView();
+
+		headerView.tools.show( new TemplateLibraryHeaderSaveView() );
+		headerView.tools2.show( new TemplateLibraryHeaderLoadView() );
+		headerView.logoArea.show( new TemplateLibraryHeaderLogoView() );
+	},
+
+	showSaveTemplateView: function( sectionID ) {
+		this.getRegion( 'modalContent' ).show( new TemplateLibrarySaveTemplateView( { sectionID: sectionID } ) );
+
+		var headerView = this.getHeaderView();
+
+		headerView.tools.reset();
+		headerView.tools2.show( new TemplateLibraryHeaderLoadView() );
+		headerView.menuArea.show( new TemplateLibraryHeaderMenuView() );
+		headerView.logoArea.show( new TemplateLibraryHeaderLogoView() );
+	},
+
+	showLoadTemplateView: function( sectionID ) {
+		this.getRegion( 'modalContent' ).show( new TemplateLibraryLoadTemplateView( { sectionID: sectionID } ) );
+
+		var headerView = this.getHeaderView();
+
+		headerView.tools2.reset();
+		headerView.tools.show( new TemplateLibraryHeaderSaveView() );
+		headerView.menuArea.show( new TemplateLibraryHeaderMenuView() );
+		headerView.logoArea.show( new TemplateLibraryHeaderLogoView() );
+	},
+
+	showPreviewView: function( templateModel ) {
+		this.getRegion( 'modalContent' ).show( new TemplateLibraryPreviewView( {
+			url: templateModel.get( 'url' )
+		} ) );
+
+		var headerView = this.getHeaderView();
+
+		headerView.menuArea.reset();
+
+		headerView.tools.show( new TemplateLibraryHeaderPreviewView( {
+			model: templateModel
+		} ) );
+
+		headerView.logoArea.show( new TemplateLibraryHeaderBackView() );
+	}
+} );
+
+module.exports = TemplateLibraryLayoutView;
+
+},{"elementor-templates/views/parts/header":33,"elementor-templates/views/parts/header-parts/back":27,"elementor-templates/views/parts/header-parts/load":28,"elementor-templates/views/parts/header-parts/logo":29,"elementor-templates/views/parts/header-parts/menu":30,"elementor-templates/views/parts/header-parts/preview":31,"elementor-templates/views/parts/header-parts/save":32,"elementor-templates/views/parts/load-template":34,"elementor-templates/views/parts/loading":35,"elementor-templates/views/parts/preview":36,"elementor-templates/views/parts/save-template":37,"elementor-templates/views/parts/templates":39}],27:[function(require,module,exports){
+var TemplateLibraryHeaderBackView;
+
+TemplateLibraryHeaderBackView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-header-back',
+
+	id: 'elementor-template-library-header-preview-back',
+
+	events: {
+		'click': 'onClick'
+	},
+
+	onClick: function() {
+		elementor.templates.showTemplates();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderBackView;
+
+},{}],28:[function(require,module,exports){
+var TemplateLibraryHeaderLoadView;
+
+TemplateLibraryHeaderLoadView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-header-load',
+
+	id: 'elementor-template-library-header-load',
+
+	className: 'elementor-template-library-header-item',
+
+	events: {
+		'click': 'onClick'
+	},
+
+	onClick: function() {
+		elementor.templates.getLayout().showLoadTemplateView();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderLoadView;
+
+},{}],29:[function(require,module,exports){
+var TemplateLibraryHeaderLogoView;
+
+TemplateLibraryHeaderLogoView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-header-logo',
+
+	id: 'elementor-template-library-header-logo',
+
+	events: {
+		'click': 'onClick'
+	},
+
+	onClick: function() {
+		elementor.templates.setTemplatesSource( 'local' );
+		elementor.templates.showTemplates();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderLogoView;
+
+},{}],30:[function(require,module,exports){
+var TemplateLibraryHeaderMenuView;
+
+TemplateLibraryHeaderMenuView = Marionette.ItemView.extend( {
+	options: {
+		activeClass: 'elementor-active'
+	},
+
+	template: '#tmpl-elementor-template-library-header-menu',
+
+	id: 'elementor-template-library-header-menu',
+
+	ui: {
+		menuItems: '.elementor-template-library-menu-item'
+	},
+
+	events: {
+		'click @ui.menuItems': 'onMenuItemClick'
+	},
+
+	$activeItem: null,
+
+	activateMenuItem: function( $item ) {
+		var activeClass = this.getOption( 'activeClass' );
+
+		if ( this.$activeItem === $item ) {
+			return;
+		}
+
+		if ( this.$activeItem ) {
+			this.$activeItem.removeClass( activeClass );
+		}
+
+		$item.addClass( activeClass );
+
+		this.$activeItem = $item;
+	},
+
+	onRender: function() {
+		var currentSource = elementor.channels.templates.request( 'filter:source' ),
+			$sourceItem = this.ui.menuItems.filter( '[data-template-source="' + currentSource + '"]' );
+
+		this.activateMenuItem( $sourceItem );
+	},
+
+	onMenuItemClick: function( event ) {
+		var item = event.currentTarget;
+
+		this.activateMenuItem( Backbone.$( item ) );
+
+		elementor.templates.setTemplatesSource( 'local');
+		elementor.templates.showTemplates();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderMenuView;
+
+},{}],31:[function(require,module,exports){
+var TemplateLibraryHeaderPreviewView;
+
+TemplateLibraryHeaderPreviewView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-header-preview',
+
+	id: 'elementor-template-library-header-preview',
+
+	ui: {
+		insertButton: '#elementor-template-library-header-preview-insert'
+	},
+
+	events: {
+		'click @ui.insertButton': 'onInsertButtonClick'
+	},
+
+	onInsertButtonClick: function() {
+		elementor.templates.importTemplate( this.model );
+	}
+} );
+
+module.exports = TemplateLibraryHeaderPreviewView;
+
+},{}],32:[function(require,module,exports){
+var TemplateLibraryHeaderSaveView;
+
+TemplateLibraryHeaderSaveView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-header-save',
+
+	id: 'elementor-template-library-header-save',
+
+	className: 'elementor-template-library-header-item',
+
+	events: {
+		'click': 'onClick'
+	},
+
+	onClick: function() {
+		elementor.templates.getLayout().showSaveTemplateView();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderSaveView;
+
+},{}],33:[function(require,module,exports){
+var TemplateLibraryHeaderView;
+
+TemplateLibraryHeaderView = Marionette.LayoutView.extend( {
+
+	id: 'elementor-template-library-header',
+
+	template: '#tmpl-elementor-template-library-header',
+
+	regions: {
+		logoArea: '#elementor-template-library-header-logo-area',
+		tools: '#elementor-template-library-header-tools',
+		tools2: '#elementor-template-library-header-tools2',
+		menuArea: '#elementor-template-library-header-menu-area'
+	},
+
+	ui: {
+		closeModal: '#elementor-template-library-header-close-modal'
+	},
+
+	events: {
+		'click @ui.closeModal': 'onCloseModalClick'
+	},
+
+	onCloseModalClick: function() {
+		elementor.templates.getModal().hide();
+	}
+} );
+
+module.exports = TemplateLibraryHeaderView;
+
+},{}],34:[function(require,module,exports){
+var TemplateLibraryLoadTemplateView;
+
+TemplateLibraryLoadTemplateView = Marionette.ItemView.extend( {
+	id: 'elementor-template-library-load-template',
+
+	template: '#tmpl-elementor-template-library-load-template',
+
+	ui: {
+		form: '#elementor-template-library-load-template-form',
+		submitButton: '#elementor-template-library-load-template-submit',
+		fileInput: '#elementor-template-library-load-template-file',
+		fileInputNice: '#elementor-template-library-load-btn-file'
+	},
+
+	events: {
+		'submit @ui.form': 'onFormSubmit',
+		'change @ui.fileInput': 'onFileChange'
+	},
+
+
+	templateHelpers: function() {
+		return {
+			sectionID: this.getOption( 'sectionID' )
+		};
+	},
+
+	onFileChange: function() {
+		$(this.ui.fileInputNice).text($(this.ui.fileInput)[0].files[0].name);
+	},
+
+	onFormSubmit: function( event ) {
+		event.preventDefault();
+
+		this.ui.submitButton.addClass( 'elementor-btn-state' );
+
+		elementor.ajax.send( 'importTemplate', {
+			data: new FormData( this.ui.form[ 0 ] ),
+			processData: false,
+			contentType: false,
+			success: function( data ) {
+				elementor.templates.getTemplatesCollection().add( data );
+
+				elementor.templates.setTemplatesSource( 'local' );
+
+				elementor.templates.showTemplates();
+			},
+			error: function( data ) {
+				elementor.templates.showErrorDialog( data.message );
+			}
+		} );
+	}
+} );
+
+module.exports = TemplateLibraryLoadTemplateView;
+
+},{}],35:[function(require,module,exports){
+var TemplateLibraryLoadingView;
+
+TemplateLibraryLoadingView = Marionette.ItemView.extend( {
+	id: 'elementor-template-library-loading',
+
+	template: '#tmpl-elementor-template-library-loading'
+} );
+
+module.exports = TemplateLibraryLoadingView;
+
+},{}],36:[function(require,module,exports){
+var TemplateLibraryPreviewView;
+
+TemplateLibraryPreviewView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-template-library-preview',
+
+	id: 'elementor-template-library-preview',
+
+	ui: {
+		iframe: '> iframe'
+	},
+
+	onRender: function() {
+		this.ui.iframe.attr( 'src', this.getOption( 'url' ) );
+	}
+} );
+
+module.exports = TemplateLibraryPreviewView;
+
+},{}],37:[function(require,module,exports){
+var TemplateLibrarySaveTemplateView;
+
+TemplateLibrarySaveTemplateView = Marionette.ItemView.extend( {
+	id: 'elementor-template-library-save-template',
+
+	template: '#tmpl-elementor-template-library-save-template',
+
+	ui: {
+		form: '#elementor-template-library-save-template-form',
+		submitButton: '#elementor-template-library-save-template-submit'
+	},
+
+	events: {
+		'submit @ui.form': 'onFormSubmit'
+	},
+
+	templateHelpers: function() {
+		return {
+			sectionID: this.getOption( 'sectionID' )
+		};
+	},
+
+	onFormSubmit: function( event ) {
+		event.preventDefault();
+
+		var formData = this.ui.form.elementorSerializeObject(),
+			elementsData = elementor.helpers.cloneObject( elementor.elements.toJSON() ),
+			sectionID = this.getOption( 'sectionID' ),
+			saveType = sectionID ? 'section' : 'page';
+
+		if ( 'section' === saveType ) {
+			elementsData = [ _.findWhere( elementsData, { id: sectionID } ) ];
+		}
+
+		_.extend( formData, {
+			data: JSON.stringify( elementsData ),
+			source: 'local',
+			type: saveType
+		} );
+
+		this.ui.submitButton.addClass( 'elementor-btn-state' );
+
+		elementor.ajax.send( 'saveTemplate', {
+			data: formData,
+			success: function( data ) {
+				elementor.templates.getTemplatesCollection().add( data );
+
+				elementor.templates.setTemplatesSource( 'local' );
+
+				elementor.templates.showTemplates();
+			},
+			error: function( data ) {
+				elementor.templates.showErrorDialog( data.message );
+			}
+		} );
+	}
+} );
+
+module.exports = TemplateLibrarySaveTemplateView;
+
+},{}],38:[function(require,module,exports){
+var TemplateLibraryTemplatesEmptyView;
+
+TemplateLibraryTemplatesEmptyView = Marionette.ItemView.extend( {
+	id: 'elementor-template-library-templates-empty',
+
+	template: '#tmpl-elementor-template-library-templates-empty'
+} );
+
+module.exports = TemplateLibraryTemplatesEmptyView;
+
+},{}],39:[function(require,module,exports){
+var TemplateLibraryTemplateLocalView = require( 'elementor-templates/views/template/local' ),
+	TemplateLibraryTemplatesEmptyView = require( 'elementor-templates/views/parts/templates-empty' ),
+	TemplateLibraryCollectionView;
+
+TemplateLibraryCollectionView = Marionette.CompositeView.extend( {
+	template: '#tmpl-elementor-template-library-templates',
+
+	id: 'elementor-template-library-templates',
+
+	childViewContainer: '#elementor-template-library-templates-container',
+
+	emptyView: TemplateLibraryTemplatesEmptyView,
+
+	getChildView: function( childModel ) {
+		return TemplateLibraryTemplateLocalView;
+	},
+
+	initialize: function() {
+		this.listenTo( elementor.channels.templates, 'filter:change', this._renderChildren );
+	},
+
+	filterByName: function( model ) {
+		var filterValue = elementor.channels.templates.request( 'filter:text' );
+
+		if ( ! filterValue ) {
+			return true;
+		}
+
+		filterValue = filterValue.toLowerCase();
+
+		if ( model.get( 'title' ).toLowerCase().indexOf( filterValue ) >= 0 ) {
+			return true;
+		}
+
+		return _.any( model.get( 'keywords' ), function( keyword ) {
+			return keyword.toLowerCase().indexOf( filterValue ) >= 0;
+		} );
+	},
+
+	filterBySource: function( model ) {
+		var filterValue = elementor.channels.templates.request( 'filter:source' );
+
+		if ( ! filterValue ) {
+			return true;
+		}
+
+		return filterValue === model.get( 'source' );
+	},
+
+	filter: function( childModel ) {
+		return this.filterByName( childModel ) && this.filterBySource( childModel );
+	},
+
+	onRenderCollection: function() {
+		var isEmpty = this.children.isEmpty();
+
+		this.$childViewContainer.attr( 'data-template-source', isEmpty ? 'empty' : elementor.channels.templates.request( 'filter:source' ) );
+	}
+} );
+
+module.exports = TemplateLibraryCollectionView;
+
+},{"elementor-templates/views/parts/templates-empty":38,"elementor-templates/views/template/local":41}],40:[function(require,module,exports){
+
+TemplateLibraryTemplateView = Marionette.ItemView.extend( {
+	className: function() {
+		return 'elementor-template-library-template elementor-template-library-template-' + this.model.get( 'source' );
+	},
+
+	ui: function() {
+		return {
+			insertButton: '.elementor-template-library-template-insert',
+			previewButton: '.elementor-template-library-template-preview'
+		};
+	},
+
+	events: function() {
+		return {
+			'click @ui.insertButton': 'onInsertButtonClick',
+			'click @ui.previewButton': 'onPreviewButtonClick'
+		};
+	},
+
+	onInsertButtonClick: function() {
+		elementor.templates.importTemplate( this.model );
+	}
+} );
+
+module.exports = TemplateLibraryTemplateView;
+
+},{}],41:[function(require,module,exports){
+var TemplateLibraryTemplateView = require( 'elementor-templates/views/template/base' ),
+	TemplateLibraryTemplateLocalView;
+
+TemplateLibraryTemplateLocalView = TemplateLibraryTemplateView.extend( {
+	template: '#tmpl-elementor-template-library-template-local',
+
+	ui: function() {
+		return _.extend( TemplateLibraryTemplateView.prototype.ui.apply( this, arguments ), {
+			deleteButton: '.elementor-template-library-template-delete'
+		} );
+	},
+
+	events: function() {
+		return _.extend( TemplateLibraryTemplateView.prototype.events.apply( this, arguments ), {
+			'click @ui.deleteButton': 'onDeleteButtonClick'
+		} );
+	},
+
+	onDeleteButtonClick: function() {
+		elementor.templates.deleteTemplate( this.model );
+	},
+
+	onPreviewButtonClick: function() {
+		open( this.model.get( 'url' ), '_blank' );
+	}
+} );
+
+module.exports = TemplateLibraryTemplateLocalView;
+
+},{"elementor-templates/views/template/base":40}],42:[function(require,module,exports){
+/* global ElementorConfig */
+var App;
+
+/**
+ * Render an icon value in content_template (underscore.js) contexts.
+ * Handles both new JSON format and legacy plain CSS class strings.
+ *
+ * Usage in content_template: {{{ elementorRenderIcon(settings.icon) }}}
+ */
+window.elementorRenderIcon = function( value ) {
+	if ( ! value ) {
+		return '';
+	}
+
+	var parsed = null;
+
+	if ( typeof value === 'object' && value !== null ) {
+		parsed = value;
+	} else if ( typeof value === 'string' ) {
+		if ( value.charAt( 0 ) === '{' ) {
+			try {
+				parsed = JSON.parse( value );
+			} catch ( e ) {
+				parsed = null;
+			}
+		}
+	}
+
+	if ( parsed ) {
+		if ( parsed.value ) {
+			return '<i class="' + parsed.value + '"></i>';
+		}
+	}
+
+	// Legacy: plain CSS class string
+	if ( typeof value === 'string' && value.length > 0 ) {
+		return '<i class="' + value + '"></i>';
+	}
+
+	return '';
+};
+
+Marionette.TemplateCache.prototype.compileTemplate = function( rawTemplate, options ) {
+	options = {
+		evaluate: /<#([\s\S]+?)#>/g,
+		interpolate: /\{\{\{([\s\S]+?)\}\}\}/g,
+		escape: /\{\{([^\}]+?)\}\}(?!\})/g
+	};
+
+	return _.template( rawTemplate, options );
+};
+
+App = Marionette.Application.extend( {
+	helpers: require( 'elementor-utils/helpers' ),
+	schemes: require( 'elementor-utils/schemes' ),
+	presetsFactory: require( 'elementor-utils/presets-factory' ),
+	modals: require( 'elementor-utils/modals' ),
+	introduction: require( 'elementor-utils/introduction' ),
+	templates: require( 'elementor-templates/manager' ),
+	styleLibrary: require( 'elementor-styles/manager' ),
+	ajax: require( 'elementor-utils/ajax' ),
+
+	channels: {
+		editor: Backbone.Radio.channel( 'ELEMENTOR:editor' ),
+		data: Backbone.Radio.channel( 'ELEMENTOR:data' ),
+		panelElements: Backbone.Radio.channel( 'ELEMENTOR:panelElements' ),
+		dataEditMode: Backbone.Radio.channel( 'ELEMENTOR:editmode' ),
+		deviceMode: Backbone.Radio.channel( 'ELEMENTOR:deviceMode' ),
+		templates: Backbone.Radio.channel( 'ELEMENTOR:templates' )
+	},
+
+	// Private Members
+	_controlsItemView: null,
+
+	_defaultDeviceMode: 'desktop',
+
+	getElementData: function( modelElement ) {
+		var elType = modelElement.get( 'elType' );
+
+		if ( 'widget' === elType ) {
+			var widgetType = modelElement.get( 'widgetType' );
+
+			if ( ! this.config.widgets[ widgetType ] ) {
+				return false;
+			}
+
+			return this.config.widgets[ widgetType ];
+		}
+
+		if ( ! this.config.elements[ elType ] ) {
+			return false;
+		}
+
+		return this.config.elements[ elType ];
+	},
+
+	getElementControls: function( modelElement ) {
+		var elementData = this.getElementData( modelElement );
+
+		if ( ! elementData ) {
+			return false;
+		}
+
+		var elType = modelElement.get( 'elType' ),
+			isInner = modelElement.get( 'isInner' );
+
+		if ( 'widget' === elType ) {
+			return elementData.controls;
+		}
+
+		return _.filter( elementData.controls, function( controlData ) {
+			return ! ( isInner && controlData.hide_in_inner || ! isInner && controlData.hide_in_top );
+		} );
+	},
+
+	getControlItemView: function( controlType ) {
+		if ( null === this._controlsItemView ) {
+			this._controlsItemView = {
+				color: require( 'elementor-views/controls/color' ),
+				dimensions: require( 'elementor-views/controls/dimensions' ),
+				image_dimensions: require( 'elementor-views/controls/image-dimensions' ),
+				media: require( 'elementor-views/controls/media' ),
+				slider: require( 'elementor-views/controls/slider' ),
+				wysiwyg: require( 'elementor-views/controls/wysiwyg' ),
+				autocomplete_products: require( 'elementor-views/controls/autocomplete-products' ),
+				autocomplete_posts: require( 'elementor-views/controls/autocomplete-posts' ),
+				choose: require( 'elementor-views/controls/choose' ),
+				url: require( 'elementor-views/controls/url' ),
+				font: require( 'elementor-views/controls/font' ),
+				section: require( 'elementor-views/controls/section' ),
+				repeater: require( 'elementor-views/controls/repeater' ),
+				wp_widget: require( 'elementor-views/controls/wp_widget' ),
+				icon: require( 'elementor-views/controls/icon' ),
+				gallery: require( 'elementor-views/controls/gallery' ),
+				select2: require( 'elementor-views/controls/select2' ),
+				select_sort: require( 'elementor-views/controls/select-sort' ),
+				box_shadow: require( 'elementor-views/controls/box-shadow' ),
+				text_shadow: require( 'elementor-views/controls/text-shadow' ),
+				structure: require( 'elementor-views/controls/structure' ),
+				animation: require( 'elementor-views/controls/animation' ),
+				hover_animation: require( 'elementor-views/controls/animation' ),
+				datetime: require( 'elementor-views/controls/datetime'),
+				code: require( 'elementor-views/controls/code' ),
+				popover_toggle: require( 'elementor-views/controls/popover-toggle' )
+			};
+
+			this.channels.editor.trigger( 'editor:controls:initialize' );
+		}
+
+		return this._controlsItemView[ controlType ] || require( 'elementor-views/controls/base' );
+	},
+
+	getPanelView: function() {
+		return this.getRegion( 'panel' ).currentView;
+	},
+
+	initComponents: function() {
+		this.initDialogsManager();
+
+		this.modals.init();
+		this.ajax.init();
+
+		const initContextMenu = require("./components/context-menu");
+		initContextMenu(this);
+	},
+
+	initDialogsManager: function() {
+		this.dialogsManager = new DialogsManager.Instance();
+	},
+
+	initPreview: function() {
+		this.$previewWrapper = Backbone.$( '#elementor-preview' );
+
+		this.$previewResponsiveWrapper = Backbone.$( '#elementor-preview-responsive-wrapper' );
+
+		var previewIframeId = 'elementor-preview-iframe';
+
+		// Make sure the iFrame does not exist.
+		if ( ! Backbone.$( '#' + previewIframeId ).length ) {
+			var previewIFrame = document.createElement( 'iframe' );
+
+			previewIFrame.id = previewIframeId;
+		    previewIFrame.src = this.config.preview_link + '&ts=' + ( new Date().getTime() );
+
+			this.$previewResponsiveWrapper.append( previewIFrame );
+		}
+
+		this.$preview = Backbone.$( '#' + previewIframeId );
+
+		this.$preview.on( 'load', _.bind( this.onPreviewLoaded, this ) );
+	},
+
+	initFrontend: function() {
+		elementorFrontend.setScopeWindow( this.$preview[0].contentWindow );
+
+		elementorFrontend.init();
+	},
+
+	onStart: function() {
+		NProgress.start();
+		NProgress.inc( 0.2 );
+
+		this.config = ElementorConfig;
+
+		Backbone.Radio.DEBUG = false;
+		Backbone.Radio.tuneIn( 'ELEMENTOR' );
+
+		this.initComponents();
+
+		// Init Base elements collection from the server
+		var ElementModel = require( 'elementor-models/element' );
+
+		this.elements = new ElementModel.Collection( this.config.data );
+
+		this.initPreview();
+
+		this.listenTo( this.channels.dataEditMode, 'switch', this.onEditModeSwitched );
+
+		this.setWorkSaver();
+
+		this.initClearPageDialog();
+		this.initLostPageDialog();
+		this.initIeEdgeDialog();
+
+	},
+
+	onPreviewLoaded: function() {
+		NProgress.done();
+
+		this.initFrontend();
+
+		this.$previewContents = this.$preview.contents();
+
+		var SectionsCollectionView = require( 'elementor-views/sections' ),
+			PanelLayoutView = require( 'elementor-layouts/panel/panel' );
+
+		var $previewElementorEl = this.$previewContents.find( '#elementor' );
+
+		if ( ! $previewElementorEl.length ) {
+			this.onPreviewElNotFound();
+			return;
+		}
+
+		var iframeRegion = new Marionette.Region( {
+			// Make sure you get the DOM object out of the jQuery object
+			el: $previewElementorEl[0]
+		} );
+
+		this.schemes.init();
+		this.schemes.printSchemesStyle();
+
+		this.$previewContents.on( 'click', function( event ) {
+			var $target = Backbone.$( event.target ),
+				editMode = elementor.channels.dataEditMode.request( 'activeMode' ),
+				isClickInsideElementor = !! $target.closest( '#elementor' ).length,
+				isTargetInsideDocument = this.contains( $target[0] );
+
+			if ( isClickInsideElementor && 'preview' !== editMode || ! isTargetInsideDocument ) {
+				return;
+			}
+
+			if ( $target.closest( 'a' ).length ) {
+				event.preventDefault();
+			}
+
+			if ( ! isClickInsideElementor ) {
+				elementor.getPanelView().setPage( 'elements' );
+			}
+		} );
+		/*console.log( this.$previewContents );
+
+		// Right-click context menu handling inside the preview iframe
+		this.$previewContents.on( 'contextmenu', function( event ) {
+			console.log( 'IQIT ContextMenu: native contextmenu event detected', event );
+
+			var $target = Backbone.$( event.target ),
+				isClickInsideElementor = !! $target.closest( '#elementor' ).length,
+				isTargetInsideDocument = this.contains( $target[0] );
+
+			// Ignore right-clicks en dehors de la zone Elementor ou hors du document
+			if ( ! isClickInsideElementor || ! isTargetInsideDocument ) {
+				return;
+			}
+
+			// Empêche le menu contextuel natif du navigateur
+			event.preventDefault();
+
+			console.log( 'IQIT ContextMenu: native contextmenu captured on', $target[0] );
+
+			// TODO: retrouver la vue Backbone/Marionette associée à l'élément cliqué
+			var clickedView = null;
+
+			// Déclenchement de l'événement interne consommé par ContextMenuView
+			elementor.channels.editor.trigger( 'context-menu:open', {
+				event: event,
+				view: clickedView,
+				groups: []
+			} );
+		} );*/
+
+		this.addRegions( {
+			sections: iframeRegion,
+			panel: '#elementor-panel',
+			topBar: '#elementor-topbar'
+		} );
+
+		this.getRegion( 'sections' ).show( new SectionsCollectionView( {
+			collection: this.elements
+		} ) );
+
+		this.getRegion( 'panel' ).show( new PanelLayoutView() );
+
+		var TopBarItemView = require( 'elementor-layouts/panel/topbar' );
+		this.getRegion( 'topBar' ).show( new TopBarItemView() );
+
+		// Init Navigator
+		var navigator = require( 'elementor-components/navigator' );
+		this.navigator = navigator.init();
+
+		this.$previewContents
+		    .children() // <html>
+		    .addClass( 'elementor-html' )
+		    .children( 'body' )
+		    .addClass( 'elementor-editor-active' );
+
+		this.setResizablePanel();
+
+		this.changeDeviceMode( this._defaultDeviceMode );
+
+		Backbone.$( '#elementor-loading' ).fadeOut( 600 );
+
+		_.defer( function() {
+			elementorFrontend.getScopeWindow().jQuery.holdReady( false );
+		} );
+
+		this.enqueueTypographyFonts();
+
+		//this.introduction.startOnLoadIntroduction(); // TEMP Removed
+
+		this.trigger( 'preview:loaded' );
+
+		var browserVersion = this.detectIE();
+
+		if (browserVersion != false){
+			this.getIeEdgeDialog().show();
+		}
+	},
+
+	onEditModeSwitched: function() {
+		var activeMode = elementor.channels.dataEditMode.request( 'activeMode' );
+
+		if ( 'preview' === activeMode ) {
+			this.enterPreviewMode();
+		} else {
+			this.exitPreviewMode();
+		}
+	},
+
+	onPreviewElNotFound: function() {
+		var dialog = this.dialogsManager.createWidget( 'confirm', {
+			id: 'elementor-fatal-error-dialog',
+			headerMessage: elementor.translate( 'preview_el_not_found_header' ),
+			message: elementor.translate( 'preview_el_not_found_message' ),
+			position: {
+				my: 'center center',
+				at: 'center center'
+			},
+            strings: {
+				confirm: elementor.translate( 'learn_more' ),
+				cancel: elementor.translate( 'go_back' )
+            },
+			onConfirm: function() {
+				open( elementor.config.maintance_url_settings, '_blank' );
+			},
+			onCancel: function() {
+				parent.history.go( -1 );
+			},
+			hideOnButtonClick: false
+		} );
+
+		dialog.show();
+	},
+
+	setFlagEditorChange: function( status ) {
+		elementor.channels.editor.reply( 'editor:changed', status );
+		elementor.channels.editor.trigger( 'editor:changed', status );
+	},
+
+	isEditorChanged: function() {
+		return ( true === elementor.channels.editor.request( 'editor:changed' ) );
+	},
+
+	setWorkSaver: function() {
+		Backbone.$( window ).on( 'beforeunload', function() {
+			if ( elementor.isEditorChanged() ) {
+				return elementor.translate( 'before_unload_alert' );
+			}
+		} );
+	},
+
+	setResizablePanel: function() {
+		var self = this,
+			side = elementor.config.is_rtl ? 'right' : 'left';
+
+		self.panel.$el.resizable( {
+			handles: elementor.config.is_rtl ? 'w' : 'e',
+			minWidth: 200,
+			maxWidth: 500,
+			start: function() {
+				self.$previewWrapper
+					.addClass( 'ui-resizable-resizing' )
+					.css( 'pointer-events', 'none' );
+			},
+			stop: function() {
+				self.$previewWrapper
+					.removeClass( 'ui-resizable-resizing' )
+					.css( 'pointer-events', '' );
+
+				elementor.channels.data.trigger( 'scrollbar:update' );
+			},
+			resize: function( event, ui ) {
+				self.$previewWrapper
+					.css( side, ui.size.width );
+			}
+		} );
+	},
+
+	enterPreviewMode: function() {
+		this.$previewContents
+		    .find( 'body' )
+		    .add( 'body' )
+		    .removeClass( 'elementor-editor-active' )
+		    .addClass( 'elementor-editor-preview' );
+
+		// Handle panel resize
+		this.$previewWrapper.css( elementor.config.is_rtl ? 'right' : 'left', '' );
+
+		this.panel.$el.css( 'width', '' );
+	},
+
+	exitPreviewMode: function() {
+		this.$previewContents
+		    .find( 'body' )
+		    .add( 'body' )
+		    .removeClass( 'elementor-editor-preview' )
+		    .addClass( 'elementor-editor-active' );
+	},
+
+	saveBuilder: function( options ) {
+		options = _.extend( {
+			revision: 'draft',
+			onSuccess: null
+		}, options );
+
+		NProgress.start();
+
+		let elements = elementor.elements.toJSON();
+		for (let i = 0; i < elements.length; i++) {
+			elements[i] = this.cleanEmptyValues(elements[i]);
+		}
+
+		return this.ajax.send( 'SaveEditor', {
+	        data: {
+		        page_id: this.config.post_id,
+				id_lang: this.config.id_lang,
+				new_content: this.config.new_content,
+				content_type: this.config.content_type,
+				page_type: this.config.page_type,
+		        revision: options.revision,
+		        data: JSON.stringify( elements )
+	        },
+			success: function( data ) {
+				NProgress.done();
+
+				elementor.setFlagEditorChange( false );
+
+				if ( _.isFunction( options.onSuccess ) ) {
+					options.onSuccess.call( this, data );
+				}
+			}
+        } );
+	},
+
+	cleanEmptyValues: function(element) {
+		//console.log('Before cleaning:', element);
+		//element = this._cleanEmptyData(element);
+		//console.log('After cleaning:', element);
+		return element;
+	},
+
+	_cleanEmptyData: function(data) {
+		// Si tableau → nettoyer chaque entrée récursivement et supprimer les entrées vides
+		if (Array.isArray(data)) {
+			const cleanedArray = data
+				.map(item => this._cleanEmptyData(item))
+				.filter(item => {
+					if (item === null || item === undefined || item === '') {
+						return false;
+					}
+
+					if (Array.isArray(item) && item.length === 0) {
+						return false;
+					}
+
+					if (item && typeof item === 'object' && !Array.isArray(item) && Object.keys(item).length === 0) {
+						return false;
+					}
+
+					return true;
+				});
+
+			return cleanedArray;
+		}
+
+		// Si objet → nettoyer chaque clé récursivement
+		if (data && typeof data === 'object') {
+			const cleanedObj = {};
+
+			Object.keys(data).forEach(key => {
+				const value = this._cleanEmptyData(data[key]);
+
+				const isEmpty =
+					value === null ||
+					value === undefined ||
+					value === '' ||
+					(Array.isArray(value) && value.length === 0) ||
+					(value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+
+				if (!isEmpty) {
+					cleanedObj[key] = value;
+				}
+			});
+
+			// Si l'objet ne contient qu'une seule clé 'unit', on le considère comme vide
+			const keys = Object.keys(cleanedObj);
+			if (keys.length === 1 && keys[0] === 'unit') {
+				return {};
+			}
+
+			return cleanedObj;
+		}
+
+		// Valeur primitive → retourner tel quel
+		return data;
+	},
+
+	changeDeviceMode: function( newDeviceMode ) {
+		var oldDeviceMode = this.channels.deviceMode.request( 'currentMode' );
+
+		if ( oldDeviceMode === newDeviceMode ) {
+			return;
+		}
+
+		Backbone.$( 'body' )
+			.removeClass( 'elementor-device-' + oldDeviceMode )
+			.addClass( 'elementor-device-' + newDeviceMode );
+
+		this.channels.deviceMode
+			.reply( 'previousMode', oldDeviceMode )
+			.reply( 'currentMode', newDeviceMode )
+			.trigger( 'change' );
+
+		Backbone.$( window ).trigger('changedDeviceMode');
+	},
+
+	initClearPageDialog: function() {
+		var self = this,
+			dialog;
+
+		self.getClearPageDialog = function() {
+			if ( dialog ) {
+				return dialog;
+			}
+
+			dialog = this.dialogsManager.createWidget( 'confirm', {
+				id: 'elementor-clear-page-dialog',
+				headerMessage: elementor.translate( 'clear_page' ),
+				message: elementor.translate( 'dialog_confirm_clear_page' ),
+				position: {
+					my: 'center center',
+					at: 'center center'
+				},
+				onConfirm: function() {
+					self.getRegion( 'sections' ).currentView.collection.reset();
+				}
+			} );
+
+			return dialog;
+		};
+	},
+
+	initLostPageDialog: function() {
+		var self = this,
+			dialog;
+
+		self.getLostPageDialog = function() {
+			if ( dialog ) {
+				return dialog;
+			}
+
+			dialog = this.dialogsManager.createWidget( 'confirm', {
+				id: 'elementor-clear-page-dialog',
+				headerMessage: elementor.translate( 'changes_lost' ),
+				message: elementor.translate( 'dialog_confirm_changes_lost' ),
+				position: {
+					my: 'center center',
+					at: 'center center'
+				},
+				onConfirm: function() {
+					Backbone.$( '#elementor-loading, #elementor-preview-loading' ).fadeIn( 600 );
+					window.location.href =  self.addUrlParam(window.location.href, 'idLang', id_lang);
+				}
+			} );
+
+			return dialog;
+		};
+	},
+
+	initIeEdgeDialog: function() {
+		var self = this,
+			dialog;
+
+		self.getIeEdgeDialog = function() {
+			if ( dialog ) {
+				return dialog;
+			}
+
+			dialog = this.dialogsManager.createWidget( 'alert', {
+				id: 'elementor-ie-edge-dialog',
+				headerMessage: elementor.translate( 'ie_edge_browser' ),
+				message: elementor.translate( 'ie_edge_browser_info' ),
+				position: {
+					my: 'center center',
+					at: 'center center'
+				},
+				onConfirm: function() {
+					window.location = elementor.config.edit_post_link;
+				}
+			} );
+
+			return dialog;
+		};
+	},
+
+	clearPage: function() {
+		this.getClearPageDialog().show();
+	},
+
+	changeLanguage: function(id_lang, ignore) {
+
+		if ( elementor.isEditorChanged() ) {
+			self.id_lang = id_lang;
+			this.getLostPageDialog().show();
+			return false;
+		}
+		Backbone.$( '#elementor-loading, #elementor-preview-loading' ).fadeIn( 600 );
+		window.location.href = this.addUrlParam(window.location.href, 'idLang', id_lang);
+
+	},
+
+	detectIE: function() {
+		var ua = window.navigator.userAgent;
+
+		var msie = ua.indexOf('MSIE ');
+		if (msie > 0) {
+			return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+		}
+
+		var trident = ua.indexOf('Trident/');
+		if (trident > 0) {
+			var rv = ua.indexOf('rv:');
+			return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+		}
+
+		var edge = ua.indexOf('Edge/');
+		if (edge > 0) {
+			return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+		}
+		return false;
+	},
+
+	addUrlParam: function(url, param, value){
+		var a = document.createElement('a'), regex = /(?:\?|&amp;|&)+([^=]+)(?:=([^&]*))*/g;
+		var match, str = []; a.href = url; param = encodeURIComponent(param);
+
+		while (match = regex.exec(a.search)){
+			if (param != match[1]) str.push(match[1]+(match[2]?"="+match[2]:""));
+		}
+
+		str.push(param+(value?"="+ encodeURIComponent(value):""));
+		a.search = str.join("&");
+		return a.href;
+	},
+
+
+
+	enqueueTypographyFonts: function() {
+		var self = this,
+			typographyScheme = this.schemes.getScheme( 'typography' );
+
+		_.each( typographyScheme.items, function( item ) {
+			self.helpers.enqueueFont( item.value.font_family );
+		} );
+	},
+
+	translate: function( stringKey, templateArgs ) {
+		var string = this.config.i18n[ stringKey ];
+
+		if ( undefined === string ) {
+			string = stringKey;
+		}
+
+		if ( templateArgs ) {
+			string = string.replace( /{(\d+)}/g, function( match, number ) {
+				return undefined !== templateArgs[ number ] ? templateArgs[ number ] : match;
+			} );
+		}
+
+		return string;
+	}
+} );
+
+module.exports = ( window.elementor = new App() ).start();
+
+},{"./components/context-menu":10,"elementor-components/navigator":11,"elementor-layouts/panel/panel":67,"elementor-layouts/panel/topbar":68,"elementor-models/element":71,"elementor-styles/manager":13,"elementor-templates/manager":24,"elementor-utils/ajax":77,"elementor-utils/helpers":78,"elementor-utils/introduction":79,"elementor-utils/modals":82,"elementor-utils/presets-factory":83,"elementor-utils/schemes":84,"elementor-views/controls/animation":88,"elementor-views/controls/autocomplete-posts":89,"elementor-views/controls/autocomplete-products":90,"elementor-views/controls/base":93,"elementor-views/controls/box-shadow":94,"elementor-views/controls/choose":95,"elementor-views/controls/code":96,"elementor-views/controls/color":97,"elementor-views/controls/datetime":98,"elementor-views/controls/dimensions":99,"elementor-views/controls/font":100,"elementor-views/controls/gallery":101,"elementor-views/controls/icon":102,"elementor-views/controls/image-dimensions":103,"elementor-views/controls/media":104,"elementor-views/controls/popover-toggle":105,"elementor-views/controls/repeater":107,"elementor-views/controls/section":108,"elementor-views/controls/select-sort":109,"elementor-views/controls/select2":110,"elementor-views/controls/slider":111,"elementor-views/controls/structure":112,"elementor-views/controls/text-shadow":113,"elementor-views/controls/url":114,"elementor-views/controls/wp_widget":115,"elementor-views/controls/wysiwyg":116,"elementor-views/sections":119}],43:[function(require,module,exports){
+var EditModeItemView;
+
+EditModeItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-mode-switcher-content',
+
+	id: 'elementor-mode-switcher-inner',
+
+	ui: {
+		previewButton: '#elementor-mode-switcher-preview-input',
+		previewLabel: '#elementor-mode-switcher-preview',
+		previewLabelA11y: '#elementor-mode-switcher-preview .elementor-screen-only'
+	},
+
+	events: {
+		'change @ui.previewButton': 'onEditModeChange'
+	},
+
+	getCurrentMode: function() {
+		return this.ui.previewButton.is( ':checked' ) ? 'preview' : 'edit';
+	},
+
+	setMode: function( mode ) {
+		this.ui.previewButton.prop( 'checked', 'preview' === mode );
+	},
+
+	onRender: function() {
+		this.onEditModeChange();
+	},
+
+	onEditModeChange: function() {
+		var dataEditMode = elementor.channels.dataEditMode,
+			oldEditMode = dataEditMode.request( 'activeMode' ),
+			currentMode = this.getCurrentMode();
+
+		dataEditMode.reply( 'activeMode', currentMode );
+
+		if ( currentMode !== oldEditMode ) {
+			dataEditMode.trigger( 'switch' );
+
+			var title = 'preview' === currentMode ? 'Back to Editor' : 'Preview';
+
+			this.ui.previewLabel.attr( 'title', title );
+			this.ui.previewLabelA11y.text( title );
+		}
+	}
+} );
+
+module.exports = EditModeItemView;
+
+},{}],44:[function(require,module,exports){
+var PanelFooterItemView;
+
+PanelFooterItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-footer-content',
+
+	tagName: 'nav',
+
+	id: 'elementor-panel-footer-tools',
+
+	possibleRotateModes: [ 'portrait', 'landscape' ],
+
+	ui: {
+		menuButtons: '.elementor-panel-footer-tool',
+		deviceModeIcon: '#elementor-panel-footer-responsive > i',
+		deviceModeButtons: '#elementor-panel-footer-responsive .elementor-panel-footer-sub-menu-item',
+		buttonSave: '#elementor-panel-footer-save',
+		buttonSaveButton: '#elementor-panel-footer-save .elementor-btn',
+		buttonPublish: '#elementor-panel-footer-publish',
+		watchTutorial: '#elementor-panel-footer-watch-tutorial',
+		showTemplates: '#elementor-panel-footer-templates-modal',
+		saveTemplate: '#elementor-panel-footer-save-template',
+		buttonGoBackoffice: '#elementor-panel-footer-view-edit-page',
+	},
+
+	events: {
+		'click @ui.deviceModeButtons': 'onClickResponsiveButtons',
+		'click @ui.buttonSave': 'onClickButtonSave',
+		'click @ui.buttonPublish': 'onClickButtonPublish',
+		'click @ui.watchTutorial': 'onClickWatchTutorial',
+		'click @ui.showTemplates': 'onClickShowTemplates',
+		'click @ui.buttonGoBackoffice': 'onClickButtonGoBackoffice',
+		'click @ui.saveTemplate': 'onClickSaveTemplate'
+	},
+
+	initialize: function() {
+		this._initDialog();
+
+		this.listenTo( elementor.channels.editor, 'editor:changed', this.onEditorChanged )
+			.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
+	},
+
+	_initDialog: function() {
+		var dialog;
+
+		this.getDialog = function() {
+			if ( ! dialog ) {
+				var $ = Backbone.$,
+					$dialogMessage = $( '<div>', {
+						'class': 'elementor-dialog-message'
+					} ),
+					$messageIcon = $( '<i>', {
+						'class': 'fa fa-check-circle'
+					} ),
+					$messageText = $( '<div>', {
+						'class': 'elementor-dialog-message-text'
+					} ).text( elementor.translate( 'saved' ) );
+
+				$dialogMessage.append( $messageIcon, $messageText );
+
+				dialog = elementor.dialogsManager.createWidget( 'popup', {
+					hide: {
+						delay: 1500
+					}
+				} );
+
+				dialog.setMessage( $dialogMessage );
+			}
+
+			return dialog;
+		};
+	},
+
+	_publishBuilder: function() {
+		var self = this;
+
+		var options = {
+			revision: 'publish',
+			onSuccess: function() {
+				self.getDialog().show();
+
+				self.ui.buttonSaveButton.removeClass( 'elementor-btn-state' );
+			}
+		};
+
+		self.ui.buttonSaveButton.addClass( 'elementor-btn-state' );
+
+		elementor.saveBuilder( options );
+	},
+
+	_saveBuilderDraft: function() {
+		elementor.saveBuilder();
+	},
+
+	getDeviceModeButton: function( deviceMode ) {
+		return this.ui.deviceModeButtons.filter( '[data-device-mode="' + deviceMode + '"]' );
+	},
+
+	onPanelClick: function( event ) {
+		var $target = Backbone.$( event.target ),
+			isClickInsideOfTool = $target.closest( '.elementor-panel-footer-sub-menu-wrapper' ).length;
+
+		if ( isClickInsideOfTool ) {
+			return;
+		}
+
+		var $tool = $target.closest( '.elementor-panel-footer-tool' ),
+			isClosedTool = $tool.length && ! $tool.hasClass( 'elementor-open' );
+
+		this.ui.menuButtons.removeClass( 'elementor-open' );
+
+		if ( isClosedTool ) {
+			$tool.addClass( 'elementor-open' );
+		}
+	},
+
+	onEditorChanged: function() {
+		this.ui.buttonSave.toggleClass( 'elementor-save-active', elementor.isEditorChanged() );
+	},
+
+	onDeviceModeChange: function() {
+		var previousDeviceMode = elementor.channels.deviceMode.request( 'previousMode' ),
+			currentDeviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+
+		this.getDeviceModeButton( previousDeviceMode ).removeClass( 'active' );
+
+		this.getDeviceModeButton( currentDeviceMode ).addClass( 'active' );
+
+		// Change the footer icon
+		this.ui.deviceModeIcon.removeClass( 'eicon-device-' + previousDeviceMode ).addClass( 'eicon-device-' + currentDeviceMode );
+	},
+
+	onClickButtonSave: function() {
+		this._publishBuilder();
+	},
+
+	onClickButtonPublish: function( event ) {
+		// Prevent click on save button
+		event.stopPropagation();
+
+		this._publishBuilder();
+	},
+
+	onClickResponsiveButtons: function( event ) {
+		var $clickedButton = this.$( event.currentTarget ),
+			newDeviceMode = $clickedButton.data( 'device-mode' );
+
+		elementor.changeDeviceMode( newDeviceMode );
+	},
+
+	onClickWatchTutorial: function() {
+		elementor.introduction.startIntroduction();
+	},
+
+	onClickShowTemplates: function() {
+		elementor.templates.startModal( function() {
+			elementor.templates.showTemplates();
+		} );
+	},
+
+	onClickSaveTemplate: function() {
+		elementor.templates.startModal( function() {
+			elementor.templates.getLayout().showSaveTemplateView();
+		} );
+	},
+
+	onClickButtonGoBackoffice: function(e) {
+		e.preventDefault();
+		window.location = elementor.config.edit_post_link;
+	},
+
+	onRender: function() {
+		var self = this;
+
+		_.defer( function() {
+			elementor.getPanelView().$el.on( 'click', _.bind( self.onPanelClick, self ) );
+		} );
+	}
+} );
+
+module.exports = PanelFooterItemView;
+
+},{}],45:[function(require,module,exports){
+var PanelHeaderItemView;
+
+PanelHeaderItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-header',
+
+	id: 'elementor-panel-header',
+
+	ui: {
+		menuButton: '#elementor-panel-header-menu-button',
+		title: '#elementor-panel-header-title',
+		addButton: '#elementor-panel-header-add-button'
+	},
+
+	events: {
+		'click @ui.addButton': 'onClickAdd',
+		'click @ui.menuButton': 'onClickMenu'
+	},
+
+	setTitle: function( title ) {
+		this.ui.title.html( title );
+	},
+
+	onClickAdd: function() {
+		elementor.getPanelView().setPage( 'elements' );
+	},
+
+	onClickMenu: function() {
+		var panel = elementor.getPanelView(),
+			currentPanelPageName = panel.getCurrentPageName(),
+			nextPage = 'menu' === currentPanelPageName ? 'elements' : 'menu';
+
+		panel.setPage( nextPage );
+	}
+} );
+
+module.exports = PanelHeaderItemView;
+
+},{}],46:[function(require,module,exports){
+var InnerTabsBehavior = require('../../../behaviors/tabs');
+
+var EditorCompositeView = Marionette.CompositeView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-editor-content' ),
+
+	id: 'elementor-panel-page-editor',
+
+	classes: {
+		popover: 'elementor-controls-popover'
+	},
+
+	behaviors: {
+		HandleInnerTabs: {
+			behaviorClass: InnerTabsBehavior
+		}
+	},
+
+	templateHelpers: function() {
+		return {
+			elementData: elementor.getElementData( this.model )
+		};
+	},
+
+	childViewContainer: 'div.elementor-controls',
+
+	modelEvents: {
+		'destroy': 'onModelDestroy'
+	},
+
+	ui: {
+		'tabs': '.elementor-tabs-controls li'
+	},
+
+	events: {
+		'click @ui.tabs a': 'onClickTabControl'
+	},
+
+	initialize: function() {
+		this.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
+	},
+
+	getChildView: function( item ) {
+		var controlType = item.get( 'type' );
+		return elementor.getControlItemView( controlType );
+	},
+
+	childViewOptions: function() {
+		return {
+			elementSettingsModel: this.model.get( 'settings' ),
+			elementEditSettings: this.model.get( 'editSettings' )
+		};
+	},
+
+	onDestroy: function() {
+		this.getOption( 'editedElementView' ).$el.removeClass( 'elementor-element-editable' );
+		this.model.trigger( 'editor:close' );
+
+		this.triggerMethod( 'editor:destroy' );
+	},
+
+	onBeforeRender: function() {
+		var controls = elementor.getElementControls( this.model.get( 'settings' ) );
+
+		if ( ! controls ) {
+			throw new Error( 'Editor controls not found' );
+		}
+
+		// Create new instance of that collection
+		this.collection = new Backbone.Collection( controls );
+	},
+
+	onRender: function() {
+		this.getOption( 'editedElementView' ).$el.addClass( 'elementor-element-editable' );
+
+		// Wrap section controls in a container
+		this.wrapSectionsControls();
+
+		// Handle popovers
+		this.handlePopovers();
+
+		// Set the first tab as active
+		this.ui.tabs.eq( 0 ).find( 'a' ).trigger( 'click' );
+
+		// Create tooltip on controls
+		this.$( '.tooltip-target' ).tipsy( {
+			gravity: function() {
+				// `n` for down, `s` for up
+				var gravity = Backbone.$( this ).data( 'tooltip-pos' );
+
+				if ( undefined !== gravity ) {
+					return gravity;
+				} else {
+					return 'n';
+				}
+			},
+			title: function() {
+				return this.getAttribute( 'data-tooltip' );
+			}
+		} );
+
+	},
+
+	wrapSectionsControls: function() {
+		var $controlsContainer = this.$( 'div.elementor-controls' ),
+			$sections = $controlsContainer.find( '> .elementor-control-type-section' );
+
+		$sections.each( function() {
+			var $section = Backbone.$( this ),
+				sectionName = $section.find( '[data-collapse_id]' ).data( 'collapse_id' ),
+				$wrapper = Backbone.$( '<div class="elementor-section-wrapper elementor-section-wrapper-' + sectionName + '"></div>' ),
+				$header = Backbone.$( '<div class="elementor-section-header"></div>' ),
+				$content = Backbone.$( '<div class="elementor-section-content"></div>' ),
+				$nextControls = $section.nextUntil( '.elementor-control-type-section' );
+
+			// Insert wrapper before the section
+			$section.before( $wrapper );
+
+			// Build the structure: wrapper > header + content
+			$header.append( $section );
+			$content.append( $nextControls );
+			$wrapper.append( $header );
+			$wrapper.append( $content );
+		} );
+	},
+
+	/**
+	 * Handle popovers.
+	 *
+	 * Groups controls that belong to a popover into a container div.
+	 */
+	handlePopovers: function() {
+		var self = this,
+			popoverStarted = false,
+			$popover;
+
+		self.removePopovers();
+
+		self.children.each( function( child ) {
+			if ( popoverStarted ) {
+				$popover.append( child.$el );
+			}
+
+			var popover = child.model.get( 'popover' );
+
+			if ( ! popover ) {
+				return;
+			}
+
+			if ( popover.start ) {
+				popoverStarted = true;
+				$popover = Backbone.$( '<div>', {
+					'class': self.classes.popover
+				} );
+				child.$el.before( $popover );
+				$popover.append( child.$el );
+			}
+
+			if ( popover.end ) {
+				popoverStarted = false;
+			}
+		} );
+	},
+
+	/**
+	 * Remove popovers.
+	 *
+	 * Removes all popover containers from the DOM.
+	 */
+	removePopovers: function() {
+		this.$el.find( '.' + this.classes.popover ).remove();
+	},
+
+	onModelDestroy: function() {
+		this.destroy();
+	},
+
+	onClickTabControl: function( event ) {
+		event.preventDefault();
+
+		var $thisTab = this.$( event.target );
+
+		this.ui.tabs.removeClass( 'active' );
+		$thisTab.closest( 'li' ).addClass( 'active' );
+
+		this.model.get( 'settings' ).trigger( 'control:switch:tab', $thisTab.data( 'tab' ) );
+
+		this.openFirstSectionInCurrentTab( $thisTab.data( 'tab' ) );
+	},
+
+	onDeviceModeChange: function() {
+		var self = this;
+
+		self.$el.removeClass( 'elementor-responsive-switchers-open' );
+
+		// Timeout according to preview resize css animation duration
+		setTimeout( function() {
+			elementor.$previewContents.find( 'html, body' ).animate( {
+				scrollTop: self.getOption( 'editedElementView' ).$el.offset().top - elementor.$preview[0].contentWindow.innerHeight / 2
+			} );
+		}, 500 );
+	},
+
+	/**
+	 * Opens the first section in the current tab.
+	 */
+	openFirstSectionInCurrentTab: function( currentTab ) {
+		var openedClass = 'elementor-open',
+			self = this,
+
+			firstSectionControlView = this.children.filter( function( view ) {
+				return ( 'section' === view.model.get( 'type' ) ) && ( currentTab === view.model.get( 'tab' ) );
+			} );
+
+		// Check if found any section controls
+		if ( _.isEmpty( firstSectionControlView ) ) {
+			return;
+		}
+
+		// Close all sections first
+		self.$( '.elementor-section-wrapper' ).removeClass( openedClass );
+		self.$( '.elementor-control.elementor-control-type-section .elementor-panel-heading' ).removeClass( openedClass );
+
+		// Open the first section
+		firstSectionControlView = firstSectionControlView[0];
+		firstSectionControlView.ui.heading.addClass( openedClass );
+		firstSectionControlView.$el.closest( '.elementor-section-wrapper' ).addClass( openedClass );
+	},
+
+	onChildviewControlSectionClicked: function( childView ) {
+		var openedClass = 'elementor-open',
+			$wrapper = childView.$el.closest( '.elementor-section-wrapper' ),
+			isSectionOpen = $wrapper.hasClass( openedClass );
+
+		// Close all sections
+		this.$( '.elementor-section-wrapper' ).removeClass( openedClass );
+		this.$( '.elementor-control.elementor-control-type-section .elementor-panel-heading' ).removeClass( openedClass );
+
+		// If the clicked section was not open, open it
+		if ( ! isSectionOpen ) {
+			childView.ui.heading.addClass( openedClass );
+			$wrapper.addClass( openedClass );
+		}
+
+		elementor.channels.data.trigger( 'scrollbar:update' );
+	}
+} );
+
+module.exports = EditorCompositeView;
+
+},{"../../../behaviors/tabs":9}],47:[function(require,module,exports){
+var PanelElementsCategory = require( '../models/element' ),
+	PanelElementsCategoriesCollection;
+
+PanelElementsCategoriesCollection = Backbone.Collection.extend( {
+	model: PanelElementsCategory
+} );
+
+module.exports = PanelElementsCategoriesCollection;
+
+},{"../models/element":50}],48:[function(require,module,exports){
+var PanelElementsElementModel = require( '../models/element' ),
+	PanelElementsElementsCollection;
+
+PanelElementsElementsCollection = Backbone.Collection.extend( {
+	model: PanelElementsElementModel/*,
+	comparator: 'title'*/
+} );
+
+module.exports = PanelElementsElementsCollection;
+
+},{"../models/element":50}],49:[function(require,module,exports){
+var PanelElementsCategoriesCollection = require( './collections/categories' ),
+	PanelElementsElementsCollection = require( './collections/elements' ),
+	PanelElementsCategoriesView = require( './views/categories' ),
+	PanelElementsElementsView = require( './views/elements' ),
+	PanelElementsSearchView = require( './views/search' ),
+	PanelElementsLanguageselectorView = require( './views/languageselector' ),
+	PanelElementsLayoutView;
+
+PanelElementsLayoutView = Marionette.LayoutView.extend( {
+	template: '#tmpl-elementor-panel-elements',
+
+	regions: {
+		elements: '#elementor-panel-elements-wrapper',
+		search: '#elementor-panel-elements-search-area',
+		languageselector: '#elementor-panel-elements-languageselector-area'
+	},
+
+	elementsCollection: null,
+
+	categoriesCollection: null,
+
+	initialize: function() {
+		this.listenTo( elementor.channels.panelElements, 'element:selected', this.destroy );
+	},
+
+	initElementsCollection: function() {
+		var elementsCollection = new PanelElementsElementsCollection(),
+			sectionConfig = elementor.config.elements.section;
+
+		elementsCollection.add( {
+			title: elementor.translate( 'inner_section' ),
+			elType: 'section',
+			categories: sectionConfig.categories,
+			keywords: sectionConfig.keywords,
+			icon: sectionConfig.icon
+		} );
+
+		// TODO: Change the array from server syntax, and no need each loop for initialize
+		_.each( elementor.config.widgets, function( element, widgetType ) {
+			elementsCollection.add( {
+				title: element.title,
+				elType: 'widget',
+				categories: element.categories,
+				keywords: element.keywords,
+				icon: element.icon,
+				widgetType: widgetType
+			} );
+		} );
+
+		this.elementsCollection = elementsCollection;
+	},
+
+	initCategoriesCollection: function() {
+		var categories = {};
+
+		this.elementsCollection.each( function( element ) {
+			_.each( element.get( 'categories' ), function( category ) {
+				if ( ! categories[ category ] ) {
+					categories[ category ] = [];
+				}
+
+				categories[ category ].push( element );
+			} );
+		} );
+
+		var categoriesCollection = new PanelElementsCategoriesCollection();
+
+		_.each( elementor.config.elements_categories, function( categoryConfig, categoryName ) {
+			if ( ! categories[ categoryName ] ) {
+				return;
+			}
+
+			categoriesCollection.add( {
+				name: categoryName,
+				title: categoryConfig.title,
+				icon: categoryConfig.icon,
+				items: categories[ categoryName ]
+			} );
+		} );
+
+		this.categoriesCollection = categoriesCollection;
+	},
+
+	showCategoriesView: function() {
+		this.getRegion( 'elements' ).show( new PanelElementsCategoriesView( { collection: this.categoriesCollection } ) );
+	},
+
+	showElementsView: function() {
+		this.getRegion( 'elements' ).show( new PanelElementsElementsView( { collection: this.elementsCollection } ) );
+	},
+
+	clearSearchInput: function() {
+		this.getChildView( 'search' ).clearInput();
+	},
+
+	changeFilter: function( filterValue ) {
+		elementor.channels.panelElements
+			.reply( 'filter:value', filterValue )
+			.trigger( 'change' );
+	},
+
+	clearFilters: function() {
+		this.changeFilter( null );
+		this.clearSearchInput();
+	},
+
+	onChildviewChildrenRender: function() {
+		this.updateElementsScrollbar();
+	},
+
+	onChildviewSearchChangeInput: function( child ) {
+		var value = child.ui.input.val();
+
+		if ( _.isEmpty( value ) ) {
+			this.showCategoriesView();
+		} else {
+			var oldValue = elementor.channels.panelElements.request( 'filter:value' );
+
+			if ( _.isEmpty( oldValue ) ) {
+				this.showElementsView();
+			}
+		}
+
+		this.changeFilter( value, 'search' );
+	},
+
+	onDestroy: function() {
+		elementor.channels.panelElements.reply( 'filter:value', null );
+	},
+
+	onShow: function() {
+		var searchRegion = this.getRegion( 'search' );
+		var languageselectorRegion = this.getRegion( 'languageselector' );
+
+		this.initElementsCollection();
+		this.initCategoriesCollection();
+		this.showCategoriesView();
+
+		searchRegion.show( new PanelElementsSearchView() );
+		languageselectorRegion.show( new PanelElementsLanguageselectorView() );
+	},
+
+	updateElementsScrollbar: function() {
+		elementor.channels.data.trigger( 'scrollbar:update' );
+	}
+} );
+
+module.exports = PanelElementsLayoutView;
+
+},{"./collections/categories":47,"./collections/elements":48,"./views/categories":51,"./views/elements":54,"./views/languageselector":55,"./views/search":56}],50:[function(require,module,exports){
+var PanelElementsElementModel;
+
+PanelElementsElementModel = Backbone.Model.extend( {
+	defaults: {
+		title: '',
+		categories: [],
+		keywords: [],
+		icon: '',
+		elType: 'widget',
+		widgetType: ''
+	}
+} );
+
+module.exports = PanelElementsElementModel;
+
+},{}],51:[function(require,module,exports){
+var PanelElementsCategoryView = require( './category' ),
+	PanelElementsCategoriesView;
+
+PanelElementsCategoriesView = Marionette.CollectionView.extend( {
+	childView: PanelElementsCategoryView,
+
+	id: 'elementor-panel-elements-categories'
+} );
+
+module.exports = PanelElementsCategoriesView;
+
+},{"./category":52}],52:[function(require,module,exports){
+var PanelElementsElementView = require( './element' ),
+	PanelElementsElementsCollection = require( '../collections/elements' ),
+	PanelElementsCategoryView;
+
+PanelElementsCategoryView = Marionette.CompositeView.extend( {
+	template: '#tmpl-elementor-panel-elements-category',
+
+	className: 'elementor-panel-category',
+
+	childView: PanelElementsElementView,
+
+	childViewContainer: '.panel-elements-category-items',
+
+	initialize: function() {
+		this.collection = new PanelElementsElementsCollection( this.model.get( 'items' ) );
+	}
+} );
+
+module.exports = PanelElementsCategoryView;
+
+},{"../collections/elements":48,"./element":53}],53:[function(require,module,exports){
+var PanelElementsElementView;
+
+PanelElementsElementView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-element-library-element',
+
+	className: 'elementor-element-wrapper',
+
+	onRender: function() {
+		var self = this;
+
+		this.$el.html5Draggable( {
+
+			onDragStart: function() {
+				elementor.channels.panelElements
+					.reply( 'element:selected', self )
+					.trigger( 'element:drag:start' );
+			},
+
+			onDragEnd: function() {
+				elementor.channels.panelElements.trigger( 'element:drag:end' );
+			},
+
+			groups: [ 'elementor-element' ]
+		} );
+	}
+} );
+
+module.exports = PanelElementsElementView;
+
+},{}],54:[function(require,module,exports){
+var PanelElementsElementView = require( './element' ),
+	PanelElementsElementsView;
+
+PanelElementsElementsView = Marionette.CollectionView.extend( {
+	childView: PanelElementsElementView,
+
+	id: 'elementor-panel-elements',
+
+	initialize: function() {
+		this.listenTo( elementor.channels.panelElements, 'change', this.onFilterChanged );
+	},
+
+	filter: function( childModel ) {
+		var filterValue = elementor.channels.panelElements.request( 'filter:value' );
+
+		if ( ! filterValue ) {
+			return true;
+		}
+
+		return _.any( [ 'title', 'keywords' ], function( type ) {
+			return ( -1 !== childModel.get( type ).toLowerCase().indexOf( filterValue.toLowerCase() ) );
+		} );
+	},
+
+	onFilterChanged: function() {
+		this._renderChildren();
+		this.triggerMethod( 'children:render' );
+	}
+} );
+
+module.exports = PanelElementsElementsView;
+
+},{"./element":53}],55:[function(require,module,exports){
+var PanelElementsLanguageselectorView;
+
+PanelElementsLanguageselectorView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-element-languageselector',
+
+	id: 'elementor-panel-elements-languageselector-wrapper',
+
+	ui: {
+		select: 'select',
+		btnShowLanguages: '#elementor-panel-elements-language-import-btn',
+		btnLanguageImport: '.elementor-panel-elements-language-import-lng'
+	},
+
+	events: {
+		'change @ui.select': 'onSelectChanged',
+		'click @ui.btnShowLanguages': 'onShowLanguagesClick',
+		'click @ui.btnLanguageImport': 'onLanguageImportClick',
+	},
+
+	initialize: function() {
+		this.initImportLanguageDialog();
+	},
+
+	onSelectChanged: function( ) {
+		if (!elementor.changeLanguage($(this.ui.select).val())) {
+			$(this.ui.select).val(elementor.config.id_lang);
+		}
+	},
+
+	onShowLanguagesClick: function( ) {
+		$(this.ui.btnShowLanguages).parent().toggleClass('elementor-open');
+	},
+
+	initImportLanguageDialog: function( ) {
+		var self = this,
+			dialog;
+
+
+		self.getImportLanguageDialog = function(id_lang) {
+			if ( dialog ) {
+				return dialog;
+			}
+
+			dialog = elementor.dialogsManager.createWidget( 'confirm', {
+				id: 'elementor-import-language-dialog',
+				headerMessage: elementor.translate( 'import_language_dialog_title' ),
+				message: elementor.translate( 'import_language_dialog_msg' ),
+				position: {
+					my: 'center center',
+					at: 'center center'
+				},
+				onConfirm: function() {
+					Backbone.$( '#elementor-loading, #elementor-preview-loading' ).fadeIn( 600 );
+					elementor.getRegion( 'sections' ).currentView.collection.reset();
+
+					elementor.ajax.send( 'getLanguageContent', {
+						data: {
+							id_lang: id_lang,
+							page_type: elementor.config.page_type,
+							page_id: elementor.config.post_id,
+							content_type: elementor.config.content_type,
+						},
+						success: function( data ) {
+							elementor.getRegion( 'sections' ).currentView.addChildModel( data );
+							Backbone.$( '#elementor-loading, #elementor-preview-loading' ).fadeOut( 600 );
+						},
+					} );
+				}
+			} );
+
+			return dialog;
+		};
+	},
+
+	onLanguageImportClick: function( element ) {
+		element.preventDefault();
+		var id_lang = $(element.currentTarget).data('language');
+		this.getImportLanguageDialog(id_lang).show();
+
+	},
+
+
+} );
+
+module.exports = PanelElementsLanguageselectorView;
+
+},{}],56:[function(require,module,exports){
+var PanelElementsSearchView;
+
+PanelElementsSearchView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-element-search',
+
+	id: 'elementor-panel-elements-search-wrapper',
+
+	ui: {
+		input: 'input'
+	},
+
+	events: {
+		'keyup @ui.input': 'onInputChanged'
+	},
+
+	onInputChanged: function( event ) {
+		var ESC_KEY = 27;
+
+		if ( ESC_KEY === event.keyCode ) {
+			this.clearInput();
+		}
+
+		this.triggerMethod( 'search:change:input' );
+	},
+
+	clearInput: function() {
+		this.ui.input.val( '' );
+	}
+} );
+
+module.exports = PanelElementsSearchView;
+
+},{}],57:[function(require,module,exports){
+var PanelMenuItemView = require( 'elementor-panel/pages/menu/views/item' ),
+	PanelMenuPageView;
+
+PanelMenuPageView = Marionette.CollectionView.extend( {
+	id: 'elementor-panel-page-menu',
+
+	childView: PanelMenuItemView,
+
+	initialize: function() {
+		this.collection = new Backbone.Collection( [
+			{
+				icon: 'eraser',
+				title: elementor.translate( 'clear_page' ),
+				callback: function() {
+					elementor.clearPage();
+				}
+			},
+			{
+				icon: 'info-circle',
+				title: elementor.translate( 'about_elementor' ),
+				type: 'link',
+				link: elementor.config.elementor_site,
+				newTab: true
+			}
+		] );
+	},
+
+	onChildviewClick: function( childView ) {
+		var menuItemType = childView.model.get( 'type' );
+
+		switch ( menuItemType ) {
+			case 'page' :
+				var pageName = childView.model.get( 'pageName' ),
+					pageTitle = childView.model.get( 'title' );
+
+				elementor.getPanelView().setPage( pageName, pageTitle );
+				break;
+
+			case 'link' :
+				var link = childView.model.get( 'link' ),
+					isNewTab = childView.model.get( 'newTab' );
+
+				if ( isNewTab ) {
+					open( link, '_blank' );
+				} else {
+					location.href = childView.model.get( 'link' );
+				}
+
+				break;
+
+			default:
+				var callback = childView.model.get( 'callback' );
+
+				if ( _.isFunction( callback ) ) {
+					callback.call( childView );
+				}
+		}
+	}
+} );
+
+module.exports = PanelMenuPageView;
+
+},{"elementor-panel/pages/menu/views/item":58}],58:[function(require,module,exports){
+var PanelMenuItemView;
+
+PanelMenuItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-menu-item',
+
+	className: 'elementor-panel-menu-item',
+
+	triggers: {
+		click: 'click'
+	}
+} );
+
+module.exports = PanelMenuItemView;
+
+},{}],59:[function(require,module,exports){
+var PanelRevisionsPageView;
+
+PanelRevisionsPageView = Marionette.ItemView.extend( {
+	id: 'elementor-panel-page-revisions',
+
+	template: '#tmpl-elementor-panel-revisions',
+
+	ui: {
+		items: '.elementor-revision-item',
+		applyBtn: '.elementor-revision-apply',
+		loadingSpinner: '.elementor-revisions-loading'
+	},
+
+	events: {
+		'click @ui.applyBtn': 'onClickApply'
+	},
+
+	selectedRevisionId: null,
+
+	onRender: function() {
+		this.loadRevisions();
+	},
+
+	loadRevisions: function() {
+		var self = this,
+			config = elementor.config,
+			$ = Backbone.$;
+
+		self.$el.html(
+			'<div class="elementor-revisions-loading" style="text-align:center;padding:40px 0;">' +
+			'<i class="fa fa-spin fa-circle-o-notch" style="font-size:24px;color:#999;"></i>' +
+			'</div>'
+		);
+
+		$.ajax( {
+			url: config.ajaxurl + '&action=GetRevisions',
+			type: 'POST',
+			data: {
+				entity_type: config.page_type,
+				entity_id: config.post_id
+			},
+			success: function( response ) {
+				if ( ! response.success ) {
+					self.$el.html( '<p style="padding:20px;color:#999;">' + elementor.translate( 'revisions_error_loading' ) + '</p>' );
+					return;
+				}
+				self.renderRevisionsList( response );
+			},
+			error: function() {
+				self.$el.html( '<p style="padding:20px;color:#999;">' + elementor.translate( 'revisions_error_loading' ) + '</p>' );
+			}
+		} );
+	},
+
+	renderRevisionsList: function( response ) {
+		var html = '',
+			$ = Backbone.$,
+			self = this;
+
+		// Actions bar
+		html += '<div class="elementor-revisions-actions">';
+		html += '<button class="elementor-revision-apply elementor-btn elementor-btn-success" disabled>' + elementor.translate( 'revisions_apply' ) + '</button>';
+		html += '</div>';
+
+		// Counter
+		html += '<div class="elementor-revisions-counter">';
+		html += response.count + ' / ' + response.limit + ' ' + elementor.translate( 'revisions_label' );
+		html += '</div>';
+
+		html += '<div class="elementor-revisions-list">';
+
+		// Autosave item (if available)
+		if ( response.autosave ) {
+			var asTimeAgo = self.getTimeAgo( response.autosave.autosave_at );
+			var asEmpName = response.autosave.employee_name || 'System';
+			var asInitial = asEmpName.charAt( 0 ).toUpperCase();
+
+			html += '<div class="elementor-revision-item elementor-revision-autosave" data-rev-id="autosave">';
+			html += '<div class="elementor-revision-avatar elementor-revision-avatar--autosave">' + asInitial + '</div>';
+			html += '<div class="elementor-revision-meta">';
+			html += '<div class="elementor-revision-date">' + asTimeAgo + ' (' + self.formatDate( response.autosave.autosave_at ) + ')</div>';
+			html += '<div class="elementor-revision-author">' + elementor.translate( 'revisions_autosave_by' ) + ' ' + self.escapeHtml( asEmpName ) + '</div>';
+			html += '</div>';
+			html += '</div>';
+		}
+
+		if ( response.revisions.length === 0 && ! response.autosave ) {
+			html += '<p class="elementor-revisions-empty">' + elementor.translate( 'revisions_no_revisions' ) + '</p>';
+		}
+
+		// Revision items
+		response.revisions.forEach( function( rev, index ) {
+			var timeAgo = self.getTimeAgo( rev.created_at );
+			var label = rev.label || elementor.translate( 'revisions_revision' );
+			var empName = rev.employee_name || 'System';
+			var initial = empName.charAt( 0 ).toUpperCase();
+			var isCurrent = ( index === 0 );
+			var currentIcon = isCurrent ? '<span class="elementor-revision-current-icon"><i class="fa fa-check"></i></span>' : '';
+
+			html += '<div class="elementor-revision-item' + ( isCurrent ? ' elementor-revision-current' : '' ) + '" data-rev-id="' + rev.id + '">';
+			html += '<div class="elementor-revision-avatar">' + initial + '</div>';
+			html += '<div class="elementor-revision-meta">';
+			html += '<div class="elementor-revision-date">' + timeAgo + ' (' + self.formatDate( rev.created_at ) + ')</div>';
+			html += '<div class="elementor-revision-author">' + self.escapeHtml( label ) + ' ' + elementor.translate( 'revisions_by' ) + ' ' + self.escapeHtml( empName ) + ' (#' + rev.id + ')</div>';
+			html += '</div>';
+			html += currentIcon;
+			html += '</div>';
+		} );
+
+		html += '</div>';
+
+		this.$el.html( html );
+
+		// Bind item click for selection
+		this.$el.on( 'click', '.elementor-revision-item', function() {
+			var $item = $( this ),
+				revId = $item.data( 'rev-id' );
+
+			self.$el.find( '.elementor-revision-item' ).removeClass( 'elementor-revision-selected' );
+			$item.addClass( 'elementor-revision-selected' );
+			self.selectedRevisionId = revId;
+
+			self.$el.find( '.elementor-revision-apply, .elementor-revision-discard' ).prop( 'disabled', false );
+		} );
+	},
+
+	onClickApply: function() {
+		if ( ! this.selectedRevisionId ) {
+			return;
+		}
+
+		var self = this,
+			config = elementor.config,
+			$ = Backbone.$;
+
+		// Autosave restore
+		if ( self.selectedRevisionId === 'autosave' ) {
+			$.ajax( {
+				url: config.ajaxurl + '&action=GetAutosave',
+				type: 'POST',
+				data: {
+					entity_type: config.page_type,
+					entity_id: config.post_id
+				},
+				success: function( response ) {
+					if ( response.success && response.content ) {
+						var parsed = JSON.parse( response.content );
+						elementor.elements.reset( parsed );
+						elementor.setFlagEditorChange( true );
+						elementor.getPanelView().setPage( 'elements' );
+					}
+				}
+			} );
+			return;
+		}
+
+		// Regular revision restore
+		$.ajax( {
+			url: config.ajaxurl + '&action=RestoreRevision',
+			type: 'POST',
+			data: { id_revision: self.selectedRevisionId },
+			success: function( response ) {
+				if ( response.success && response.content ) {
+					var parsed = JSON.parse( response.content );
+					elementor.elements.reset( parsed );
+					elementor.setFlagEditorChange( true );
+					elementor.getPanelView().setPage( 'elements' );
+				}
+			}
+		} );
+	},
+
+	getTimeAgo: function( dateStr ) {
+		var now = new Date(),
+			date = new Date( dateStr.replace( ' ', 'T' ) ),
+			diff = Math.floor( ( now - date ) / 1000 );
+
+		if ( diff < 60 ) { return diff + ' ' + elementor.translate( 'revisions_seconds_ago' ); }
+		if ( diff < 3600 ) { return Math.floor( diff / 60 ) + ' ' + elementor.translate( 'revisions_min_ago' ); }
+		if ( diff < 86400 ) { return Math.floor( diff / 3600 ) + ' ' + elementor.translate( 'revisions_hours_ago' ); }
+		return Math.floor( diff / 86400 ) + ' ' + elementor.translate( 'revisions_days_ago' );
+	},
+
+	formatDate: function( dateStr ) {
+		var d = new Date( dateStr.replace( ' ', 'T' ) );
+		var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+		return d.getDate() + ' ' + months[ d.getMonth() ] + ' @ ' +
+			( '0' + d.getHours() ).slice( -2 ) + ':' + ( '0' + d.getMinutes() ).slice( -2 );
+	},
+
+	escapeHtml: function( str ) {
+		var div = document.createElement( 'div' );
+		div.textContent = str;
+		return div.innerHTML;
+	}
+} );
+
+module.exports = PanelRevisionsPageView;
+
+},{}],60:[function(require,module,exports){
+var PanelSchemeBaseView;
+
+PanelSchemeBaseView = Marionette.CompositeView.extend( {
+	id: function() {
+		return 'elementor-panel-scheme-' + this.getType();
+	},
+
+	className: 'elementor-panel-scheme',
+
+	childViewContainer: '.elementor-panel-scheme-items',
+
+	getTemplate: function() {
+		return Marionette.TemplateCache.get( '#tmpl-elementor-panel-schemes-' + this.getType() );
+	},
+
+	ui: function() {
+		return {
+			saveButton: '.elementor-panel-scheme-save .elementor-btn',
+			discardButton: '.elementor-panel-scheme-discard .elementor-btn',
+			resetButton: '.elementor-panel-scheme-reset .elementor-btn'
+		};
+	},
+
+	events: function() {
+		return {
+			'click @ui.saveButton': 'saveScheme',
+			'click @ui.discardButton': 'discardScheme',
+			'click @ui.resetButton': 'setDefaultScheme'
+		};
+	},
+
+	initialize: function() {
+		this.model = new Backbone.Model();
+
+		this.resetScheme();
+	},
+
+	getType: function() {},
+
+	getScheme: function() {
+		return elementor.schemes.getScheme( this.getType() );
+	},
+
+	changeChildrenUIValues: function( schemeItems ) {
+		var self = this;
+
+		_.each( schemeItems, function( value, key ) {
+			var model = self.collection.findWhere( { key: key } ),
+				childView = self.children.findByModelCid( model.cid );
+
+			childView.changeUIValue( value );
+		} );
+	},
+
+	discardScheme: function() {
+		elementor.schemes.resetSchemes( this.getType() );
+
+		this.ui.saveButton.prop( 'disabled', true );
+
+		this._renderChildren();
+	},
+
+	setSchemeValue: function( key, value ) {
+		elementor.schemes.setSchemeValue( this.getType(), key, value );
+	},
+
+	saveScheme: function() {
+		elementor.schemes.saveScheme( this.getType() );
+
+		this.ui.saveButton.prop( 'disabled', true );
+
+		this.resetScheme();
+
+		this._renderChildren();
+	},
+
+	setDefaultScheme: function() {
+		var defaultScheme = elementor.config.default_schemes[ this.getType() ].items;
+
+		this.changeChildrenUIValues( defaultScheme );
+	},
+
+	resetItems: function() {
+		this.model.set( 'items', this.getScheme().items );
+	},
+
+	resetCollection: function() {
+		var items = this.model.get( 'items' );
+
+		this.collection = new Backbone.Collection();
+
+		_.each( items, _.bind( function( item, key ) {
+			item.type = this.getType();
+			item.key = key;
+
+			this.collection.add( item );
+		}, this ) );
+	},
+
+	resetScheme: function() {
+		this.resetItems();
+		this.resetCollection();
+	},
+
+	onChildviewValueChange: function( childView, newValue ) {
+		this.ui.saveButton.removeProp( 'disabled' );
+
+		this.setSchemeValue( childView.model.get( 'key' ), newValue );
+	}
+} );
+
+module.exports = PanelSchemeBaseView;
+
+},{}],61:[function(require,module,exports){
+var PanelSchemeBaseView = require( 'elementor-panel/pages/schemes/base' ),
+	PanelSchemeColorsView;
+
+PanelSchemeColorsView = PanelSchemeBaseView.extend( {
+
+	ui: function() {
+		var ui = PanelSchemeBaseView.prototype.ui.apply( this, arguments );
+
+		ui.systemSchemes = '.elementor-panel-scheme-color-system-scheme';
+
+		return ui;
+	},
+
+	events: function() {
+		var events = PanelSchemeBaseView.prototype.events.apply( this, arguments );
+
+		events[ 'click @ui.systemSchemes' ] = 'onSystemSchemeClick';
+
+		return events;
+	},
+
+	getChildView: function() {
+		return require( 'elementor-panel/pages/schemes/items/color' );
+	},
+
+	getType: function() {
+		return 'color';
+	},
+
+	onSystemSchemeClick: function( event ) {
+		var $schemeClicked = Backbone.$( event.currentTarget ),
+			schemeName = $schemeClicked.data( 'schemeName' ),
+			scheme = elementor.config.system_schemes.color[ schemeName ].items;
+
+		this.changeChildrenUIValues( scheme );
+	}
+} );
+
+module.exports = PanelSchemeColorsView;
+
+},{"elementor-panel/pages/schemes/base":60,"elementor-panel/pages/schemes/items/color":64}],62:[function(require,module,exports){
+var PanelSchemeDisabledView;
+
+PanelSchemeDisabledView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-panel-schemes-disabled',
+
+	disabledTitle: '',
+
+	templateHelpers: function() {
+		return {
+			disabledTitle: this.disabledTitle
+		};
+	},
+
+	id: 'elementor-panel-schemes-disabled'
+} );
+
+module.exports = PanelSchemeDisabledView;
+
+},{}],63:[function(require,module,exports){
+var PanelSchemeItemView;
+
+PanelSchemeItemView = Marionette.ItemView.extend( {
+	getTemplate: function() {
+		return Marionette.TemplateCache.get( '#tmpl-elementor-panel-scheme-' + this.model.get( 'type' ) + '-item' );
+	},
+
+	className: function() {
+		return 'elementor-panel-scheme-item';
+	}
+} );
+
+module.exports = PanelSchemeItemView;
+
+},{}],64:[function(require,module,exports){
+var PanelSchemeItemView = require( 'elementor-panel/pages/schemes/items/base' ),
+	PanelSchemeColorView;
+
+PanelSchemeColorView = PanelSchemeItemView.extend( {
+	ui: {
+		input: '.elementor-panel-scheme-color-value'
+	},
+
+	changeUIValue: function( newValue ) {
+		this.ui.input.wpColorPicker( 'color', newValue );
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.ui.input.wpColorPicker( 'instance' ) ) {
+			this.ui.input.wpColorPicker( 'close' );
+		}
+	},
+
+	onRender: function() {
+		this.ui.input.wpColorPicker( {
+			change: _.bind( function( event, ui ) {
+				this.triggerMethod( 'value:change', ui.color.toString() );
+			}, this )
+		} );
+	}
+} );
+
+module.exports = PanelSchemeColorView;
+
+},{"elementor-panel/pages/schemes/items/base":63}],65:[function(require,module,exports){
+var PanelSchemeItemView = require( 'elementor-panel/pages/schemes/items/base' ),
+	PanelSchemeTypographyView;
+
+PanelSchemeTypographyView = PanelSchemeItemView.extend( {
+	className: function() {
+		var classes = PanelSchemeItemView.prototype.className.apply( this, arguments );
+
+		return classes + ' elementor-panel-box';
+	},
+
+	ui: {
+		heading: '.elementor-panel-heading',
+		allFields: '.elementor-panel-scheme-typography-item-field',
+		inputFields: 'input.elementor-panel-scheme-typography-item-field',
+		selectFields: 'select.elementor-panel-scheme-typography-item-field',
+		selectFamilyFields: 'select.elementor-panel-scheme-typography-item-field[name="font_family"]'
+	},
+
+	events: {
+		'input @ui.inputFields': 'onFieldChange',
+		'change @ui.selectFields': 'onFieldChange',
+		'click @ui.heading': 'toggleVisibility'
+	},
+
+	onRender: function() {
+		var self = this;
+
+		this.ui.inputFields.add( this.ui.selectFields ).each( function() {
+			var $this = Backbone.$( this ),
+				name = $this.attr( 'name' ),
+				value = self.model.get( 'value' )[ name ];
+
+			$this.val( value );
+		} );
+
+		this.ui.selectFamilyFields.select2( {
+			dir: elementor.config.is_rtl ? 'rtl' : 'ltr'
+		} );
+	},
+
+	toggleVisibility: function() {
+		this.ui.heading.toggleClass( 'elementor-open' );
+	},
+
+	changeUIValue: function( newValue ) {
+		this.ui.allFields.each( function() {
+			var $this = Backbone.$( this ),
+				thisName = $this.attr( 'name' ),
+				newFieldValue = newValue[ thisName ];
+
+			$this.val( newFieldValue ).trigger( 'change' );
+		} );
+	},
+
+	onFieldChange: function( event ) {
+		var $select = this.$( event.currentTarget ),
+			currentValue = elementor.helpers.cloneObject( this.model.get( 'value' ) ),
+			fieldKey = $select.attr( 'name' );
+
+		currentValue[ fieldKey ] = $select.val();
+
+		if ( 'font_family' === fieldKey && ! _.isEmpty( currentValue[ fieldKey ] ) ) {
+			elementor.helpers.enqueueFont( currentValue[ fieldKey ] );
+		}
+
+		this.triggerMethod( 'value:change', currentValue );
+	}
+} );
+
+module.exports = PanelSchemeTypographyView;
+
+},{"elementor-panel/pages/schemes/items/base":63}],66:[function(require,module,exports){
+var PanelSchemeBaseView = require( 'elementor-panel/pages/schemes/base' ),
+	PanelSchemeTypographyView;
+
+PanelSchemeTypographyView = PanelSchemeBaseView.extend( {
+
+	getChildView: function() {
+		return require( 'elementor-panel/pages/schemes/items/typography' );
+	},
+
+	getType: function() {
+		return 'typography';
+	}
+} );
+
+module.exports = PanelSchemeTypographyView;
+
+},{"elementor-panel/pages/schemes/base":60,"elementor-panel/pages/schemes/items/typography":65}],67:[function(require,module,exports){
+var EditModeItemView = require( 'elementor-layouts/edit-mode' ),
+	PanelLayoutView;
+
+PanelLayoutView = Marionette.LayoutView.extend( {
+	template: '#tmpl-elementor-panel',
+
+	id: 'elementor-panel-inner',
+
+	regions: {
+		content: '#elementor-panel-content-wrapper',
+		header: '#elementor-panel-header-wrapper',
+		footer: '#elementor-panel-footer',
+		modeSwitcher: '#elementor-mode-switcher'
+	},
+
+	pages: {},
+
+	childEvents: {
+		'click:add': function() {
+			this.setPage( 'elements' );
+		},
+		'editor:destroy': function() {
+			this.setPage( 'elements' );
+		}
+	},
+
+	currentPageName: null,
+
+	_isScrollbarInitialized: false,
+
+	initialize: function() {
+		this.initPages();
+	},
+
+	initPages: function() {
+		var pages = {
+			elements: {
+				view: require( 'elementor-panel/pages/elements/elements' ),
+				title: '<img src="' + elementor.config.assets_url + 'images/logo-panel.svg">'
+			},
+			editor: {
+				view: require( 'elementor-panel/pages/editor' )
+			},
+			menu: {
+				view: require( 'elementor-panel/pages/menu/menu' ),
+				title: '<img src="' + elementor.config.assets_url + 'images/logo-panel.svg">'
+			},
+			colorScheme: {
+				view: require( 'elementor-panel/pages/schemes/colors' )
+			},
+			typographyScheme: {
+				view: require( 'elementor-panel/pages/schemes/typography' )
+			},
+			revisions: {
+				view: require( 'elementor-panel/pages/revisions' ),
+				title: 'Revisions'
+			}
+		};
+
+		var schemesTypes = Object.keys( elementor.schemes.getSchemes() ),
+			disabledSchemes = _.difference( schemesTypes, elementor.schemes.getEnabledSchemesTypes() );
+
+		_.each( disabledSchemes, function( schemeType ) {
+			var scheme  = elementor.schemes.getScheme( schemeType );
+
+			pages[ schemeType + 'Scheme' ].view = require( 'elementor-panel/pages/schemes/disabled' ).extend( {
+				disabledTitle: scheme.disabled_title
+			} );
+		} );
+
+		this.pages = pages;
+	},
+
+	getHeaderView: function() {
+		return this.getChildView( 'header' );
+	},
+
+	getCurrentPageName: function() {
+		return this.currentPageName;
+	},
+
+	getCurrentPageView: function() {
+		return this.getChildView( 'content' );
+	},
+
+	setPage: function( page, title, viewOptions ) {
+		var pageData = this.pages[ page ];
+
+		if ( ! pageData ) {
+			throw new ReferenceError( 'Elementor panel doesn\'t have page named \'' + page + '\'' );
+		}
+
+		this.showChildView( 'content', new pageData.view( viewOptions ) );
+
+		this.getHeaderView().setTitle( title || pageData.title );
+
+		this.currentPageName = page;
+	},
+
+	onBeforeShow: function() {
+		var PanelFooterItemView = require( 'elementor-layouts/panel/footer' ),
+			PanelHeaderItemView = require( 'elementor-layouts/panel/header' );
+
+		// Edit Mode
+		this.showChildView( 'modeSwitcher', new EditModeItemView() );
+
+		// Header
+		this.showChildView( 'header', new PanelHeaderItemView() );
+
+		// Footer
+		this.showChildView( 'footer', new PanelFooterItemView() );
+
+		// Added Editor events
+		this.updateScrollbar = _.throttle( this.updateScrollbar, 100 );
+
+		this.getRegion( 'content' )
+			.on( 'before:show', _.bind( this.onEditorBeforeShow, this ) )
+			.on( 'empty', _.bind( this.onEditorEmpty, this ) )
+			.on( 'show', _.bind( this.updateScrollbar, this ) );
+
+		// Set default page to elements
+		this.setPage( 'elements' );
+
+		this.listenTo( elementor.channels.data, 'scrollbar:update', this.updateScrollbar );
+	},
+
+	onEditorBeforeShow: function() {
+		_.defer( _.bind( this.updateScrollbar, this ) );
+	},
+
+	onEditorEmpty: function() {
+		this.updateScrollbar();
+	},
+
+	updateScrollbar: function() {
+		var $panel = this.content.$el;
+
+		if ( ! this._isScrollbarInitialized ) {
+			$panel.perfectScrollbar();
+			this._isScrollbarInitialized = true;
+
+			return;
+		}
+
+		$panel.perfectScrollbar( 'update' );
+	}
+} );
+
+module.exports = PanelLayoutView;
+
+},{"elementor-layouts/edit-mode":43,"elementor-layouts/panel/footer":44,"elementor-layouts/panel/header":45,"elementor-panel/pages/editor":46,"elementor-panel/pages/elements/elements":49,"elementor-panel/pages/menu/menu":57,"elementor-panel/pages/revisions":59,"elementor-panel/pages/schemes/colors":61,"elementor-panel/pages/schemes/disabled":62,"elementor-panel/pages/schemes/typography":66}],68:[function(require,module,exports){
+var TopBarItemView;
+
+TopBarItemView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-topbar-content',
+
+	tagName: 'nav',
+
+	id: 'elementor-topbar-tools',
+
+	ui: {
+		exit: '#elementor-topbar-exit',
+		logo: '#elementor-topbar-logo',
+		revisions: '#elementor-topbar-revisions',
+		deviceButtons: '.elementor-topbar-device-btn',
+		templates: '#elementor-topbar-templates',
+		styles: '#elementor-topbar-styles',
+		navigator: '#elementor-topbar-navigator',
+		inspect: '#elementor-topbar-inspect',
+		preview: '#elementor-topbar-preview',
+		save: '#elementor-topbar-save',
+		saveIcon: '#elementor-topbar-save .elementor-topbar-save-icon'
+	},
+
+	events: {
+		'click @ui.exit': 'onClickExit',
+		'click @ui.logo': 'onClickLogo',
+		'click @ui.revisions': 'onClickRevisions',
+		'click @ui.deviceButtons': 'onClickDeviceButton',
+		'click @ui.templates': 'onClickTemplates',
+		'click @ui.styles': 'onClickStyles',
+		'click @ui.navigator': 'onClickNavigator',
+		'click @ui.inspect': 'onClickInspect',
+		'click @ui.preview': 'onClickPreview',
+		'click @ui.save': 'onClickSave'
+	},
+
+	initialize: function() {
+		this._initSaveDialog();
+		this._initAutosave();
+
+		this.listenTo( elementor.channels.editor, 'editor:changed', this.onEditorChanged );
+		this.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
+	},
+
+	_initSaveDialog: function() {
+		var dialog;
+
+		this.getSaveDialog = function() {
+			if ( ! dialog ) {
+				var $ = Backbone.$,
+					$dialogMessage = $( '<div>', {
+						'class': 'elementor-dialog-message'
+					} ),
+					$messageIcon = $( '<i>', {
+						'class': 'fa fa-check-circle'
+					} ),
+					$messageText = $( '<div>', {
+						'class': 'elementor-dialog-message-text'
+					} ).text( elementor.translate( 'saved' ) );
+
+				$dialogMessage.append( $messageIcon, $messageText );
+
+				dialog = elementor.dialogsManager.createWidget( 'popup', {
+					hide: {
+						delay: 1500
+					}
+				} );
+
+				dialog.setMessage( $dialogMessage );
+			}
+
+			return dialog;
+		};
+	},
+
+	_initAutosave: function() {
+		var self = this;
+
+		// Autosave every 60 seconds when there are unsaved changes
+		this._autosaveInterval = setInterval( function() {
+			if ( elementor.isEditorChanged() ) {
+				self._doAutosave();
+			}
+		}, 60000 );
+	},
+
+	_doAutosave: function() {
+		var config = elementor.config,
+			data = elementor.elements.toJSON();
+
+		if ( ! data || ! data.length ) {
+			return;
+		}
+
+		Backbone.$.ajax( {
+			url: config.ajaxurl + '&action=SaveAutosave',
+			type: 'POST',
+			data: {
+				entity_type: config.page_type,
+				entity_id: config.post_id,
+				data: JSON.stringify( data )
+			}
+		} );
+	},
+
+	onClickExit: function() {
+		if ( elementor.isEditorChanged() ) {
+			var dialog = elementor.dialogsManager.createWidget( 'confirm', {
+				headerMessage: elementor.translate( 'changes_lost' ),
+				message: elementor.translate( 'dialog_confirm_changes_lost' ),
+				strings: {
+					confirm: elementor.translate( 'go_back' ),
+					cancel: elementor.translate( 'cancel' )
+				},
+				onConfirm: function() {
+					window.location = elementor.config.edit_post_link;
+				}
+			} );
+			dialog.show();
+		} else {
+			window.location = elementor.config.edit_post_link;
+		}
+	},
+
+	onClickLogo: function( e ) {
+		e.preventDefault();
+		window.location = elementor.config.edit_post_link;
+	},
+
+	onClickRevisions: function() {
+		var panel = elementor.getPanelView();
+		if ( panel.getCurrentPageName() === 'revisions' ) {
+			panel.setPage( 'elements' );
+		} else {
+			panel.setPage( 'revisions', 'Revisions' );
+		}
+	},
+
+	onClickDeviceButton: function( e ) {
+		var newDeviceMode = Backbone.$( e.currentTarget ).data( 'device-mode' );
+		elementor.changeDeviceMode( newDeviceMode );
+	},
+
+	onClickNavigator: function() {
+		this.ui.navigator.toggleClass( 'active' );
+		elementor.channels.editor.trigger( 'navigator:toggle' );
+	},
+
+	onClickTemplates: function() {
+		elementor.templates.startModal( function() {
+			elementor.templates.showTemplates();
+		} );
+	},
+
+	onClickStyles: function() {
+		elementor.styleLibrary.startModal( function() {
+			elementor.styleLibrary.showStyles();
+		} );
+	},
+
+	onClickInspect: function() {
+		// Toggle inspect mode via the panel footer (delegates to existing logic)
+		var $inspectBtn = Backbone.$( '#elementor-panel-footer-inspect' );
+		if ( $inspectBtn.length ) {
+			$inspectBtn.trigger( 'click' );
+		}
+		this.ui.inspect.toggleClass( 'active' );
+	},
+
+	onClickPreview: function() {
+		var self = this,
+			config = elementor.config,
+			$ = Backbone.$;
+
+		// Step 1: autosave current content
+		var data = elementor.elements.toJSON();
+		if ( ! data || ! data.length ) {
+			return;
+		}
+
+		self.ui.preview.addClass( 'active' );
+
+		$.ajax( {
+			url: config.ajaxurl + '&action=SaveAutosave',
+			type: 'POST',
+			data: {
+				entity_type: config.page_type,
+				entity_id: config.post_id,
+				data: JSON.stringify( data )
+			},
+			success: function() {
+				// Step 2: get the front-office preview URL
+				$.ajax( {
+					url: config.ajaxurl + '&action=GetPreviewUrl',
+					type: 'POST',
+					data: {
+						page_type: config.page_type,
+						page_id: config.post_id,
+						content_type: config.content_type,
+						id_lang: config.id_lang
+					},
+					success: function( response ) {
+						self.ui.preview.removeClass( 'active' );
+						if ( response.success && response.url ) {
+							window.open( response.url, '_blank' );
+						}
+					},
+					error: function() {
+						self.ui.preview.removeClass( 'active' );
+					}
+				} );
+			},
+			error: function() {
+				self.ui.preview.removeClass( 'active' );
+			}
+		} );
+	},
+
+	onClickSave: function() {
+		var self = this;
+
+		self.ui.save.addClass( 'elementor-topbar-save-loading' );
+
+		var options = {
+			revision: 'publish',
+			onSuccess: function() {
+				self.getSaveDialog().show();
+				self.ui.save.removeClass( 'elementor-topbar-save-loading' );
+
+				// Refresh revisions panel if currently displayed
+				var panel = elementor.getPanelView();
+				if ( panel.getCurrentPageName() === 'revisions' ) {
+					panel.setPage( 'revisions', 'Revisions' );
+				}
+			}
+		};
+
+		elementor.saveBuilder( options );
+	},
+
+	onEditorChanged: function() {
+		this.ui.save.toggleClass( 'elementor-topbar-save-active', elementor.isEditorChanged() );
+	},
+
+	onDeviceModeChange: function() {
+		var previousDeviceMode = elementor.channels.deviceMode.request( 'previousMode' ),
+			currentDeviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+
+		this.ui.deviceButtons.filter( '[data-device-mode="' + previousDeviceMode + '"]' ).removeClass( 'active' );
+		this.ui.deviceButtons.filter( '[data-device-mode="' + currentDeviceMode + '"]' ).addClass( 'active' );
+	},
+
+	onDestroy: function() {
+		if ( this._autosaveInterval ) {
+			clearInterval( this._autosaveInterval );
+		}
+	}
+} );
+
+module.exports = TopBarItemView;
+
+},{}],69:[function(require,module,exports){
+var BaseSettingsModel;
+
+BaseSettingsModel = Backbone.Model.extend( {
+
+	initialize: function( data ) {
+		this.controls = elementor.getElementControls( this );
+		if ( ! this.controls ) {
+			return;
+		}
+
+		var attrs = data || {},
+			defaults = {};
+
+		_.each( this.controls, function( field ) {
+			var control = elementor.config.controls[ field.type ];
+
+			if ( _.isObject( control.default_value )  ) {
+				defaults[ field.name ] = _.extend( {}, control.default_value, field['default'] || {} );
+			} else {
+				defaults[ field.name ] = field['default'] || control.default_value;
+			}
+		} );
+
+		this.defaults = defaults;
+
+		// Apply default style when creating a new widget (empty settings)
+		var widgetType = attrs.widgetType;
+		var isNewWidget = widgetType && this._countUserKeys( attrs ) === 0;
+
+		if ( isNewWidget ) {
+			var defaultStyle = this._findDefaultStyle( widgetType );
+
+			if ( defaultStyle ) {
+				attrs = _.defaults( {}, defaultStyle, defaults );
+				attrs.widgetType = widgetType;
+				if ( data && data.elType ) {
+					attrs.elType = data.elType;
+				}
+				if ( data && data.isInner ) {
+					attrs.isInner = data.isInner;
+				}
+			}
+		}
+
+		// TODO: Change method to recursive
+		attrs = _.defaults( {}, attrs, defaults );
+
+		_.each( this.controls, function( field ) {
+			if ( 'repeater' === field.type ) {
+				attrs[ field.name ] = new Backbone.Collection( attrs[ field.name ], {
+					model: BaseSettingsModel
+				} );
+			}
+		} );
+
+		this.set( attrs );
+	},
+
+	/**
+	 * Count keys in settings data that are not system/meta keys.
+	 * Used to detect if a widget was just created (empty user settings).
+	 */
+	_countUserKeys: function( data ) {
+		var metaKeys = [ 'widgetType', 'elType', 'isInner' ];
+		var count = 0;
+
+		_.each( data, function( value, key ) {
+			if ( ! _.contains( metaKeys, key ) ) {
+				count++;
+			}
+		} );
+
+		return count;
+	},
+
+	/**
+	 * Find the default style settings for a given widget type
+	 * from the widgetStyles config array.
+	 */
+	_findDefaultStyle: function( widgetType ) {
+		if ( ! elementor.config || ! elementor.config.widgetStyles ) {
+			return null;
+		}
+
+		var styles = elementor.config.widgetStyles;
+
+		for ( var i = 0; i < styles.length; i++ ) {
+			if ( styles[ i ].widget_type === widgetType && styles[ i ].is_default ) {
+				return styles[ i ].settings || null;
+			}
+		}
+
+		return null;
+	},
+
+	getFontControls: function() {
+		return _.filter( this.controls, _.bind( function( control ) {
+			return 'font' === control.type;
+		}, this ) );
+	},
+
+	getStyleControls: function( controls ) {
+		var self = this;
+
+		controls = controls || self.controls;
+
+		return _.filter( controls, function( control ) {
+			if ( control.fields ) {
+				control.styleFields = self.getStyleControls( control.fields );
+
+				return true;
+			}
+
+			return self.isStyleControl( control.name, controls );
+		} );
+	},
+
+	isStyleControl: function( attribute, controls ) {
+		controls = controls || this.controls;
+
+		var currentControl = _.find( controls, function( control ) {
+			return attribute === control.name;
+		} );
+
+		return currentControl && ! _.isEmpty( currentControl.selectors );
+	},
+
+	getClassControls: function() {
+		return _.filter( this.controls, _.bind( function( control ) {
+			return this.isClassControl( control.name );
+		}, this ) );
+	},
+
+	isClassControl: function( attribute ) {
+		var currentControl = _.find( this.controls, function( control ) {
+			return attribute === control.name;
+		} );
+
+		return currentControl && ! _.isUndefined( currentControl.prefix_class );
+	},
+
+	getControl: function( id ) {
+		return _.find( this.controls, function( control ) {
+			return id === control.name;
+		} );
+	},
+
+	clone: function() {
+		return new BaseSettingsModel( elementor.helpers.cloneObject( this.attributes ) );
+	},
+
+	toJSON: function() {
+
+		var data = Backbone.Model.prototype.toJSON.call( this );
+
+		delete data.widgetType;
+		delete data.elType;
+		delete data.isInner;
+
+		_.each( data, function( attribute, key ) {
+			if ( attribute && attribute.toJSON ) {
+				data[ key ] = attribute.toJSON();
+			}
+		} );
+
+		return data;
+	},
+
+	toJSONCleaned: function() {
+		var data = Backbone.Model.prototype.toJSONCleaned.call( this );
+
+		delete data.widgetType;
+		delete data.elType;
+		delete data.isInner;
+
+		// remove empty values
+		data = this.cleanEmptyValues(data);
+
+
+		console.log(data);
+		_.each( data, function( attribute, key ) {
+			if ( attribute && attribute.toJSON ) {
+				data[ key ] = attribute.toJSON();
+			}
+		});
+
+		return data;
+	},
+
+	cleanEmptyValues: function(data) {
+		function cleanEmptyValues(data) {
+			// Si tableau → nettoyer chaque entrée
+			if (Array.isArray(data)) {
+				const cleanedArray = data
+					.map(item => cleanEmptyValues(item))           // nettoyage récursif
+					.filter(item =>                                 // suppression des entrées vides
+						item !== null &&
+						item !== undefined &&
+						item !== '' &&
+						!(typeof item === 'object' && Object.keys(item).length === 0)
+					);
+
+				return cleanedArray.length > 0 ? cleanedArray : [];  // retourne tableau vide si vide
+			}
+
+			// Si objet → nettoyer chaque clé
+			if (typeof data === 'object' && data !== null) {
+				const cleanedObj = {};
+
+				Object.keys(data).forEach(key => {
+					const value = cleanEmptyValues(data[key]);
+
+					const isEmpty =
+						value === null ||
+						value === undefined ||
+						value === '' ||
+						(Array.isArray(value) && value.length === 0) ||
+						(typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0);
+
+					if (!isEmpty) {
+						cleanedObj[key] = value;
+					}
+				});
+
+				return cleanedObj;
+			}
+
+			// Valeur primitive → retourner tel quel
+			return data;
+		}
+	}
+} );
+
+module.exports = BaseSettingsModel;
+},{}],70:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	ColumnSettingsModel;
+
+ColumnSettingsModel = BaseSettingsModel.extend( {
+	defaults: {
+		_inline_size: '',
+		_column_size: 100
+	}
+} );
+
+module.exports = ColumnSettingsModel;
+
+},{"elementor-models/base-settings":69}],71:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	WidgetSettingsModel = require( 'elementor-models/widget-settings' ),
+	ColumnSettingsModel = require( 'elementor-models/column-settings' ),
+	RowSettingsModel = require( 'elementor-models/row-settings' ),
+	SectionSettingsModel = require( 'elementor-models/section-settings' ),
+
+	ElementModel,
+	ElementCollection;
+
+ElementModel = Backbone.Model.extend( {
+	defaults: {
+		id: '',
+		elType: '',
+		isInner: false,
+		settings: {},
+		defaultEditSettings: {}
+	},
+
+	remoteRender: false,
+	_htmlCache: null,
+	_jqueryXhr: null,
+	renderOnLeave: false,
+
+	initialize: function( options ) {
+		var elements = this.get( 'elements' ),
+			elType = this.get( 'elType' ),
+			settings;
+
+		var settingModels = {
+			widget: WidgetSettingsModel,
+			column: ColumnSettingsModel,
+			row: RowSettingsModel,
+			section: SectionSettingsModel
+		};
+
+		var SettingsModel = settingModels[ elType ] || BaseSettingsModel;
+
+		settings = this.get( 'settings' ) || {};
+		if ( 'widget' === elType ) {
+			settings.widgetType = this.get( 'widgetType' );
+		}
+
+		settings.elType = elType;
+		settings.isInner = this.get( 'isInner' );
+
+		settings = new SettingsModel( settings );
+		this.set( 'settings', settings );
+
+		this.initEditSettings();
+
+		if ( undefined !== elements ) {
+			this.set( 'elements', new ElementCollection( elements ) );
+		}
+
+		if ( 'widget' === this.get( 'elType' ) ) {
+			this.remoteRender = true;
+			this.setHtmlCache( options.htmlCache || '' );
+		}
+
+		// No need this variable anymore
+		delete options.htmlCache;
+
+		// Make call to remote server as throttle function
+		this.renderRemoteServer = _.throttle( this.renderRemoteServer, 1000 );
+
+		this.on( 'destroy', this.onDestroy );
+		this.on( 'editor:close', this.onCloseEditor );
+	},
+
+	initEditSettings: function() {
+		this.set( 'editSettings', new Backbone.Model( this.get( 'defaultEditSettings' ) ) );
+	},
+
+	onDestroy: function() {
+		// Clean the memory for all use instances
+		var settings = this.get( 'settings' ),
+			elements = this.get( 'elements' );
+
+		if ( undefined !== elements ) {
+			_.each( _.clone( elements.models ), function( model ) {
+				model.destroy();
+			} );
+		}
+		settings.destroy();
+	},
+
+	onCloseEditor: function() {
+		this.initEditSettings();
+
+		if ( this.renderOnLeave ) {
+			this.renderRemoteServer();
+		}
+	},
+
+	setSetting: function( key, value, triggerChange ) {
+		triggerChange = triggerChange || false;
+
+		var settings = this.get( 'settings' );
+
+		settings.set( key, value );
+
+		this.set( 'settings', settings );
+
+		if ( triggerChange ) {
+			this.trigger( 'change', this );
+			this.trigger( 'change:settings', this );
+			this.trigger( 'change:settings:' + key, this );
+		}
+	},
+
+	getSetting: function( key ) {
+		var settings = this.get( 'settings' );
+
+		if ( undefined === settings.get( key ) ) {
+			return '';
+		}
+
+		return settings.get( key );
+	},
+
+	setHtmlCache: function( htmlCache ) {
+		this._htmlCache = htmlCache;
+	},
+
+	getHtmlCache: function() {
+		return this._htmlCache;
+	},
+
+	getTitle: function() {
+		var elementData = elementor.getElementData( this );
+
+		return ( elementData ) ? elementData.title : 'Unknown';
+	},
+
+	getIcon: function() {
+		var elementData = elementor.getElementData( this );
+
+		return ( elementData ) ? elementData.icon : 'unknown';
+	},
+
+	renderRemoteServer: function() {
+		if ( ! this.remoteRender ) {
+			return;
+		}
+
+		this.renderOnLeave = false;
+
+		this.trigger( 'before:remote:render' );
+
+		if ( this._jqueryXhr && 4 !== this._jqueryXhr ) {
+			this._jqueryXhr.abort();
+		}
+
+		var data = this.toJSON();
+
+		this._jqueryXhr = elementor.ajax.send( 'renderWidget', {
+			url: elementor.config.ajaxFrontUrl,
+			data: {
+				post_id: elementor.config.post_id,
+				data: JSON.stringify( data ),
+			},
+			success: _.bind( this.onRemoteGetHtml, this )
+		} );
+	},
+
+
+
+
+	onRemoteGetHtml: function( data ) {
+		this.setHtmlCache( data.render );
+		this.trigger( 'remote:render' );
+	},
+
+	clone: function() {
+		var newModel = Backbone.Model.prototype.clone.apply( this, arguments );
+		newModel.set( 'id', elementor.helpers.getUniqueID() );
+
+		newModel.setHtmlCache( this.getHtmlCache() );
+
+		var elements = this.get( 'elements' ),
+			settings = this.get( 'settings' );
+
+		if ( ! _.isEmpty( elements ) ) {
+			newModel.set( 'elements', elements.clone() );
+		}
+
+		newModel.set( 'settings', settings.clone() );
+
+		return newModel;
+	},
+
+	toJSON: function( options ) {
+		options = _.extend( { copyHtmlCache: false }, options );
+
+		// Call parent's toJSON method
+		var data = Backbone.Model.prototype.toJSON.call( this );
+
+		_.each( data, function( attribute, key ) {
+			if ( attribute && attribute.toJSON ) {
+				data[ key ] = attribute.toJSON( options );
+			}
+		} );
+
+		if ( options.copyHtmlCache ) {
+			data.htmlCache = this.getHtmlCache();
+		} else {
+			delete data.htmlCache;
+		}
+
+		return data;
+	}
+
+} );
+
+ElementCollection = Backbone.Collection.extend( {
+	add: function( models, options, isCorrectSet ) {
+		if ( ( ! options || ! options.silent ) && ! isCorrectSet ) {
+			throw 'Call Error: Adding model to element collection is allowed only by the dedicated addChildModel() method.';
+		}
+
+		return Backbone.Collection.prototype.add.call( this, models, options );
+	},
+
+	model: function( attrs, options ) {
+		if ( attrs.elType ) {
+			return new ElementModel( attrs, options );
+		}
+		return new Backbone.Model( attrs, options );
+	},
+
+	clone: function() {
+		var tempCollection = Backbone.Collection.prototype.clone.apply( this, arguments ),
+			newCollection = new ElementCollection();
+
+		tempCollection.forEach( function( model ) {
+			newCollection.add( model.clone(), null, true );
+		} );
+
+		return newCollection;
+	}
+} );
+
+ElementCollection.prototype.sync = function() {
+	return null;
+};
+ElementCollection.prototype.fetch = function() {
+	return null;
+};
+ElementCollection.prototype.save = function() {
+	return null;
+};
+
+ElementModel.prototype.sync = function() {
+	return null;
+};
+ElementModel.prototype.fetch = function() {
+	return null;
+};
+ElementModel.prototype.save = function() {
+	return null;
+};
+
+module.exports = {
+	Model: ElementModel,
+	Collection: ElementCollection
+};
+
+},{"elementor-models/base-settings":69,"elementor-models/column-settings":70,"elementor-models/row-settings":72,"elementor-models/section-settings":73,"elementor-models/widget-settings":74}],72:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	RowSettingsModel;
+
+RowSettingsModel = BaseSettingsModel.extend( {
+	defaults: {}
+} );
+
+module.exports = RowSettingsModel;
+
+},{"elementor-models/base-settings":69}],73:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	SectionSettingsModel;
+
+SectionSettingsModel = BaseSettingsModel.extend( {
+	defaults: {}
+} );
+
+module.exports = SectionSettingsModel;
+
+},{"elementor-models/base-settings":69}],74:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	WidgetSettingsModel;
+
+WidgetSettingsModel = BaseSettingsModel.extend( {
+
+} );
+
+module.exports = WidgetSettingsModel;
+
+},{"elementor-models/base-settings":69}],75:[function(require,module,exports){
+// modules/iqitelementor/views/_dev/js/editor/utils/context-clipboard.js
+
+let clipboard = window.iqitElementorClipboard || null;
+
+function setClipboardFromElement( view ) {
+    const model = view.model;
+
+    clipboard = {
+        type: 'element',
+        elType: model.get( 'elType' ),          // section / column / widget
+        widgetType: model.get( 'widgetType' ),  // uniquement pour les widgets
+        data: model.toJSON(),
+    };
+
+    window.iqitElementorClipboard = clipboard;
+    return clipboard;
+}
+
+function getCopyAction( view, options = {} ) {
+    const defaults = {
+        icon: '<i class="fa fa-clipboard"></i>',
+    };
+
+    const settings = Object.assign( {}, defaults, options );
+
+    return {
+        name: 'copy',
+        icon: settings.icon,
+        title: elementor.translate ? elementor.translate( 'Copy' ) : 'Copy',
+        separator: settings.separator,
+        callback: () => {
+            setClipboardFromElement( view );
+        },
+    };
+}
+
+module.exports = getCopyAction;
+},{}],76:[function(require,module,exports){
+/**
+ * Utils: paste only style-related settings from one element to another.
+ *
+ * This module exposes two helpers:
+ * - canPasteStyles(clipboardModel, targetModel)
+ * - pasteStyles(clipboardModel, targetModel)
+ *
+ * Both parameters are expected to be Backbone models of Elementor-like widgets
+ * (the same type as those used in the editor).
+ */
+
+/**
+ * Try to get the control definitions for a given element model.
+ * The exact API may vary a bit depending on the fork, so we try
+ * a few common patterns and fall back safely.
+ *
+ * @param {Backbone.Model} model
+ * @returns {Object|null}
+ */
+function getControlsFromModel(model) {
+	if (!model || typeof model !== 'object') {
+		return null;
+	}
+
+	let widgetType = null;
+	if (typeof model.get === 'function') {
+		widgetType = model.get('widgetType');
+	}
+
+	if (
+		typeof elementor !== 'undefined' &&
+		elementor.config &&
+		elementor.config.widgets &&
+		widgetType &&
+		elementor.config.widgets[widgetType]
+	) {
+		const widgetConfig = elementor.config.widgets[widgetType];
+		if (widgetConfig && widgetConfig.controls && typeof widgetConfig.controls === 'object') {
+			return widgetConfig.controls;
+		}
+	}
+
+	return null;
+}
+
+/**
+ * Return the list of setting keys that belong to the Style tab
+ * (or to a section considered as a style section).
+ *
+ * @param {Backbone.Model} model
+ * @returns {string[]} Array of setting keys
+ */
+function getStyleControls(model) {
+	const controls = getControlsFromModel(model);
+	if (!controls) {
+		return [];
+	}
+
+	return controls.filter((control) => {
+		if (typeof control !== 'object') {
+			return false;
+		}
+
+		if ( undefined !== control.style_transfer ) {
+			return control.style_transfer;
+		}
+
+		return 'content' !== control.tab || control.selectors || control.prefix_class;
+	});
+}
+
+/**
+ * Petit helper pour normaliser les settings d'un modèle
+ * (Backbone model ou simple objet).
+ *
+ * @param {any} rawSettings
+ * @returns {Object}
+ */
+function normalizeSettings(rawSettings) {
+	if (!rawSettings) {
+		return {};
+	}
+
+	// Backbone model avec toJSON()
+	if (typeof rawSettings.toJSON === 'function') {
+		return rawSettings.toJSON();
+	}
+
+	// Déjà un objet simple
+	if (typeof rawSettings === 'object') {
+		return rawSettings;
+	}
+
+	return {};
+}
+
+/**
+ * Colle uniquement les settings liés au Style depuis clipboardModel vers targetModel.
+ * Ne fait rien si les prérequis ne sont pas remplis.
+ *
+ * @param {Backbone.Model} targetModel
+ */
+function pasteStyles(targetModel) {
+    const clipboardModel = window.iqitElementorClipboard;
+	if (!clipboardModel || !targetModel) {
+		return;
+	}
+
+	// Clés de style basées sur la définition des controls de la CIBLE :
+	// ça évite d'essayer de setter des clés qui n'existent pas sur ce widget.
+	const styleControls = getStyleControls(targetModel);
+
+	if (!styleControls.length) {
+		return;
+	}
+
+	const sourceSettings = normalizeSettings(clipboardModel.data.settings);
+	const newStyleSettings = {};
+
+	styleControls.forEach((control) => {
+		if (Object.prototype.hasOwnProperty.call(sourceSettings, control.name)) {
+			newStyleSettings[control.name] = sourceSettings[control.name];
+		}
+	});
+
+	const targetSettingsRaw = targetModel.get && targetModel.get('settings');
+	const targetSettings = normalizeSettings(targetSettingsRaw);
+
+	if (!Object.keys(newStyleSettings).length) {
+		// Rien à coller
+		return;
+	}
+
+	// Fusion des settings actuels avec les nouveaux styles
+	const mergedSettings = (typeof _ !== 'undefined' && typeof _.extend === 'function')
+		? _.extend({}, targetSettings, newStyleSettings)
+		: Object.assign({}, targetSettings, newStyleSettings);
+
+	// On met à jour le modèle cible. Selon ton implémentation,
+	// tu peux avoir un setSetting() ou similaire.
+	if (typeof targetSettingsRaw === 'object' && typeof targetSettingsRaw.set === 'function') {
+		// Si settings est un Backbone Model
+		Object.keys(mergedSettings).forEach((settingKey) => {
+			targetSettingsRaw.set(settingKey, mergedSettings[settingKey]);
+		});
+	} else if (typeof targetModel.setSettings === 'function') {
+		// Certaines implémentations exposent une API dédiée
+		targetModel.setSettings(mergedSettings);
+	} else if (typeof targetModel.set === 'function') {
+		// Fallback : on remplace le bloc settings complet
+		targetModel.set('settings', mergedSettings);
+	}
+}
+
+function getPastStylesAction( view, options = {} ) {
+    const defaults = {
+        icon: '<i class="fa fa-paint-brush"></i>',
+    };
+
+    const settings = Object.assign( {}, defaults, options );
+
+    return {
+        name: 'paste_styles',
+        icon: settings.icon,
+        title: elementor.translate ? elementor.translate( 'Paste styles' ) : 'Copy',
+        separator: settings.separator,
+        callback: () => {
+            pasteStyles(view.model);
+        },
+    };
+}
+
+// Export par défaut pratique si tu préfères importer un seul objet.
+module.exports = getPastStylesAction;
+
+},{}],77:[function(require,module,exports){
+var Ajax;
+
+Ajax = {
+	config: {},
+
+	initConfig: function() {
+		this.config = {
+			ajaxParams: {
+				type: 'POST',
+				url: elementor.config.ajaxurl,
+				data: {}
+			}
+		};
+	},
+
+	init: function() {
+		this.initConfig();
+	},
+
+	send: function( action, options ) {
+		var ajaxParams = elementor.helpers.cloneObject( this.config.ajaxParams );
+
+		options = options || {};
+
+		Backbone.$.extend( ajaxParams, options );
+
+
+		if ( ajaxParams.data instanceof FormData ) {
+			ajaxParams.data.append( 'action', action );
+		} else {
+			ajaxParams.data.action = action;
+		}
+
+		var successCallback = ajaxParams.success,
+			errorCallback = ajaxParams.error;
+
+		if ( successCallback || errorCallback ) {
+			ajaxParams.success = function( response ) {
+				if ( response.success && successCallback ) {
+					successCallback( response.data );
+				}
+
+				if ( ( ! response.success ) && errorCallback ) {
+					errorCallback( response.data );
+				}
+			};
+
+			if ( errorCallback ) {
+				ajaxParams.error = function( data ) {
+					errorCallback( data );
+				};
+			}
+		}
+
+		return Backbone.$.ajax( ajaxParams );
+	}
+};
+
+module.exports = Ajax;
+
+},{}],78:[function(require,module,exports){
+var helpers;
+
+helpers = {
+	_enqueuedFonts: [],
+
+	elementsHierarchy: {
+		section: {
+			column: {
+				widget: null,
+				section: null
+			}
+		}
+	},
+
+	enqueueFont: function( font ) {
+		if ( -1 !== this._enqueuedFonts.indexOf( font ) ) {
+			return;
+		}
+
+		var fontType = elementor.config.controls.font.fonts[ font ],
+			fontUrl;
+
+		switch ( fontType ) {
+			case 'googlefonts' :
+				fontUrl = 'https://fonts.googleapis.com/css?family=' + font + ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic';
+				break;
+
+			case 'earlyaccess' :
+				var fontLowerString = font.replace( /\s+/g, '' ).toLowerCase();
+				fontUrl = 'https://fonts.googleapis.com/earlyaccess/' + fontLowerString + '.css';
+				break;
+		}
+
+		if ( ! _.isEmpty( fontUrl ) ) {
+			elementor.$previewContents.find( 'link:last' ).after( '<link href="' + fontUrl + '" rel="stylesheet" type="text/css">' );
+		}
+		this._enqueuedFonts.push( font );
+	},
+
+	getElementChildType: function( elementType, container ) {
+		if ( ! container ) {
+			container = this.elementsHierarchy;
+		}
+
+		if ( undefined !== container[ elementType ] ) {
+
+			if ( Backbone.$.isPlainObject( container[ elementType ] ) ) {
+				return Object.keys( container[ elementType ] );
+			}
+
+			return null;
+		}
+
+		for ( var type in container ) {
+
+			if ( ! container.hasOwnProperty( type ) ) {
+				continue;
+			}
+
+			if ( ! Backbone.$.isPlainObject( container[ type ] ) ) {
+				continue;
+			}
+
+			var result = this.getElementChildType( elementType, container[ type ] );
+
+			if ( result ) {
+				return result;
+			}
+		}
+
+		return null;
+	},
+
+	getUniqueID: function() {
+		var id;
+
+		// TODO: Check conflict models
+		//while ( true ) {
+			id = Math.random().toString( 36 ).substr( 2, 7 );
+			//if ( 1 > $( 'li.item-id-' + id ).length ) {
+				return id;
+			//}
+		//}
+	},
+
+	stringReplaceAll: function( string, replaces ) {
+		var re = new RegExp( Object.keys( replaces ).join( '|' ), 'gi' );
+
+		return string.replace( re, function( matched ) {
+			return replaces[ matched ];
+		} );
+	},
+
+	isControlVisible: function( controlModel, elementSettingsModel ) {
+		var condition;
+
+		// TODO: Better way to get this?
+		if ( _.isFunction( controlModel.get ) ) {
+			condition = controlModel.get( 'condition' );
+		} else {
+			condition = controlModel.condition;
+		}
+
+		if ( _.isEmpty( condition ) ) {
+			return true;
+		}
+
+		var hasFields = _.filter( condition, function( conditionValue, conditionName ) {
+			var conditionNameParts = conditionName.match( /([a-z_0-9]+)(?:\[([a-z_]+)])?(!?)$/i ),
+				conditionRealName = conditionNameParts[1],
+				conditionSubKey = conditionNameParts[2],
+				isNegativeCondition = !! conditionNameParts[3],
+				controlValue = elementSettingsModel.get( conditionRealName );
+
+			if ( conditionSubKey ) {
+				controlValue = controlValue[ conditionSubKey ];
+			}
+
+			var isContains = ( _.isArray( conditionValue ) ) ? _.contains( conditionValue, controlValue ) : conditionValue === controlValue;
+
+			return isNegativeCondition ? isContains : ! isContains;
+		} );
+
+		return _.isEmpty( hasFields );
+	},
+
+	cloneObject: function( object ) {
+		return JSON.parse( JSON.stringify( object ) );
+	},
+
+	getYoutubeIDFromURL: function( url ) {
+		var videoIDParts = url.match( /^.*(?:youtu.be\/|v\/|e\/|u\/\w+\/|embed\/|v=)([^#\&\?]*).*/ );
+
+		return videoIDParts && videoIDParts[1];
+	},
+
+	disableElementEvents: function( $element ) {
+		$element.each( function() {
+			var currentPointerEvents = this.style.pointerEvents;
+
+			if ( 'none' === currentPointerEvents ) {
+				return;
+			}
+
+			Backbone.$( this )
+				.data( 'backup-pointer-events', currentPointerEvents )
+				.css( 'pointer-events', 'none' );
+		} );
+	},
+
+	enableElementEvents: function( $element ) {
+		$element.each( function() {
+			var $this = Backbone.$( this ),
+				backupPointerEvents = $this.data( 'backup-pointer-events' );
+
+			if ( undefined === backupPointerEvents ) {
+				return;
+			}
+
+			$this
+				.removeData( 'backup-pointer-events' )
+				.css( 'pointer-events', backupPointerEvents );
+		} );
+	}
+};
+
+module.exports = helpers;
+
+},{}],79:[function(require,module,exports){
+var Introduction;
+
+Introduction = function() {
+	var modal;
+
+	var initModal = function() {
+		modal = elementor.dialogsManager.createWidget( 'elementor-modal', {
+			id: 'elementor-introduction'
+		} );
+
+		modal.on( 'hide', function() {
+			modal.getElements( 'message' ).empty(); // In order to stop the video
+		} );
+	};
+
+	this.getSettings = function() {
+		return elementor.config.introduction;
+	};
+
+	this.getModal = function() {
+		if ( ! modal ) {
+			initModal();
+		}
+
+		return modal;
+	};
+
+	this.startIntroduction = function() {
+		var settings = this.getSettings();
+
+		this.getModal()
+		    .setHeaderMessage( settings.title )
+		    .setMessage( settings.content )
+		    .show();
+	};
+
+	this.startOnLoadIntroduction = function() {
+		var settings = this.getSettings();
+
+		if ( ! settings.is_user_should_view ) {
+			return;
+		}
+
+		setTimeout( _.bind( function() {
+			this.startIntroduction();
+		}, this ), settings.delay );
+	};
+
+};
+
+module.exports = new Introduction();
+
+},{}],80:[function(require,module,exports){
+/**
+ * HTML5 - Drag and Drop
+ */
+;(function( $ ) {
+
+	var hasFullDataTransferSupport = function( event ) {
+		try {
+			event.originalEvent.dataTransfer.setData( 'test', 'test' );
+
+			event.originalEvent.dataTransfer.clearData( 'test' );
+
+			return true;
+		} catch ( e ) {
+			return false;
+		}
+	};
+
+	var Draggable = function( userSettings ) {
+		var self = this,
+			settings = {},
+			elementsCache = {},
+			defaultSettings = {
+				element: '',
+				groups: null,
+				onDragStart: null,
+				onDragEnd: null
+			};
+
+		var initSettings = function() {
+			$.extend( true, settings, defaultSettings, userSettings );
+		};
+
+		var initElementsCache = function() {
+			elementsCache.$element = $( settings.element );
+		};
+
+		var buildElements = function() {
+			elementsCache.$element.attr( 'draggable', true );
+		};
+
+		var onDragEnd = function( event ) {
+			if ( $.isFunction( settings.onDragEnd ) ) {
+				settings.onDragEnd.call( elementsCache.$element, event, self );
+			}
+		};
+
+		var onDragStart = function( event ) {
+			var groups = settings.groups || [],
+				dataContainer = {
+					groups: groups
+				};
+
+			if ( hasFullDataTransferSupport( event ) ) {
+				event.originalEvent.dataTransfer.setData( JSON.stringify( dataContainer ), true );
+			}
+
+			if ( $.isFunction( settings.onDragStart ) ) {
+				settings.onDragStart.call( elementsCache.$element, event, self );
+			}
+		};
+
+		var attachEvents = function() {
+			elementsCache.$element
+				.on( 'dragstart', onDragStart )
+				.on( 'dragend', onDragEnd );
+		};
+
+		var init = function() {
+			initSettings();
+
+			initElementsCache();
+
+			buildElements();
+
+			attachEvents();
+		};
+
+		this.destroy = function() {
+			elementsCache.$element.off( 'dragstart', onDragStart );
+
+			elementsCache.$element.removeAttr( 'draggable' );
+		};
+
+		init();
+	};
+
+	var Droppable = function( userSettings ) {
+		var self = this,
+			settings = {},
+			elementsCache = {},
+			defaultSettings = {
+				element: '',
+				items: '>',
+				horizontalSensitivity: '10%',
+				axis: [ 'vertical', 'horizontal' ],
+				groups: null,
+				isDroppingAllowed: null,
+				onDragEnter: null,
+				onDragging: null,
+				onDropping: null,
+				onDragLeave: null
+			};
+
+		var initSettings = function() {
+			$.extend( settings, defaultSettings, userSettings );
+		};
+
+		var initElementsCache = function() {
+			elementsCache.$element = $( settings.element );
+		};
+
+		var hasHorizontalDetection = function() {
+			return -1 !== settings.axis.indexOf( 'horizontal' );
+		};
+
+		var hasVerticalDetection = function() {
+			return -1 !== settings.axis.indexOf( 'vertical' );
+		};
+
+		var checkHorizontal = function( offsetX, elementWidth ) {
+			var isPercentValue,
+				sensitivity;
+
+			if ( ! hasHorizontalDetection() ) {
+				return false;
+			}
+
+			if ( ! hasVerticalDetection() ) {
+				return offsetX > elementWidth / 2 ? 'right' : 'left';
+			}
+
+			sensitivity = settings.horizontalSensitivity.match( /\d+/ );
+
+			if ( ! sensitivity ) {
+				return false;
+			}
+
+			sensitivity = sensitivity[ 0 ];
+
+			isPercentValue = /%$/.test( settings.horizontalSensitivity );
+
+			if ( isPercentValue ) {
+				sensitivity = elementWidth / sensitivity;
+			}
+
+			if ( offsetX > elementWidth - sensitivity ) {
+				return 'right';
+			} else if ( offsetX < sensitivity ) {
+				return 'left';
+			}
+
+			return false;
+		};
+
+		var getSide = function( element, event ) {
+			var $element,
+				thisHeight,
+				thisWidth,
+				side;
+
+			event = event.originalEvent;
+
+			$element = $( element );
+			thisHeight = $element.outerHeight();
+			thisWidth = $element.outerWidth();
+
+			if ( side = checkHorizontal( event.offsetX, thisWidth ) ) {
+				return side;
+			}
+
+			if ( ! hasVerticalDetection() ) {
+				return false;
+			}
+
+			if ( event.offsetY > thisHeight / 2 ) {
+				side = 'bottom';
+			} else {
+				side = 'top';
+			}
+
+			return side;
+		};
+
+		var isDroppingAllowed = function( element, side, event ) {
+			var dataTransferTypes,
+				draggableGroups,
+				isGroupMatch,
+				isDroppingAllowed;
+
+			if ( settings.groups && hasFullDataTransferSupport( event ) ) {
+
+				dataTransferTypes = event.originalEvent.dataTransfer.types;
+				isGroupMatch = false;
+
+				dataTransferTypes = Array.prototype.slice.apply( dataTransferTypes ); // Convert to array, since Firefox hold him as DOMStringList
+
+				dataTransferTypes.forEach( function( type ) {
+					try {
+						draggableGroups = JSON.parse( type );
+
+						if ( ! draggableGroups.groups.slice ) {
+							return;
+						}
+
+						settings.groups.forEach( function( groupName ) {
+
+							if ( -1 !== draggableGroups.groups.indexOf( groupName ) ) {
+								isGroupMatch = true;
+								return false; // stops the forEach from extra loops
+							}
+						} );
+					} catch ( e ) {
+					}
+				} );
+
+				if ( ! isGroupMatch ) {
+					return false;
+				}
+			}
+
+			if ( $.isFunction( settings.isDroppingAllowed ) ) {
+
+				isDroppingAllowed = settings.isDroppingAllowed.call( element, side, event, self );
+
+				if ( ! isDroppingAllowed ) {
+					return false;
+				}
+			}
+
+			return true;
+		};
+
+		var onDragEnter = function( event ) {
+			if ( event.target !== this ) {
+				return;
+			}
+
+			// Avoid internal elements event firing
+			$( this ).children().each( function() {
+				var currentPointerEvents = this.style.pointerEvents;
+
+				if ( 'none' === currentPointerEvents ) {
+					return;
+				}
+
+				$( this )
+					.data( 'backup-pointer-events', currentPointerEvents )
+					.css( 'pointer-events', 'none' );
+			} );
+
+			var side = getSide( this, event );
+
+			if ( ! isDroppingAllowed( this, side, event ) ) {
+				return;
+			}
+
+			if ( $.isFunction( settings.onDragEnter ) ) {
+				settings.onDragEnter.call( this, side, event, self );
+			}
+		};
+
+		var onDragOver = function( event ) {
+			var side = getSide( this, event );
+
+			if ( ! isDroppingAllowed( this, side, event ) ) {
+				return;
+			}
+
+			event.preventDefault();
+
+			if ( $.isFunction( settings.onDragging ) ) {
+				settings.onDragging.call( this, side, event, self );
+			}
+		};
+
+		var onDrop = function( event ) {
+			var side = getSide( this, event );
+
+			if ( ! isDroppingAllowed( this, side, event ) ) {
+				return;
+			}
+
+			event.preventDefault();
+
+			if ( $.isFunction( settings.onDropping ) ) {
+				settings.onDropping.call( this, side, event, self );
+			}
+		};
+
+		var onDragLeave = function( event ) {
+			// Avoid internal elements event firing
+			$( this ).children().each( function() {
+				var $this = $( this ),
+					backupPointerEvents = $this.data( 'backup-pointer-events' );
+
+				if ( undefined === backupPointerEvents ) {
+					return;
+				}
+
+				$this
+					.removeData( 'backup-pointer-events' )
+					.css( 'pointer-events', backupPointerEvents );
+			} );
+
+			if ( $.isFunction( settings.onDragLeave ) ) {
+				settings.onDragLeave.call( this, event, self );
+			}
+		};
+
+		var attachEvents = function() {
+			elementsCache.$element
+				.on( 'dragenter', settings.items, onDragEnter )
+				.on( 'dragover', settings.items, onDragOver )
+				.on( 'drop', settings.items, onDrop )
+				.on( 'dragleave drop', settings.items, onDragLeave );
+		};
+
+		var init = function() {
+			initSettings();
+
+			initElementsCache();
+
+			attachEvents();
+		};
+
+		this.destroy = function() {
+			elementsCache.$element
+				.off( 'dragenter', settings.items, onDragEnter )
+				.off( 'dragover', settings.items, onDragOver )
+				.off( 'drop', settings.items, onDrop )
+				.off( 'dragleave drop', settings.items, onDragLeave );
+		};
+
+		init();
+	};
+
+	var plugins = {
+		html5Draggable: Draggable,
+		html5Droppable: Droppable
+	};
+
+	$.each( plugins, function( pluginName, Plugin ) {
+		$.fn[ pluginName ] = function( options ) {
+			options = options || {};
+
+			this.each( function() {
+				var instance = $.data( this, pluginName ),
+					hasInstance = instance instanceof Plugin;
+
+				if ( hasInstance ) {
+
+					if ( 'destroy' === options ) {
+
+						instance.destroy();
+
+						$.removeData( this, pluginName );
+					}
+
+					return;
+				}
+
+				options.element = this;
+
+				$.data( this, pluginName, new Plugin( options ) );
+			} );
+
+			return this;
+		};
+	} );
+})( jQuery );
+
+},{}],81:[function(require,module,exports){
+/*!
+ * jQuery Serialize Object v1.0.1
+ */
+(function( $ ) {
+	$.fn.elementorSerializeObject = function() {
+		var serializedArray = this.serializeArray(),
+			data = {};
+
+		var parseObject = function( dataContainer, key, value ) {
+			var isArrayKey = /^[^\[\]]+\[]/.test( key ),
+				isObjectKey = /^[^\[\]]+\[[^\[\]]+]/.test( key ),
+				keyName = key.replace( /\[.*/, '' );
+
+			if ( isArrayKey ) {
+				if ( ! dataContainer[ keyName ] ) {
+					dataContainer[ keyName ] = [];
+				}
+			} else {
+				if ( ! isObjectKey ) {
+					if ( dataContainer.push ) {
+						dataContainer.push( value );
+					} else {
+						dataContainer[ keyName ] = value;
+					}
+
+					return;
+				}
+
+				if ( ! dataContainer[ keyName ] ) {
+					dataContainer[ keyName ] = {};
+				}
+			}
+
+			var nextKeys = key.match( /\[[^\[\]]*]/g );
+
+			nextKeys[ 0 ] = nextKeys[ 0 ].replace( /\[|]/g, '' );
+
+			return parseObject( dataContainer[ keyName ], nextKeys.join( '' ), value );
+		};
+
+		$.each( serializedArray, function() {
+			parseObject( data, this.name, this.value );
+		} );
+		return data;
+	};
+})( jQuery );
+
+},{}],82:[function(require,module,exports){
+var Modals;
+
+Modals = {
+	init: function() {
+		this.initModalWidgetType();
+	},
+
+	initModalWidgetType: function() {
+		var modalProperties = {
+			getDefaultSettings: function() {
+				var settings = DialogsManager.getWidgetType( 'options' ).prototype.getDefaultSettings.apply( this, arguments );
+
+				return _.extend( settings, {
+					position: {
+						my: 'center',
+						at: 'center'
+					},
+					contentWidth: 'auto',
+					contentHeight: 'auto',
+					closeButton: true
+				} );
+			},
+			buildWidget: function() {
+				DialogsManager.getWidgetType( 'options' ).prototype.buildWidget.apply( this, arguments );
+
+				if ( ! this.getSettings( 'closeButton' ) ) {
+					return;
+				}
+
+				var $closeButton = this.addElement( 'closeButton', '<div><i class="fa fa-times"></i></div>' );
+
+				this.getElements( 'widgetContent' ).prepend( $closeButton );
+			},
+			attachEvents: function() {
+				if ( this.getSettings( 'closeButton' ) ) {
+					this.getElements( 'closeButton' ).on( 'click', this.hide );
+				}
+			},
+			onReady: function() {
+				DialogsManager.getWidgetType( 'options' ).prototype.onReady.apply( this, arguments );
+
+				var elements = this.getElements(),
+					settings = this.getSettings();
+
+				if ( 'auto' !== settings.contentWidth ) {
+					elements.message.width( settings.contentWidth );
+				}
+
+				if ( 'auto' !== settings.contentHeight ) {
+					elements.message.height( settings.contentHeight );
+				}
+			}
+		};
+
+		DialogsManager.addWidgetType( 'elementor-modal', DialogsManager.getWidgetType( 'options' ).extend( 'elementor-modal', modalProperties ) );
+	}
+};
+
+module.exports = Modals;
+
+},{}],83:[function(require,module,exports){
+var presetsFactory;
+
+presetsFactory = {
+
+	getPresetsDictionary: function() {
+		return {
+			11: 100 / 9,
+			12: 100 / 8,
+			14: 100 / 7,
+			16: 100 / 6,
+			33: 100 / 3,
+			66: 2 / 3 * 100,
+			83: 5 / 6 * 100
+		};
+	},
+
+	getAbsolutePresetValues: function( preset ) {
+		var clonedPreset = elementor.helpers.cloneObject( preset ),
+			presetDictionary = this.getPresetsDictionary();
+
+		_.each( clonedPreset, function( unitValue, unitIndex ) {
+			if ( presetDictionary[ unitValue ] ) {
+				clonedPreset[ unitIndex ] = presetDictionary[ unitValue ];
+			}
+		} );
+
+		return clonedPreset;
+	},
+
+	getPresets: function( columnsCount, presetIndex ) {
+		var presets = elementor.helpers.cloneObject( elementor.config.elements.section.presets );
+
+		if ( columnsCount ) {
+			presets = presets[ columnsCount ];
+		}
+
+		if ( presetIndex ) {
+			presets = presets[ presetIndex ];
+		}
+
+		return presets;
+	},
+
+	getPresetByStructure: function( structure ) {
+		var parsedStructure = this.getParsedStructure( structure );
+
+		return this.getPresets( parsedStructure.columnsCount, parsedStructure.presetIndex );
+	},
+
+	getParsedStructure: function( structure ) {
+		structure += ''; // Make sure this is a string
+
+		return {
+			columnsCount: structure.slice( 0, -1 ),
+			presetIndex: structure.substr( -1 )
+		};
+	},
+
+	getPresetSVG: function( preset, svgWidth, svgHeight, separatorWidth ) {
+		svgWidth = svgWidth || 100;
+		svgHeight = svgHeight || 50;
+		separatorWidth = separatorWidth || 2;
+
+		var absolutePresetValues = this.getAbsolutePresetValues( preset ),
+			presetSVGPath = this._generatePresetSVGPath( absolutePresetValues, svgWidth, svgHeight, separatorWidth );
+
+		return this._createSVGPreset( presetSVGPath, svgWidth, svgHeight );
+	},
+
+	_createSVGPreset: function( presetPath, svgWidth, svgHeight ) {
+		var svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
+
+		svg.setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:xlink', 'http://www.w3.org/1999/xlink' );
+		svg.setAttribute( 'viewBox', '0 0 ' + svgWidth + ' ' + svgHeight );
+
+		var path = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
+
+		path.setAttribute( 'd', presetPath );
+
+		svg.appendChild( path );
+
+		return svg;
+	},
+
+	_generatePresetSVGPath: function( preset, svgWidth, svgHeight, separatorWidth ) {
+		var DRAW_SIZE = svgWidth - separatorWidth * ( preset.length - 1 );
+
+		var xPointer = 0,
+			dOutput = '';
+
+		for ( var i = 0; i < preset.length; i++ ) {
+			if ( i ) {
+				dOutput += ' ';
+			}
+
+			var increment = preset[ i ] / 100 * DRAW_SIZE;
+
+			xPointer += increment;
+
+			dOutput += 'M' + ( +xPointer.toFixed( 4 ) ) + ',0';
+
+			dOutput += 'V' + svgHeight;
+
+			dOutput += 'H' + ( +( xPointer - increment ).toFixed( 4 ) );
+
+			dOutput += 'V0Z';
+
+			xPointer += separatorWidth;
+		}
+
+		return dOutput;
+	}
+};
+
+module.exports = presetsFactory;
+
+},{}],84:[function(require,module,exports){
+var Schemes;
+
+Schemes = function() {
+	var self = this,
+		styleRules = {},
+		schemes = {},
+		settings = {
+			selectorWrapperPrefix: '.elementor-widget-'
+		},
+		elements = {};
+
+	var buildUI = function() {
+		elements.$previewHead.append( elements.$style );
+	};
+
+	var initElements = function() {
+		elements.$style = Backbone.$( '<style>', {
+			id: 'elementor-style-scheme'
+		});
+
+		elements.$previewHead = elementor.$previewContents.find( 'head' );
+	};
+
+	var initSchemes = function() {
+		schemes = elementor.helpers.cloneObject( elementor.config.schemes.items );
+	};
+
+	var addStyleRule = function( selector, property ) {
+		if ( ! styleRules[ selector ] ) {
+			styleRules[ selector ] = [];
+		}
+
+		styleRules[ selector ].push( property );
+	};
+
+	var fetchControlStyles = function( control, widgetType ) {
+		_.each( control.selectors, function( cssProperty, selector ) {
+			var currentSchemeValue = self.getSchemeValue( control.scheme.type, control.scheme.value, control.scheme.key ),
+				outputSelector,
+				outputCssProperty;
+
+			if ( _.isEmpty( currentSchemeValue.value ) ) {
+				return;
+			}
+
+			outputSelector = selector.replace( /\{\{WRAPPER\}\}/g, settings.selectorWrapperPrefix + widgetType );
+			outputCssProperty = elementor.getControlItemView().replaceStyleValues( cssProperty, currentSchemeValue.value );
+
+			addStyleRule( outputSelector, outputCssProperty );
+		} );
+	};
+
+	var fetchWidgetControlsStyles = function( widget, widgetType ) {
+		var widgetSchemeControls = self.getWidgetSchemeControls( widget );
+
+		_.each( widgetSchemeControls, function( control ) {
+			fetchControlStyles( control, widgetType );
+		} );
+	};
+
+	var fetchAllWidgetsSchemesStyle = function() {
+		_.each( elementor.config.widgets, function( widget, widgetType ) {
+			fetchWidgetControlsStyles(  widget, widgetType  );
+		} );
+	};
+
+	var parseSchemeStyle = function() {
+		var stringOutput = '';
+
+		_.each( styleRules, function( properties, selector ) {
+			stringOutput += selector + '{' + properties.join( '' ) + '}';
+		} );
+
+		return stringOutput;
+	};
+
+	var resetStyleRules = function() {
+		styleRules = {};
+	};
+
+	this.init = function() {
+		initElements();
+		buildUI();
+		initSchemes();
+
+		return self;
+	};
+
+	this.getWidgetSchemeControls = function( widget ) {
+		return _.filter( widget.controls, function( control ) {
+			return _.isObject( control.scheme );
+		} );
+	};
+
+	this.getSchemes = function() {
+		return schemes;
+	};
+
+	this.getEnabledSchemesTypes = function() {
+		return elementor.config.schemes.enabled_schemes;
+	};
+
+	this.getScheme = function( schemeType ) {
+		return schemes[ schemeType ];
+	};
+
+	this.getSchemeValue = function( schemeType, value, key ) {
+		if ( this.getEnabledSchemesTypes().indexOf( schemeType ) < 0 ) {
+			return false;
+		}
+
+		var scheme = self.getScheme( schemeType ),
+			schemeValue = scheme.items[ value ];
+
+		if ( key && _.isObject( schemeValue ) ) {
+			var clonedSchemeValue = elementor.helpers.cloneObject( schemeValue );
+
+			clonedSchemeValue.value = schemeValue.value[ key ];
+
+			return clonedSchemeValue;
+		}
+
+		return schemeValue;
+	};
+
+	this.printSchemesStyle = function() {
+		resetStyleRules();
+		fetchAllWidgetsSchemesStyle();
+
+		elements.$style.text( parseSchemeStyle() );
+	};
+
+	this.resetSchemes = function( schemeName ) {
+		schemes[ schemeName ] = elementor.helpers.cloneObject( elementor.config.schemes.items[ schemeName ] );
+
+		this.onSchemeChange();
+	};
+
+	this.saveScheme = function( schemeName ) {
+		elementor.config.schemes.items[ schemeName ].items = elementor.helpers.cloneObject( schemes[ schemeName ].items );
+
+		NProgress.start();
+
+		elementor.ajax.send( 'apply_scheme', {
+			data: {
+				scheme_name: schemeName,
+				data: JSON.stringify( schemes[ schemeName ].items )
+			},
+			success: function() {
+				NProgress.done();
+			}
+		} );
+	};
+
+	this.setSchemeValue = function( schemeName, itemKey, value ) {
+		schemes[ schemeName ].items[ itemKey ].value = value;
+
+		this.onSchemeChange();
+	};
+
+	this.onSchemeChange = function() {
+		this.printSchemesStyle();
+	};
+};
+
+module.exports = new Schemes();
+
+},{}],85:[function(require,module,exports){
+( function( $ ) {
+
+	var Stylesheet = function() {
+		var self = this,
+			rules = {},
+			devices = {};
+
+		var getDeviceMaxValue = function( deviceName ) {
+			var deviceNames = Object.keys( devices ),
+				deviceNameIndex = deviceNames.indexOf( deviceName ),
+				nextIndex = deviceNameIndex + 1;
+
+			if ( nextIndex >= deviceNames.length ) {
+				throw new RangeError( 'Max value for this device is out of range.' );
+			}
+
+			return devices[ deviceNames[ nextIndex ] ] - 1;
+		};
+
+		var queryToHash = function( query ) {
+			var hash = [];
+
+			$.each( query, function( endPoint ) {
+				hash.push( endPoint + '_' + this );
+			} );
+
+			return hash.join( '-' );
+		};
+
+		var hashToQuery = function( hash ) {
+			var query = {};
+
+			hash = hash.split( '-' ).filter( String );
+
+			hash.forEach( function( singleQuery ) {
+				var queryParts = singleQuery.split( '_' ),
+					endPoint = queryParts[0],
+					deviceName = queryParts[1];
+
+				query[ endPoint ] = 'max' === endPoint ? getDeviceMaxValue( deviceName ) : devices[ deviceName ];
+			} );
+
+			return query;
+		};
+
+		var addQueryHash = function( queryHash ) {
+			rules[ queryHash ] = {};
+
+			var hashes = Object.keys( rules );
+
+			if ( hashes.length < 2 ) {
+				return;
+			}
+
+			// Sort the devices from narrowest to widest
+			hashes.sort( function( a, b ) {
+				if ( 'all' === a ) {
+					return -1;
+				}
+
+				if ( 'all' === b ) {
+					return 1;
+				}
+
+				var aQuery = hashToQuery( a ),
+					bQuery = hashToQuery( b );
+
+				return bQuery.max - aQuery.max;
+			} );
+
+			var sortedRules = {};
+
+			hashes.forEach( function( deviceName ) {
+				sortedRules[ deviceName ] = rules[ deviceName ];
+			} );
+
+			rules = sortedRules;
+		};
+
+		this.addDevice = function( deviceName, deviceValue ) {
+			devices[ deviceName ] = deviceValue;
+
+			var deviceNames = Object.keys( devices );
+
+			if ( deviceNames.length < 2 ) {
+				return self;
+			}
+
+			// Sort the devices from narrowest to widest
+			deviceNames.sort( function( a, b ) {
+				return devices[ a ] - devices[ b ];
+			} );
+
+			var sortedDevices = {};
+
+			deviceNames.forEach( function( deviceName ) {
+				sortedDevices[ deviceName ] = devices[ deviceName ];
+			} );
+
+			devices = sortedDevices;
+
+			return self;
+		};
+
+		var getQueryHashStyleFormat = function( queryHash ) {
+			var query = hashToQuery( queryHash ),
+				styleFormat = [];
+
+			$.each( query, function( endPoint ) {
+				styleFormat.push( '(' + endPoint + '-width:' + this + 'px)' );
+			} );
+
+			return '@media' + styleFormat.join( ' and ' );
+		};
+
+		this.addRules = function( selector, styleRules, query ) {
+			var queryHash = 'all';
+
+			if ( query ) {
+				queryHash = queryToHash( query );
+			}
+
+			if ( ! rules[ queryHash ] ) {
+				addQueryHash( queryHash );
+			}
+
+			if ( ! rules[ queryHash ][ selector ] ) {
+				rules[ queryHash ][ selector ] = {};
+			}
+
+			if ( 'string' === typeof styleRules ) {
+				styleRules = styleRules.split( ';' ).filter( String );
+
+				var orderedRules = {};
+
+				try {
+					$.each( styleRules, function() {
+						var property = this.split( /:(.*)?/ );
+						orderedRules[ property[ 0 ].trim() ] = property[ 1 ].trim().replace( ';', '' );
+					} );
+				} catch ( error ) { // At least one of the properties is incorrect
+					return;
+				}
+
+				styleRules = orderedRules;
+			}
+
+			$.extend( rules[ queryHash ][ selector ], styleRules );
+
+			return self;
+		};
+
+		this.empty = function() {
+			rules = {};
+		};
+
+		this.toString = function() {
+			var styleText = '';
+
+			$.each( rules, function( queryHash ) {
+				var deviceText = Stylesheet.parseRules( this );
+
+				if ( 'all' !== queryHash ) {
+					deviceText = getQueryHashStyleFormat( queryHash ) + '{' + deviceText + '}';
+				}
+
+				styleText += deviceText;
+			} );
+
+			return styleText;
+		};
+	};
+
+	Stylesheet.parseRules = function( rules ) {
+		var parsedRules = '';
+
+		$.each( rules, function( selector ) {
+			var selectorContent = Stylesheet.parseProperties( this );
+
+			if ( selectorContent ) {
+				parsedRules += selector + '{' + selectorContent + '}';
+			}
+		} );
+
+		return parsedRules;
+	};
+
+	Stylesheet.parseProperties = function( properties ) {
+		var parsedProperties = '';
+
+		$.each( properties, function( propertyKey ) {
+			if ( this ) {
+				parsedProperties += propertyKey + ':' + this + ';';
+			}
+		} );
+
+		return parsedProperties;
+	};
+
+	module.exports = Stylesheet;
+} )( jQuery );
+
+},{}],86:[function(require,module,exports){
+var BaseSettingsModel = require( 'elementor-models/base-settings' ),
+	Stylesheet = require( 'elementor-utils/stylesheet' ),
+	BaseElementView;
+
+BaseElementView = Marionette.CompositeView.extend( {
+	tagName: 'div',
+
+	id: function() {
+		return this.getElementUniqueClass();
+	},
+
+	attributes: function() {
+		var type = this.model.get( 'elType' );
+
+		if ( 'widget'  === type ) {
+			type = this.model.get( 'widgetType' );
+		}
+		return {
+			'data-element_type': type
+		};
+	},
+
+	baseEvents: {},
+
+	elementEvents: {},
+
+	stylesheet: null,
+	$stylesheetElement: null,
+
+	getElementType: function() {
+		return this.model.get( 'elType' );
+	},
+
+	getChildType: function() {
+		return elementor.helpers.getElementChildType( this.getElementType() );
+	},
+
+	templateHelpers: function() {
+		return {
+			elementModel: this.model
+		};
+	},
+
+	events: function() {
+		return _.extend( {}, this.baseEvents, this.elementEvents );
+	},
+
+	getTemplateType: function() {
+		return 'js';
+	},
+
+	initialize: function() {
+		// grab the child collection from the parent model
+		// so that we can render the collection as children
+		// of this parent element
+		this.collection = this.model.get( 'elements' );
+
+		if ( this.collection ) {
+			this.listenTo( this.collection, 'add remove reset', this.onCollectionChanged, this );
+		}
+
+		this.listenTo( this.model.get( 'settings' ), 'change', this.onSettingsChanged, this );
+		this.listenTo( this.model.get( 'editSettings' ), 'change', this.onSettingsChanged, this );
+
+		this.on( 'render', function() {
+			this.renderUI();
+			this.runReadyTrigger();
+		} );
+
+		this.initRemoveDialog();
+
+		this.initStylesheet();
+	},
+
+	addChildModel: function( model, options ) {
+		return this.collection.add( model, options, true );
+	},
+
+	isCollectionFilled: function() {
+		return false;
+	},
+
+	isInner: function() {
+		return !! this.model.get( 'isInner' );
+	},
+
+	initRemoveDialog: function() {
+		var removeDialog;
+
+		this.getRemoveDialog = function() {
+			if ( ! removeDialog ) {
+				var elementTitle = this.model.getTitle();
+
+				removeDialog = elementor.dialogsManager.createWidget( 'confirm', {
+					message: elementor.translate( 'dialog_confirm_delete', [ elementTitle.toLowerCase() ] ),
+					headerMessage: elementor.translate( 'delete_element', [ elementTitle ] ),
+					strings: {
+						confirm: elementor.translate( 'delete' ),
+						cancel: elementor.translate( 'cancel' )
+					},
+					defaultOption: 'confirm',
+					onConfirm: _.bind( function() {
+						this.model.destroy();
+					}, this )
+				} );
+			}
+
+			return removeDialog;
+		};
+	},
+
+	initStylesheet: function() {
+		this.stylesheet = new Stylesheet();
+
+		var viewportBreakpoints = elementor.config.viewportBreakpoints;
+
+		this.stylesheet
+			.addDevice( 'mobile', 0 )
+			.addDevice( 'tablet', viewportBreakpoints.md )
+			.addDevice( 'desktop', viewportBreakpoints.lg );
+	},
+
+	enqueueFonts: function() {
+		_.each( this.model.get( 'settings' ).getFontControls(), _.bind( function( control ) {
+			var fontFamilyName = this.model.getSetting( control.name );
+			if ( _.isEmpty( fontFamilyName ) ) {
+				return;
+			}
+
+			var isVisible = elementor.helpers.isControlVisible( control, this.model.get( 'settings' ) );
+			if ( ! isVisible ) {
+				return;
+			}
+
+			elementor.helpers.enqueueFont( fontFamilyName );
+		}, this ) );
+	},
+
+	renderStyles: function() {
+		var self = this,
+			settings = self.model.get( 'settings' );
+
+		self.stylesheet.empty();
+
+		self.addStyleRules( settings.getStyleControls(), settings.attributes );
+
+
+		/*
+		 _.each( settings.getStyleControls(), function( control ) {
+		 var controlValue = self.model.getSetting( control.name );
+
+		 if ( ! _.isNumber( controlValue ) && _.isEmpty( controlValue ) ) {
+		 return;
+		 }
+
+		 var isVisible = elementor.helpers.isControlVisible( control, self.model.get( 'settings' ) );
+		 if ( ! isVisible ) {
+		 return;
+		 }
+
+		 _.each( control.selectors, function( cssProperty, selector ) {
+		 var outputSelector = selector.replace( /\{\{WRAPPER}}/g, '#' + self.getElementUniqueClass() ),
+		 outputCssProperty = elementor.getControlItemView( control.type ).replaceStyleValues( cssProperty, controlValue ),
+		 query;
+
+		 if ( _.isEmpty( outputCssProperty ) ) {
+		 return;
+		 }
+
+		 if ( control.responsive && 'desktop' !== control.responsive ) {
+		 query = { max: control.responsive };
+		 }
+
+		 self.stylesheet.addRules( outputSelector, outputCssProperty, query );
+		 } );
+		 } );
+		 */
+
+
+
+
+		if ( 'column' === self.model.get( 'elType' ) ) {
+			var inlineSize = self.model.getSetting( '_inline_size' );
+
+			if ( ! _.isEmpty( inlineSize ) ) {
+				self.stylesheet.addRules( '#' + self.getElementUniqueClass(), { width: inlineSize + '%' }, { min: 'tablet' } );
+			}
+		}
+
+		self.addStyleToDocument();
+
+		// Render custom CSS
+		self.renderCustomCSS();
+	},
+
+	renderCustomCSS: function() {
+		var customCSS = this.model.getSetting( '_custom_css' ),
+			styleId = 'elementor-style-' + this.model.get( 'id' ) + '-custom';
+
+		// Find existing element in DOM if not cached
+		if ( ! this.$customCSSElement ) {
+			this.$customCSSElement = elementor.$previewContents.find( '#' + styleId );
+			if ( ! this.$customCSSElement.length ) {
+				this.$customCSSElement = null;
+			}
+		}
+
+		if ( _.isEmpty( customCSS ) ) {
+			// Remove existing custom CSS element if exists
+			if ( this.$customCSSElement ) {
+				this.$customCSSElement.remove();
+				this.$customCSSElement = null;
+			}
+			return;
+		}
+
+		// Replace "selector" placeholder with the unique element selector
+		var selector = '.elementor-element.elementor-element-' + this.model.get( 'id' );
+		customCSS = customCSS.replace( /selector/g, selector );
+
+		// Create the element only if it doesn't exist
+		if ( ! this.$customCSSElement ) {
+			this.$customCSSElement = Backbone.$( '<style>', { id: styleId } );
+			elementor.$previewContents.find( 'head' ).append( this.$customCSSElement );
+		}
+
+		this.$customCSSElement.text( customCSS );
+	},
+
+	addStyleRules: function( controls, values, placeholders, replacements ) {
+		var self = this;
+
+		placeholders = placeholders || [ /\{\{WRAPPER}}/g ];
+
+		replacements = replacements || [ '#' + self.getElementUniqueClass() ];
+
+		_.each( controls, function( control ) {
+
+			if ( control.styleFields ) {
+				placeholders[1] = '{{CURRENT_ITEM}}';
+
+				values[ control.name ].each( function( itemModel ) {
+					replacements[1] = '.elementor-repeater-item-' + itemModel.get( '_id' );
+
+					self.addStyleRules( control.styleFields, itemModel.attributes, placeholders, replacements );
+				} );
+			}
+
+			//self.addControlStyleRules( control, values, self.model.get( 'settings' ), placeholders, replacements );
+			self.addControlStyleRules( control, values, self.model.get( 'settings' ).controls, placeholders, replacements );
+		} );
+	},
+
+	addControlStyleRules: function( control, values, controlsStack, placeholders, replacements ) {
+		var self = this;
+
+		BaseElementView.addControlStyleRules( self.stylesheet, control, controlsStack, function( control ) {
+			return self.getStyleControlValue( control, values );
+		}, placeholders, replacements );
+	},
+
+	getStyleControlValue: function( control, values ) {
+		var value = values[ control.name ];
+
+		if ( control.selectors_dictionary ) {
+			value = control.selectors_dictionary[ value ] || value;
+		}
+
+		if ( ! _.isNumber( value ) && _.isEmpty( value ) ) {
+			return;
+		}
+
+		var isVisible = elementor.helpers.isControlVisible( control, this.model.get( 'settings' ) );
+		if ( ! isVisible ) {
+			return;
+		}
+
+		return value;
+	},
+
+
+
+	/*
+
+	addControlStyleRules: function( control, values, controlsStack, placeholders, replacements ) {
+		var self = this,
+			value = values[ control.name ];
+
+		if ( ! _.isNumber( value ) && _.isEmpty( value ) ) {
+			return;
+		}
+
+		var isVisible = elementor.helpers.isControlVisible( control, this.model.get( 'settings' ) );
+		if ( ! isVisible ) {
+			return;
+		}
+		_.each( control.selectors, function( cssProperty, selector ) {
+
+			var outputCssProperty,
+				parsedValue = '',
+				parserControl,
+				valueToInsert = value,
+				query;
+
+
+			try {
+				outputCssProperty = cssProperty.replace( /\{\{(?:([^.}]+)\.)?([^}]*)}}/g, function( originalPhrase, controlName, placeholder ) {
+
+					if ( controlName ) {
+						parserControl = _.findWhere( controlsStack, { name: controlName } );
+
+						valueToInsert = values( parserControl );
+
+						console.log(controlName);
+						console.log(originalPhrase);
+						console.log(placeholder);
+						console.log(valueToInsert);
+					}
+
+					parsedValue = elementor.getControlItemView( control.type ).getStyleValue( placeholder.toLowerCase(), valueToInsert );
+
+
+					if ( '' === parsedValue ) {
+						throw '';
+					}
+
+					return parsedValue;
+				} );
+			} catch ( e ) {
+				console.log(e);
+				return;
+			}
+
+			//console.log(outputCssProperty);
+
+
+		var outputCssProperty = elementor.getControlItemView( control.type ).replaceStyleValues( cssProperty, value );
+			//console.log(outputCssProperty);
+
+
+			if ( _.isEmpty( outputCssProperty ) ) {
+				return;
+			}
+
+			_.each( placeholders, function( placeholder, index ) {
+				selector = selector.replace( placeholder, replacements[ index ] );
+			} );
+
+			if ( control.responsive && 'desktop' !== control.responsive ) {
+				query = { max: control.responsive };
+			}
+
+			self.stylesheet.addRules( selector, outputCssProperty, query );
+		} );
+	},
+
+	*/
+
+	addStyleToDocument: function() {
+		var styleText = this.stylesheet.toString(),
+			styleId = 'elementor-style-' + this.model.get( 'id' );
+
+		// Always look up in DOM — cached reference may be stale after drag-and-drop
+		this.$stylesheetElement = elementor.$previewContents.find( '#' + styleId );
+		if ( ! this.$stylesheetElement.length ) {
+			this.$stylesheetElement = null;
+		}
+
+		if ( _.isEmpty( styleText ) && ! this.$stylesheetElement ) {
+			return;
+		}
+
+		if ( ! this.$stylesheetElement ) {
+			this.$stylesheetElement = Backbone.$( '<style>', { id: styleId } );
+			elementor.$previewContents.find( 'head' ).append( this.$stylesheetElement );
+		}
+
+		this.$stylesheetElement.text( styleText );
+	},
+
+	renderCustomClasses: function() {
+		// Add base class and unique element class (same as ID for CSS selector compatibility)
+		this.$el.addClass( 'elementor-element' );
+		this.$el.addClass( this.getElementUniqueClass() );
+
+		var settings = this.model.get( 'settings' );
+
+		_.each( settings.attributes, _.bind( function( value, attribute ) {
+			if ( settings.isClassControl( attribute ) ) {
+				var currentControl = settings.getControl( attribute );
+
+				this.$el.removeClass( currentControl.prefix_class + settings.previous( attribute ) );
+
+				var isVisible = elementor.helpers.isControlVisible( currentControl, this.model.get( 'settings' ) );
+
+				if ( isVisible && ! _.isEmpty( settings.get( attribute ) ) ) {
+					this.$el.addClass( currentControl.prefix_class + settings.get( attribute ) );
+					this.$el.addClass( _.result( this, 'className' ) );
+				}
+			}
+		}, this ) );
+	},
+
+	renderUI: function() {
+		this.renderStyles();
+		this.renderCustomClasses();
+		this.renderCustomAttributes();
+		this.enqueueFonts();
+	},
+
+	// Attributes blacklist (same as PHP)
+	_attributesBlacklist: [
+		'id', 'class', 'data-id', 'data-settings', 'data-element_type',
+		'data-widget_type', 'data-model-cid'
+	],
+
+	// Store previous custom attributes to remove them on change
+	_previousCustomAttributes: [],
+
+	renderCustomAttributes: function() {
+		var self = this,
+			customAttributes = this.model.getSetting( '_custom_attributes' );
+
+		// Remove previous custom attributes
+		_.each( this._previousCustomAttributes, function( attrName ) {
+			self.$el.removeAttr( attrName );
+		});
+		this._previousCustomAttributes = [];
+
+		if ( _.isEmpty( customAttributes ) ) {
+			return;
+		}
+
+		// Parse attributes (format: key|value per line)
+		var lines = customAttributes.split( '\n' );
+
+		_.each( lines, function( line ) {
+			line = line.trim();
+			if ( _.isEmpty( line ) ) {
+				return;
+			}
+
+			var parts = line.split( '|' ),
+				attrKey = parts[0].trim().toLowerCase(),
+				attrValue = parts[1] ? parts[1].trim() : '';
+
+			// Validate attribute name (only valid characters)
+			if ( ! /^[a-z][-_a-z0-9]*$/.test( attrKey ) ) {
+				var match = attrKey.match( /[-_a-z0-9]+/ );
+				if ( ! match ) {
+					return;
+				}
+				attrKey = match[0];
+			}
+
+			// Block dangerous attributes (on* events, href)
+			if ( attrKey === 'href' || attrKey.indexOf( 'on' ) === 0 ) {
+				return;
+			}
+
+			// Block blacklisted attributes
+			if ( _.contains( self._attributesBlacklist, attrKey ) ) {
+				return;
+			}
+
+			// Apply attribute
+			self.$el.attr( attrKey, attrValue );
+			self._previousCustomAttributes.push( attrKey );
+		});
+	},
+
+	runReadyTrigger: function() {
+		_.defer( _.bind( function() {
+			elementorFrontend.elementsHandler.runReadyTrigger( this.$el );
+		}, this ) );
+	},
+
+	getElementUniqueClass: function() {
+		return 'elementor-element-' + this.model.get( 'id' );
+	},
+
+	onCollectionChanged: function() {
+		elementor.setFlagEditorChange( true );
+	},
+
+	onSettingsChanged: function( settings ) {
+		if ( this.model.get( 'editSettings' ) !== settings ) {
+			// Change flag only if server settings was changed
+			elementor.setFlagEditorChange( true );
+		}
+
+		// Make sure is correct model
+		if ( settings instanceof BaseSettingsModel ) {
+			var isContentChanged = false;
+
+			_.each( settings.changedAttributes(), function( settingValue, settingKey ) {
+				var control = settings.getControl( settingKey );
+
+				if ( ! control ) {
+					return;
+				}
+
+				if ( control.force_render || ! settings.isStyleControl( settingKey ) && ! settings.isClassControl( settingKey ) ) {
+					isContentChanged = true;
+				}
+			} );
+
+			if ( ! isContentChanged ) {
+				this.renderUI();
+				return;
+			}
+		}
+
+		// Re-render the template
+		var templateType = this.getTemplateType();
+
+		if ( 'js' === templateType ) {
+			this.model.setHtmlCache();
+			this.render();
+			this.model.renderOnLeave = true;
+		} else {
+			this.model.renderRemoteServer();
+		}
+	},
+
+	onClickRemove: function( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		this.getRemoveDialog().show();
+	},
+
+	onBeforeDestroy: function() {
+		// Remove element stylesheet from the DOM
+		if ( this.$stylesheetElement ) {
+			this.$stylesheetElement.remove();
+			this.$stylesheetElement = null;
+		}
+
+		// Remove custom CSS style from the DOM
+		if ( this.$customCSSElement ) {
+			this.$customCSSElement.remove();
+			this.$customCSSElement = null;
+		}
+	}
+}, {
+	addControlStyleRules: function( stylesheet, control, controlsStack, valueCallback, placeholders, replacements ) {
+		var value = valueCallback( control );
+
+		if ( undefined === value ) {
+			return;
+		}
+
+		_.each( control.selectors, function( cssProperty, selector ) {
+
+			var outputCssProperty,
+				query;
+
+			try {
+				outputCssProperty = cssProperty.replace( /\{\{(?:([^.}]+)\.)?([^}]*)}}/g, function( originalPhrase, controlName, placeholder ) {
+                    var parserControl = control,
+                        valueToInsert = value;
+
+                    if ( controlName ) {
+                        parserControl = _.findWhere( controlsStack, { name: controlName } );
+
+                        valueToInsert = valueCallback( parserControl );
+                    }
+
+                    var parsedValue = elementor.getControlItemView( parserControl.type ).getStyleValue( placeholder.toLowerCase(), valueToInsert );
+
+                    // Skip if value is empty, undefined or null
+                    if ( '' === parsedValue || undefined === parsedValue || null === parsedValue ) {
+                        throw '';
+                    }
+
+					if ('__EMPTY__' === parsedValue) {
+						parsedValue = '';
+					}
+
+                    return parsedValue;
+				} );
+			} catch ( e ) {
+				return;
+			}
+
+			if ( _.isEmpty( outputCssProperty ) ) {
+				return;
+			}
+
+            _.each( placeholders, function( placeholder, index ) {
+                var placeholderPattern = new RegExp( placeholder, 'g' );
+
+                selector = selector.replace( placeholderPattern, replacements[ index ] );
+            } );
+
+			if ( control.responsive && 'desktop' !== control.responsive ) {
+				query = { max: control.responsive };
+			}
+
+			stylesheet.addRules( selector, outputCssProperty, query );
+		} );
+	}
+} );
+
+module.exports = BaseElementView;
+},{"elementor-models/base-settings":69,"elementor-utils/stylesheet":85}],87:[function(require,module,exports){
+var BaseElementView = require( 'elementor-views/base-element' ),
+	ElementEmptyView = require( 'elementor-views/element-empty' ),
+	WidgetView = require( 'elementor-views/widget' ),
+	ColumnView;
+
+ColumnView = BaseElementView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-element-column-content' ),
+
+	elementEvents: {
+		'click > .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-remove': 'onClickRemove',
+		'click @ui.listTriggers': 'onClickTrigger'
+	},
+
+	getChildView: function( model ) {
+		if ( 'section' === model.get( 'elType' ) ) {
+			return require( 'elementor-views/section' ); // We need to require the section dynamically
+		}
+
+		return WidgetView;
+	},
+
+	emptyView: ElementEmptyView,
+
+	className: function() {
+		var classes = 'elementor-column',
+			type = this.isInner() ? 'inner' : 'top';
+
+		classes += ' elementor-' + type + '-column';
+
+		return classes;
+	},
+
+	childViewContainer: '> .elementor-column-wrap > .elementor-widget-wrap',
+
+	triggers: {
+		'click > .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-add': 'click:new',
+		'click > .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-edit': 'click:edit',
+		'click > .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-trigger': 'click:edit',
+		'click > .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-duplicate': 'click:duplicate'
+	},
+
+	ui: {
+		columnTitle: '.column-title',
+		columnInner: '> .elementor-column-wrap',
+		listTriggers: '> .elementor-element-overlay .elementor-editor-element-trigger'
+	},
+
+	behaviors: {
+		Sortable: {
+			behaviorClass: require( 'elementor-behaviors/sortable' ),
+			elChildType: 'widget'
+		},
+		Resizable: {
+			behaviorClass: require( 'elementor-behaviors/resizable' )
+		},
+		HandleDuplicate: {
+			behaviorClass: require( 'elementor-behaviors/handle-duplicate' )
+		},
+		HandleEditor: {
+			behaviorClass: require( 'elementor-behaviors/handle-editor' )
+		},
+		HandleEditMode: {
+			behaviorClass: require( 'elementor-behaviors/handle-edit-mode' )
+		},
+		HandleAddMode: {
+			behaviorClass: require( 'elementor-behaviors/duplicate' )
+		},
+		HandleElementsRelation: {
+			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
+		}
+	},
+
+	initialize: function() {
+		BaseElementView.prototype.initialize.apply( this, arguments );
+
+		this.listenTo( elementor.channels.data, 'widget:drag:start', this.onWidgetDragStart );
+		this.listenTo( elementor.channels.data, 'widget:drag:end', this.onWidgetDragEnd );
+	},
+
+	isDroppingAllowed: function( side, event ) {
+		var elementView = elementor.channels.panelElements.request( 'element:selected' ),
+			elType = elementView.model.get( 'elType' );
+
+		if ( 'section' === elType ) {
+			return ! this.isInner();
+		}
+
+		return 'widget' === elType;
+	},
+
+	changeSizeUI: function() {
+		var columnSize = this.model.getSetting( '_column_size' ),
+			inlineSize = this.model.getSetting( '_inline_size' ),
+			columnSizeTitle = parseFloat( inlineSize || columnSize ).toFixed( 1 ) + '%';
+
+		this.$el.attr( 'data-col', columnSize );
+
+		this.ui.columnTitle.html( columnSizeTitle );
+	},
+
+	getSortableOptions: function() {
+		return {
+			connectWith: '.elementor-widget-wrap',
+			items: '> .elementor-element'
+		};
+	},
+
+	// Events
+	onCollectionChanged: function() {
+		BaseElementView.prototype.onCollectionChanged.apply( this, arguments );
+
+		this.changeChildContainerClasses();
+	},
+
+	changeChildContainerClasses: function() {
+		var emptyClass = 'elementor-element-empty',
+			populatedClass = 'elementor-element-populated';
+
+		if ( !this.collection || this.collection.isEmpty() ) {
+			this.ui.columnInner.removeClass( populatedClass ).addClass( emptyClass );
+		} else {
+			this.ui.columnInner.removeClass( emptyClass ).addClass( populatedClass );
+		}
+	},
+
+	onRender: function() {
+		var self = this;
+
+		self.changeChildContainerClasses();
+		self.changeSizeUI();
+
+		self.$el.html5Droppable( {
+			items: ' > .elementor-column-wrap > .elementor-widget-wrap > .elementor-element, >.elementor-column-wrap > .elementor-widget-wrap > .elementor-empty-view > .elementor-first-add',
+			axis: [ 'vertical' ],
+			groups: [ 'elementor-element' ],
+			isDroppingAllowed: _.bind( self.isDroppingAllowed, self ),
+			onDragEnter: function() {
+				self.$el.addClass( 'elementor-dragging-on-child' );
+			},
+			onDragging: function( side, event ) {
+				event.stopPropagation();
+
+				if ( this.dataset.side !== side ) {
+					Backbone.$( this ).attr( 'data-side', side );
+				}
+			},
+			onDragLeave: function() {
+				self.$el.removeClass( 'elementor-dragging-on-child' );
+
+				Backbone.$( this ).removeAttr( 'data-side' );
+			},
+			onDropping: function( side, event ) {
+				event.stopPropagation();
+
+				var elementView = elementor.channels.panelElements.request( 'element:selected' ),
+					newIndex = Backbone.$( this ).index();
+
+				if ( 'bottom' === side ) {
+					newIndex++;
+				}
+
+				var itemData = {
+					id: elementor.helpers.getUniqueID(),
+					elType: elementView.model.get( 'elType' )
+				};
+
+				if ( 'widget' === itemData.elType ) {
+					itemData.widgetType = elementView.model.get( 'widgetType' );
+				} else if ( 'section' === itemData.elType ) {
+					itemData.elements = [];
+					itemData.isInner = true;
+				} else {
+					return;
+				}
+
+				self.triggerMethod( 'request:add', itemData, { at: newIndex } );
+			}
+		} );
+	},
+
+	onClickTrigger: function( event ) {
+		event.preventDefault();
+
+		var $trigger = this.$( event.currentTarget ),
+			isTriggerActive = $trigger.hasClass( 'elementor-active' );
+
+		this.ui.listTriggers.removeClass( 'elementor-active' );
+
+		if ( ! isTriggerActive ) {
+			$trigger.addClass( 'elementor-active' );
+		}
+	},
+
+	onWidgetDragStart: function() {
+		this.$el.addClass( 'elementor-dragging' );
+	},
+
+	onWidgetDragEnd: function() {
+		this.$el.removeClass( 'elementor-dragging' );
+	},
+
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'> .elementor-element-overlay .elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+
+			actions.push({
+				name: 'edit',
+				title: (elementor.translate ? elementor.translate('Edit Column') : 'Edit Column'),
+				icon: '<i class="eicon-edit"></i>',
+				callback: () => {
+					this.triggerMethod('click:edit');
+				},
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+			const $add = this.$el.find('.elementor-editor-element-add');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($add.length) {
+				actions.push({
+					name: 'add',
+					icon: '<i class="fa fa-plus"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Add column after') : 'Add column after',
+					callback: () => {
+						$add.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		/*// Hook plus spécifique pour les widgets,
+		// comme le `getContextMenuGroups` du widget promo sur le dépôt officiel.
+		if (elementor.hooks && elementor.hooks.applyFilters) {
+			return elementor.hooks.applyFilters(
+				'elements/widget/context-menu/groups',
+				groups,
+				this.model
+			);
+		}*/
+
+		return groups;
+	},
+} );
+
+module.exports = ColumnView;
+
+},{"elementor-behaviors/context-menu":1,"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/resizable":7,"elementor-behaviors/sortable":8,"elementor-views/base-element":86,"elementor-views/element-empty":117,"elementor-views/section":118,"elementor-views/widget":120}],88:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlAnimationItemView;
+
+ControlAnimationItemView = ControlBaseItemView.extend( {
+
+	onReady: function() {
+		this.ui.select.select2();
+	}
+} );
+
+module.exports = ControlAnimationItemView;
+
+},{"elementor-views/controls/base":93}],89:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlAutocompletePostsItemView;
+
+ControlAutocompletePostsItemView = ControlBaseItemView.extend( {
+
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.searchInput = '.elementor-control-autocomplete-search';
+		ui.selectedOptions = '.elementor-control-selected-options';
+		ui.selectedPreview = '.elementor-control-selected-preview';
+		ui.buttonPostRemove = '.elementor-post-remove';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.buttonPostRemove': 'onClickPostRemove',
+	},
+
+
+	onShow: function () {
+
+		var self = this;
+
+		self.ui.selectedPreview.sortable( {
+		    axis: 'y',
+            stop: function( event, ui ) {
+
+		        var $selectBox = $(self.ui.selectedOptions).empty();
+
+                $.map($(this).find('.elementor-post'), function(el) {
+                    $selectBox.append('<option value="' + $(el).data('post-id') + '" selected>p</option>');
+                });
+
+                $selectBox.trigger('change');
+            }
+        } );
+
+		self.insertPosts(this.getControlValue());
+
+		var p_auto_settings = {
+			minChars: 3,
+			autoFill: true,
+			max: 20,
+			matchContains: true,
+			mustMatch: true,
+			dataType: 'json',
+			extraParams: {
+				format: 'json',
+				excludeIds: self.getSelectedPostsIds(),
+				action: 'SearchPosts'
+			},
+			parse: function (data) {
+				var parsed = [];
+				if (data == null)
+					return true;
+				for (var i = 0; i < data.length; i++) {
+					parsed[parsed.length] = {
+						data: data[i],
+						value: data[i].name,
+						result: data[i].name
+					};
+				}
+				return parsed;
+			},
+			formatItem: function (item) {
+				return '<img src="' + item.image + '" style="width: 30px; max-height: 100%; margin-right: 5px; border: 1px dotted #cecece; display: inline-block; vertical-align: middle;" />(ID: ' + item.id + ') ' + item.name;
+			},
+			cacheLength: 0,
+		};
+
+		$(this.ui.searchInput).autocomplete(ElementorConfig.ajaxurl, p_auto_settings).result(function (event, data, formatted) {
+			if (data == null)
+				return false;
+
+			var optionHtml = '<option value="' + data.id + '" selected>' + '(ID: ' + data.id+ ') ' + data.name + '</option>';
+			var previewHtml = '<div class="elementor-post" data-post-id="' + data.id + '"><div class="elementor-repeater-row-handle-sortable"><i class="fa fa-ellipsis-v"></i></div><img class="elementor-post-image" src="' + data.image + '" />' +
+				'<div class="elementor-post-info"><span class="elementor-post-reference">(id: ' + data.id + ')</span>'
+				+ data.name
+				+ '<button data-post-id="' + data.id + '" class="elementor-post-remove elementor-post-remove2' + data.id + '"><i class="fa fa-remove"></i></button></div></div>';
+
+			if ($(self.ui.searchInput).attr('data-single')) {
+				$(self.ui.selectedOptions).html(optionHtml);
+				$(self.ui.selectedPreview).html(previewHtml);
+			} else{
+				$(self.ui.selectedOptions).append(optionHtml);
+				$(self.ui.selectedPreview).append(previewHtml);
+			}
+
+
+
+			$(self.ui.searchInput).setOptions({
+				extraParams: {
+					format: 'json',
+					excludeIds : self.getSelectedPostsIds(),
+					action: 'SearchPosts'
+				}
+			});
+
+			$(self.ui.selectedOptions).trigger('change');
+			$(this).val('');
+
+		});
+
+	},
+
+	onClickPostRemove: function(domEvent) {
+
+		var $post = $(domEvent.currentTarget);
+		var postId = $post.data('post-id');
+
+		$post.parents('.elementor-post').first().remove();
+
+		$(this.ui.selectedOptions).find('option[value=' + postId +' ]').remove();
+
+		$(this.ui.searchInput).setOptions({
+			extraParams: {
+				format: 'json',
+				excludeIds : this.getSelectedPostsIds(),
+				action: 'SearchPosts'
+			}
+		});
+
+		$(this.ui.selectedOptions).trigger('change');
+
+
+	},
+
+	getSelectedPostsIds: function() {
+
+		var ids = $(this.ui.selectedOptions).val();
+
+		if (_.isUndefined(ids)|| ids == null) {
+			return '';
+		}
+		else{
+			return ids.toString();
+		}
+
+	},
+
+	onBeforeDestroy: function() {
+
+		$(this.ui.searchInput).unautocomplete();
+
+	},
+
+	insertPosts: function(ids) {
+
+		if (_.isUndefined(ids)|| ids == null) {
+			return;
+		}
+
+		var posts = null;
+		var self = this;
+
+		elementor.ajax.send( 'GetPosts', {
+			data: {
+				ids: ids.toString(),
+			},
+			success: function(data) {
+				_.each( data, function( data ) {
+					$(self.ui.selectedPreview).append('<div class="elementor-post" data-post-id="' + data.id + '"><div class="elementor-repeater-row-handle-sortable"><i class="fa fa-ellipsis-v"></i></div><img class="elementor-post-image" src="' + data.image + '" />' +
+						'<div class="elementor-post-info"><span class="elementor-post-reference">(id: ' + data.id + ')</span>'
+						+ data.name
+						+ '<button data-post-id="' + data.id + '" class="elementor-post-remove"><i class="fa fa-remove"></i></button></div></div>');
+				});
+			}
+		} );
+		return posts;
+	}
+
+} );
+
+module.exports = ControlAutocompletePostsItemView;
+
+
+
+},{"elementor-views/controls/base":93}],90:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlAutocompleteProductsItemView;
+
+ControlAutocompleteProductsItemView = ControlBaseItemView.extend( {
+
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.searchInput = '.elementor-control-autocomplete-search';
+		ui.selectedOptions = '.elementor-control-selected-options';
+		ui.selectedPreview = '.elementor-control-selected-preview';
+		ui.buttonProductRemove = '.elementor-product-remove';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.buttonProductRemove': 'onClickProductRemove',
+	},
+
+
+	onShow: function () {
+
+		var self = this;
+
+		self.ui.selectedPreview.sortable( {
+		    axis: 'y',
+            stop: function( event, ui ) {
+
+		        var $selectBox = $(self.ui.selectedOptions).empty();
+
+                $.map($(this).find('.elementor-product'), function(el) {
+                    $selectBox.append('<option value="' + $(el).data('product-id') + '" selected>p</option>');
+                });
+
+                $selectBox.trigger('change');
+            }
+        } );
+
+		self.insertProducts(this.getControlValue());
+
+		var p_auto_settings = {
+			minChars: 3,
+			autoFill: true,
+			max: 20,
+			matchContains: true,
+			mustMatch: true,
+			dataType: 'json',
+			extraParams: {
+				format: 'json',
+				excludeIds: self.getSelectedProductsIds(),
+				action: 'SearchProducts'
+			},
+			parse: function (data) {
+				var parsed = [];
+				if (data == null)
+					return true;
+				for (var i = 0; i < data.length; i++) {
+					parsed[parsed.length] = {
+						data: data[i],
+						value: data[i].name,
+						result: data[i].name
+					};
+				}
+				return parsed;
+			},
+			formatItem: function (item) {
+				return '<img src="' + item.image + '" style="width: 30px; max-height: 100%; margin-right: 5px; border: 1px dotted #cecece; display: inline-block; vertical-align: middle;" />(ID: ' + item.id + ') ' + item.name;
+			},
+			cacheLength: 0,
+		};
+
+		$(this.ui.searchInput).autocomplete(ElementorConfig.ajaxurl, p_auto_settings).result(function (event, data, formatted) {
+			if (data == null)
+				return false;
+
+			var optionHtml = '<option value="' + data.id + '" selected>' + '(ID: ' + data.id+ ') ' + data.name + '</option>';
+			var previewHtml = '<div class="elementor-product" data-product-id="' + data.id + '"><div class="elementor-repeater-row-handle-sortable"><i class="fa fa-ellipsis-v"></i></div><img class="elementor-product-image" src="' + data.image + '" />' +
+				'<div class="elementor-product-info"><span class="elementor-product-reference">(id: ' + data.id + ')</span>'
+				+ data.name
+				+ '<button data-product-id="' + data.id + '" class="elementor-product-remove elementor-product-remove2' + data.id + '"><i class="fa fa-remove"></i></button></div></div>';
+
+			if ($(self.ui.searchInput).attr('data-single')) {
+				$(self.ui.selectedOptions).html(optionHtml);
+				$(self.ui.selectedPreview).html(previewHtml);
+			} else{
+				$(self.ui.selectedOptions).append(optionHtml);
+				$(self.ui.selectedPreview).append(previewHtml);
+			}
+
+
+
+			$(self.ui.searchInput).setOptions({
+				extraParams: {
+					format: 'json',
+					excludeIds : self.getSelectedProductsIds(),
+					action: 'SearchProducts'
+				}
+			});
+
+			$(self.ui.selectedOptions).trigger('change');
+			$(this).val('');
+
+		});
+
+	},
+
+	onClickProductRemove: function(domEvent) {
+
+		var $product = $(domEvent.currentTarget);
+		var productId = $product.data('product-id');
+
+		$product.parents('.elementor-product').first().remove();
+
+		$(this.ui.selectedOptions).find('option[value=' + productId +' ]').remove();
+
+		$(this.ui.searchInput).setOptions({
+			extraParams: {
+				format: 'json',
+				excludeIds : this.getSelectedProductsIds(),
+				action: 'SearchProducts'
+			}
+		});
+
+		$(this.ui.selectedOptions).trigger('change');
+
+
+	},
+
+	getSelectedProductsIds: function() {
+
+		var ids = $(this.ui.selectedOptions).val();
+
+		if (_.isUndefined(ids)|| ids == null) {
+			return '';
+		}
+		else{
+			return ids.toString();
+		}
+
+	},
+
+	onBeforeDestroy: function() {
+
+		$(this.ui.searchInput).unautocomplete();
+
+	},
+
+	insertProducts: function(ids) {
+
+		if (_.isUndefined(ids)|| ids == null) {
+			return;
+		}
+
+		var products = null;
+		var self = this;
+
+		elementor.ajax.send( 'GetProducts', {
+			data: {
+				ids: ids.toString(),
+			},
+			success: function(data) {
+				_.each( data, function( data ) {
+					data.id = data.id_product;
+					$(self.ui.selectedPreview).append('<div class="elementor-product" data-product-id="' + data.id + '"><div class="elementor-repeater-row-handle-sortable"><i class="fa fa-ellipsis-v"></i></div><img class="elementor-product-image" src="' + data.image + '" />' +
+						'<div class="elementor-product-info"><span class="elementor-product-reference">(id: ' + data.id + ')</span>'
+						+ data.name
+						+ '<button data-product-id="' + data.id + '" class="elementor-product-remove"><i class="fa fa-remove"></i></button></div></div>');
+				});
+			}
+		} );
+		return products;
+	}
+
+} );
+
+module.exports = ControlAutocompleteProductsItemView;
+
+
+
+},{"elementor-views/controls/base":93}],91:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlBaseMultipleItemView;
+
+ControlBaseMultipleItemView = ControlBaseItemView.extend( {
+
+	applySavedValue: function() {
+		var values = this.getControlValue(),
+			$inputs = this.$( '[data-setting]' ),
+			self = this;
+
+		_.each( values, function( value, key ) {
+			var $input = $inputs.filter( function() {
+				return key === this.dataset.setting;
+			} );
+
+			self.setInputValue( $input, value );
+		} );
+	},
+
+	getControlValue: function( key ) {
+		var values = this.elementSettingsModel.get( this.model.get( 'name' ) );
+
+		if ( ! Backbone.$.isPlainObject( values ) ) {
+			return {};
+		}
+
+		if ( key ) {
+			return values[ key ] || '';
+		}
+
+		return elementor.helpers.cloneObject( values );
+	},
+
+	setValue: function( key, value ) {
+		var values = this.getControlValue();
+
+		if ( 'object' === typeof key ) {
+			_.each( key, function( internalValue, internalKey ) {
+				values[ internalKey ] = internalValue;
+			} );
+		} else {
+			values[ key ] = value;
+		}
+
+		this.setSettingsModel( values );
+	},
+
+	updateElementModel: function( event ) {
+		var inputValue = this.getInputValue( event.currentTarget ),
+			key = event.currentTarget.dataset.setting;
+
+		this.setValue( key, inputValue );
+	}
+}, {
+	// Static methods
+	replaceStyleValues: function( cssProperty, controlValue ) {
+		if ( ! _.isObject( controlValue ) ) {
+			return ''; // invalid
+		}
+
+		// Trying to retrieve whole the related properties
+		// according to the string matches.
+		// When one of the properties is empty, aborting
+		// the action and returning an empty string.
+		try {
+			return cssProperty.replace( /\{\{([A-Z]+)}}/g, function( fullMatch, pureMatch ) {
+				var value = controlValue[ pureMatch.toLowerCase() ];
+
+				// Skip if value is empty, undefined or null
+				if ( '' === value || undefined === value || null === value ) {
+					throw '';
+				}
+
+				return value;
+			} );
+		} catch ( exception ) {
+			return '';
+		}
+	},
+	getStyleValue: function( placeholder, controlValue ) {
+		if ( ! _.isObject( controlValue ) ) {
+			return ''; // invalid
+		}
+
+		var value = controlValue[ placeholder ];
+
+		// Return empty string if value is undefined or null
+		if ( undefined === value || null === value ) {
+			return '';
+		}
+
+		return value;
+	}
+} );
+
+module.exports = ControlBaseMultipleItemView;
+
+},{"elementor-views/controls/base":93}],92:[function(require,module,exports){
+var ControlBaseMultipleItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlBaseUnitsItemView;
+
+ControlBaseUnitsItemView = ControlBaseMultipleItemView.extend( {
+
+	getCurrentRange: function() {
+		return this.getUnitRange( this.getControlValue( 'unit' ) );
+	},
+
+	getUnitRange: function( unit ) {
+		var ranges = this.model.get( 'range' );
+
+		if ( ! ranges || ! ranges[ unit ] ) {
+			return false;
+		}
+
+		return ranges[ unit ];
+	}
+}, {
+
+	// Static methods
+	getStyleValue( placeholder, controlValue ) {
+		let returnValue = ControlBaseMultipleItemView.getStyleValue( placeholder, controlValue );
+
+		if ( 'unit' === placeholder && 'custom' === returnValue ) {
+			returnValue = '__EMPTY__';
+		}
+
+		return returnValue;
+	},
+} );
+
+module.exports = ControlBaseUnitsItemView;
+
+},{"elementor-views/controls/base-multiple":91}],93:[function(require,module,exports){
+var ControlBaseItemView;
+
+ControlBaseItemView = Marionette.CompositeView.extend( {
+	ui: function() {
+		return {
+			input: 'input[data-setting][type!="checkbox"][type!="radio"]',
+			checkbox: 'input[data-setting][type="checkbox"]',
+			radio: 'input[data-setting][type="radio"]',
+			select: 'select[data-setting]',
+			textarea: 'textarea[data-setting]',
+			controlTitle: '.elementor-control-title',
+			responsiveSwitchers: '.elementor-responsive-switcher',
+			switcherDesktop: '.elementor-responsive-switcher-desktop'
+		};
+	},
+
+	className: function() {
+		// TODO: Any better classes for that?
+		var classes = 'elementor-control elementor-control-' + this.model.get( 'name' ) + ' elementor-control-type-' + this.model.get( 'type' ),
+			modelClasses = this.model.get( 'classes' ),
+			responsiveControl = this.model.get( 'responsive' );
+
+		if ( ! _.isEmpty( modelClasses ) ) {
+			classes += ' ' + modelClasses;
+		}
+
+		if ( ! _.isEmpty( this.model.get( 'section' ) ) ) {
+			classes += ' elementor-control-under-section';
+		}
+
+		if ( ! _.isEmpty( responsiveControl ) ) {
+			classes += ' elementor-control-responsive-' + responsiveControl;
+		}
+
+		return classes;
+	},
+
+	getTemplate: function() {
+		return Marionette.TemplateCache.get( '#tmpl-elementor-control-' + this.model.get( 'type' ) + '-content' );
+	},
+
+	templateHelpers: function() {
+		var controlData = {
+			controlValue: this.getControlValue(),
+			_cid: this.model.cid
+		};
+
+		return {
+			data: _.extend( {}, this.model.toJSON(), controlData )
+		};
+	},
+
+	baseEvents: {
+		'input @ui.input': 'onBaseInputChange',
+		'change @ui.checkbox': 'onBaseInputChange',
+		'change @ui.radio': 'onBaseInputChange',
+		'input @ui.textarea': 'onBaseInputChange',
+		'change @ui.select': 'onBaseInputChange',
+		'click @ui.switcherDesktop': 'onSwitcherDesktopClick',
+		'click @ui.responsiveSwitchers': 'onSwitcherClick'
+	},
+
+	childEvents: {},
+
+	events: function() {
+		return _.extend( {}, this.baseEvents, this.childEvents );
+	},
+
+	initialize: function( options ) {
+		this.elementSettingsModel = options.elementSettingsModel;
+
+		var controlType = this.model.get( 'type' ),
+			controlSettings = Backbone.$.extend( true, {}, elementor.config.controls[ controlType ], this.model.attributes );
+
+		this.model.set( controlSettings );
+
+		this.listenTo( this.elementSettingsModel, 'change', this.toggleControlVisibility );
+		this.listenTo( this.elementSettingsModel, 'control:switch:tab', this.onControlSwitchTab );
+		this.listenTo( elementor.channels.deviceMode, 'change', this.toggleControlVisibility );
+	},
+
+	getControlValue: function() {
+		return this.elementSettingsModel.get( this.model.get( 'name' ) );
+	},
+
+	isValidValue: function( value ) {
+		return true;
+	},
+
+	setValue: function( value ) {
+		this.setSettingsModel( value );
+	},
+
+	setSettingsModel: function( value ) {
+		if ( true !== this.isValidValue( value ) ) {
+			this.triggerMethod( 'settings:error' );
+			return;
+		}
+
+		this.elementSettingsModel.set( this.model.get( 'name' ), value );
+
+		this.triggerMethod( 'settings:change' );
+	},
+
+	applySavedValue: function() {
+		this.setInputValue( '[data-setting="' + this.model.get( 'name' ) + '"]', this.getControlValue() );
+	},
+
+	getEditSettings: function( setting ) {
+		var settings = this.getOption( 'elementEditSettings' ).toJSON();
+
+		if ( setting ) {
+			return settings[ setting ];
+		}
+
+		return settings;
+	},
+
+	setEditSetting: function( settingKey, settingValue ) {
+		var settings = this.getOption( 'elementEditSettings' );
+
+		settings.set( settingKey, settingValue );
+	},
+
+	getInputValue: function( input ) {
+		var $input = this.$( input ),
+			inputValue = $input.val(),
+			inputType = $input.attr( 'type' );
+
+		if ( -1 !== [ 'radio', 'checkbox' ].indexOf( inputType ) ) {
+			return $input.prop( 'checked' ) ? inputValue : '';
+		}
+
+		return inputValue;
+	},
+
+	// This method used inside of repeater
+	getFieldTitleValue: function() {
+		return this.getControlValue();
+	},
+
+	setInputValue: function( input, value ) {
+		var $input = this.$( input ),
+			inputType = $input.attr( 'type' );
+
+		if ( 'checkbox' === inputType ) {
+			$input.prop( 'checked', !! value );
+		} else if ( 'radio' === inputType ) {
+			$input.filter( '[value="' + value + '"]' ).prop( 'checked', true );
+		} else if ( 'select2' === inputType ) {
+			// don't touch
+		} else {
+			$input.val( value );
+		}
+	},
+
+	onSettingsError: function() {
+		this.$el.addClass( 'elementor-error' );
+	},
+
+	onSettingsChange: function() {
+		this.$el.removeClass( 'elementor-error' );
+	},
+
+	onRender: function() {
+		this.applySavedValue();
+
+		var layoutType = this.model.get( 'label_block' ) ? 'block' : 'inline',
+			showLabel = this.model.get( 'show_label' ),
+			elClasses = 'elementor-label-' + layoutType;
+
+		elClasses += ' elementor-control-separator-' + this.model.get( 'separator' );
+
+		if ( ! showLabel ) {
+			elClasses += ' elementor-control-hidden-label';
+		}
+
+		this.$el.addClass( elClasses );
+		this.renderResponsiveSwitchers();
+
+		this.triggerMethod( 'ready' );
+		this.toggleControlVisibility();
+	},
+
+	onBaseInputChange: function( event ) {
+		this.updateElementModel( event );
+
+		this.triggerMethod( 'input:change', event );
+	},
+
+	onSwitcherClick: function( event ) {
+		var device = Backbone.$( event.currentTarget ).data( 'device' );
+
+		elementor.changeDeviceMode( device );
+	},
+
+	onSwitcherDesktopClick: function() {
+		elementor.getPanelView().getCurrentPageView().$el.toggleClass( 'elementor-responsive-switchers-open' );
+	},
+
+	renderResponsiveSwitchers: function() {
+		if ( _.isEmpty( this.model.get( 'responsive' ) ) ) {
+			return;
+		}
+
+		var templateHtml = Backbone.$( '#tmpl-elementor-control-responsive-switchers' ).html();
+
+		this.ui.controlTitle.after( templateHtml );
+	},
+
+	toggleControlVisibility: function() {
+		var isVisible = elementor.helpers.isControlVisible( this.model, this.elementSettingsModel );
+
+		// Vérifier aussi la visibilité responsive
+		var responsiveControl = this.model.get( 'responsive' );
+		if ( isVisible && ! _.isEmpty( responsiveControl ) ) {
+			var currentDeviceMode = elementor.channels.deviceMode.request( 'currentMode' );
+			isVisible = ( responsiveControl === currentDeviceMode );
+		}
+
+		this.$el.toggleClass( 'elementor-hidden-control', ! isVisible );
+		elementor.channels.data.trigger( 'scrollbar:update' );
+	},
+
+	onControlSwitchTab: function( activeTab ) {
+		var isActiveTab = ( activeTab === this.model.get( 'tab' ) );
+		this.$el.toggleClass( 'elementor-active-tab', isActiveTab );
+
+		// If this is a section control, propagate the class to the wrapper
+		if ( 'section' === this.model.get( 'type' ) ) {
+			var $wrapper = this.$el.closest( '.elementor-section-wrapper' );
+			if ( $wrapper.length ) {
+				$wrapper.toggleClass( 'elementor-active-tab', isActiveTab );
+			}
+		}
+
+		elementor.channels.data.trigger( 'scrollbar:update' );
+	},
+
+	onReady: function() {},
+
+	updateElementModel: function( event ) {
+		this.setValue( this.getInputValue( event.currentTarget ) );
+	}
+}, {
+	// Static methods
+	replaceStyleValues: function( cssProperty, controlValue ) {
+		var replaceArray = { '\{\{VALUE\}\}': controlValue };
+
+		return elementor.helpers.stringReplaceAll( cssProperty, replaceArray );
+	},
+	getStyleValue: function( placeholder, controlValue ) {
+		return controlValue;
+	}
+} );
+
+module.exports = ControlBaseItemView;
+
+},{}],94:[function(require,module,exports){
+var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlBoxShadowItemView;
+
+ControlBoxShadowItemView = ControlMultipleBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlMultipleBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.sliders = '.elementor-slider';
+		ui.colors = '.elementor-box-shadow-color-picker';
+
+		return ui;
+	},
+
+	childEvents: {
+		'slide @ui.sliders': 'onSlideChange'
+	},
+
+	initSliders: function() {
+		var value = this.getControlValue();
+
+		this.ui.sliders.each( function() {
+			var $slider = Backbone.$( this ),
+				$input = $slider.next( '.elementor-slider-input' ).find( 'input' );
+
+			$slider.slider( {
+				value: value[ this.dataset.input ],
+				min: +$input.attr( 'min' ),
+				max: +$input.attr( 'max' )
+			} );
+		} );
+	},
+
+	initColors: function() {
+		var self = this;
+
+		this.ui.colors.wpColorPicker( {
+			change: function() {
+				var $this = Backbone.$( this ),
+					type = $this.data( 'setting' );
+
+				self.setValue( type, $this.wpColorPicker( 'color' ) );
+			},
+
+			clear: function() {
+				self.setValue( this.dataset.setting, '' );
+			},
+
+			width: 251
+		} );
+	},
+
+	onInputChange: function( event ) {
+		var type = event.currentTarget.dataset.setting,
+			$slider = this.ui.sliders.filter( '[data-input="' + type + '"]' );
+
+		$slider.slider( 'value', this.getControlValue( type ) );
+	},
+
+	onReady: function() {
+		this.initSliders();
+		this.initColors();
+	},
+
+	onSlideChange: function( event, ui ) {
+		var type = event.currentTarget.dataset.input,
+			$input = this.ui.input.filter( '[data-setting="' + type + '"]' );
+
+		$input.val( ui.value );
+		this.setValue( type, ui.value );
+	},
+
+	onBeforeDestroy: function() {
+		this.ui.colors.each( function() {
+			var $color = Backbone.$( this );
+
+			if ( $color.wpColorPicker( 'instance' ) ) {
+				$color.wpColorPicker( 'close' );
+			}
+		} );
+
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlBoxShadowItemView;
+
+},{"elementor-views/controls/base-multiple":91}],95:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlChooseItemView;
+
+ControlChooseItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.inputs = '[type="radio"]';
+
+		return ui;
+	},
+
+	childEvents: {
+		'mousedown label': 'onMouseDownLabel',
+		'click @ui.inputs': 'onClickInput',
+		'change @ui.inputs': 'updateElementModel'
+	},
+
+	onMouseDownLabel: function( event ) {
+		var $clickedLabel = this.$( event.currentTarget ),
+			$selectedInput = this.$( '#' + $clickedLabel.attr( 'for' ) );
+
+		$selectedInput.data( 'checked', $selectedInput.prop( 'checked' ) );
+	},
+
+	onClickInput: function( event ) {
+		if ( ! this.model.get( 'toggle' ) ) {
+			return;
+		}
+
+		var $selectedInput = this.$( event.currentTarget );
+
+		if ( $selectedInput.data( 'checked' ) ) {
+			$selectedInput.prop( 'checked', false ).trigger( 'change' );
+		}
+	},
+
+	onRender: function() {
+		ControlBaseItemView.prototype.onRender.apply( this, arguments );
+
+		var currentValue = this.getControlValue();
+
+		if ( currentValue ) {
+			this.ui.inputs.filter( '[value="' + currentValue + '"]' ).prop( 'checked', true );
+		} else if ( ! this.model.get( 'toggle' ) ) {
+			this.ui.inputs.first().prop( 'checked', true ).trigger( 'change' );
+		}
+	}
+} );
+
+module.exports = ControlChooseItemView;
+
+},{"elementor-views/controls/base":93}],96:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlCodeItemView;
+
+ControlCodeItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.editor = '.elementor-code-editor';
+		ui.textarea = '.elementor-code-editor-value';
+
+		return ui;
+	},
+
+	editor: null,
+	markerIds: [],
+
+	onReady: function() {
+		var self = this;
+
+		if ( typeof ace === 'undefined' ) {
+			return;
+		}
+
+		var editorElement = this.ui.editor[0];
+		var mode = this.ui.editor.data( 'mode' ) || 'css';
+
+		this.editor = ace.edit( editorElement );
+		this.editor.setTheme( 'ace/theme/tomorrow' );
+		this.editor.session.setMode( 'ace/mode/' + mode );
+		this.editor.setOptions( {
+			minLines: 8,
+			maxLines: 20,
+			showPrintMargin: false,
+			fontSize: 12,
+			enableBasicAutocompletion: true,
+			enableLiveAutocompletion: true
+		});
+
+		// Add custom completer for "selector" keyword
+		this.addSelectorCompleter();
+
+		// Set initial value
+		var initialValue = this.getControlValue() || '';
+		this.editor.setValue( initialValue, -1 );
+
+		// Highlight "selector" keyword
+		this.highlightSelector();
+
+		// Listen for changes
+		this.editor.session.on( 'change', function() {
+			self.setValue( self.editor.getValue() );
+			self.highlightSelector();
+		} );
+	},
+
+	addSelectorCompleter: function() {
+		if ( typeof ace.require !== 'function' ) {
+			return;
+		}
+
+		var langTools = ace.require( 'ace/ext/language_tools' );
+		if ( ! langTools ) {
+			return;
+		}
+
+		var selectorCompleter = {
+			getCompletions: function( editor, session, pos, prefix, callback ) {
+				callback( null, [
+					{
+						caption: 'selector',
+						value: 'selector',
+						meta: 'Wrapper',
+						score: 1
+					}
+				]);
+			}
+		};
+
+		langTools.addCompleter( selectorCompleter );
+	},
+
+	highlightSelector: function() {
+		var self = this;
+		var session = this.editor.session;
+		var Range = ace.require( 'ace/range' ).Range;
+
+		// Remove previous markers
+		this.markerIds.forEach( function( id ) {
+			session.removeMarker( id );
+		});
+		this.markerIds = [];
+
+		// Find and highlight all "selector" occurrences
+		var content = session.getValue();
+		var regex = /\bselector\b/g;
+		var match;
+
+		while ( ( match = regex.exec( content ) ) !== null ) {
+			var startPos = session.doc.indexToPosition( match.index );
+			var endPos = session.doc.indexToPosition( match.index + match[0].length );
+			var range = new Range( startPos.row, startPos.column, endPos.row, endPos.column );
+
+			var markerId = session.addMarker( range, 'ace_selector_highlight', 'text', true );
+			self.markerIds.push( markerId );
+		}
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.editor ) {
+			this.editor.destroy();
+			this.editor = null;
+		}
+	},
+
+	applySavedValue: function() {
+		if ( this.editor ) {
+			var value = this.getControlValue() || '';
+			if ( this.editor.getValue() !== value ) {
+				this.editor.setValue( value, -1 );
+			}
+		}
+	}
+} );
+
+module.exports = ControlCodeItemView;
+
+},{"elementor-views/controls/base":93}],97:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlColorItemView;
+
+ControlColorItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.picker = '.color-picker-hex';
+
+		return ui;
+	},
+
+	onReady: function() {
+		this.ui.picker.wpColorPicker( {
+			change: _.bind( function() {
+				this.setValue( this.ui.picker.wpColorPicker( 'color' ) );
+			}, this ),
+
+			clear: _.bind( function() {
+				this.setValue( '' );
+			}, this ),
+
+			width: 251
+		} ).wpColorPicker( 'instance' )
+			.wrap.find( '> .wp-picker-input-wrap > .wp-color-picker' )
+			.removeAttr( 'maxlength' );
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.ui.picker.wpColorPicker( 'instance' ) ) {
+			this.ui.picker.wpColorPicker( 'close' );
+		}
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlColorItemView;
+
+},{"elementor-views/controls/base":93}],98:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+    ControlDateTimeItemView;
+
+ControlDateTimeItemView = ControlBaseItemView.extend( {
+    ui: function() {
+        var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+        ui.picker = '.datetimepicker';
+
+        return ui;
+    },
+
+    onReady: function() {
+        console.log(this.ui.picker);
+
+        this.ui.picker.datetimepicker({
+            prevText: '',
+            nextText: '',
+            dateFormat: 'yy-mm-dd',
+            currentText: dateTimePickerL10n.currentText,
+            closeText: dateTimePickerL10n.closeText,
+            ampm: false,
+            amNames: ['AM', 'A'],
+            pmNames: ['PM', 'P'],
+            timeFormat: 'hh:mm:ss tt',
+            timeSuffix: '',
+            timeOnlyTitle: dateTimePickerL10n.timeOnlyTitle,
+            timeText: dateTimePickerL10n.timeText,
+            hourText: dateTimePickerL10n.hourText,
+            minuteText: dateTimePickerL10n.minuteText,
+        });
+    },
+
+    onBeforeDestroy: function() {
+        var picker = this.ui && this.ui.picker ? this.ui.picker : null;
+
+        if (picker && picker.length && picker.data('datetimepicker')) {
+            picker.datetimepicker('destroy');
+        }
+    }
+} );
+
+module.exports = ControlDateTimeItemView;
+},{"elementor-views/controls/base":93}],99:[function(require,module,exports){
+var ControlBaseUnitsItemView = require( 'elementor-views/controls/base-units' ),
+	ControlDimensionsItemView;
+
+ControlDimensionsItemView = ControlBaseUnitsItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseUnitsItemView.prototype.ui.apply( this, arguments );
+
+		ui.controls = '.elementor-control-dimension > input:enabled';
+		ui.link = 'button.elementor-link-dimensions';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.link': 'onLinkDimensionsClicked'
+	},
+
+	defaultDimensionValue: 0,
+
+	initialize: function() {
+		ControlBaseUnitsItemView.prototype.initialize.apply( this, arguments );
+
+		// TODO: Need to be in helpers, and not in variable
+		this.model.set( 'allowed_dimensions', this.filterDimensions( this.model.get( 'allowed_dimensions' ) ) );
+	},
+
+	getPossibleDimensions: function() {
+		return [
+			'top',
+			'right',
+			'bottom',
+			'left'
+		];
+	},
+
+	filterDimensions: function( filter ) {
+		filter = filter || 'all';
+
+		var dimensions = this.getPossibleDimensions();
+
+		if ( 'all' === filter ) {
+			return dimensions;
+		}
+
+		if ( ! _.isArray( filter ) ) {
+			if ( 'horizontal' === filter ) {
+				filter = [ 'right', 'left' ];
+			} else if ( 'vertical' === filter ) {
+				filter = [ 'top', 'bottom' ];
+			}
+		}
+
+		return filter;
+	},
+
+	onReady: function() {
+		var currentValue = this.getControlValue();
+
+		if ( ! this.isLinkedDimensions() ) {
+			this.ui.link.addClass( 'unlinked' );
+
+			this.ui.controls.each( _.bind( function( index, element ) {
+				var value = currentValue[ element.dataset.setting ];
+
+				if ( _.isEmpty( value ) ) {
+					value = this.defaultDimensionValue;
+				}
+
+				this.$( element ).val( value );
+			}, this ) );
+		}
+
+		this.fillEmptyDimensions();
+	},
+
+	updateDimensionsValue: function() {
+		var currentValue = {},
+			dimensions = this.getPossibleDimensions(),
+			$controls = this.ui.controls;
+
+		dimensions.forEach( _.bind( function( dimension ) {
+			var $element = $controls.filter( '[data-setting="' + dimension + '"]' );
+
+			currentValue[ dimension ] = $element.length ? $element.val() : this.defaultDimensionValue;
+		}, this ) );
+
+		this.setValue( currentValue );
+	},
+
+	fillEmptyDimensions: function() {
+		var dimensions = this.getPossibleDimensions(),
+			allowedDimensions = this.model.get( 'allowed_dimensions' ),
+			$controls = this.ui.controls;
+
+		if ( this.isLinkedDimensions() ) {
+			return;
+		}
+
+		dimensions.forEach( _.bind( function( dimension ) {
+			var $element = $controls.filter( '[data-setting="' + dimension + '"]' ),
+				isAllowedDimension = -1 !== _.indexOf( allowedDimensions, dimension );
+
+			if ( isAllowedDimension && $element.length && _.isEmpty( $element.val() ) ) {
+				$element.val( this.defaultDimensionValue );
+			}
+
+		}, this ) );
+	},
+
+	updateDimensions: function() {
+		this.fillEmptyDimensions();
+		this.updateDimensionsValue();
+	},
+
+	resetDimensions: function() {
+		this.ui.controls.val( '' );
+
+		this.updateDimensionsValue();
+	},
+
+	onInputChange: function( event ) {
+		var inputSetting = event.target.dataset.setting;
+
+		if ( 'unit' === inputSetting ) {
+			this.resetDimensions();
+		}
+
+		if ( ! _.contains( this.getPossibleDimensions(), inputSetting ) ) {
+			return;
+		}
+
+		if ( this.isLinkedDimensions() ) {
+			var $thisControl = this.$( event.target );
+
+			this.ui.controls.val( $thisControl.val() );
+		}
+
+		this.updateDimensions();
+	},
+
+	onLinkDimensionsClicked: function( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		this.ui.link.toggleClass( 'unlinked' );
+
+		this.setValue( 'isLinked', ! this.ui.link.hasClass( 'unlinked' ) );
+
+		if ( this.isLinkedDimensions() ) {
+			// Set all controls value from the first control.
+			this.ui.controls.val( this.ui.controls.eq( 0 ).val() );
+		}
+
+		this.updateDimensions();
+	},
+
+	isLinkedDimensions: function() {
+		return this.getControlValue( 'isLinked' );
+	}
+} );
+
+module.exports = ControlDimensionsItemView;
+
+},{"elementor-views/controls/base-units":92}],100:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlFontItemView;
+
+ControlFontItemView = ControlBaseItemView.extend( {
+	onReady: function() {
+		this.ui.select.select2( {
+			dir: elementor.config.is_rtl ? 'rtl' : 'ltr'
+		} );
+	},
+
+	templateHelpers: function() {
+		var helpers = ControlBaseItemView.prototype.templateHelpers.apply( this, arguments );
+
+		helpers.getFontsByGroups = _.bind( function( groups ) {
+			var fonts = this.model.get( 'fonts' ),
+				filteredFonts = {};
+
+			_.each( fonts, function( fontType, fontName ) {
+				if ( _.isArray( groups ) && _.contains( groups, fontType ) || fontType === groups ) {
+					filteredFonts[ fontName ] = fontType;
+				}
+			} );
+
+			return filteredFonts;
+		}, this );
+
+		return helpers;
+	}
+} );
+
+module.exports = ControlFontItemView;
+
+},{"elementor-views/controls/base":93}],101:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlMediaItemView;
+
+ControlMediaItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.addImages = '.elementor-control-gallery-add';
+		ui.clearGallery = '.elementor-control-gallery-clear';
+		ui.galleryThumbnails = '.elementor-control-gallery-thumbnails';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.addImages': 'onAddImagesClick',
+		'click @ui.clearGallery': 'onClearGalleryClick',
+		'click @ui.galleryThumbnails': 'onGalleryThumbnailsClick'
+	},
+
+	onReady: function() {
+		var hasImages = this.hasImages();
+
+		this.$el
+		    .toggleClass( 'elementor-gallery-has-images', hasImages )
+		    .toggleClass( 'elementor-gallery-empty', ! hasImages );
+
+		this.initRemoveDialog();
+	},
+
+	hasImages: function() {
+		return !! this.getControlValue().length;
+	},
+
+	openFrame: function( action ) {
+		this.initFrame( action );
+
+		this.frame.open();
+	},
+
+	initFrame: function( action ) {
+		var frameStates = {
+			create: 'gallery',
+			add: 'gallery-library',
+			edit: 'gallery-edit'
+		};
+
+		var options = {
+			frame:  'post',
+			multiple: true,
+			state: frameStates[ action ],
+			button: {
+				text: elementor.translate( 'insert_media' )
+			}
+		};
+
+		if ( this.hasImages() ) {
+			options.selection = this.fetchSelection();
+		}
+
+		this.frame = wp.media( options );
+
+		// When a file is selected, run a callback.
+		this.frame.on( {
+			'update': this.select,
+			'menu:render:default': this.menuRender,
+			'content:render:browse': this.gallerySettings
+		}, this );
+	},
+
+	menuRender: function( view ) {
+		view.unset( 'insert' );
+		view.unset( 'featured-image' );
+	},
+
+	gallerySettings: function( browser ) {
+		browser.sidebar.on( 'ready', function() {
+			browser.sidebar.unset( 'gallery' );
+		} );
+	},
+
+	fetchSelection: function() {
+		var attachments = wp.media.query( {
+			orderby: 'post__in',
+			order: 'ASC',
+			type: 'image',
+			perPage: -1,
+			post__in: _.pluck( this.getControlValue(), 'id' )
+		} );
+
+		return new wp.media.model.Selection( attachments.models, {
+			props: attachments.props.toJSON(),
+			multiple: true
+		} );
+	},
+
+	/**
+	 * Callback handler for when an attachment is selected in the media modal.
+	 * Gets the selected image information, and sets it within the control.
+	 */
+	select: function( selection ) {
+		var images = [];
+
+		selection.each( function( image ) {
+			images.push( {
+				id: image.get( 'id' ),
+				url: image.get( 'url' )
+			} );
+		} );
+
+		this.setValue( images );
+
+		this.render();
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.frame ) {
+			this.frame.off();
+		}
+
+		this.$el.remove();
+	},
+
+	resetGallery: function() {
+		this.setValue( '' );
+
+		this.render();
+	},
+
+	initRemoveDialog: function() {
+		var removeDialog;
+
+		this.getRemoveDialog = function() {
+			if ( ! removeDialog ) {
+				removeDialog = elementor.dialogsManager.createWidget( 'confirm', {
+					message: elementor.translate( 'dialog_confirm_gallery_delete' ),
+					headerMessage: elementor.translate( 'delete_gallery' ),
+					strings: {
+						confirm: elementor.translate( 'delete' ),
+						cancel: elementor.translate( 'cancel' )
+					},
+					defaultOption: 'confirm',
+					onConfirm: _.bind( this.resetGallery, this )
+				} );
+			}
+
+			return removeDialog;
+		};
+	},
+
+	onAddImagesClick: function() {
+		this.openFrame( this.hasImages() ? 'add' : 'create' );
+	},
+
+	onClearGalleryClick: function() {
+		this.getRemoveDialog().show();
+	},
+
+	onGalleryThumbnailsClick: function() {
+		this.openFrame( 'edit' );
+	}
+} );
+
+module.exports = ControlMediaItemView;
+
+},{"elementor-views/controls/base":93}],102:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlIconItemView;
+
+// Shared caches across all icon control instances (repeater rows, etc.)
+var _manifestCache = {};
+var _loadedCss = {};
+var _svgCache = {};
+
+ControlIconItemView = ControlBaseItemView.extend( {
+
+	_currentLibrary: null,
+	_allIcons: [],
+	_filteredIcons: [],
+	_renderOffset: 0,
+	_BATCH_SIZE: 60,
+	_panelOpen: false,
+	_libraries: null,
+	_outsideClickHandler: null,
+
+	ui: function() {
+		var parentUi = ControlBaseItemView.prototype.ui;
+		if ( typeof parentUi === 'function' ) {
+			parentUi = parentUi.call( this );
+		}
+		return _.extend( {}, parentUi, {
+			picker: '.elementor-icon-picker',
+			preview: '.elementor-icon-picker-preview',
+			previewIcon: '.elementor-icon-picker-preview-icon',
+			previewLabel: '.elementor-icon-picker-preview-label',
+			clearBtn: '.elementor-icon-picker-clear',
+			panel: '.elementor-icon-picker-panel',
+			tabs: '.elementor-icon-picker-tabs',
+			searchInput: '.elementor-icon-picker-search input',
+			grid: '.elementor-icon-picker-grid'
+		} );
+	},
+
+	events: function() {
+		return _.extend( ControlBaseItemView.prototype.events.apply( this, arguments ), {
+			'click .elementor-icon-picker-preview': 'onTogglePanel',
+			'click .elementor-icon-picker-clear': 'onClearIcon',
+			'input .elementor-icon-picker-search input': 'onSearchInput',
+			'click .elementor-icon-picker-tab': 'onTabClick',
+			'click .elementor-icon-picker-item': 'onIconClick'
+		} );
+	},
+
+	onReady: function() {
+		this._libraries = this.model.get( 'libraries' ) || {};
+		var keys = _.keys( this._libraries );
+		this._currentLibrary = keys[0] || null;
+
+		// Build tabs only if multiple libraries
+		if ( keys.length > 1 ) {
+			this._renderTabs( keys );
+		}
+
+		// Restore preview from existing value
+		this._restorePreview();
+
+		// Load first library manifest
+		if ( this._currentLibrary ) {
+			this._loadManifest( this._currentLibrary );
+		}
+
+		// Infinite scroll
+		this.ui.grid.on( 'scroll', _.bind( this._onGridScroll, this ) );
+	},
+
+	// ──────────────────────────────────────
+	// Tabs
+	// ──────────────────────────────────────
+
+	_renderTabs: function( keys ) {
+		var self = this;
+		var $tabs = this.ui.tabs;
+		$tabs.empty();
+
+		_.each( keys, function( key ) {
+			var lib = self._libraries[ key ];
+			var $tab = Backbone.$( '<div class="elementor-icon-picker-tab" />' )
+				.attr( 'data-library', key )
+				.text( lib.label );
+
+			if ( key === self._currentLibrary ) {
+				$tab.addClass( 'active' );
+			}
+			$tabs.append( $tab );
+		} );
+	},
+
+	onTabClick: function( e ) {
+		var $tab = Backbone.$( e.currentTarget );
+		var key = $tab.data( 'library' );
+
+		if ( key === this._currentLibrary ) {
+			return;
+		}
+
+		this.ui.tabs.find( '.elementor-icon-picker-tab' ).removeClass( 'active' );
+		$tab.addClass( 'active' );
+
+		this._currentLibrary = key;
+		this.ui.searchInput.val( '' );
+		this._loadManifest( key );
+	},
+
+	// ──────────────────────────────────────
+	// Panel toggle
+	// ──────────────────────────────────────
+
+	onTogglePanel: function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		if ( this._panelOpen ) {
+			this._closePanel();
+		} else {
+			this._openPanel();
+		}
+	},
+
+	_openPanel: function() {
+		this.ui.panel.show();
+		this._panelOpen = true;
+		this.ui.searchInput.focus();
+
+		// Close on click outside
+		var self = this;
+		this._outsideClickHandler = function( e ) {
+			if ( ! Backbone.$( e.target ).closest( '.elementor-icon-picker' ).length ) {
+				self._closePanel();
+			}
+		};
+
+		_.defer( function() {
+			Backbone.$( document ).on( 'click.iconPicker', self._outsideClickHandler );
+		} );
+	},
+
+	_closePanel: function() {
+		this.ui.panel.hide();
+		this._panelOpen = false;
+		Backbone.$( document ).off( 'click.iconPicker' );
+	},
+
+	// ──────────────────────────────────────
+	// Manifest loading
+	// ──────────────────────────────────────
+
+	_loadManifest: function( key ) {
+		var self = this;
+		var lib = this._libraries[ key ];
+
+		if ( ! lib ) {
+			return;
+		}
+
+		// Check cache
+		if ( _manifestCache[ key ] ) {
+			self._onManifestLoaded( key, _manifestCache[ key ] );
+			return;
+		}
+
+		// Show loading state
+		this.ui.grid.html( '<div class="elementor-icon-picker-loading">Loading...</div>' );
+
+		var url = elementor.config.assets_url + 'data/icon-manifests/' + lib.manifest;
+
+		Backbone.$.getJSON( url )
+			.done( function( data ) {
+				_manifestCache[ key ] = data;
+				self._onManifestLoaded( key, data );
+			} )
+			.fail( function() {
+				self.ui.grid.html( '<div class="elementor-icon-picker-empty">Failed to load icons</div>' );
+			} );
+	},
+
+	_onManifestLoaded: function( key, data ) {
+		// Load CDN CSS for font preview in editor
+		if ( data.cdnCss ) {
+			this._loadLibraryCss( key, data.cdnCss );
+		}
+
+		this._allIcons = data.icons || [];
+		this._renderGrid();
+	},
+
+	_loadLibraryCss: function( key, url ) {
+		if ( _loadedCss[ key ] ) {
+			return;
+		}
+		_loadedCss[ key ] = true;
+
+		var link = document.createElement( 'link' );
+		link.rel = 'stylesheet';
+		link.href = url;
+		link.id = 'iqit-icon-lib-' + key;
+		document.head.appendChild( link );
+	},
+
+	// ──────────────────────────────────────
+	// Grid rendering
+	// ──────────────────────────────────────
+
+	_renderGrid: function() {
+		this.ui.grid.empty().scrollTop( 0 );
+		this._renderOffset = 0;
+
+		var term = ( this.ui.searchInput.val() || '' ).toLowerCase().trim();
+
+		if ( term ) {
+			this._filteredIcons = _.filter( this._allIcons, function( icon ) {
+				return icon.n.indexOf( term ) !== -1;
+			} );
+		} else {
+			this._filteredIcons = this._allIcons;
+		}
+
+		if ( ! this._filteredIcons.length ) {
+			var noResultText = this.ui.picker.data( 'no-result' ) || 'No icons found';
+			this.ui.grid.html( '<div class="elementor-icon-picker-empty">' + noResultText + '</div>' );
+			return;
+		}
+
+		this._renderBatch();
+	},
+
+	_renderBatch: function() {
+		var batch = this._filteredIcons.slice( this._renderOffset, this._renderOffset + this._BATCH_SIZE );
+
+		if ( ! batch.length ) {
+			return;
+		}
+
+		var currentValue = this._getCurrentIconClass();
+		var fragment = document.createDocumentFragment();
+
+		_.each( batch, function( icon ) {
+			var div = document.createElement( 'div' );
+			div.className = 'elementor-icon-picker-item';
+			if ( icon.c === currentValue ) {
+				div.className += ' selected';
+			}
+			div.setAttribute( 'data-class', icon.c );
+			div.setAttribute( 'data-style', icon.s );
+			div.setAttribute( 'data-name', icon.n );
+			div.title = icon.n;
+
+			var i = document.createElement( 'i' );
+			i.className = icon.c;
+			div.appendChild( i );
+
+			fragment.appendChild( div );
+		} );
+
+		this.ui.grid[0].appendChild( fragment );
+		this._renderOffset += batch.length;
+	},
+
+	_onGridScroll: function() {
+		var el = this.ui.grid[0];
+		if ( el.scrollTop + el.clientHeight >= el.scrollHeight - 40 ) {
+			this._renderBatch();
+		}
+	},
+
+	// ──────────────────────────────────────
+	// Search
+	// ──────────────────────────────────────
+
+	onSearchInput: _.debounce( function() {
+		this._renderGrid();
+	}, 200 ),
+
+	// ──────────────────────────────────────
+	// Icon selection & SVG fetch
+	// ──────────────────────────────────────
+
+	onIconClick: function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		var $item = Backbone.$( e.currentTarget );
+		var iconClass = $item.attr( 'data-class' );
+		var style = $item.attr( 'data-style' );
+		var name = $item.attr( 'data-name' );
+		var library = this._currentLibrary;
+
+		// Visual feedback
+		this.ui.grid.find( '.selected' ).removeClass( 'selected' );
+		$item.addClass( 'selected' );
+
+		// Update preview immediately (using font icon)
+		this._updatePreview( iconClass, name );
+
+		// Fetch SVG, save to disk, then store only the key
+		var self = this;
+		this._fetchSvg( library, style, name, function( svg ) {
+			if ( svg ) {
+				self._saveSvgToDisk( library, style, name, svg, function( svgKey ) {
+					var newValue = JSON.stringify( {
+						library: library,
+						value: iconClass,
+						svgKey: svgKey || ''
+					} );
+
+					self.ui.input.val( newValue ).trigger( 'input' );
+					self.setValue( newValue );
+					self._closePanel();
+				} );
+			} else {
+				var newValue = JSON.stringify( {
+					library: library,
+					value: iconClass
+				} );
+
+				self.ui.input.val( newValue ).trigger( 'input' );
+				self.setValue( newValue );
+				self._closePanel();
+			}
+		} );
+	},
+
+	_fetchSvg: function( library, style, name, callback ) {
+		var cacheKey = library + '/' + style + '/' + name;
+
+		if ( _svgCache[ cacheKey ] ) {
+			callback( _svgCache[ cacheKey ] );
+			return;
+		}
+
+		var manifest = _manifestCache[ library ];
+		if ( ! manifest || ! manifest.cdnSvgBase ) {
+			callback( '' );
+			return;
+		}
+
+		// Build SVG URL based on library type
+		var svgUrl;
+		if ( library === 'bi' ) {
+			// Bootstrap Icons: no style subfolder
+			svgUrl = manifest.cdnSvgBase + '/' + name + '.svg';
+		} else {
+			// FA & Phosphor: style subfolder
+			svgUrl = manifest.cdnSvgBase + '/' + style + '/' + name + '.svg';
+		}
+
+		Backbone.$.get( svgUrl )
+			.done( function( data ) {
+				var svg;
+				if ( typeof data === 'string' ) {
+					svg = data;
+				} else if ( data && data.documentElement ) {
+					svg = new XMLSerializer().serializeToString( data.documentElement );
+				} else {
+					svg = '';
+				}
+				_svgCache[ cacheKey ] = svg;
+				callback( svg );
+			} )
+			.fail( function() {
+				callback( '' );
+			} );
+	},
+
+	_saveSvgToDisk: function( library, style, name, svg, callback ) {
+		var cacheKey = library + '/' + style + '/' + name;
+
+		// Already saved in this session
+		if ( _svgCache[ '__saved__' + cacheKey ] ) {
+			callback( cacheKey );
+			return;
+		}
+
+		elementor.ajax.send( 'SaveSvgIcon', {
+			data: {
+				library: library,
+				style: style,
+				name: name,
+				svg: svg
+			},
+			success: function( data ) {
+				_svgCache[ '__saved__' + cacheKey ] = true;
+				callback( data && data.svgKey ? data.svgKey : cacheKey );
+			},
+			error: function() {
+				// Fallback: use the computed key even if save failed
+				callback( cacheKey );
+			}
+		} );
+	},
+
+	// ──────────────────────────────────────
+	// Clear
+	// ──────────────────────────────────────
+
+	onClearIcon: function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		this.ui.input.val( '' ).trigger( 'input' );
+		this.setValue( '' );
+		this.ui.previewIcon.empty();
+		this.ui.previewLabel.text(
+			this.$( '.elementor-icon-picker-preview-label' ).first().data( 'default' ) || 'Select Icon'
+		);
+		this.ui.clearBtn.hide();
+		this.ui.grid.find( '.selected' ).removeClass( 'selected' );
+	},
+
+	// ──────────────────────────────────────
+	// Value management
+	// ──────────────────────────────────────
+
+	setValue: function( value ) {
+		this.setSettingsModel( value );
+	},
+
+	applySavedValue: function() {
+		var value = this.getControlValue();
+		this.$( 'input[data-setting]' ).val( typeof value === 'string' ? value : JSON.stringify( value ) );
+		this._restorePreview();
+	},
+
+	_restorePreview: function() {
+		var value = this.getControlValue();
+		if ( ! value ) {
+			this.ui.clearBtn.hide();
+			return;
+		}
+
+		var iconClass = this._getCurrentIconClass();
+		if ( iconClass ) {
+			this._updatePreview( iconClass, iconClass.replace( /^(fa-\w+\s+fa-|bi\s+bi-|ph\s+ph-)/, '' ) );
+		}
+	},
+
+	_getCurrentIconClass: function() {
+		var value = this.getControlValue();
+		if ( ! value ) {
+			return '';
+		}
+
+		if ( typeof value === 'object' && value !== null && value.value ) {
+			return value.value;
+		}
+
+		if ( typeof value === 'string' ) {
+			try {
+				var parsed = JSON.parse( value );
+				if ( parsed && parsed.value ) {
+					return parsed.value;
+				}
+			} catch ( e ) {
+				// Legacy string value
+				return value;
+			}
+		}
+
+		return '';
+	},
+
+	_updatePreview: function( iconClass, label ) {
+		this.ui.previewIcon.html( '<i class="' + iconClass + '"></i>' );
+		this.ui.previewLabel.text( label );
+		this.ui.clearBtn.show();
+	},
+
+	getFieldTitleValue: function() {
+		var iconClass = this._getCurrentIconClass();
+		return iconClass ? iconClass.replace( /^(fa-\w+\s+fa-|bi\s+bi-|ph\s+ph-)/, '' ) : '';
+	},
+
+	onBeforeDestroy: function() {
+		this.ui.grid.off( 'scroll' );
+		Backbone.$( document ).off( 'click.iconPicker' );
+	}
+} );
+
+module.exports = ControlIconItemView;
+
+},{"elementor-views/controls/base":93}],103:[function(require,module,exports){
+var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlImageDimensionsItemView;
+
+ControlImageDimensionsItemView = ControlMultipleBaseItemView.extend( {
+	ui: function() {
+		return {
+			inputWidth: 'input[data-setting="width"]',
+			inputHeight: 'input[data-setting="height"]',
+
+			btnApply: 'button.elementor-image-dimensions-apply-button'
+		};
+	},
+
+	// Override the base events
+	baseEvents: {
+		'click @ui.btnApply': 'onApplyClicked'
+	},
+
+	onApplyClicked: function( event ) {
+		event.preventDefault();
+
+		this.setValue( {
+			width: this.ui.inputWidth.val(),
+			height: this.ui.inputHeight.val()
+		} );
+	}
+} );
+
+module.exports = ControlImageDimensionsItemView;
+
+},{"elementor-views/controls/base-multiple":91}],104:[function(require,module,exports){
+var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlMediaItemView;
+
+ControlMediaItemView = ControlMultipleBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlMultipleBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.controlMedia = '.elementor-control-media';
+		ui.frameOpeners = '.elementor-control-media-upload-button, .elementor-control-media-image';
+		ui.deleteButton = '.elementor-control-media-delete';
+		ui.fileField = '.elementor-control-media-field';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.frameOpeners': 'openFrame',
+		'click @ui.deleteButton': 'deleteImage',
+		'input @ui.fileField': 'select'
+	},
+
+	onReady: function() {
+		if ( _.isEmpty( this.getControlValue( 'url' ) ) ) {
+			this.ui.controlMedia.addClass( 'media-empty' );
+		} else{
+			var attachment = this.ui.fileField.val();
+
+			if ( attachment) {
+				var img = new Image();
+				var self = this;
+
+				img.onload = function() {
+					var width = this.width;
+					var  height = this.height;
+					self.setValue( {
+						url: attachment,
+						id: 1,
+						width: width,
+						height: height,
+					});
+				};
+				img.src = attachment;
+			}
+		}
+	},
+
+	openFrame: function() {
+		openPsFileManager('elementor-control-media-field-' + this.model.cid, 1);
+	},
+
+	deleteImage: function() {
+		this.setValue( {
+			url: '',
+			width: '',
+			height: '',
+			id: ''
+		} );
+
+		this.render();
+	},
+
+	select: function() {
+		var attachment = this.ui.fileField.val();
+
+		if ( attachment) {
+			var img = new Image();
+			var self = this;
+
+			img.onload = function() {
+				var width = this.width;
+				var  height = this.height;
+				self.setValue( {
+					url: attachment,
+					id: 1,
+					width: width,
+					height: height,
+				});
+				self.render();
+				self.ui.fileField.val(attachment);
+			};
+
+			img.src = attachment;
+		}
+	},
+
+	onBeforeDestroy: function() {
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlMediaItemView;
+
+},{"elementor-views/controls/base-multiple":91}],105:[function(require,module,exports){
+var ControlBaseView = require( './base' );
+
+var ControlPopoverToggleView = ControlBaseView.extend( {
+	ui: function() {
+		var ui = ControlBaseView.prototype.ui.apply( this, arguments );
+
+		ui.toggleButton = '.elementor-control-popover-toggle-toggle';
+		ui.toggleButtonLabel = '.elementor-control-popover-toggle-toggle-label';
+		ui.resetButton = '.elementor-control-popover-toggle-reset-label';
+
+		return ui;
+	},
+
+	events: function() {
+		return _.extend( ControlBaseView.prototype.events.apply( this, arguments ), {
+			'change @ui.toggleButton': 'onToggleChange',
+			'click @ui.toggleButtonLabel': 'onToggleLabelClick',
+			'click @ui.resetButton': 'onResetClick'
+		} );
+	},
+
+	onToggleChange: function() {
+		var value = this.ui.toggleButton.filter( ':checked' ).val();
+		this.setValue( value );
+		this.togglePopover( !! value );
+
+		console.log( 'Popover toggle changed to value:', value );
+	},
+
+	onToggleLabelClick: function( event ) {
+		const $popover = this.$el.next('.elementor-controls-popover');
+		this.togglePopover( !$popover.hasClass( 'elementor-open' ) );
+
+		console.log( 'Popover toggled via label click.' );
+	},
+
+	onResetClick: function( event ) {
+		event.preventDefault();
+		this.resetPopoverControls();
+	},
+
+	togglePopover: function( show ) {
+		const $popover = this.$el.next('.elementor-controls-popover');
+		console.log( this.$el, $popover );
+
+		if ( ! $popover.length ) {
+			return;
+		}
+
+		$popover.toggleClass( 'elementor-open', show );
+
+		// Manage outside click listener
+		if ( show ) {
+			this.addOutsideClickListener();
+		} else {
+			this.removeOutsideClickListener();
+		}
+	},
+
+	addOutsideClickListener: function() {
+		var self = this;
+
+		// Avoid duplicates
+		this.removeOutsideClickListener();
+
+		this.outsideClickHandler = function( event ) {
+			var $target = Backbone.$( event.target ),
+				$popover = self.$el.next( '.elementor-controls-popover' );
+
+			// If click is not on toggle control and not inside popover
+			if ( ! $target.closest( self.$el ).length &&
+				 ! $target.closest( $popover ).length ) {
+				// Close the popover
+				self.togglePopover( false );
+			}
+		};
+
+		// Use namespaced event to avoid conflicts
+		Backbone.$( document ).on( 'click.popoverToggle' + this.cid, this.outsideClickHandler );
+	},
+
+	removeOutsideClickListener: function() {
+		Backbone.$( document ).off( 'click.popoverToggle' + this.cid );
+	},
+
+	onDestroy: function() {
+		this.removeOutsideClickListener();
+	},
+
+	resetPopoverControls: function() {
+		this.setValue( '' );
+		this.ui.toggleButton.filter( '[value=""]' ).prop( 'checked', true );
+		this.ui.toggleButton.filter( '[value!=""]' ).prop( 'checked', false );
+		this.togglePopover( false );
+	},
+
+	onRender: function() {
+		this.togglePopover( false );
+	}
+} );
+
+module.exports = ControlPopoverToggleView;
+},{"./base":93}],106:[function(require,module,exports){
+var RepeaterRowView;
+
+RepeaterRowView = Marionette.CompositeView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-repeater-row' ),
+
+	className: 'repeater-fields',
+
+	ui: {
+		duplicateButton: '.elementor-repeater-tool-duplicate',
+		editButton: '.elementor-repeater-tool-edit',
+		removeButton: '.elementor-repeater-tool-remove',
+		itemTitle: '.elementor-repeater-row-item-title'
+	},
+
+	triggers: {
+		'click @ui.removeButton': 'click:remove',
+		'click @ui.duplicateButton': 'click:duplicate',
+		'click @ui.itemTitle': 'click:edit'
+	},
+
+	templateHelpers: function() {
+		return {
+			itemIndex: this.getOption( 'itemIndex' )
+		};
+	},
+
+	childViewContainer: '.elementor-repeater-row-controls',
+
+	getChildView: function( item ) {
+		var controlType = item.get( 'type' );
+		return elementor.getControlItemView( controlType );
+	},
+
+	childViewOptions: function() {
+		return {
+			elementSettingsModel: this.model
+		};
+	},
+
+	updateIndex: function( newIndex ) {
+		this.itemIndex = newIndex;
+		this.setTitle();
+	},
+
+	setTitle: function() {
+		var titleField = this.getOption( 'titleField' ),
+			title;
+
+		if ( titleField ) {
+			var changerControlModel = this.collection.find( { name: titleField } ),
+				changerControlView = this.children.findByModelCid( changerControlModel.cid );
+
+			title = changerControlView.getFieldTitleValue();
+		}
+
+		if ( ! title ) {
+			title = elementor.translate( 'Item #{0}', [ this.getOption( 'itemIndex' ) ] );
+		}
+
+		this.ui.itemTitle.text( title );
+	},
+
+	initialize: function( options ) {
+		this.elementSettingsModel = options.elementSettingsModel;
+
+		this.itemIndex = 0;
+
+		// Collection for Controls list
+		this.collection = new Backbone.Collection( options.controlFields );
+
+		if ( options.titleField ) {
+			this.listenTo( this.model, 'change:' + options.titleField, this.setTitle );
+		}
+	},
+
+	onRender: function() {
+		this.setTitle();
+	}
+} );
+
+module.exports = RepeaterRowView;
+
+},{}],107:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	RepeaterRowView = require( 'elementor-views/controls/repeater-row' ),
+	ControlRepeaterItemView;
+
+ControlRepeaterItemView = ControlBaseItemView.extend( {
+	ui: {
+		btnAddRow: '.elementor-repeater-add',
+		fieldContainer: '.elementor-repeater-fields'
+	},
+
+	events: {
+		'click @ui.btnAddRow': 'onButtonAddRowClick',
+		'sortstart @ui.fieldContainer': 'onSortStart',
+		'sortupdate @ui.fieldContainer': 'onSortUpdate'
+	},
+
+	childView: RepeaterRowView,
+
+	childViewContainer: '.elementor-repeater-fields',
+
+	templateHelpers: function() {
+		return {
+			data: _.extend( {}, this.model.toJSON(), { controlValue: [] } )
+		};
+	},
+
+	childViewOptions: function() {
+		return {
+			controlFields: this.model.get( 'fields' ),
+			titleField: this.model.get( 'title_field' )
+		};
+	},
+
+	initialize: function( options ) {
+		ControlBaseItemView.prototype.initialize.apply( this, arguments );
+
+		this.collection = this.elementSettingsModel.get( this.model.get( 'name' ) );
+
+		this.listenTo( this.collection, 'change add remove reset', this.onCollectionChanged, this );
+	},
+
+	editRow: function( rowView ) {
+		if ( this.currentEditableChild ) {
+			this.currentEditableChild.getChildViewContainer( this.currentEditableChild ).removeClass( 'editable' );
+
+			var sortedRowView = this.currentEditableChild,
+				rowControls = sortedRowView.children._views;
+
+			jQuery.each( rowControls, function() {
+				if ( 'wysiwyg' === this.model.get( 'type' ) ) {
+					tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, this.editorID);
+				}
+			} );
+		}
+
+
+		if ( this.currentEditableChild === rowView ) {
+			delete this.currentEditableChild;
+			return;
+		}
+
+		rowView.getChildViewContainer( rowView ).addClass( 'editable' );
+
+		this.currentEditableChild = rowView;
+
+
+		var sortedRowView = this.currentEditableChild,
+			rowControls = sortedRowView.children._views;
+
+		jQuery.each( rowControls, function() {
+			if ( 'wysiwyg' === this.model.get( 'type' ) ) {
+				tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, this.editorID);
+				tinymce.EditorManager.execCommand('mceAddEditor', false, this.editorID);
+			}
+		} );
+
+		this.updateActiveRow();
+	},
+
+	toggleMinRowsClass: function() {
+		if ( ! this.model.get( 'prevent_empty' ) ) {
+			return;
+		}
+
+		this.$el.toggleClass( 'elementor-repeater-has-minimum-rows', 1 >= this.collection.length );
+	},
+
+	updateActiveRow: function() {
+		var activeItemIndex = 0;
+
+
+		if ( this.currentEditableChild ) {
+			activeItemIndex = this.currentEditableChild.itemIndex;
+		}
+
+		this.setEditSetting( 'activeItemIndex', activeItemIndex );
+	},
+
+	updateChildIndexes: function() {
+		this.children.each( _.bind( function( view ) {
+			view.updateIndex( this.collection.indexOf( view.model ) + 1 );
+		}, this ) );
+	},
+
+	onRender: function() {
+		this.ui.fieldContainer.sortable( { axis: 'y' } );
+
+		this.toggleMinRowsClass();
+	},
+
+	onSortStart: function( event, ui ) {
+		ui.item.data( 'oldIndex', ui.item.index() );
+	},
+
+	onSortUpdate: function( event, ui ) {
+		var oldIndex = ui.item.data( 'oldIndex' ),
+			model = this.collection.at( oldIndex ),
+			newIndex = ui.item.index();
+
+		this.collection.remove( model );
+		this.collection.add( model, { at: newIndex } );
+	},
+
+	onAddChild: function() {
+		this.updateChildIndexes();
+		this.updateActiveRow();
+	},
+
+	onRemoveChild: function( childView ) {
+		if ( childView === this.currentEditableChild ) {
+			delete this.currentEditableChild;
+		}
+
+		this.updateChildIndexes();
+		this.updateActiveRow();
+	},
+
+	onCollectionChanged: function() {
+		this.elementSettingsModel.trigger( 'change' );
+
+		this.toggleMinRowsClass();
+	},
+
+	onButtonAddRowClick: function() {
+		var defaults = {};
+		_.each( this.model.get( 'fields' ), function( field ) {
+			defaults[ field.name ] = field['default'];
+		} );
+
+		var newModel = this.collection.add( defaults ),
+			newChildView = this.children.findByModel( newModel );
+
+		this.editRow( newChildView );
+	},
+
+	onChildviewClickRemove: function( childView ) {
+		childView.model.destroy();
+	},
+
+	onChildviewClickDuplicate: function( childView ) {
+		this.collection.add( childView.model.clone(), { at: childView.itemIndex } );
+	},
+
+	onChildviewClickEdit: function( childView ) {
+		this.editRow( childView );
+	}
+} );
+
+module.exports = ControlRepeaterItemView;
+
+},{"elementor-views/controls/base":93,"elementor-views/controls/repeater-row":106}],108:[function(require,module,exports){
+var ControlBaseItemView = require('elementor-views/controls/base'),
+    ControlSectionItemView;
+
+ControlSectionItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.heading = '.elementor-panel-heading';
+
+		return ui;
+	},
+
+	triggers: {
+		'click': 'control:section:clicked'
+	}
+} );
+
+module.exports = ControlSectionItemView;
+
+},{"elementor-views/controls/base":93}],109:[function(require,module,exports){
+// Attention: DO NOT use this control since it has bugs
+// TODO: This control is unused
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlSelectSortItemView;
+
+ControlSelectSortItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.select = '.elementor-select-sort';
+		ui.selectedOptions = '.elementor-select-sort-selector';
+		ui.selectedPreview = '.elementor-control-selected-preview';
+		ui.buttonAdd = '.elementor-value-add';
+		ui.buttonRemove = '.elementor-selected-value-remove';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.buttonRemove': 'onClickRemove',
+		'click @ui.buttonAdd': 'onClickAdd',
+	},
+
+	onReady: function() {
+
+		var self = this;
+
+		this.ui.selectedPreview.sortable( {
+			axis: 'y',
+			stop: function( event, ui ) {
+
+				var $selectBox = $(self.ui.select).empty();
+
+				$.map($(this).find('.elementor-selected-value-preview'), function(el) {
+					$selectBox.append('<option value="' + $(el).data('value-id') + '" selected>'+ $(el).data('value-text') +'</option>');
+				});
+
+				$selectBox.trigger('change');
+			}
+		} );
+
+	},
+
+	onClickRemove: function(domEvent) {
+
+		var $element = $(domEvent.currentTarget);
+		var id = $element.data('value-id');
+		$element.parents('.elementor-selected-value-preview').first().remove();
+		$(this.ui.select).find('option[value=' + id +' ]').remove().prop("selected", false);
+		$(this.ui.selectedOptions).find('option[value=' + id +' ]').prop('disabled', false).removeClass('hidden-option');
+
+		$(this.ui.select).trigger('change');
+
+	},
+
+	onClickAdd: function(domEvent) {
+
+		var self = this;
+
+		$(this.ui.selectedOptions).find(':selected').each(function() {
+			$option = $( this );
+
+			if($option .prop('disabled') == true){
+				return;
+			}
+			$optionClone = $option.clone().prop("selected", true);
+
+
+			$option.prop('disabled', true);
+
+			if($(self.ui.selectedOptions).data('remove')){
+				$option.addClass('hidden-option');
+			}
+
+			$optionClone.appendTo(self.ui.select);
+			var id = $(this).val();
+			var text = $(this).text();
+
+			$(self.ui.selectedPreview).append('<div class="elementor-selected-value-preview" data-value-text="' + text + '" data-value-id="' + id  + '"><div class="elementor-repeater-row-handle-sortable"><i class="fa fa-ellipsis-v"></i></div>' +
+				'<div class="selected-value-preview-info">'
+				+ text
+				+ '<button data-value-id="' + id + '" data-value-text="' + text + '" class="elementor-selected-value-remove selected-value-remove' + id + '"><i class="fa fa-remove"></i></button></div></div>');
+		});
+
+		$(this.ui.select).trigger('change');
+
+
+	},
+
+	onBeforeDestroy: function() {
+
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlSelectSortItemView;
+
+},{"elementor-views/controls/base":93}],110:[function(require,module,exports){
+// Attention: DO NOT use this control since it has bugs
+// TODO: This control is unused
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlSelect2ItemView;
+
+ControlSelect2ItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.select = '.elementor-select2';
+
+		return ui;
+	},
+
+	onReady: function() {
+		var options = {
+			allowClear: true
+		};
+
+		this.ui.select.select2( options );
+	},
+
+	onBeforeDestroy: function() {
+		if ( this.ui.select.data( 'select2' ) ) {
+			this.ui.select.select2( 'destroy' );
+		}
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlSelect2ItemView;
+
+},{"elementor-views/controls/base":93}],111:[function(require,module,exports){
+var ControlBaseUnitsItemView = require( 'elementor-views/controls/base-units' ),
+	ControlSliderItemView;
+
+ControlSliderItemView = ControlBaseUnitsItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseUnitsItemView.prototype.ui.apply( this, arguments );
+
+		ui.slider = '.elementor-slider';
+
+		return ui;
+	},
+
+	childEvents: {
+		'slide @ui.slider': 'onSlideChange'
+	},
+
+	_isCustomUnit: function() {
+		return 'custom' === this.getControlValue( 'unit' );
+	},
+
+	_setInputMode: function( isCustom ) {
+		this.ui.input.attr( 'type', isCustom ? 'text' : 'number' );
+
+		if ( isCustom ) {
+			this.ui.input.removeAttr( 'min' ).removeAttr( 'max' ).removeAttr( 'step' );
+		}
+	},
+
+	_applyNumberConstraints: function( unitRange ) {
+		// jQuery 3.5.1: éviter attr(object) (peut throw si une valeur n'est pas une string)
+		// unitRange vient typiquement de getCurrentRange(): { min, max, step }
+		this.ui.input
+			.removeAttr( 'min' )
+			.removeAttr( 'max' )
+			.removeAttr( 'step' );
+
+		if ( unitRange && null != unitRange.min ) {
+			this.ui.input.attr( 'min', unitRange.min );
+		}
+		if ( unitRange && null != unitRange.max ) {
+			this.ui.input.attr( 'max', unitRange.max );
+		}
+		if ( unitRange && null != unitRange.step ) {
+			this.ui.input.attr( 'step', unitRange.step );
+		}
+	},
+
+	_destroySliderIfNeeded: function() {
+		// jQuery UI slider: éviter exceptions si pas initialisé.
+		if ( this.ui.slider && this.ui.slider.length && this.ui.slider.hasClass( 'ui-slider' ) ) {
+			this.ui.slider.slider( 'destroy' );
+		}
+	},
+
+	_updateUnitsUI: function() {
+		var isCustom = this._isCustomUnit();
+
+		this._setInputMode( isCustom );
+
+		if ( isCustom ) {
+			this._destroySliderIfNeeded();
+			this.ui.slider.hide();
+			var size = this.getControlValue( 'size' );
+			this.ui.input.val( size );
+
+			return;
+		}
+
+		this.ui.slider.show();
+		this.initSlider();
+	},
+
+	initSlider: function() {
+		// Ne pas initialiser le slider si on est en "custom".
+		if ( this._isCustomUnit() ) {
+			// En custom, on laisse l'input tel quel (texte libre).
+			this._setInputMode( true );
+			this.ui.slider.hide();
+			return;
+		}
+
+		var size = this.getControlValue( 'size' ),
+			unitRange = this.getCurrentRange();
+
+		this._setInputMode( false );
+		this._applyNumberConstraints( unitRange );
+
+		/*// Normaliser size pour le slider (jQuery UI attend un nombre).
+		if ( '' === size || null == size ) {
+			size = unitRange && null != unitRange.min ? unitRange.min : 0;
+		}
+		size = Number( size );
+		if ( isNaN( size ) ) {
+			size = unitRange && null != unitRange.min ? Number( unitRange.min ) : 0;
+		}*/
+
+		console.log('Initializing slider with size:', size, this.ui.input);
+
+
+
+		this.ui.input.val( size );
+
+		this._destroySliderIfNeeded();
+
+		this.ui.slider.slider( _.extend( {}, unitRange, { value: size } ) );
+	},
+
+	resetSize: function() {
+		this.setValue( 'size', '' );
+		this.initSlider();
+	},
+
+	onReady: function() {
+		this._updateUnitsUI();
+	},
+
+	onSlideChange: function( event, ui ) {
+		this.setValue( 'size', ui.value );
+
+		this.ui.input.val( ui.value );
+	},
+
+	onInputChange: function( event ) {
+		var dataChanged = event.currentTarget.dataset.setting;
+
+		if ( 'size' === dataChanged ) {
+			if ( this._isCustomUnit() ) {
+				return;
+			}
+
+			// Eviter d'envoyer une string vide / non-numérique au slider.
+			var v = this.getControlValue( 'size' );
+			v = Number( v );
+			if ( isNaN( v ) ) {
+				return;
+			}
+
+			this.ui.slider.slider( 'value', v );
+		} else if ( 'unit' === dataChanged ) {
+			// Si on repasse sur une unité numérique, la valeur doit être un entier "pur".
+			// parseInt suffit: si "12px"/"12.5" => mismatch => on vide.
+			if ( ! this._isCustomUnit() ) {
+				const rawSize = this.getControlValue('size');
+				if ( null != rawSize && '' !== rawSize ) {
+					const trimmed = String( rawSize ).trim();
+					const parsed = parseInt( trimmed, 10 );
+					if ( isNaN( parsed ) || String( parsed ) !== trimmed ) {
+						this.setValue( 'size', '' );
+						if ( this.ui && this.ui.input && this.ui.input.length ) {
+							this.ui.input.val( '' );
+						}
+					}
+				}
+			}
+
+			this._updateUnitsUI();
+		}
+	},
+
+	onBeforeDestroy: function() {
+		this._destroySliderIfNeeded();
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlSliderItemView;
+
+},{"elementor-views/controls/base-units":92}],112:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlStructureItemView;
+
+ControlStructureItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.resetStructure = '.elementor-control-structure-reset';
+
+		return ui;
+	},
+
+	childEvents: {
+		'click @ui.resetStructure': 'onResetStructureClick'
+	},
+
+	templateHelpers: function() {
+		var helpers = ControlBaseItemView.prototype.templateHelpers.apply( this, arguments );
+
+		helpers.getMorePresets = _.bind( this.getMorePresets, this );
+
+		return helpers;
+	},
+
+	getCurrentEditedSection: function() {
+		var editor = elementor.getPanelView().getCurrentPageView();
+
+		return editor.getOption( 'editedElementView' );
+	},
+
+	getMorePresets: function() {
+		var parsedStructure = elementor.presetsFactory.getParsedStructure( this.getControlValue() );
+
+		return elementor.presetsFactory.getPresets( parsedStructure.columnsCount );
+	},
+
+	onInputChange: function() {
+		this.getCurrentEditedSection().redefineLayout();
+
+		this.render();
+	},
+
+	onResetStructureClick: function() {
+		this.getCurrentEditedSection().resetColumnsCustomSize();
+	}
+} );
+
+module.exports = ControlStructureItemView;
+
+},{"elementor-views/controls/base":93}],113:[function(require,module,exports){
+var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlTextShadowItemView;
+
+ControlTextShadowItemView = ControlMultipleBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlMultipleBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.sliders = '.elementor-slider';
+		ui.colors = '.elementor-text-shadow-color-picker';
+
+		return ui;
+	},
+
+	childEvents: {
+		'slide @ui.sliders': 'onSlideChange'
+	},
+
+	initSliders: function() {
+		var value = this.getControlValue();
+
+		this.ui.sliders.each( function() {
+			var $slider = Backbone.$( this ),
+				$input = $slider.next( '.elementor-slider-input' ).find( 'input' );
+
+			$slider.slider( {
+				value: value[ this.dataset.input ],
+				min: +$input.attr( 'min' ),
+				max: +$input.attr( 'max' )
+			} );
+		} );
+	},
+
+	initColors: function() {
+		var self = this;
+		this.ui.colors.wpColorPicker( {
+			change: function() {
+				var $this = Backbone.$( this ),
+					type = $this.data( 'setting' );
+
+				self.setValue( type, $this.wpColorPicker( 'color' ) );
+			},
+
+			clear: function() {
+				self.setValue( this.dataset.setting, '' );
+			},
+
+			width: 251
+		} );
+	},
+
+	onInputChange: function( event ) {
+		var type = event.currentTarget.dataset.setting,
+			$slider = this.ui.sliders.filter( '[data-input="' + type + '"]' );
+
+		$slider.slider( 'value', this.getControlValue( type ) );
+	},
+
+	onReady: function() {
+		this.initSliders();
+		this.initColors();
+	},
+
+	onSlideChange: function( event, ui ) {
+		var type = event.currentTarget.dataset.input,
+			$input = this.ui.input.filter( '[data-setting="' + type + '"]' );
+
+		$input.val( ui.value );
+		this.setValue( type, ui.value );
+	},
+
+	onBeforeDestroy: function() {
+		this.ui.colors.each( function() {
+			var $color = Backbone.$( this );
+
+			if ( $color.wpColorPicker( 'instance' ) ) {
+				$color.wpColorPicker( 'close' );
+			}
+		} );
+
+		this.$el.remove();
+	}
+} );
+
+module.exports = ControlTextShadowItemView;
+
+},{"elementor-views/controls/base-multiple":91}],114:[function(require,module,exports){
+var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multiple' ),
+	ControlUrlItemView;
+
+var _searchCache = {};
+
+ControlUrlItemView = ControlMultipleBaseItemView.extend( {
+
+	_dropdownOpen: false,
+	_searchXhr: null,
+	_entityMode: false,
+	_outsideClickHandler: null,
+
+	ui: function() {
+		var ui = ControlMultipleBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.searchInput = '.elementor-control-url-search';
+		ui.dropdown = '.elementor-control-url-dropdown';
+		ui.inputWrap = '.elementor-control-url-input-wrap';
+		ui.entityPreview = '.elementor-control-url-entity-preview';
+		ui.entityType = '.elementor-control-url-entity-type';
+		ui.entityLabel = '.elementor-control-url-entity-label';
+		ui.entityClear = '.elementor-control-url-entity-clear';
+		ui.btnExternal = 'button.elementor-control-url-target';
+		ui.frameOpeners = '.elementor-control-url-media';
+
+		return ui;
+	},
+
+	events: function() {
+		return _.extend( ControlMultipleBaseItemView.prototype.events.apply( this, arguments ), {
+			'input .elementor-control-url-search': 'onSearchInput',
+			'focus .elementor-control-url-search': 'onSearchFocus',
+			'keydown .elementor-control-url-search': 'onSearchKeydown',
+			'click .elementor-control-url-entity-clear': 'onEntityClear',
+			'click .elementor-control-url-target': 'onExternalClicked',
+			'click .elementor-control-url-media': 'openFrame',
+			'click .elementor-control-url-dropdown-item': 'onDropdownItemClick'
+		} );
+	},
+
+	onReady: function() {
+		if ( this.getControlValue( 'is_external' ) ) {
+			this.ui.btnExternal.addClass( 'active' );
+		}
+
+		this._restoreEntityPreview();
+	},
+
+	// ──────────────────────────────────────
+	// Entity preview (when an entity is selected)
+	// ──────────────────────────────────────
+
+	_restoreEntityPreview: function() {
+		var type = this.getControlValue( 'type' );
+		var label = this.getControlValue( 'label' );
+
+		if ( type && type !== 'custom' && label ) {
+			this._showEntityPreview( type, label );
+		} else {
+			this._hideEntityPreview();
+		}
+	},
+
+	_showEntityPreview: function( type, label ) {
+		this._entityMode = true;
+		this.ui.entityType.text( this._getTypeLabel( type ) );
+		this.ui.entityLabel.text( label );
+		this.ui.entityPreview.show();
+		this.ui.inputWrap.hide();
+	},
+
+	_hideEntityPreview: function() {
+		this._entityMode = false;
+		this.ui.entityPreview.hide();
+		this.ui.inputWrap.show();
+	},
+
+	_getTypeLabel: function( type ) {
+		var labels = {
+			'category': 'Category',
+			'cms': 'CMS',
+			'manufacturer': 'Brand',
+			'supplier': 'Supplier'
+		};
+		return labels[ type ] || type;
+	},
+
+	onEntityClear: function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		this.setValue( {
+			type: '',
+			id: '',
+			url: '',
+			label: ''
+		} );
+
+		this._hideEntityPreview();
+		this.ui.searchInput.val( '' ).focus();
+	},
+
+	// ──────────────────────────────────────
+	// Search & dropdown
+	// ──────────────────────────────────────
+
+	onSearchFocus: function() {
+		var val = ( this.ui.searchInput.val() || '' ).trim();
+		if ( val.length >= 2 ) {
+			this._doSearch( val );
+		}
+	},
+
+	onSearchInput: _.debounce( function() {
+		var val = ( this.ui.searchInput.val() || '' ).trim();
+
+		if ( val.length < 2 ) {
+			this._closeDropdown();
+
+			// Treat as custom URL on blur/change
+			this.setValue( {
+				type: 'custom',
+				id: '',
+				url: val,
+				label: ''
+			} );
+			return;
+		}
+
+		// If it looks like a URL, set as custom immediately
+		if ( this._looksLikeUrl( val ) ) {
+			this.setValue( {
+				type: 'custom',
+				id: '',
+				url: val,
+				label: ''
+			} );
+		}
+
+		this._doSearch( val );
+	}, 300 ),
+
+	onSearchKeydown: function( e ) {
+		// Escape closes dropdown
+		if ( e.keyCode === 27 ) {
+			this._closeDropdown();
+			return;
+		}
+
+		// Enter on a custom URL
+		if ( e.keyCode === 13 ) {
+			e.preventDefault();
+			this._closeDropdown();
+
+			var val = ( this.ui.searchInput.val() || '' ).trim();
+			if ( val ) {
+				this.setValue( {
+					type: 'custom',
+					id: '',
+					url: val,
+					label: ''
+				} );
+			}
+		}
+	},
+
+	_looksLikeUrl: function( str ) {
+		return /^(https?:\/\/|\/|#|mailto:|tel:)/.test( str );
+	},
+
+	_doSearch: function( term ) {
+		var self = this;
+
+		// Cancel previous request
+		if ( this._searchXhr ) {
+			this._searchXhr.abort();
+			this._searchXhr = null;
+		}
+
+		// Check cache
+		var cacheKey = term.toLowerCase();
+		if ( _searchCache[ cacheKey ] ) {
+			self._renderDropdown( _searchCache[ cacheKey ], term );
+			return;
+		}
+
+		// Show loading
+		this.ui.dropdown.html( '<div class="elementor-control-url-dropdown-loading">...</div>' ).show();
+		this._dropdownOpen = true;
+		this._bindOutsideClick();
+
+		this._searchXhr = elementor.ajax.send( 'SearchEntities', {
+			data: {
+				q: term
+			},
+			success: function( data ) {
+				self._searchXhr = null;
+				_searchCache[ cacheKey ] = data || [];
+				self._renderDropdown( data || [], term );
+			},
+			error: function() {
+				self._searchXhr = null;
+				self._closeDropdown();
+			}
+		} );
+	},
+
+	_renderDropdown: function( results, term ) {
+		var $dropdown = this.ui.dropdown;
+		$dropdown.empty();
+
+		if ( ! results.length ) {
+			var noResult = this.ui.searchInput.data( 'no-result' ) || 'No results';
+			$dropdown.html( '<div class="elementor-control-url-dropdown-empty">' + noResult + '</div>' );
+			$dropdown.show();
+			this._dropdownOpen = true;
+			this._bindOutsideClick();
+			return;
+		}
+
+		var fragment = document.createDocumentFragment();
+
+		_.each( results, function( item ) {
+			var div = document.createElement( 'div' );
+			div.className = 'elementor-control-url-dropdown-item';
+			div.setAttribute( 'data-type', item.type );
+			div.setAttribute( 'data-id', item.id );
+			div.setAttribute( 'data-label', item.name );
+
+			var typeSpan = document.createElement( 'span' );
+			typeSpan.className = 'elementor-control-url-dropdown-item-type';
+			typeSpan.textContent = item.type_label;
+			div.appendChild( typeSpan );
+
+			var nameSpan = document.createElement( 'span' );
+			nameSpan.className = 'elementor-control-url-dropdown-item-name';
+			nameSpan.textContent = item.name;
+			div.appendChild( nameSpan );
+
+			fragment.appendChild( div );
+		} );
+
+		$dropdown[0].appendChild( fragment );
+		$dropdown.show();
+		this._dropdownOpen = true;
+		this._bindOutsideClick();
+	},
+
+	onDropdownItemClick: function( e ) {
+		var $item = Backbone.$( e.currentTarget );
+		var type = $item.attr( 'data-type' );
+		var id = $item.attr( 'data-id' );
+		var label = $item.attr( 'data-label' );
+
+		this.setValue( {
+			type: type,
+			id: id,
+			url: '',
+			label: label
+		} );
+
+		this._showEntityPreview( type, label );
+		this._closeDropdown();
+	},
+
+	_closeDropdown: function() {
+		this.ui.dropdown.hide().empty();
+		this._dropdownOpen = false;
+		this._unbindOutsideClick();
+	},
+
+	_bindOutsideClick: function() {
+		if ( this._outsideClickHandler ) {
+			return;
+		}
+		var self = this;
+		this._outsideClickHandler = function( e ) {
+			if ( ! Backbone.$( e.target ).closest( '.elementor-control-url-input-wrap' ).length ) {
+				self._closeDropdown();
+			}
+		};
+		_.defer( function() {
+			Backbone.$( document ).on( 'click.urlSearch', self._outsideClickHandler );
+		} );
+	},
+
+	_unbindOutsideClick: function() {
+		if ( this._outsideClickHandler ) {
+			Backbone.$( document ).off( 'click.urlSearch', this._outsideClickHandler );
+			this._outsideClickHandler = null;
+		}
+	},
+
+	// ──────────────────────────────────────
+	// External & Media (keep existing behavior)
+	// ──────────────────────────────────────
+
+	openFrame: function() {
+		openPsFileManager( 'elementor-control-url-field-' + this.model.cid, 2 );
+	},
+
+	onExternalClicked: function( e ) {
+		e.preventDefault();
+		this.ui.btnExternal.toggleClass( 'active' );
+		this.setValue( 'is_external', this.isExternal() );
+	},
+
+	isExternal: function() {
+		return this.ui.btnExternal.hasClass( 'active' );
+	},
+
+	// ──────────────────────────────────────
+	// Value management
+	// ──────────────────────────────────────
+
+	applySavedValue: function() {
+		ControlMultipleBaseItemView.prototype.applySavedValue.apply( this, arguments );
+
+		var url = this.getControlValue( 'url' );
+		var type = this.getControlValue( 'type' );
+
+		// If entity mode, don't show URL in input
+		if ( type && type !== 'custom' ) {
+			this.ui.searchInput.val( '' );
+		} else if ( url ) {
+			this.ui.searchInput.val( url );
+		}
+	},
+
+	// Override to handle custom URL changes from the input
+	updateElementModel: function( event ) {
+		var key = event.currentTarget.dataset.setting;
+
+		if ( key === 'url' ) {
+			var val = this.getInputValue( event.currentTarget );
+
+			// Only update if not in entity mode
+			if ( ! this._entityMode ) {
+				this.setValue( {
+					type: 'custom',
+					id: '',
+					url: val,
+					label: ''
+				} );
+			}
+			return;
+		}
+
+		ControlMultipleBaseItemView.prototype.updateElementModel.apply( this, arguments );
+	},
+
+	onBeforeDestroy: function() {
+		this._unbindOutsideClick();
+		if ( this._searchXhr ) {
+			this._searchXhr.abort();
+		}
+	}
+} );
+
+module.exports = ControlUrlItemView;
+
+},{"elementor-views/controls/base-multiple":91}],115:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlWPWidgetItemView;
+
+ControlWPWidgetItemView = ControlBaseItemView.extend( {
+	ui: function() {
+		var ui = ControlBaseItemView.prototype.ui.apply( this, arguments );
+
+		ui.form = 'form';
+		ui.loading = '.wp-widget-form-loading';
+
+		return ui;
+	},
+
+	events: {
+		'keyup @ui.form :input': 'onFormChanged',
+		'change @ui.form :input': 'onFormChanged'
+	},
+
+	onFormChanged: function() {
+		var idBase = 'widget-' + this.model.get( 'id_base' ),
+			settings = this.ui.form.elementorSerializeObject()[ idBase ].REPLACE_TO_ID;
+
+		this.setValue( settings );
+	},
+
+	onReady: function() {
+		/*
+		elementor.ajax.send( 'editor_get_wp_widget_form', {
+			data: {
+				widget_type: this.model.get( 'widget' ),
+				data: JSON.stringify( this.elementSettingsModel.toJSON() )
+			},
+			success: _.bind( function( data ) {
+				this.ui.form.html( data );
+			}, this )
+		} );
+		*/
+	}
+} );
+
+module.exports = ControlWPWidgetItemView;
+
+},{"elementor-views/controls/base":93}],116:[function(require,module,exports){
+var ControlBaseItemView = require( 'elementor-views/controls/base' ),
+	ControlWysiwygItemView;
+
+ControlWysiwygItemView = ControlBaseItemView.extend( {
+
+	childEvents: {
+		'keyup textarea.elementor-wp-editor': 'updateElementModel'
+	},
+
+	initialize: function() {
+		ControlBaseItemView.prototype.initialize.apply( this, arguments );
+		this.editorID = 'elementorwpeditor' + this.cid;
+
+	},
+	
+	attachElContent: function() {
+		var editorTemplate = elementor.config.wp_editor.replace( /elementorwpeditor/g, this.editorID ).replace( '%%EDITORCONTENT%%', this.getControlValue() );
+
+		this.$el.html( editorTemplate );
+
+		return this;
+	},
+
+	onShow: function() {
+		tinymce.EditorManager.execCommand('mceAddEditor', false, this.editorID);
+	},
+
+	onBeforeDestroy: function() {
+		tinymce.EditorManager.execCommand( 'mceRemoveEditor', true, this.editorID);
+	}
+} );
+
+module.exports = ControlWysiwygItemView;
+
+},{"elementor-views/controls/base":93}],117:[function(require,module,exports){
+var ElementEmptyView;
+
+ElementEmptyView = Marionette.ItemView.extend( {
+	template: '#tmpl-elementor-empty-preview',
+
+	className: 'elementor-empty-view',
+
+	events: {
+		'click': 'onClickAdd'
+	},
+
+	onClickAdd: function() {
+		elementor.getPanelView().setPage( 'elements' );
+	}
+} );
+
+module.exports = ElementEmptyView;
+
+},{}],118:[function(require,module,exports){
+var BaseElementView = require( 'elementor-views/base-element' ),
+	ColumnView = require( 'elementor-views/column' ),
+	SectionView;
+
+SectionView = BaseElementView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-element-section-content' ),
+
+	childView: ColumnView,
+
+	className: function() {
+		var classes = 'elementor-section',
+			type = this.isInner() ? 'inner' : 'top';
+
+		classes += ' elementor-' + type + '-section';
+
+		return classes;
+	},
+
+	tagName: 'section',
+
+	childViewContainer: '> .elementor-container > .elementor-row',
+
+	triggers: {
+		'click .elementor-editor-section-settings-list .elementor-editor-element-edit': 'click:edit',
+		'click .elementor-editor-section-settings-list .elementor-editor-element-trigger': 'click:edit',
+		'click .elementor-editor-section-settings-list .elementor-editor-element-duplicate': 'click:duplicate'
+	},
+
+	elementEvents: {
+		'click .elementor-editor-section-settings-list .elementor-editor-element-remove': 'onClickRemove',
+		'click .elementor-editor-section-settings-list .elementor-editor-element-save': 'onClickSave'
+	},
+
+	behaviors: {
+		Sortable: {
+			behaviorClass: require( 'elementor-behaviors/sortable' ),
+			elChildType: 'column'
+		},
+		HandleDuplicate: {
+			behaviorClass: require( 'elementor-behaviors/handle-duplicate' )
+		},
+		HandleEditor: {
+			behaviorClass: require( 'elementor-behaviors/handle-editor' )
+		},
+		HandleEditMode: {
+			behaviorClass: require( 'elementor-behaviors/handle-edit-mode' )
+		},
+		HandleAddMode: {
+			behaviorClass: require( 'elementor-behaviors/duplicate' )
+		},
+		HandleElementsRelation: {
+			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
+		}
+	},
+
+	initialize: function() {
+		BaseElementView.prototype.initialize.apply( this, arguments );
+
+		this.listenTo( this.collection, 'add remove reset', this._checkIsFull );
+		this.listenTo( this.collection, 'remove', this.onCollectionRemove );
+		this.listenTo( this.model, 'change:settings:structure', this.onStructureChanged );
+	},
+
+	addEmptyColumn: function() {
+		this.addChildModel( {
+			id: elementor.helpers.getUniqueID(),
+			elType: 'column',
+			settings: {},
+			elements: []
+		} );
+	},
+
+	addChildModel: function( model, options ) {
+		var isModelInstance = model instanceof Backbone.Model,
+			isInner = this.isInner();
+
+		if ( isModelInstance ) {
+			model.set( 'isInner', isInner );
+		} else {
+			model.isInner = isInner;
+		}
+
+		return BaseElementView.prototype.addChildModel.apply( this, arguments );
+	},
+
+	getSortableOptions: function() {
+		var sectionConnectClass = this.isInner() ? '.elementor-inner-section' : '.elementor-top-section';
+
+		return {
+			connectWith: sectionConnectClass + ' > .elementor-container > .elementor-row',
+			handle: '> .elementor-element-overlay .elementor-editor-column-settings-list .elementor-editor-element-trigger',
+			items: '> .elementor-column'
+		};
+	},
+
+	getColumnPercentSize: function( element, size ) {
+		return size / element.parent().width() * 100;
+	},
+
+	getDefaultStructure: function() {
+		return this.collection.length + '0';
+	},
+
+	getStructure: function() {
+		return this.model.getSetting( 'structure' );
+	},
+
+	setStructure: function( structure ) {
+		var parsedStructure = elementor.presetsFactory.getParsedStructure( structure );
+
+		if ( +parsedStructure.columnsCount !== this.collection.length ) {
+			throw new TypeError( 'The provided structure doesn\'t match the columns count.' );
+		}
+
+		this.model.setSetting( 'structure', structure, true );
+	},
+
+	redefineLayout: function() {
+		var preset = elementor.presetsFactory.getPresetByStructure( this.getStructure() );
+
+		this.collection.each( function( model, index ) {
+			model.setSetting( '_column_size', preset.preset[ index ] );
+			model.setSetting( '_inline_size', null );
+		} );
+
+		this.children.invoke( 'changeSizeUI' );
+	},
+
+	resetLayout: function() {
+		this.setStructure( this.getDefaultStructure() );
+	},
+
+	resetColumnsCustomSize: function() {
+		this.collection.each( function( model ) {
+			model.setSetting( '_inline_size', null );
+		} );
+
+		this.children.invoke( 'changeSizeUI' );
+	},
+
+	isCollectionFilled: function() {
+		var MAX_SIZE = 10,
+			columnsCount = this.collection.length;
+
+		return ( MAX_SIZE <= columnsCount );
+	},
+
+	_checkIsFull: function() {
+		this.$el.toggleClass( 'elementor-section-filled', this.isCollectionFilled() );
+	},
+
+	_checkIsEmpty: function() {
+		if ( ! this.collection.length ) {
+			this.addEmptyColumn();
+		}
+	},
+
+	getNextColumn: function( columnView ) {
+		var modelIndex = this.collection.indexOf( columnView.model ),
+			nextModel = this.collection.at( modelIndex + 1 );
+
+		return this.children.findByModelCid( nextModel.cid );
+	},
+
+	onBeforeRender: function() {
+		this._checkIsEmpty();
+	},
+
+	onRender: function() {
+		this._checkIsFull();
+	},
+
+	onAddChild: function() {
+		if ( ! this.isBuffering ) {
+			// Reset the layout just when we have really add/remove element.
+			this.resetLayout();
+		}
+	},
+
+	onCollectionRemove: function() {
+		// If it's the last column, please create new one.
+		this._checkIsEmpty();
+
+		this.resetLayout();
+	},
+
+	onChildviewRequestResizeStart: function( childView ) {
+		var nextChildView = this.getNextColumn( childView );
+
+		if ( ! nextChildView ) {
+			return;
+		}
+
+		var $iframes = childView.$el.find( 'iframe' ).add( nextChildView.$el.find( 'iframe' ) );
+
+		elementor.helpers.disableElementEvents( $iframes );
+	},
+
+	onChildviewRequestResizeStop: function( childView ) {
+		var nextChildView = this.getNextColumn( childView );
+
+		if ( ! nextChildView ) {
+			return;
+		}
+
+		var $iframes = childView.$el.find( 'iframe' ).add( nextChildView.$el.find( 'iframe' ) );
+
+		elementor.helpers.enableElementEvents( $iframes );
+	},
+
+	onChildviewRequestResize: function( childView, ui ) {
+		// Get current column details
+		var currentSize = childView.model.getSetting( '_inline_size' );
+
+		if ( ! currentSize ) {
+			currentSize = this.getColumnPercentSize( ui.element, ui.originalSize.width );
+		}
+
+		var newSize = this.getColumnPercentSize( ui.element, ui.size.width ),
+			difference = newSize - currentSize;
+
+		ui.element.css( {
+			//width: currentSize + '%',
+			width: '',
+			left: 'initial' // Fix for RTL resizing
+		} );
+
+		// Get next column details
+		var nextChildView = this.getNextColumn( childView );
+
+		if ( ! nextChildView ) {
+			return;
+		}
+
+		var MINIMUM_COLUMN_SIZE = 10,
+
+			$nextElement = nextChildView.$el,
+			nextElementCurrentSize = this.getColumnPercentSize( $nextElement, $nextElement.width() ),
+			nextElementNewSize = nextElementCurrentSize - difference;
+
+		if ( newSize < MINIMUM_COLUMN_SIZE || newSize > 100 || ! difference || nextElementNewSize < MINIMUM_COLUMN_SIZE || nextElementNewSize > 100 ) {
+			return;
+		}
+
+		// Set the current column size
+		childView.model.setSetting( '_inline_size', newSize.toFixed( 3 ) );
+		childView.changeSizeUI();
+
+		// Set the next column size
+		nextChildView.model.setSetting( '_inline_size', nextElementNewSize.toFixed( 3 ) );
+		nextChildView.changeSizeUI();
+	},
+
+	onStructureChanged: function() {
+		this.redefineLayout();
+	},
+
+	onClickSave: function( event ) {
+		event.preventDefault();
+
+		var sectionID = this.model.get( 'id' );
+
+		elementor.templates.startModal( function() {
+			elementor.templates.getLayout().showSaveTemplateView( sectionID );
+		} );
+	},
+
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'> .elementor-element-overlay .elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+			actions.push({
+				name: 'edit',
+				title: (elementor.translate ? elementor.translate('Edit Section') : 'Edit Section'),
+				icon: '<i class="eicon-edit"></i>',
+				callback: () => {
+					this.triggerMethod('click:edit');
+				},
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+			const $template = this.$el.find('.elementor-editor-element-save');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			if ($template.length) {
+				actions.push({
+					name: 'save-as-template',
+					icon: '<i class="fa fa-save"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Save as Template') : 'Save as Template',
+					callback: () => {
+						$template.trigger('click');
+					},
+				});
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		return groups;
+	},
+} );
+
+module.exports = SectionView;
+
+},{"elementor-behaviors/context-menu":1,"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-behaviors/sortable":8,"elementor-views/base-element":86,"elementor-views/column":87}],119:[function(require,module,exports){
+var SectionView = require( 'elementor-views/section' ),
+	SectionsCollectionView;
+
+SectionsCollectionView = Marionette.CompositeView.extend( {
+	template: Marionette.TemplateCache.get( '#tmpl-elementor-preview' ),
+
+	id: 'elementor-inner',
+
+	childViewContainer: '#elementor-section-wrap',
+
+	childView: SectionView,
+
+	ui: {
+		addSectionArea: '#elementor-add-section',
+		addNewSection: '#elementor-add-new-section',
+		closePresetsIcon: '#elementor-select-preset-close',
+		addSectionButton: '#elementor-add-section-button',
+		addTemplateButton: '#elementor-add-template-button',
+		selectPreset: '#elementor-select-preset',
+		presets: '.elementor-preset'
+	},
+
+	events: {
+		'click @ui.addSectionButton': 'onAddSectionButtonClick',
+		'click @ui.addTemplateButton': 'onAddTemplateButtonClick',
+		'click @ui.closePresetsIcon': 'closeSelectPresets',
+		'click @ui.presets': 'onPresetSelected'
+	},
+
+	behaviors: {
+		Sortable: {
+			behaviorClass: require( 'elementor-behaviors/sortable' ),
+			elChildType: 'section'
+		},
+		HandleDuplicate: {
+			behaviorClass: require( 'elementor-behaviors/handle-duplicate' )
+		},
+		HandleAdd: {
+			behaviorClass: require( 'elementor-behaviors/duplicate' )
+		},
+		HandleElementsRelation: {
+			behaviorClass: require( 'elementor-behaviors/elements-relation' )
+		}
+	},
+
+	getSortableOptions: function() {
+		return {
+			handle: '> .elementor-element-overlay .elementor-editor-section-settings-list .elementor-editor-element-trigger',
+			items: '> .elementor-section'
+		};
+	},
+
+	getChildType: function() {
+		return [ 'section' ];
+	},
+
+	isCollectionFilled: function() {
+		return false;
+	},
+
+	initialize: function() {
+		this
+			.listenTo( this.collection, 'add remove reset', this.onCollectionChanged )
+			.listenTo( elementor.channels.panelElements, 'element:drag:start', this.onPanelElementDragStart )
+			.listenTo( elementor.channels.panelElements, 'element:drag:end', this.onPanelElementDragEnd );
+	},
+
+	addChildModel: function( model, options ) {
+		return this.collection.add( model, options, true );
+	},
+
+	addSection: function( properties ) {
+		var newSection = {
+			id: elementor.helpers.getUniqueID(),
+			elType: 'section',
+			settings: {},
+			elements: []
+		};
+
+		if ( properties ) {
+			_.extend( newSection, properties );
+		}
+
+		var newModel = this.addChildModel( newSection );
+
+		return this.children.findByModelCid( newModel.cid );
+	},
+
+	closeSelectPresets: function() {
+		this.ui.addNewSection.show();
+		this.ui.selectPreset.hide();
+	},
+
+	fixBlankPageOffset: function() {
+		var sectionHandleHeight = 27,
+			elTopOffset = this.$el.offset().top,
+			elTopOffsetRange = sectionHandleHeight - elTopOffset;
+
+		if ( 0 < elTopOffsetRange ) {
+			var $style = Backbone.$( '<style>' ).text( '.elementor-editor-active #elementor-inner{margin-top: ' + elTopOffsetRange + 'px}' );
+
+			elementor.$previewContents.children().children( 'head' ).append( $style );
+		}
+	},
+
+	onAddSectionButtonClick: function() {
+		this.ui.addNewSection.hide();
+		this.ui.selectPreset.show();
+	},
+
+	onAddTemplateButtonClick: function() {
+		elementor.templates.startModal( function() {
+			elementor.templates.showTemplates();
+		} );
+	},
+
+	onRender: function() {
+		var self = this;
+
+		self.ui.addSectionArea.html5Droppable( {
+			axis: [ 'vertical' ],
+			groups: [ 'elementor-element' ],
+			onDragEnter: function( side ) {
+				self.ui.addSectionArea.attr( 'data-side', side );
+			},
+			onDragLeave: function() {
+				self.ui.addSectionArea.removeAttr( 'data-side' );
+			},
+			onDropping: function() {
+				var elementView = elementor.channels.panelElements.request( 'element:selected' ),
+					newSection = self.addSection(),
+					elType = elementView.model.get( 'elType' );
+
+				var elementData = {
+					id: elementor.helpers.getUniqueID(),
+					elType: elType
+				};
+
+				if ( 'widget' === elType ) {
+					elementData.widgetType = elementView.model.get( 'widgetType' );
+				} else {
+					elementData.elements = [];
+					elementData.isInner = true;
+				}
+
+				newSection.triggerMethod( 'request:add', elementData );
+			}
+		} );
+
+		_.defer( _.bind( self.fixBlankPageOffset, this ) );
+	},
+
+	onCollectionChanged: function() {
+		elementor.setFlagEditorChange( true );
+	},
+
+	onPresetSelected: function( event ) {
+		this.closeSelectPresets();
+
+		var selectedStructure = event.currentTarget.dataset.structure,
+			parsedStructure = elementor.presetsFactory.getParsedStructure( selectedStructure ),
+			elements = [],
+			loopIndex;
+
+		for ( loopIndex = 0; loopIndex < parsedStructure.columnsCount; loopIndex++ ) {
+			elements.push( {
+				id: elementor.helpers.getUniqueID(),
+				elType: 'column',
+				settings: {},
+				elements: []
+			} );
+		}
+
+		var newSection = this.addSection( { elements: elements } );
+
+		newSection.setStructure( selectedStructure );
+		newSection.redefineLayout();
+	},
+
+	onPanelElementDragStart: function() {
+		elementor.helpers.disableElementEvents( this.$el.find( 'iframe' ) );
+	},
+
+	onPanelElementDragEnd: function() {
+		elementor.helpers.enableElementEvents( this.$el.find( 'iframe' ) );
+	}
+} );
+
+module.exports = SectionsCollectionView;
+
+},{"elementor-behaviors/duplicate":2,"elementor-behaviors/elements-relation":3,"elementor-behaviors/handle-duplicate":4,"elementor-behaviors/sortable":8,"elementor-views/section":118}],120:[function(require,module,exports){
+var BaseElementView = require( 'elementor-views/base-element' ),
+	WidgetView;
+
+WidgetView = BaseElementView.extend( {
+	_templateType: null,
+
+	getTemplate: function() {
+		if ( 'remote' !== this.getTemplateType() ) {
+			return Marionette.TemplateCache.get( '#tmpl-elementor-' + this.model.get( 'elType' ) + '-' + this.model.get( 'widgetType' ) + '-content' );
+		} else {
+			return _.template( '' );
+		}
+	},
+
+	className: function() {
+		return 'elementor-widget elementor-widget-' + this.model.get( 'widgetType' );
+	},
+
+	modelEvents: {
+		'before:remote:render': 'onModelBeforeRemoteRender',
+		'remote:render': 'onModelRemoteRender'
+	},
+
+	triggers: {
+		'click': {
+			event: 'click:edit',
+			stopPropagation: false
+		},
+		'click > .elementor-editor-element-settings .elementor-editor-add-element': 'click:add',
+		'click > .elementor-editor-element-settings .elementor-editor-element-duplicate': 'click:duplicate'
+	},
+
+	elementEvents: {
+		'click > .elementor-editor-element-settings .elementor-editor-element-remove': 'onClickRemove'
+	},
+
+	behaviors: {
+		HandleEditor: {
+			behaviorClass: require( 'elementor-behaviors/handle-editor' )
+		},
+		HandleEditMode: {
+			behaviorClass: require( 'elementor-behaviors/handle-edit-mode' )
+		},
+		ContextMenu: {
+			behaviorClass: require( 'elementor-behaviors/context-menu' )
+		}
+	},
+
+	initialize: function() {
+		BaseElementView.prototype.initialize.apply( this, arguments );
+
+		if ( 'remote' === this.getTemplateType() &&  ! this.model.getHtmlCache() ) {
+			this.model.renderRemoteServer();
+		}
+	},
+
+	getTemplateType: function() {
+		if ( null === this._templateType ) {
+			var $template = Backbone.$( '#tmpl-elementor-' + this.model.get( 'elType' ) + '-' + this.model.get( 'widgetType' ) + '-content' );
+
+			if ( 0 === $template.length ) {
+				this._templateType = 'remote';
+			} else {
+				this._templateType = 'js';
+			}
+		}
+
+		return this._templateType;
+	},
+
+	onModelBeforeRemoteRender: function() {
+		this.$el.addClass( 'elementor-loading' );
+	},
+
+	onBeforeDestroy: function() {
+		// Parent handles $stylesheetElement and $customCSSElement cleanup
+		BaseElementView.prototype.onBeforeDestroy.apply( this, arguments );
+	},
+
+	onModelRemoteRender: function() {
+		if ( this.isDestroyed ) {
+			return;
+		}
+
+		this.$el.removeClass( 'elementor-loading' );
+		this.render();
+	},
+
+	attachElContent: function( html ) {
+		var htmlCache = this.model.getHtmlCache();
+
+		if ( htmlCache ) {
+			html = htmlCache;
+		}
+
+		//this.$el.html( html );
+		_.defer( _.bind( function() {
+			elementorFrontend.getScopeWindow().jQuery( '#' + this.getElementUniqueClass() ).html( html );
+		}, this ) );
+
+		return this;
+	},
+
+	onRender: function() {
+		var self = this;
+
+		self.$el
+			.removeClass( 'elementor-widget-empty' )
+			.children( '.elementor-widget-empty-icon' )
+			.remove();
+
+		//self.$el.imagesLoaded().always( function() {
+
+		//setTimeout( function() {
+				//	if ( 1 > self.$el.height() ) {
+					//	self.$el.addClass( 'elementor-widget-empty' );
+
+					// TODO: REMOVE THIS !!
+					// TEMP CODING !!
+					//	self.$el.append( '<i class="elementor-widget-empty-icon eicon-' + self.model.getIcon() + '"></i>' );
+					//	}
+				//}, 200 );
+			// Is element empty?
+		//} );
+	},
+	getContextMenuGroups() {
+		const groups = [];
+
+		const $settings = this.$el.find(
+			'.elementor-editor-element-settings'
+		);
+
+		if ($settings.length) {
+			const actions = [];
+
+			const elementTitle = $settings.attr('data-title') || 'Widget';
+
+			actions.push({
+			    name: 'edit',
+			    title: (elementor.translate ? elementor.translate('Edit') : 'Edit') + ' ' + elementTitle,
+			    icon: '<i class="eicon-edit"></i>',
+			    callback: () => {
+			        this.triggerMethod('click:edit');
+			    },
+			});
+
+			const $duplicate = $settings.find('.elementor-editor-element-duplicate');
+			const $remove = $settings.find('.elementor-editor-element-remove');
+
+			if ($duplicate.length) {
+				actions.push({
+					name: 'duplicate',
+					icon: '<i class="fa fa-copy"></i>',
+					title: elementor.translate ? elementor.translate('Duplicate') : 'Duplicate',
+					callback: () => {
+						$duplicate.trigger('click');
+					},
+				});
+			}
+
+			actions.push(
+				require( 'elementor-utils/actions/copy' )( this, {
+					separator: 'before',
+				})
+			);
+
+			actions.push(
+				require( 'elementor-utils/actions/paste-styles' )( this)
+			);
+
+			// --- Style Library actions ---
+			var widgetView = this;
+			var widgetType = this.model.get( 'widgetType' );
+
+			// "Save styles as..."
+			actions.push( {
+				name: 'save_style_as',
+				icon: '<i class="fa fa-floppy-o"></i>',
+				separator: 'before',
+				title: elementor.translate ? elementor.translate( 'save_style_as' ) : 'Save styles as...',
+				callback: function() {
+					var settingsModel = widgetView.model.get( 'settings' );
+					var settings = settingsModel && typeof settingsModel.toJSON === 'function'
+						? settingsModel.toJSON()
+						: {};
+
+					elementor.styleLibrary.startModal( function() {
+						elementor.styleLibrary.showSaveStyleView( widgetType, settings );
+					} );
+				}
+			} );
+
+			// "Use style" — list available styles for this widget type
+			var widgetStyles = elementor.styleLibrary.getStylesForWidget( widgetType );
+
+			if ( widgetStyles.length ) {
+				widgetStyles.forEach( function( styleModel, index ) {
+					var styleName = styleModel.get( 'name' );
+					var isDefault = styleModel.get( 'is_default' );
+
+					actions.push( {
+						name: 'use_style_' + styleModel.get( 'id_widget_style' ),
+						icon: isDefault
+							? '<i class="fa fa-star"></i>'
+							: '<i class="fa fa-paint-brush"></i>',
+						separator: index === 0 ? 'before' : undefined,
+						title: ( index === 0
+							? ( elementor.translate ? elementor.translate( 'use_style' ) + ': ' : 'Use style: ' )
+							: '' ) + styleName,
+						callback: function() {
+							elementor.styleLibrary.applyStyle( styleModel, widgetView.model );
+						}
+					} );
+				} );
+			}
+
+			if ($remove.length) {
+				actions.push({
+					name: 'delete',
+					icon: '<i class="fa fa-trash"></i>',
+					separator: 'before',
+					title: elementor.translate ? elementor.translate('Delete') : 'Supprimer',
+					callback: () => {
+						$remove.trigger('click');
+					},
+				});
+			}
+
+			if (actions.length) {
+				groups.push({
+					name: 'element',
+					actions,
+				});
+			}
+		}
+
+		return groups;
+	},
+} );
+
+module.exports = WidgetView;
+
+},{"elementor-behaviors/context-menu":1,"elementor-behaviors/handle-edit-mode":5,"elementor-behaviors/handle-editor":6,"elementor-utils/actions/copy":75,"elementor-utils/actions/paste-styles":76,"elementor-views/base-element":86}]},{},[80,81,42])
+//# sourceMappingURL=editor.js.map

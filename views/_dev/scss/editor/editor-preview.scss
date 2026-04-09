@@ -683,11 +683,13 @@ html.elementor-html {
 
 	#elementor-add-section-button {
 		background-color: $editor-accent;
+		justify-content: center;
 	}
 
 	#elementor-add-template-button {
 		background-color: $editor-dark;
 		margin-left: 25px;
+		justify-content: center;
 	}
 
 	#elementor-add-section-drag-title {

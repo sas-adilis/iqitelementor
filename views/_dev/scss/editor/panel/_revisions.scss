@@ -7,6 +7,23 @@
 	color: $editor-lightest;
 }
 
+// Loading spinner
+.elementor-revisions-loading {
+	text-align: center;
+	padding: 40px 0;
+
+	i {
+		font-size: 24px;
+		color: #999;
+	}
+}
+
+// Error state
+.elementor-revisions-error {
+	padding: 20px;
+	color: #999;
+}
+
 // Actions bar
 .elementor-revisions-actions {
 	display: flex;
@@ -20,21 +37,13 @@
 		font-size: 11px;
 		text-transform: uppercase;
 		border-radius: 3px;
+		width: 100%;
 
 		&:disabled {
-			opacity: 0.4;
+			opacity: 0.6;
 			cursor: not-allowed;
 		}
 	}
-}
-
-// Counter
-.elementor-revisions-counter {
-	padding: 8px 15px;
-	font-size: 11px;
-	color: $editor-light;
-	text-align: center;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 // Empty state
@@ -61,11 +70,11 @@
 	gap: 12px;
 
 	&:hover {
-		background-color: rgba(0, 0, 0, 0.15);
+		background-color: rgba(0, 0, 0, 0.05);
 	}
 
 	&.elementor-revision-selected {
-		background-color: rgba(0, 0, 0, 0.25);
+		background-color: rgba(0, 0, 0, 0.05);
 	}
 
 	&.elementor-revision-current {
@@ -98,13 +107,13 @@
 .elementor-revision-date {
 	font-size: 12px;
 	font-weight: 500;
-	color: #fff;
+	color: $editor-darker;
 	margin-bottom: 3px;
 }
 
 .elementor-revision-author {
 	font-size: 11px;
-	color: $editor-light;
+	color: $editor-dark;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -113,7 +122,7 @@
 // Current check icon
 .elementor-revision-current-icon {
 	flex: 0 0 auto;
-	color: $editor-success;
+	color: $editor-accent;
 	font-size: 14px;
 }
 

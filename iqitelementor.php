@@ -56,7 +56,7 @@ class IqitElementor extends Module implements WidgetInterface
     {
         $this->name = 'iqitelementor';
         $this->tab = 'front_office_features';
-        $this->version = '1.4.2';
+        $this->version = '1.4.3';
         $this->author = 'IQIT-COMMERCE.COM';
         $this->bootstrap = true;
         $this->controllers = ['preview', 'widget', 'landing'];

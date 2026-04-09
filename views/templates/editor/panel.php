@@ -37,6 +37,9 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 		<button id="elementor-topbar-templates" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Templates', 'elementor'); ?>">
 			<i class="fa fa-folder"></i>
 		</button>
+		<button id="elementor-topbar-styles" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Styles Library', 'elementor'); ?>">
+			<i class="fa fa-paint-brush"></i>
+		</button>
 		<button id="elementor-topbar-navigator" class="elementor-topbar-btn" title="<?php echo Translater::get()->l('Navigator', 'elementor'); ?>">
 			<i class="eicon-navigator"></i>
 		</button>
@@ -56,7 +59,43 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 </script>
 
 <script type="text/template" id="tmpl-elementor-panel-revisions">
-	<div class="elementor-revisions-spinner"></div>
+	<div class="elementor-revisions-loading">
+		<i class="fa fa-spin fa-circle-o-notch"></i>
+	</div>
+</script>
+
+<script type="text/template" id="tmpl-elementor-panel-revisions-list">
+	<div class="elementor-revisions-actions">
+		<button class="elementor-revision-apply elementor-btn elementor-btn-success" disabled><?php echo Translater::get()->l('Apply', 'elementor'); ?></button>
+	</div>
+	<div class="elementor-revisions-list"></div>
+</script>
+
+<script type="text/template" id="tmpl-elementor-panel-revisions-autosave">
+	<div class="elementor-revision-avatar elementor-revision-avatar--autosave">{{ initial }}</div>
+	<div class="elementor-revision-meta">
+		<div class="elementor-revision-date">{{ timeAgo }} ({{ formattedDate }})</div>
+		<div class="elementor-revision-author"><?php echo Translater::get()->l('Autosave by', 'elementor'); ?> {{ employeeName }}</div>
+	</div>
+</script>
+
+<script type="text/template" id="tmpl-elementor-panel-revisions-item">
+	<div class="elementor-revision-avatar">{{ initial }}</div>
+	<div class="elementor-revision-meta">
+		<div class="elementor-revision-date">{{ timeAgo }} ({{ formattedDate }})</div>
+		<div class="elementor-revision-author">{{ label }} <?php echo Translater::get()->l('by', 'elementor'); ?> {{ employeeName }} (#{{ id }})</div>
+	</div>
+	<# if ( isCurrent ) { #>
+	<span class="elementor-revision-current-icon"><i class="fa fa-check"></i></span>
+	<# } #>
+</script>
+
+<script type="text/template" id="tmpl-elementor-panel-revisions-empty">
+	<p class="elementor-revisions-empty"><?php echo Translater::get()->l('No revisions yet.', 'elementor'); ?></p>
+</script>
+
+<script type="text/template" id="tmpl-elementor-panel-revisions-error">
+	<p class="elementor-revisions-error"><?php echo Translater::get()->l('Error loading revisions.', 'elementor'); ?></p>
 </script>
 
 <script type="text/template" id="tmpl-elementor-panel">

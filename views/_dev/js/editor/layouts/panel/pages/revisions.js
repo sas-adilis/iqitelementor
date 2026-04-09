@@ -5,17 +5,11 @@ PanelRevisionsPageView = Marionette.ItemView.extend( {
 
 	template: '#tmpl-elementor-panel-revisions',
 
-	ui: {
-		items: '.elementor-revision-item',
-		applyBtn: '.elementor-revision-apply',
-		loadingSpinner: '.elementor-revisions-loading'
-	},
+	selectedRevisionId: null,
 
 	events: {
-		'click @ui.applyBtn': 'onClickApply'
+		'click .elementor-revision-apply': 'onClickApply'
 	},
-
-	selectedRevisionId: null,
 
 	onRender: function() {
 		this.loadRevisions();
@@ -26,12 +20,6 @@ PanelRevisionsPageView = Marionette.ItemView.extend( {
 			config = elementor.config,
 			$ = Backbone.$;
 
-		self.$el.html(
-			'<div class="elementor-revisions-loading" style="text-align:center;padding:40px 0;">' +
-			'<i class="fa fa-spin fa-circle-o-notch" style="font-size:24px;color:#999;"></i>' +
-			'</div>'
-		);
-
 		$.ajax( {
 			url: config.ajaxurl + '&action=GetRevisions',
 			type: 'POST',
@@ -41,75 +29,79 @@ PanelRevisionsPageView = Marionette.ItemView.extend( {
 			},
 			success: function( response ) {
 				if ( ! response.success ) {
-					self.$el.html( '<p style="padding:20px;color:#999;">' + elementor.translate( 'revisions_error_loading' ) + '</p>' );
+					self.showError();
 					return;
 				}
 				self.renderRevisionsList( response );
 			},
 			error: function() {
-				self.$el.html( '<p style="padding:20px;color:#999;">' + elementor.translate( 'revisions_error_loading' ) + '</p>' );
+				self.showError();
 			}
 		} );
 	},
 
+	showError: function() {
+		var tmpl = Marionette.TemplateCache.get( '#tmpl-elementor-panel-revisions-error' );
+		this.$el.html( tmpl() );
+	},
+
 	renderRevisionsList: function( response ) {
-		var html = '',
-			$ = Backbone.$,
+		var $ = Backbone.$,
 			self = this;
 
-		// Actions bar
-		html += '<div class="elementor-revisions-actions">';
-		html += '<button class="elementor-revision-apply elementor-btn elementor-btn-success" disabled>' + elementor.translate( 'revisions_apply' ) + '</button>';
-		html += '</div>';
+		// Render the list wrapper
+		var listTmpl = Marionette.TemplateCache.get( '#tmpl-elementor-panel-revisions-list' );
+		this.$el.html( listTmpl() );
 
-		// Counter
-		html += '<div class="elementor-revisions-counter">';
-		html += response.count + ' / ' + response.limit + ' ' + elementor.translate( 'revisions_label' );
-		html += '</div>';
+		var $list = this.$el.find( '.elementor-revisions-list' );
 
-		html += '<div class="elementor-revisions-list">';
-
-		// Autosave item (if available)
+		// Autosave item
 		if ( response.autosave ) {
-			var asTimeAgo = self.getTimeAgo( response.autosave.autosave_at );
 			var asEmpName = response.autosave.employee_name || 'System';
-			var asInitial = asEmpName.charAt( 0 ).toUpperCase();
+			var autosaveTmpl = Marionette.TemplateCache.get( '#tmpl-elementor-panel-revisions-autosave' );
 
-			html += '<div class="elementor-revision-item elementor-revision-autosave" data-rev-id="autosave">';
-			html += '<div class="elementor-revision-avatar elementor-revision-avatar--autosave">' + asInitial + '</div>';
-			html += '<div class="elementor-revision-meta">';
-			html += '<div class="elementor-revision-date">' + asTimeAgo + ' (' + self.formatDate( response.autosave.autosave_at ) + ')</div>';
-			html += '<div class="elementor-revision-author">' + elementor.translate( 'revisions_autosave_by' ) + ' ' + self.escapeHtml( asEmpName ) + '</div>';
-			html += '</div>';
-			html += '</div>';
+			var $autosave = $( '<div class="elementor-revision-item elementor-revision-autosave" data-rev-id="autosave"></div>' );
+			$autosave.html( autosaveTmpl( {
+				initial: asEmpName.charAt( 0 ).toUpperCase(),
+				timeAgo: self.getTimeAgo( response.autosave.autosave_at ),
+				formattedDate: self.formatDate( response.autosave.autosave_at ),
+				employeeName: self.escapeHtml( asEmpName )
+			} ) );
+			$list.append( $autosave );
 		}
 
+		// Empty state
 		if ( response.revisions.length === 0 && ! response.autosave ) {
-			html += '<p class="elementor-revisions-empty">' + elementor.translate( 'revisions_no_revisions' ) + '</p>';
+			var emptyTmpl = Marionette.TemplateCache.get( '#tmpl-elementor-panel-revisions-empty' );
+			$list.html( emptyTmpl() );
+			return;
 		}
 
 		// Revision items
+		var itemTmpl = Marionette.TemplateCache.get( '#tmpl-elementor-panel-revisions-item' );
+
 		response.revisions.forEach( function( rev, index ) {
-			var timeAgo = self.getTimeAgo( rev.created_at );
-			var label = rev.label || elementor.translate( 'revisions_revision' );
 			var empName = rev.employee_name || 'System';
-			var initial = empName.charAt( 0 ).toUpperCase();
 			var isCurrent = ( index === 0 );
-			var currentIcon = isCurrent ? '<span class="elementor-revision-current-icon"><i class="fa fa-check"></i></span>' : '';
 
-			html += '<div class="elementor-revision-item' + ( isCurrent ? ' elementor-revision-current' : '' ) + '" data-rev-id="' + rev.id + '">';
-			html += '<div class="elementor-revision-avatar">' + initial + '</div>';
-			html += '<div class="elementor-revision-meta">';
-			html += '<div class="elementor-revision-date">' + timeAgo + ' (' + self.formatDate( rev.created_at ) + ')</div>';
-			html += '<div class="elementor-revision-author">' + self.escapeHtml( label ) + ' ' + elementor.translate( 'revisions_by' ) + ' ' + self.escapeHtml( empName ) + ' (#' + rev.id + ')</div>';
-			html += '</div>';
-			html += currentIcon;
-			html += '</div>';
+			var $item = $( '<div class="elementor-revision-item" data-rev-id="' + rev.id + '"></div>' );
+
+			if ( isCurrent ) {
+				$item.addClass( 'elementor-revision-current' );
+			}
+
+			$item.html( itemTmpl( {
+				id: rev.id,
+				initial: empName.charAt( 0 ).toUpperCase(),
+				timeAgo: self.getTimeAgo( rev.created_at ),
+				formattedDate: self.formatDate( rev.created_at ),
+				label: self.escapeHtml( rev.label || elementor.translate( 'revisions_revision' ) ),
+				employeeName: self.escapeHtml( empName ),
+				isCurrent: isCurrent
+			} ) );
+
+			$list.append( $item );
 		} );
-
-		html += '</div>';
-
-		this.$el.html( html );
 
 		// Bind item click for selection
 		this.$el.on( 'click', '.elementor-revision-item', function() {
@@ -120,7 +112,7 @@ PanelRevisionsPageView = Marionette.ItemView.extend( {
 			$item.addClass( 'elementor-revision-selected' );
 			self.selectedRevisionId = revId;
 
-			self.$el.find( '.elementor-revision-apply, .elementor-revision-discard' ).prop( 'disabled', false );
+			self.$el.find( '.elementor-revision-apply' ).prop( 'disabled', false );
 		} );
 	},
 

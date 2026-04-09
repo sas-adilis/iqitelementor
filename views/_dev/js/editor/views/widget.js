@@ -125,7 +125,6 @@ WidgetView = BaseElementView.extend( {
 	},
 	getContextMenuGroups() {
 		const groups = [];
-		const defaultActions = require( 'elementor-utils/actions/save-default' );
 
 		const $settings = this.$el.find(
 			'.elementor-editor-element-settings'
@@ -169,15 +168,54 @@ WidgetView = BaseElementView.extend( {
 				require( 'elementor-utils/actions/paste-styles' )( this)
 			);
 
-			// Save as default / Reset default
-			actions.push(
-				defaultActions.getSaveDefaultAction( this, { separator: 'before' } )
-			);
+			// --- Style Library actions ---
+			var widgetView = this;
+			var widgetType = this.model.get( 'widgetType' );
 
-			if ( defaultActions.hasDefault( this.model.get( 'widgetType' ) ) ) {
-				actions.push(
-					defaultActions.getResetDefaultAction( this )
-				);
+			// "Save styles as..."
+			actions.push( {
+				name: 'save_style_as',
+				icon: '<i class="fa fa-floppy-o"></i>',
+				separator: 'before',
+				title: elementor.translate ? elementor.translate( 'save_style_as' ) : 'Save styles as...',
+				callback: function() {
+					var settingsModel = widgetView.model.get( 'settings' );
+					var settings = settingsModel && typeof settingsModel.toJSON === 'function'
+						? settingsModel.toJSON()
+						: {};
+
+					elementor.styleLibrary.startModal( function() {
+						elementor.styleLibrary.showSaveStyleView( widgetType, settings );
+					} );
+				}
+			} );
+
+			// "Use style" — list available styles for this widget type
+			var widgetStyles = elementor.styleLibrary.getStylesForWidget( widgetType );
+
+			if ( widgetStyles.length ) {
+				widgetStyles.forEach( function( styleModel, index ) {
+					var styleName = styleModel.get( 'name' );
+					var isDefault = styleModel.get( 'is_default' );
+
+					actions.push( {
+						name: 'use_style_' + styleModel.get( 'id_widget_style' ),
+						icon: isDefault
+							? '<i class="fa fa-star"></i>'
+							: '<i class="fa fa-paint-brush"></i>',
+						title: styleName,
+						callback: function() {
+							elementor.styleLibrary.applyStyle( styleModel, widgetView.model );
+						}
+					} );
+				} );
+			} else {
+				actions.push( {
+					name: 'no_styles',
+					icon: '<i class="fa fa-paint-brush"></i>',
+					title: elementor.translate ? elementor.translate( 'no_styles_for_widget' ) : 'No saved styles',
+					callback: function() {}
+				} );
 			}
 
 			if ($remove.length) {

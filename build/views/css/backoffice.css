@@ -1,0 +1,11 @@
+/*! iqitelementor - v1.0.0 - 08-04-2026 */
+.btn-edit-with-elementor {
+  background: #9b0a46 !important;
+  padding: 12px 15px !important;
+  color: #fff !important;
+}
+.btn-edit-with-elementor:hover {
+  background: #ac0a49 !important;
+}
+
+/*# sourceMappingURL=backoffice.css.map */

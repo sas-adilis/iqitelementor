@@ -23,24 +23,22 @@ BaseSettingsModel = Backbone.Model.extend( {
 
 		this.defaults = defaults;
 
-		// Apply saved widget defaults when creating a new widget (empty settings)
+		// Apply default style when creating a new widget (empty settings)
 		var widgetType = attrs.widgetType;
 		var isNewWidget = widgetType && this._countUserKeys( attrs ) === 0;
 
-		if (
-			isNewWidget &&
-			elementor.config &&
-			elementor.config.widgetDefaults &&
-			elementor.config.widgetDefaults[ widgetType ]
-		) {
-			attrs = _.defaults( {}, elementor.config.widgetDefaults[ widgetType ], defaults );
-			// Restore meta keys needed by the system
-			attrs.widgetType = widgetType;
-			if ( data && data.elType ) {
-				attrs.elType = data.elType;
-			}
-			if ( data && data.isInner ) {
-				attrs.isInner = data.isInner;
+		if ( isNewWidget ) {
+			var defaultStyle = this._findDefaultStyle( widgetType );
+
+			if ( defaultStyle ) {
+				attrs = _.defaults( {}, defaultStyle, defaults );
+				attrs.widgetType = widgetType;
+				if ( data && data.elType ) {
+					attrs.elType = data.elType;
+				}
+				if ( data && data.isInner ) {
+					attrs.isInner = data.isInner;
+				}
 			}
 		}
 
@@ -73,6 +71,26 @@ BaseSettingsModel = Backbone.Model.extend( {
 		} );
 
 		return count;
+	},
+
+	/**
+	 * Find the default style settings for a given widget type
+	 * from the widgetStyles config array.
+	 */
+	_findDefaultStyle: function( widgetType ) {
+		if ( ! elementor.config || ! elementor.config.widgetStyles ) {
+			return null;
+		}
+
+		var styles = elementor.config.widgetStyles;
+
+		for ( var i = 0; i < styles.length; i++ ) {
+			if ( styles[ i ].widget_type === widgetType && styles[ i ].is_default ) {
+				return styles[ i ].settings || null;
+			}
+		}
+
+		return null;
 	},
 
 	getFontControls: function() {

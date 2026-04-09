@@ -197,33 +197,36 @@ BaseElementView = Marionette.CompositeView.extend( {
 		var customCSS = this.model.getSetting( '_custom_css' ),
 			styleId = 'elementor-style-' + this.model.get( 'id' ) + '-custom';
 
-		// Find existing element in DOM if not cached
-		if ( ! this.$customCSSElement ) {
-			this.$customCSSElement = elementor.$previewContents.find( '#' + styleId );
-			if ( ! this.$customCSSElement.length ) {
-				this.$customCSSElement = null;
-			}
-		}
+		var $existing = elementor.$previewContents.find( '#' + styleId );
 
-		if ( _.isEmpty( customCSS ) ) {
-			// Remove existing custom CSS element if exists
-			if ( this.$customCSSElement ) {
+		// Same view — update in place
+		if ( $existing.length && this.$customCSSElement && $existing[0] === this.$customCSSElement[0] ) {
+			if ( _.isEmpty( customCSS ) ) {
 				this.$customCSSElement.remove();
 				this.$customCSSElement = null;
+			} else {
+				var selector = '.elementor-element.elementor-element-' + this.model.get( 'id' );
+				this.$customCSSElement.text( customCSS.replace( /selector/g, selector ) );
 			}
 			return;
 		}
 
-		// Replace "selector" placeholder with the unique element selector
+		// Different view owns the element — invalidate its reference
+		if ( $existing.length ) {
+			$existing.remove();
+		}
+
+		this.$customCSSElement = null;
+
+		if ( _.isEmpty( customCSS ) ) {
+			return;
+		}
+
 		var selector = '.elementor-element.elementor-element-' + this.model.get( 'id' );
 		customCSS = customCSS.replace( /selector/g, selector );
 
-		// Create the element only if it doesn't exist
-		if ( ! this.$customCSSElement ) {
-			this.$customCSSElement = Backbone.$( '<style>', { id: styleId } );
-			elementor.$previewContents.find( 'head' ).append( this.$customCSSElement );
-		}
-
+		this.$customCSSElement = Backbone.$( '<style>', { id: styleId } );
+		elementor.$previewContents.find( 'head' ).append( this.$customCSSElement );
 		this.$customCSSElement.text( customCSS );
 	},
 
@@ -360,21 +363,34 @@ BaseElementView = Marionette.CompositeView.extend( {
 		var styleText = this.stylesheet.toString(),
 			styleId = 'elementor-style-' + this.model.get( 'id' );
 
-		// Always look up in DOM — cached reference may be stale after drag-and-drop
-		this.$stylesheetElement = elementor.$previewContents.find( '#' + styleId );
-		if ( ! this.$stylesheetElement.length ) {
-			this.$stylesheetElement = null;
-		}
+		var $existing = elementor.$previewContents.find( '#' + styleId );
 
-		if ( _.isEmpty( styleText ) && ! this.$stylesheetElement ) {
+		// Same view updating its own styles — update text in place
+		if ( $existing.length && this.$stylesheetElement && $existing[0] === this.$stylesheetElement[0] ) {
+			if ( _.isEmpty( styleText ) ) {
+				this.$stylesheetElement.remove();
+				this.$stylesheetElement = null;
+			} else {
+				this.$stylesheetElement.text( styleText );
+			}
 			return;
 		}
 
-		if ( ! this.$stylesheetElement ) {
-			this.$stylesheetElement = Backbone.$( '<style>', { id: styleId } );
-			elementor.$previewContents.find( 'head' ).append( this.$stylesheetElement );
+		// Different view owns the <style> (drag-and-drop) — remove it so
+		// the old view's cached reference becomes stale and its
+		// onBeforeDestroy .remove() will be a no-op.
+		if ( $existing.length ) {
+			$existing.remove();
 		}
 
+		this.$stylesheetElement = null;
+
+		if ( _.isEmpty( styleText ) ) {
+			return;
+		}
+
+		this.$stylesheetElement = Backbone.$( '<style>', { id: styleId } );
+		elementor.$previewContents.find( 'head' ).append( this.$stylesheetElement );
 		this.$stylesheetElement.text( styleText );
 	},
 

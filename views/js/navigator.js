@@ -102,10 +102,12 @@
         ui: {
             toggle: '.elementor-navigator__element__list-toggle',
             header: '.elementor-navigator__element__title',
-            title: '.elementor-navigator__item-title'
+            title: '.elementor-navigator__item-title',
+            visibility: '.elementor-navigator__element__toggle'
         },
 
         events: {
+            'click @ui.visibility': 'onVisibilityToggle',
             'click @ui.toggle': 'onToggleClick',
             'click @ui.header': 'onHeaderClick'
         },
@@ -141,6 +143,26 @@
                 this.childrenRegion.empty();
             }
         },
+        onVisibilityToggle: function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+
+            var isHidden = !this.$el.hasClass('elementor-navigator__element--hidden');
+            this.$el.toggleClass('elementor-navigator__element--hidden', isHidden);
+
+            var elementId = this.model && this.model.get('id');
+            var iframe = document.getElementById('elementor-preview-iframe');
+
+            if (iframe && iframe.contentDocument && elementId) {
+                var el = iframe.contentDocument.querySelector('[data-id="' + elementId + '"]');
+
+                if (el) {
+                    el.style.display = isHidden ? 'none' : '';
+                }
+            }
+        },
+
         onToggleClick: function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -458,6 +480,7 @@
                 $el.draggable({
                     handle: '#elementor-navigator__header',
                     containment: 'window',
+                    distance: 10,
                     stop: function () {
                         self.saveState();
                     }
@@ -467,9 +490,8 @@
 
             if ($.fn.resizable) {
                 $el.resizable({
-                    handles: 's',
-                    minWidth: 260,
-                    minHeight: 200,
+                    handles: { s: '#elementor-navigator__footer' },
+                    minHeight: 250,
                     stop: function (event, ui) {
                         self.saveState();
                     }

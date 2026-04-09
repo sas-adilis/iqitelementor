@@ -40,7 +40,7 @@ defined('_PS_VERSION_') or exit;
             <span class="elementor-navigator__element__title__text">{{{ title }}}</span>
         </div>
         <div class="elementor-navigator__element__toggle">
-            <i class="eicon-preview-medium"></i>
+            <i class="fa fa-eye"></i>
         </div>
         <div class="elementor-navigator__element__indicators"></div>
     </div>

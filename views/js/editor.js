@@ -806,10 +806,9 @@ NavigatorElementView = Marionette.CompositeView.extend( {
 	},
 
 	events: {
-		'click @ui.item': 'onItemClick',
-		'dblclick @ui.title': 'onTitleDblClick',
 		'click @ui.listToggle': 'onListToggleClick',
 		'click @ui.toggle': 'onVisibilityToggle',
+		'click @ui.item': 'onItemClick',
 		'contextmenu @ui.item': 'onContextMenu'
 	},
 
@@ -849,8 +848,8 @@ NavigatorElementView = Marionette.CompositeView.extend( {
 		// Listen for title/settings changes
 		this.listenTo( this.model.get( 'settings' ), 'change', this.onSettingsChanged );
 
-		// Collapsed state (default: sections collapsed, columns expanded)
-		this._collapsed = ( 'section' === this.model.get( 'elType' ) );
+		// Collapsed state (default: all collapsed)
+		this._collapsed = true;
 	},
 
 	onRender: function() {
@@ -943,14 +942,14 @@ NavigatorElementView = Marionette.CompositeView.extend( {
 			return;
 		}
 
-		// Find the parent editor view and use its addChildModel (same as sortable.js)
-		var parentEditorView = this._findParentEditorViewForModel( this.model );
+		// Find the editor view for this container and use its addChildModel (same as sortable.js)
+		var containerEditorView = this._findEditorView( this.model );
 
-		if ( parentEditorView ) {
+		if ( containerEditorView ) {
 			// Suppress navigator re-render during sort (DOM already correct)
 			this._suppressRefresh = true;
-			parentEditorView.collection.remove( model );
-			parentEditorView.addChildModel( model, { at: newIndex } );
+			containerEditorView.collection.remove( model );
+			containerEditorView.addChildModel( model, { at: newIndex } );
 			this._suppressRefresh = false;
 		}
 
@@ -984,8 +983,8 @@ NavigatorElementView = Marionette.CompositeView.extend( {
 			return;
 		}
 
-		// Find target editor view
-		var targetEditorView = this._findParentEditorViewForModel( this.model );
+		// Find the editor view for this container (the drop target)
+		var targetEditorView = this._findEditorView( this.model );
 
 		if ( targetEditorView ) {
 			// Remove from old collection (triggers re-render in old parent)
@@ -1127,34 +1126,29 @@ NavigatorElementView = Marionette.CompositeView.extend( {
 
 	onListToggleClick: function( event ) {
 		event.stopPropagation();
+		event.stopImmediatePropagation();
 		this._collapsed = ! this._collapsed;
 		this.$el.toggleClass( 'elementor-navigator__element--collapsed', this._collapsed );
 	},
 
 	onVisibilityToggle: function( event ) {
 		event.stopPropagation();
-		// Toggle hidden state visually (does not affect the actual rendering)
-		this.$el.toggleClass( 'elementor-navigator__element--hidden' );
-	},
+		event.stopImmediatePropagation();
 
-	onTitleDblClick: function( event ) {
-		event.stopPropagation();
-		// Allow inline renaming via contenteditable (optional UX)
-		var $text = this.ui.title;
-		$text.attr( 'contenteditable', 'true' ).focus();
+		var isHidden = ! this.$el.hasClass( 'elementor-navigator__element--hidden' );
+		this.$el.toggleClass( 'elementor-navigator__element--hidden', isHidden );
 
-		var self = this;
-		$text.one( 'blur keydown', function( e ) {
-			if ( e.type === 'keydown' && e.keyCode !== 13 ) {
-				return;
+		// Hide/show the element in the editor preview via native DOM
+		var elementId = this.model.get( 'id' );
+		var iframe = document.getElementById( 'elementor-preview-iframe' );
+
+		if ( iframe && iframe.contentDocument ) {
+			var el = iframe.contentDocument.querySelector( '[data-id="' + elementId + '"]' );
+
+			if ( el ) {
+				el.style.display = isHidden ? 'none' : '';
 			}
-			e.preventDefault();
-			$text.removeAttr( 'contenteditable' );
-			var newTitle = $text.text().trim();
-			if ( newTitle ) {
-				self.model.get( 'settings' ).set( '_title', newTitle );
-			}
-		} );
+		}
 	},
 
 	onContextMenu: function( event ) {
@@ -1374,8 +1368,17 @@ NavigatorView = Marionette.LayoutView.extend( {
 		// Make the panel draggable by the header
 		this.$el.draggable( {
 			handle: '#elementor-navigator__header',
-			containment: 'window'
+			containment: 'window',
+			distance: 10
 		} );
+
+		// Make the panel resizable by the footer (south handle)
+		if ( $.fn.resizable ) {
+			this.$el.resizable( {
+				handles: { s: '#elementor-navigator__footer' },
+				minHeight: 250
+			} );
+		}
 	},
 
 	refreshTree: function() {

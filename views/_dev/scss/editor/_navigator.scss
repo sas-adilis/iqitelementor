@@ -4,8 +4,8 @@
 
 $navigator-width: 250px;
 $navigator-header-height: 40px;
-$navigator-item-height: 30px;
-$navigator-indent: 20px;
+$navigator-item-height: 35px;
+$navigator-indent: 10px;
 $navigator-bg: #fff;
 $navigator-header-bg: $editor-darkest;
 $navigator-border: rgba(0, 0, 0, 0.08);
@@ -16,10 +16,9 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 
 #elementor-navigator {
 	position: fixed;
-	top: 100px;
-	left: 60px;
+	top: 80px;
+	right: 40px;
 	width: $navigator-width;
-	max-height: 60vh;
 	z-index: $editor-layer + 2;
 	background: $navigator-bg;
 	border-radius: 8px;
@@ -91,7 +90,6 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	overflow-y: auto;
 	overflow-x: hidden;
 	min-height: 60px;
-	max-height: calc(60vh - #{$navigator-header-height} - 32px);
 
 	// Thin scrollbar
 	&::-webkit-scrollbar {
@@ -123,16 +121,17 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	height: 32px;
 	border-top: 1px solid $navigator-border;
 	flex-shrink: 0;
+	cursor: ns-resize;
 
 	i {
 		font-size: 16px;
 		color: $editor-light;
-		cursor: pointer;
+		pointer-events: none;
 		transition: color 0.2s;
+	}
 
-		&:hover {
-			color: $editor-darkest;
-		}
+	&:hover i {
+		color: $editor-darkest;
 	}
 }
 
@@ -156,20 +155,32 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	height: $navigator-item-height;
 	padding: 0 8px;
 	cursor: pointer;
-	transition: background-color 0.12s ease;
 	border-bottom: 1px solid transparent;
 	gap: 4px;
+	position: relative;
 
-	&:hover {
+	// Full-width hover background (ignores parent indent)
+	&::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: -100px;
+		right: -100px;
+		z-index: -1;
+		transition: background-color 0.12s ease;
+		pointer-events: none;
+	}
+
+	&:hover::before {
 		background-color: rgba(0, 0, 0, 0.04);
 	}
 }
 
 // Active / selected state
 .elementor-navigator__element--active {
-	> .elementor-navigator__item {
-		background-color: rgba($primary, 0.08);
-		border-left: 2px solid $primary;
+	> .elementor-navigator__item::before {
+		background-color: rgba(0, 0, 0, 0.08);
 	}
 }
 
@@ -179,9 +190,15 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 		opacity: 0.4;
 	}
 
-	.elementor-navigator__element__toggle i {
+	// Grey out all nested children too
+	.elementor-navigator__element .elementor-navigator__item {
+		opacity: 0.4;
+	}
+
+	// Switch to eye-slash icon
+	> .elementor-navigator__item .elementor-navigator__element__toggle i {
 		&::before {
-			content: "\e82c"; // eicon-preview-thin (closed eye)
+			content: "\f070"; // fa-eye-slash
 		}
 	}
 }
@@ -194,13 +211,13 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 18px;
-	height: 18px;
+	width: 20px;
+	height: 20px;
 	flex-shrink: 0;
 
 	i {
-		font-size: 8px;
-		color: $editor-dark;
+		font-size: 16px;
+		color: $editor-darkest;
 		transition: transform 0.15s ease;
 	}
 }
@@ -231,13 +248,13 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 20px;
-	height: 20px;
+	width: 22px;
+	height: 22px;
 	flex-shrink: 0;
 
 	i {
-		font-size: 12px;
-		color: $editor-dark;
+		font-size: 14px;
+		color: $editor-darkest;
 	}
 }
 
@@ -245,12 +262,6 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 .elementor-navigator__element--section {
 	> .elementor-navigator__item .elementor-navigator__element__element-type i {
 		color: $blue-flat;
-	}
-}
-
-.elementor-navigator__element--column {
-	> .elementor-navigator__item .elementor-navigator__element__element-type i {
-		color: $editor-accent;
 	}
 }
 
@@ -273,12 +284,6 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	color: $editor-darkest;
 	line-height: $navigator-item-height;
 
-	&[contenteditable="true"] {
-		background: rgba($primary, 0.06);
-		outline: 1px solid $primary;
-		border-radius: 2px;
-		padding: 0 4px;
-	}
 }
 
 // ---------------------------------------------------------------------------
@@ -296,7 +301,7 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 	transition: opacity 0.15s;
 
 	i {
-		font-size: 12px;
+		font-size: 14px;
 		color: $editor-light;
 
 		&:hover {
@@ -327,17 +332,15 @@ $navigator-border: rgba(0, 0, 0, 0.08);
 
 .elementor-navigator__sortable-placeholder {
 	height: $navigator-item-height;
-	background: rgba($primary, 0.08);
-	border: 1px dashed rgba($primary, 0.4);
-	border-radius: 3px;
-	margin: 1px 8px;
+	background-color: rgba(0, 0, 0, 0.04);
+	border-radius: 0;
 }
 
 .elementor-navigator__element--dragging {
-	opacity: 0.5;
+	transform: rotateX(5deg);
 
 	> .elementor-navigator__item {
-		background-color: rgba($primary, 0.06);
+		background-color: rgba(0, 0, 0, 0.04);
 	}
 }
 

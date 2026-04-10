@@ -445,6 +445,10 @@ $_MODULE['<{iqitelementor}prestashop>column_603850e072131401265c4fc01027db93'] =
 $_MODULE['<{iqitelementor}prestashop>column_692af12e687aba7f0845b9a49b515c9d'] = 'Alignement vertical';
 $_MODULE['<{iqitelementor}prestashop>column_e7a75a08827daff36c7455297f2bf5d1'] = 'Comportement vertical';
 $_MODULE['<{iqitelementor}prestashop>column_f5b67dd021f56100a6ea99169a67bf5e'] = 'Espace des widgets';
+$_MODULE['<{iqitelementor}prestashop>column_c90569e82c89b529879e906bec3a769e'] = 'Comportement de largeur';
+$_MODULE['<{iqitelementor}prestashop>column_c936f9927e7b00ada48d5b571b74ff7d'] = 'Masquer sur Ordinateur';
+$_MODULE['<{iqitelementor}prestashop>column_4365dd761ee313b7154369721242ca54'] = 'Masquer sur Tablette';
+$_MODULE['<{iqitelementor}prestashop>column_8c51f4baf5c75864896a9984fdd085ed'] = 'Masquer sur Mobile';
 $_MODULE['<{iqitelementor}prestashop>column_75b84a0c01e7f3ae1a3d543bc02957f9'] = 'Z-index';
 
 // --- Source: countdown (Widget/Countdown.php) ---
@@ -700,6 +704,10 @@ $_MODULE['<{iqitelementor}prestashop>icontrait_30954d90085f6eaaf5817917fc5fecb3'
 $_MODULE['<{iqitelementor}prestashop>icontrait_7a1920d61156abc05a60135aefe8bc67'] = 'Par défaut';
 $_MODULE['<{iqitelementor}prestashop>icontrait_6b73ad372508225645eb96a2e505a602'] = 'Encadré';
 $_MODULE['<{iqitelementor}prestashop>icontrait_817434295a673aed431435658b65d9a7'] = 'Icône';
+$_MODULE['<{iqitelementor}prestashop>icontrait_95ba6a44ba93b9682e79fe73c3c0f137'] = 'Type d\'icône';
+$_MODULE['<{iqitelementor}prestashop>icontrait_1234378663ad7a6133906fafb9a625a0'] = 'Bibliothèque d\'icônes';
+$_MODULE['<{iqitelementor}prestashop>icontrait_b1602704f20eb44d7266096eeb04d2b8'] = 'Image personnalisée';
+$_MODULE['<{iqitelementor}prestashop>icontrait_110a2260531c40f3ea949814747ded10'] = 'Envoyez une image à utiliser comme icône personnalisée.';
 $_MODULE['<{iqitelementor}prestashop>icontrait_37e929a6d14b3e6eeb834900e8216c6e'] = 'Survol de l\'icône';
 $_MODULE['<{iqitelementor}prestashop>icontrait_5f6535b98548e838b911fe3cbd2f9600'] = 'Padding de l\'icône';
 $_MODULE['<{iqitelementor}prestashop>icontrait_05646446d5c08ca3e9a91784064e7ecb'] = 'Rotation de l\'icône';

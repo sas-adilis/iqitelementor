@@ -71,7 +71,21 @@ var App;
 
 	elementorIconObserve( document.body || document.documentElement );
 
-	window.elementorRenderIcon = function( value ) {
+	window.elementorRenderIcon = function( value, iconType, svgMedia ) {
+		// Custom SVG mode
+		if ( iconType === 'svg' && svgMedia ) {
+			var svgUrl = '';
+			if ( typeof svgMedia === 'object' && svgMedia.url ) {
+				svgUrl = svgMedia.url;
+			} else if ( typeof svgMedia === 'string' && svgMedia.length ) {
+				svgUrl = svgMedia;
+			}
+			if ( svgUrl ) {
+				return '<span class="elementor-icon-svg elementor-icon-svg--custom"><img src="' + svgUrl + '" alt="" /></span>';
+			}
+			return '';
+		}
+
 		if ( ! value ) {
 			return '';
 		}

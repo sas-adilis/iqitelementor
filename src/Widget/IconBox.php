@@ -4,8 +4,8 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Typography as GroupTypography;
 use IqitElementor\Helper\Translater;
-use IqitElementor\Helper\IconHelper;
 use IqitElementor\Manager\ControlManager;
+use IqitElementor\Traits\IconTrait;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
     throw new \RuntimeException('iqitelementor: ELEMENTOR_ABSPATH not defined — module not loaded properly');
@@ -13,6 +13,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class IconBox extends WidgetBase
 {
+    use IconTrait;
     public function getId(): string
     {
         return 'icon-box';
@@ -38,49 +39,7 @@ class IconBox extends WidgetBase
             ]
         );
 
-        $this->addControl(
-            'view',
-            [
-                'label' => Translater::get()->l('View'),
-                'type' => ControlManager::SELECT,
-                'section' => 'section_icon',
-                'options' => [
-                    'default' => Translater::get()->l('Default'),
-                    'stacked' => Translater::get()->l('Stacked'),
-                    'framed' => Translater::get()->l('Framed'),
-                ],
-                'default' => 'default',
-                'prefix_class' => 'elementor-view-',
-            ]
-        );
-
-        $this->addControl(
-            'icon',
-            [
-                'label' => Translater::get()->l('Choose Icon'),
-                'type' => ControlManager::ICON,
-                'default' => 'fa fa-star',
-                'section' => 'section_icon',
-            ]
-        );
-
-        $this->addControl(
-            'shape',
-            [
-                'label' => Translater::get()->l('Shape'),
-                'type' => ControlManager::SELECT,
-                'section' => 'section_icon',
-                'options' => [
-                    'circle' => Translater::get()->l('Circle'),
-                    'square' => Translater::get()->l('Square'),
-                ],
-                'default' => 'circle',
-                'condition' => [
-                    'view!' => 'default',
-                ],
-                'prefix_class' => 'elementor-shape-',
-            ]
-        );
+        $this->registerIconContentControls('section_icon', [], '', [], 'fa fa-star');
 
         $this->addControl(
             'title_text',
@@ -174,40 +133,7 @@ class IconBox extends WidgetBase
             ]
         );
 
-        $this->addControl(
-            'primary_color',
-            [
-                'label' => Translater::get()->l('Primary Color'),
-                'type' => ControlManager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'default' => '',
-                'selectors' => [
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon, {{WRAPPER}}.elementor-view-default .elementor-icon' => 'color: {{VALUE}}; border-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon svg, {{WRAPPER}}.elementor-view-default .elementor-icon svg' => 'fill: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'secondary_color',
-            [
-                'label' => Translater::get()->l('Secondary Color'),
-                'type' => ControlManager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'default' => '',
-                'condition' => [
-                    'view!' => 'default',
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon' => 'color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon svg' => 'fill: {{VALUE}};',
-                ],
-            ]
-        );
+        $this->registerIconStyleControls('section_style_icon');
 
         $this->addControl(
             'icon_space',
@@ -230,155 +156,6 @@ class IconBox extends WidgetBase
                     '{{WRAPPER}}.elementor-position-left .elementor-icon-box-icon' => 'margin-right: {{SIZE}}{{UNIT}};',
                     '{{WRAPPER}}.elementor-position-top .elementor-icon-box-icon' => 'margin-bottom: {{SIZE}}{{UNIT}};',
                 ],
-            ]
-        );
-
-        $this->addControl(
-            'icon_size',
-            [
-                'label' => Translater::get()->l('Icon Size'),
-                'type' => ControlManager::SLIDER,
-                'range' => [
-                    'px' => [
-                        'min' => 6,
-                        'max' => 300,
-                    ],
-                ],
-                'section' => 'section_style_icon',
-                'tab' => self::TAB_STYLE,
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-icon i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-icon svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'icon_padding',
-            [
-                'label' => Translater::get()->l('Icon Padding'),
-                'type' => ControlManager::SLIDER,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-icon' => 'padding: {{SIZE}}{{UNIT}};',
-                ],
-                'default' => [
-                    'size' => 1.5,
-                    'unit' => 'em',
-                ],
-                'range' => [
-                    'em' => [
-                        'min' => 0,
-                    ],
-                ],
-                'condition' => [
-                    'view!' => 'default',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'rotate',
-            [
-                'label' => Translater::get()->l('Icon Rotate'),
-                'type' => ControlManager::SLIDER,
-                'default' => [
-                    'size' => 0,
-                    'unit' => 'deg',
-                ],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-icon i' => 'transform: rotate({{SIZE}}{{UNIT}});',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'border_width',
-            [
-                'label' => Translater::get()->l('Border Width'),
-                'type' => ControlManager::DIMENSIONS,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-icon' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'view' => 'framed',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'border_radius',
-            [
-                'label' => Translater::get()->l('Border Radius'),
-                'type' => ControlManager::DIMENSIONS,
-                'size_units' => ['px', '%'],
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_style_icon',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
-                ],
-                'condition' => [
-                    'view!' => 'default',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'section_hover',
-            [
-                'label' => Translater::get()->l('Icon Hover'),
-                'type' => ControlManager::SECTION,
-                'tab' => self::TAB_STYLE,
-            ]
-        );
-
-        $this->addControl(
-            'hover_primary_color',
-            [
-                'label' => Translater::get()->l('Primary Color'),
-                'type' => ControlManager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_hover',
-                'default' => '',
-                'selectors' => [
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon:hover' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon:hover, {{WRAPPER}}.elementor-view-default .elementor-icon:hover' => 'color: {{VALUE}}; border-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon:hover svg, {{WRAPPER}}.elementor-view-default .elementor-icon:hover svg' => 'fill: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'hover_secondary_color',
-            [
-                'label' => Translater::get()->l('Secondary Color'),
-                'type' => ControlManager::COLOR,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_hover',
-                'default' => '',
-                'condition' => [
-                    'view!' => 'default',
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}.elementor-view-framed .elementor-icon:hover' => 'background-color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon:hover' => 'color: {{VALUE}};',
-                    '{{WRAPPER}}.elementor-view-stacked .elementor-icon:hover svg' => 'fill: {{VALUE}};',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'hover_animation',
-            [
-                'label' => Translater::get()->l('Animation'),
-                'type' => ControlManager::HOVER_ANIMATION,
-                'tab' => self::TAB_STYLE,
-                'section' => 'section_hover',
             ]
         );
 
@@ -551,7 +328,7 @@ class IconBox extends WidgetBase
         <div class="elementor-icon-box-wrapper">
             <div class="elementor-icon-box-icon">
                 <<?php echo implode(' ', [$icon_tag, $icon_attributes, $link_attributes]); ?>>
-                <?php echo IconHelper::renderIcon($instance['icon']); ?>
+                <?php echo $this->renderIconFromSettings($instance); ?>
             </<?php echo $icon_tag; ?>>
         </div>
         <div class="elementor-icon-box-content">
@@ -572,7 +349,7 @@ class IconBox extends WidgetBase
         <div class="elementor-icon-box-wrapper">
             <div class="elementor-icon-box-icon">
                 <{{{ iconTag + ' ' + link }}} class="elementor-icon elementor-animation-{{ settings.hover_animation }}">
-                {{{ elementorRenderIcon(settings.icon) }}}
+                {{{ <?php echo static::getIconTemplateExpression(); ?> }}}
             </
             {{{ iconTag }}}>
         </div>

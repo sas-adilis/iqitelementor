@@ -46,6 +46,91 @@ class IconHelper
     }
 
     /**
+     * Render a custom uploaded SVG icon.
+     *
+     * @param array|string $media  Media control value (array with 'url' key)
+     * @param array        $attrs  Extra HTML attributes
+     */
+    public static function renderCustomSvg($media, array $attrs = array()): string
+    {
+        if (empty($media)) {
+            return '';
+        }
+
+        if (is_string($media)) {
+            $url = $media;
+        } elseif (is_array($media) && !empty($media['url'])) {
+            $url = $media['url'];
+        } else {
+            return '';
+        }
+
+        $url = trim($url);
+        if (empty($url)) {
+            return '';
+        }
+
+        $attrStr = self::buildAttrString($attrs);
+
+        // If the URL points to an SVG file, try to inline it
+        if (preg_match('/\.svg(\?.*)?$/i', $url)) {
+            $svg = self::loadCustomSvgFromUrl($url);
+            if ($svg) {
+                return '<span class="elementor-icon-svg elementor-icon-svg--custom"' . $attrStr . '>' . $svg . '</span>';
+            }
+        }
+
+        // Fallback: render as <img>
+        return '<span class="elementor-icon-svg elementor-icon-svg--custom"' . $attrStr . '>'
+            . '<img src="' . Helper::escAttr($url) . '" alt="" />'
+            . '</span>';
+    }
+
+    /**
+     * Load and sanitize a custom SVG from a URL (local path only).
+     *
+     * @return string|false
+     */
+    private static function loadCustomSvgFromUrl(string $url)
+    {
+        // Only load from the local server — resolve relative/absolute PS paths
+        $basePath = rtrim(_PS_ROOT_DIR_, '/');
+
+        // Try to resolve as a local file
+        $parsed = parse_url($url);
+        $path = isset($parsed['path']) ? $parsed['path'] : '';
+
+        if (empty($path)) {
+            return false;
+        }
+
+        // Strip base URI if present (e.g. /prestashop/img/cms/icon.svg -> /img/cms/icon.svg)
+        $baseUri = rtrim(__PS_BASE_URI__, '/');
+        if (!empty($baseUri) && strpos($path, $baseUri) === 0) {
+            $path = substr($path, strlen($baseUri));
+        }
+
+        $filePath = $basePath . '/' . ltrim($path, '/');
+
+        // Security: ensure the resolved path stays within PS root
+        $realPath = realpath($filePath);
+        if (!$realPath || strpos($realPath, $basePath) !== 0) {
+            return false;
+        }
+
+        if (!is_file($realPath) || strtolower(pathinfo($realPath, PATHINFO_EXTENSION)) !== 'svg') {
+            return false;
+        }
+
+        $svg = file_get_contents($realPath);
+        if ($svg === false || strpos($svg, '<svg') === false) {
+            return false;
+        }
+
+        return self::sanitizeSvg($svg);
+    }
+
+    /**
      * Build a svgKey from library key and CSS class value.
      *
      * E.g. ("ph", "ph ph-arrow-circle-left") => "ph/regular/arrow-circle-left"

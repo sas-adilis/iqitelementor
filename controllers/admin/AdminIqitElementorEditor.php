@@ -211,7 +211,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'widgetStyles' => $this->loadWidgetStyles(),
                 'i18n' => [
                     'elementor' => $this->module->getTranslator()->trans('Elementor', [], 'Modules.Iqitelementor.Admin'),
-                    'dialog_confirm_delete' => $this->module->getTranslator()->trans('Are you sure you want to remove this?', [], 'Modules.Iqitelementor.Admin') . ' {0}',
+                    'dialog_confirm_delete' => $this->module->getTranslator()->trans('Are you sure you want to delete this', [], 'Modules.Iqitelementor.Admin') . ' {0}?',
                     'dialog_user_taken_over' => '{0} ' . $this->module->getTranslator()->trans('has taken over and is currently editing. Do you want to take over this page editing?', [], 'Modules.Iqitelementor.Admin'),
                     'delete' => $this->module->getTranslator()->trans('Delete', [], 'Modules.Iqitelementor.Admin'),
                     'cancel' => $this->module->getTranslator()->trans('Cancel', [], 'Modules.Iqitelementor.Admin'),

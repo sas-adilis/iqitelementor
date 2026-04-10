@@ -560,11 +560,11 @@
 }
 
 @media (max-width: 575px) {
-  .col-mobile-auto-yes {
+  .col-mobile-behavior-auto {
     width: auto !important;
     flex: 0 0 auto;
   }
-  .col-mobile-dynamic-yes {
+  .col-mobile-behavior-dynamic {
     width: 100% !important;
     max-width: 100%;
     flex: 1 0 0;
@@ -572,11 +572,11 @@
   }
 }
 @media (min-width: 768px) and (max-width: 1023px) {
-  .col-tablet-auto-yes {
+  .col-tablet-behavior-auto {
     width: auto !important;
     flex: 0 0 auto;
   }
-  .col-tablet-dynamic-yes {
+  .col-tablet-behavior-dynamic {
     width: 100% !important;
     max-width: 100%;
     flex: 1 0 0;
@@ -584,11 +584,11 @@
   }
 }
 @media (min-width: 1024px) {
-  .col-auto-yes {
+  .col-behavior-auto {
     width: auto !important;
     flex: 0 0 auto;
   }
-  .col-dynamic-yes {
+  .col-behavior-dynamic {
     width: 100% !important;
     max-width: 100%;
     flex: 1 0 0;

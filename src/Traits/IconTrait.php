@@ -45,7 +45,25 @@ trait IconTrait
     ): void {
         $p = $prefix;
 
+        if (!in_array('icon_type', $exclude)) {
+            $this->addControl(
+                $p . 'icon_type',
+                [
+                    'label' => Translater::get()->l('Icon Type'),
+                    'type' => ControlManager::SELECT,
+                    'section' => $sectionId,
+                    'options' => [
+                        'icon' => Translater::get()->l('Icon Library'),
+                        'svg' => Translater::get()->l('Custom Image'),
+                    ],
+                    'default' => 'icon',
+                    'condition' => $condition,
+                ]
+            );
+        }
+
         if (!in_array('icon', $exclude)) {
+            $iconCondition = array_merge($condition, [$p . 'icon_type' => 'icon']);
             $this->addControl(
                 $p . 'icon',
                 [
@@ -54,7 +72,21 @@ trait IconTrait
                     'label_block' => true,
                     'default' => $default,
                     'section' => $sectionId,
-                    'condition' => $condition,
+                    'condition' => $iconCondition,
+                ]
+            );
+        }
+
+        if (!in_array('icon_svg', $exclude)) {
+            $svgCondition = array_merge($condition, [$p . 'icon_type' => 'svg']);
+            $this->addControl(
+                $p . 'icon_svg',
+                [
+                    'label' => Translater::get()->l('Custom Image'),
+                    'type' => ControlManager::MEDIA,
+                    'section' => $sectionId,
+                    'condition' => $svgCondition,
+                    'description' => Translater::get()->l('Upload an image to use as a custom icon.'),
                 ]
             );
         }
@@ -186,6 +218,7 @@ trait IconTrait
                     'selectors' => [
                         $sel . ' i' => 'font-size: {{SIZE}}{{UNIT}};',
                         $sel . ' svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
+                        $sel . ' .elementor-icon-svg--custom img' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}};',
                     ],
                 ]
             );
@@ -231,7 +264,7 @@ trait IconTrait
                     'section' => $sectionId,
                     'condition' => $condition,
                     'selectors' => [
-                        $sel . ' i, ' . $sel . ' svg' => 'transform: rotate({{SIZE}}{{UNIT}});',
+                        $sel . ' i, ' . $sel . ' svg, ' . $sel . ' .elementor-icon-svg--custom img' => 'transform: rotate({{SIZE}}{{UNIT}});',
                     ],
                 ]
             );
@@ -371,6 +404,14 @@ trait IconTrait
      */
     protected function renderIconFromSettings(array $instance, string $key = 'icon', array $attrs = []): string
     {
+        $prefix = ($key === 'icon') ? '' : str_replace('icon', '', $key);
+        $typeKey = $prefix . 'icon_type';
+        $svgKey = $prefix . 'icon_svg';
+
+        if (!empty($instance[$typeKey]) && $instance[$typeKey] === 'svg') {
+            return IconHelper::renderCustomSvg($instance[$svgKey] ?? [], $attrs);
+        }
+
         if (empty($instance[$key])) {
             return '';
         }
@@ -383,8 +424,17 @@ trait IconTrait
      *
      * @param string $settingsPath  JS expression (e.g. 'settings.icon', 'item.icon')
      */
-    protected static function getIconTemplateExpression(string $settingsPath = 'settings.icon'): string
+    /**
+     * Get the JS expression for rendering an icon in contentTemplate.
+     * Returns a string to be used inside {{{ }}} in underscore templates.
+     *
+     * @param string $settingsPath  JS expression (e.g. 'settings.icon', 'item.icon')
+     * @param string $prefix        Control name prefix (must match registerIconContentControls prefix)
+     */
+    protected static function getIconTemplateExpression(string $settingsPath = 'settings.icon', string $prefix = ''): string
     {
-        return 'elementorRenderIcon(' . $settingsPath . ')';
+        $typePath = 'settings.' . $prefix . 'icon_type';
+        $svgPath = 'settings.' . $prefix . 'icon_svg';
+        return 'elementorRenderIcon(' . $settingsPath . ', ' . $typePath . ', ' . $svgPath . ')';
     }
 }

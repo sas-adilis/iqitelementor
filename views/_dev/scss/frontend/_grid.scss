@@ -262,11 +262,11 @@
 }
 
 @media (max-width: $screen-xs-max) {
-	.col-mobile-auto-yes {
+	.col-mobile-behavior-auto {
 		width: auto !important;
 		flex: 0 0 auto;
 	}
-	.col-mobile-dynamic-yes {
+	.col-mobile-behavior-dynamic {
 		width: 100% !important;
 		max-width: 100%;
 		flex: 1 0 0;
@@ -275,11 +275,11 @@
 }
 
 @media (min-width: $screen-md-min) and (max-width: $screen-md-max) {
-	.col-tablet-auto-yes {
+	.col-tablet-behavior-auto {
 		width: auto !important;
 		flex: 0 0 auto;
 	}
-	.col-tablet-dynamic-yes {
+	.col-tablet-behavior-dynamic {
 		width: 100% !important;
 		max-width: 100%;
 		flex: 1 0 0;
@@ -288,11 +288,11 @@
 }
 
 @media (min-width: $screen-lg-min) {
-	.col-auto-yes {
+	.col-behavior-auto {
 		width: auto !important;
 		flex: 0 0 auto;
 	}
-	.col-dynamic-yes {
+	.col-behavior-dynamic {
 		width: 100% !important;
 		max-width: 100%;
 		flex: 1 0 0;

@@ -17,6 +17,10 @@ var ElementsHandler = require('elementor-frontend/elements-handler');
 /** Set to true to enable Swiper debug logging in the console */
 var SWIPER_DEBUG = true;
 
+// When the theme provides Swiper core (not the bundle), modules must be passed
+// explicitly. The theme exposes them on window.SwiperModules.
+var SwiperModules = window.SwiperModules || null;
+
 var SWIPER_SM_BREAKPOINT = 576;
 var SWIPER_MD_BREAKPOINT = 768;
 var SWIPER_LG_BREAKPOINT = 992;
@@ -357,6 +361,17 @@ function initCarousel() {
 
     var isEditMode = !!(window.elementorFrontendConfig && elementorFrontendConfig.isEditMode);
 
+    // Build the modules array when the theme provides Swiper core (not the bundle)
+    var modules = [];
+    if (SwiperModules) {
+        if (SwiperModules.Navigation) modules.push(SwiperModules.Navigation);
+        if (SwiperModules.Pagination) modules.push(SwiperModules.Pagination);
+        if (SwiperModules.Scrollbar) modules.push(SwiperModules.Scrollbar);
+        if (SwiperModules.Autoplay && savedOptions.autoplay) modules.push(SwiperModules.Autoplay);
+        if (SwiperModules.Grid && savedOptions.itemsPerColumn && savedOptions.itemsPerColumn > 1) modules.push(SwiperModules.Grid);
+        if (SwiperModules.EffectFade && savedOptions.fade) modules.push(SwiperModules.EffectFade);
+    }
+
     var swiperOptions = {
         touchEventsTarget: 'container',
         watchOverflow: true,
@@ -379,6 +394,11 @@ function initCarousel() {
             }
         }
     };
+
+    // Inject modules when using Swiper core (not the bundle)
+    if (modules.length) {
+        swiperOptions.modules = modules;
+    }
 
     // Direction
     if (savedOptions.direction && (savedOptions.direction === 'vertical' || savedOptions.direction === 'horizontal')) {

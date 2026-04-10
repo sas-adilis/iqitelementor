@@ -32,73 +32,6 @@ class Column extends ElementBase
         return 'columns';
     }
 
-    private function addWidthControls(?string $device = null): void
-    {
-        $this->addControl(
-            'width_auto'.($device ? "_$device" : ''),
-            [
-                'label' => Translater::get()->l('Auto Width'),
-                'type' => ControlManager::SWITCHER,
-                'description' => Translater::get()->l('Column width will be defined by its content width.'),
-                /*'selectors' => [
-                    '{{WRAPPER}}' => 'width: auto !important; flex: 0 0 auto;',
-                ],*/
-                'prefix_class' => 'col'.($device ? "-$device" : '').'-auto-',
-                'condition' => [
-                    'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'width_dynamic'.($device ? "_$device" : ''),
-            [
-                'label' => Translater::get()->l('Dynamic Width'),
-                'type' => ControlManager::SWITCHER,
-                'description' => Translater::get()->l('The column will fill the remaining space in the row.'),
-                /*'selectors' => [
-                    '{{WRAPPER}}' => 'width: 100% !important; max-width: 100%; flex: 1 0 0; min-width: 0;',
-                ],*/
-                'prefix_class' => 'col'.($device ? "-$device" : '').'-dynamic-',
-                'condition' => [
-                    'width_auto'.($device ? "_$device" : '').'!' => 'yes',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'width'.($device ? "_$device" : ''),
-            [
-                'label' => Translater::get()->l('Column Width') . ' (%)',
-                'type' => ControlManager::NUMBER,
-                'min' => 2,
-                'max' => 98,
-                'required' => true,
-                'device_args' => [
-                    'tablet' => [
-                        'max' => 100,
-                        'required' => false,
-                    ],
-                    'mobile' => [
-                        'max' => 100,
-                        'required' => false,
-                    ],
-                ],
-                'min_affected_device' => [
-                    'desktop' => 'tablet',
-                    'tablet'=> 'tablet',
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}' => 'width: {{VALUE}}%',
-                ],
-                'condition' => [
-                    'width_auto'.($device ? "_$device" : '').'!' => 'yes',
-                    'width_dynamic'.($device ? "_$device" : '').'!' => 'yes',
-                ],
-            ]
-        );
-    }
-
     protected function registerControls(): void
     {
 
@@ -111,21 +44,36 @@ class Column extends ElementBase
             ]
         );
 
-        $this->startControlsTabs('column_size_tabs');
+        $this->addResponsiveControl(
+            'width_behavior',
+            [
+                'label' => Translater::get()->l('Width Behavior'),
+                'type' => ControlManager::SELECT,
+                'default' => '',
+                'options' => [
+                    '' => Translater::get()->l('Default'),
+                    'auto' => Translater::get()->l('Auto'),
+                    'dynamic' => Translater::get()->l('Dynamic'),
+                ],
+                'prefix_class' => 'col%s-behavior-',
+            ]
+        );
 
-        $this->startControlsTab('column_size_desktop_tab', ['label' => Translater::get()->l('Desktop')]);
-        $this->addWidthControls();
-        $this->endControlsTab();
-
-        $this->startControlsTab('column_size_tablet_tab', ['label' => Translater::get()->l('Tablet')]);
-        $this->addWidthControls('tablet');
-        $this->endControlsTab();
-
-        $this->startControlsTab('column_size_mobile_tab', ['label' => Translater::get()->l('Mobile')]);
-        $this->addWidthControls('mobile');
-        $this->endControlsTab();
-
-        $this->endControlsTabs();
+        $this->addResponsiveControl(
+            'width',
+            [
+                'label' => Translater::get()->l('Column Width') . ' (%)',
+                'type' => ControlManager::NUMBER,
+                'min' => 2,
+                'max' => 100,
+                'selectors' => [
+                    '{{WRAPPER}}' => 'width: {{VALUE}}%',
+                ],
+                'condition' => [
+                    'width_behavior' => '',
+                ],
+            ]
+        );
 
         /*$this->addResponsiveControl(
             'align',
@@ -257,7 +205,7 @@ class Column extends ElementBase
             ]
         );
 
-        $this->addControl(
+        $this->addResponsiveControl(
             'border_radius',
             [
                 'label' => Translater::get()->l('Border Radius'),
@@ -484,75 +432,44 @@ class Column extends ElementBase
             ]
         );
 
-        $responsive_points = [
-            'screen_sm' => [
-                'title' => Translater::get()->l('Mobile Width'),
-                'class_prefix' => 'elementor-sm-',
-                'classes' => '',
-                'description' => '',
-            ],
-            'screen_md' => [
-                'title' => Translater::get()->l('Tablet Width'),
-                'class_prefix' => 'elementor-md-',
-                'classes' => '',
-                'description' => '',
-            ],
-        ];
+        $this->addControl(
+            'hide_desktop',
+            [
+                'label' => Translater::get()->l('Hide On Desktop'),
+                'type' => ControlManager::SWITCHER,
+                'default' => '',
+                'prefix_class' => 'elementor-',
+                'section' => 'section_responsive',
+                'tab' => self::TAB_ADVANCED,
+                'return_value' => 'hidden-desktop',
+            ]
+        );
 
-        foreach ($responsive_points as $point_name => $point_data) {
-            $this->addControl(
-                $point_name,
-                [
-                    'label' => $point_data['title'],
-                    'type' => ControlManager::SELECT,
-                    'section' => 'section_responsive',
-                    'default' => 'default',
-                    'options' => [
-                        'default' => Translater::get()->l('Default'),
-                        'custom' => Translater::get()->l('Custom'),
-                    ],
-                    'tab' => self::TAB_ADVANCED,
-                    'description' => $point_data['description'],
-                    'classes' => $point_data['classes'],
-                ]
-            );
+        $this->addControl(
+            'hide_tablet',
+            [
+                'label' => Translater::get()->l('Hide On Tablet'),
+                'type' => ControlManager::SWITCHER,
+                'default' => '',
+                'prefix_class' => 'elementor-',
+                'section' => 'section_responsive',
+                'tab' => self::TAB_ADVANCED,
+                'return_value' => 'hidden-tablet',
+            ]
+        );
 
-            $this->addControl(
-                $point_name . '_width',
-                [
-                    'label' => Translater::get()->l('Column Width'),
-                    'type' => ControlManager::SELECT,
-                    'section' => 'section_responsive',
-                    'options' => [
-                        '10' => '10%',
-                        '11' => '11%',
-                        '12' => '12%',
-                        '14' => '14%',
-                        '16' => '16%',
-                        '20' => '20%',
-                        '25' => '25%',
-                        '30' => '30%',
-                        '33' => '33%',
-                        '40' => '40%',
-                        '50' => '50%',
-                        '60' => '60%',
-                        '66' => '66%',
-                        '70' => '70%',
-                        '75' => '75%',
-                        '80' => '80%',
-                        '83' => '83%',
-                        '90' => '90%',
-                        '100' => '100%',
-                    ],
-                    'default' => '100',
-                    'tab' => self::TAB_ADVANCED,
-                    'condition' => [
-                        $point_name => ['custom'],
-                    ],
-                    'prefix_class' => $point_data['class_prefix'],
-                ]
-            );
-        }
+        $this->addControl(
+            'hide_mobile',
+            [
+                'label' => Translater::get()->l('Hide On Mobile'),
+                'type' => ControlManager::SWITCHER,
+                'default' => '',
+                'prefix_class' => 'elementor-',
+                'section' => 'section_responsive',
+                'tab' => self::TAB_ADVANCED,
+                'return_value' => 'hidden-phone',
+            ]
+        );
 
         $this->registerCustomAttributesControls(self::TAB_ADVANCED);
         $this->registerCustomCssControls(self::TAB_ADVANCED);

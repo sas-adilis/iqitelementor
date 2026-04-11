@@ -6,6 +6,7 @@ use IqitElementor\Control\Group\Border;
 use IqitElementor\Control\Group\BoxShadow;
 use IqitElementor\Control\Group\Image as GroupImage;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 
@@ -437,11 +438,8 @@ class Image extends WidgetBase
 
         $link = $this->getLinkUrl($instance);
         if ($link) {
-            $target = '';
-            if (!empty($link['is_external'])) {
-                $target = ' target="_blank" rel="noopener noreferrer"';
-            }
-            $image_html = sprintf('<a href="%s"%s>%s</a>', $link['url'], $target, $image_html);
+            $linkAttrs = LinkAttributesHelper::getAttributesHtml($link);
+            $image_html = sprintf('<a href="%s"%s>%s</a>', $link['url'], $linkAttrs, $image_html);
         }
 
         $image_html = '<div class="elementor-image' . (!empty($instance['shape']) ? ' elementor-image-shape-' . $instance['shape'] : '') . '">' . $image_html . '</div>';

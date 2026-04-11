@@ -3,6 +3,7 @@
 namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Typography as GroupTypography;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 use IqitElementor\Traits\IconTrait;
@@ -316,9 +317,8 @@ class IconBox extends WidgetBase
             $this->addRenderAttribute('link', 'href', $instance['link']['url']);
             $icon_tag = 'a';
 
-            if (!empty($instance['link']['is_external'])) {
-                $this->addRenderAttribute('link', 'target', '_blank');
-                $this->addRenderAttribute('link', 'rel', 'noopener noreferrer');
+            foreach (LinkAttributesHelper::getAttributesArray($instance['link']) as $attrKey => $attrValue) {
+                $this->addRenderAttribute('link', $attrKey, $attrValue);
             }
         }
 

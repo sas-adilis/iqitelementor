@@ -243,11 +243,7 @@ trait HeadingTrait
             'text' => $settings['heading_text'] ?? '',
             'tag' => $settings['heading_tag'] ?? 'h2',
             'classes' => implode(' ', $heading_classes),
-            'link' => [
-                'url' => $settings['heading_link']['url'] ?? null,
-                'is_external' => $settings['heading_link']['is_external'] ?? null,
-                'nofollow' => $settings['heading_link']['nofollow'] ?? null,
-            ]
+            'link' => $settings['heading_link'] ?? [],
         ];
     }
 }

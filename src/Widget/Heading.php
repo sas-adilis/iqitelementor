@@ -2,6 +2,7 @@
 
 namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 use IqitElementor\Traits\HeadingTrait;
@@ -97,13 +98,8 @@ class Heading extends WidgetBase
         if (!empty($heading_options['link']['url'])) {
             $this->addRenderAttribute('url', 'href', $heading_options['link']['url']);
 
-            if (!empty($heading_options['link']['is_external'])) {
-                $this->addRenderAttribute('url', 'target', '_blank');
-                $this->addRenderAttribute('url', 'rel', 'noopener noreferrer');
-            }
-
-            if (!empty($heading_options['link']['nofollow'])) {
-                $this->addRenderAttribute('url', 'rel', 'nofollow');
+            foreach (LinkAttributesHelper::getAttributesArray($heading_options['link']) as $attrKey => $attrValue) {
+                $this->addRenderAttribute('url', $attrKey, $attrValue);
             }
 
             $title_content = sprintf(
@@ -141,9 +137,32 @@ class Heading extends WidgetBase
         var titleContent = '<span>' + headingText + '</span>';
 
         if (settings.heading_link && settings.heading_link.url) {
-            var target = settings.heading_link.is_external ? ' target="_blank"' : '';
-            var rel = settings.heading_link.is_external ? ' rel="noopener noreferrer"' : '';
-            titleContent = '<a href="' + settings.heading_link.url + '"' + target + rel + '>' + headingText + '</a>';
+            var link = settings.heading_link;
+            var attrs = '';
+            var relParts = [];
+
+            if (link.is_external) {
+                attrs += ' target="_blank"';
+                relParts.push('noopener', 'noreferrer');
+            }
+            if (link.nofollow) {
+                relParts.push('nofollow');
+            }
+            if (relParts.length) {
+                attrs += ' rel="' + _.uniq(relParts).join(' ') + '"';
+            }
+            if (link.custom_attributes) {
+                _.each(link.custom_attributes.split(','), function(pair) {
+                    var parts = pair.split('|');
+                    if (parts.length !== 2) return;
+                    var key = parts[0].trim();
+                    var val = parts[1].trim();
+                    if (!/^[A-Za-z_:][A-Za-z0-9_\-:.]*$/.test(key)) return;
+                    attrs += ' ' + key + '="' + _.escape(val) + '"';
+                });
+            }
+
+            titleContent = '<a href="' + _.escape(link.url) + '"' + attrs + '>' + headingText + '</a>';
         }
         #>
         <{{{ tag }}} class="{{{ classes }}}">{{{ titleContent }}}</{{{ tag }}}>

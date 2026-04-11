@@ -2,6 +2,7 @@ var ControlMultipleBaseItemView = require( 'elementor-views/controls/base-multip
 	ControlUrlItemView;
 
 var _searchCache = {};
+var MIN_SEARCH_CHARS = 3;
 
 ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 
@@ -9,18 +10,26 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 	_searchXhr: null,
 	_entityMode: false,
 	_outsideClickHandler: null,
+	_typeLabels: null,
+	_optionsOpen: false,
 
 	ui: function() {
 		var ui = ControlMultipleBaseItemView.prototype.ui.apply( this, arguments );
 
+		ui.field = '.elementor-control-field';
 		ui.searchInput = '.elementor-control-url-search';
 		ui.dropdown = '.elementor-control-url-dropdown';
+		ui.dropdownResults = '.elementor-control-url-dropdown-results';
+		ui.dropdownLoading = '.elementor-control-url-dropdown-loading';
+		ui.dropdownEmpty = '.elementor-control-url-dropdown-empty';
 		ui.inputWrap = '.elementor-control-url-input-wrap';
 		ui.entityPreview = '.elementor-control-url-entity-preview';
 		ui.entityType = '.elementor-control-url-entity-type';
 		ui.entityLabel = '.elementor-control-url-entity-label';
 		ui.entityClear = '.elementor-control-url-entity-clear';
-		ui.btnExternal = 'button.elementor-control-url-target';
+		ui.btnOptions = 'button.elementor-control-url-options';
+		ui.optionsPanel = '.elementor-control-url-options-inline';
+		ui.optionInputs = '.elementor-control-url-option';
 		ui.frameOpeners = '.elementor-control-url-media';
 
 		return ui;
@@ -32,23 +41,35 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 			'focus .elementor-control-url-search': 'onSearchFocus',
 			'keydown .elementor-control-url-search': 'onSearchKeydown',
 			'click .elementor-control-url-entity-clear': 'onEntityClear',
-			'click .elementor-control-url-target': 'onExternalClicked',
+			'click .elementor-control-url-options': 'onOptionsToggle',
 			'click .elementor-control-url-media': 'openFrame',
-			'click .elementor-control-url-dropdown-item': 'onDropdownItemClick'
+			'click .elementor-control-url-dropdown-item': 'onDropdownItemClick',
+			'change .elementor-control-url-option[type="checkbox"]': 'onOptionCheckboxChange',
+			'input .elementor-control-url-option-text': 'onOptionTextInput'
 		} );
 	},
 
 	onReady: function() {
-		if ( this.getControlValue( 'is_external' ) ) {
-			this.ui.btnExternal.addClass( 'active' );
-		}
-
+		this._typeLabels = this._readTypeLabels();
+		this._syncOptionsUi();
 		this._restoreEntityPreview();
 	},
 
 	// ──────────────────────────────────────
 	// Entity preview (when an entity is selected)
 	// ──────────────────────────────────────
+
+	_readTypeLabels: function() {
+		var raw = this.ui.field.attr( 'data-type-labels' );
+		if ( ! raw ) {
+			return {};
+		}
+		try {
+			return JSON.parse( raw );
+		} catch ( err ) {
+			return {};
+		}
+	},
 
 	_restoreEntityPreview: function() {
 		var type = this.getControlValue( 'type' );
@@ -65,24 +86,27 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 		this._entityMode = true;
 		this.ui.entityType.text( this._getTypeLabel( type ) );
 		this.ui.entityLabel.text( label );
-		this.ui.entityPreview.show();
-		this.ui.inputWrap.hide();
+		this.ui.entityPreview.prop( 'hidden', false );
+		this.ui.inputWrap.prop( 'hidden', true );
 	},
 
 	_hideEntityPreview: function() {
 		this._entityMode = false;
-		this.ui.entityPreview.hide();
-		this.ui.inputWrap.show();
+		this.ui.entityPreview.prop( 'hidden', true );
+		this.ui.inputWrap.prop( 'hidden', false );
 	},
 
 	_getTypeLabel: function( type ) {
-		var labels = {
-			'category': 'Category',
-			'cms': 'CMS',
-			'manufacturer': 'Brand',
-			'supplier': 'Supplier'
-		};
-		return labels[ type ] || type;
+		// Prefer the value stored on the link (translated server-side when
+		// the entity was picked). Fallback to the map injected on the field.
+		var stored = this.getControlValue( 'type_label' );
+		if ( stored ) {
+			return stored;
+		}
+		if ( this._typeLabels && this._typeLabels[ type ] ) {
+			return this._typeLabels[ type ];
+		}
+		return type;
 	},
 
 	onEntityClear: function( e ) {
@@ -93,7 +117,8 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 			type: '',
 			id: '',
 			url: '',
-			label: ''
+			label: '',
+			type_label: ''
 		} );
 
 		this._hideEntityPreview();
@@ -106,7 +131,7 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 
 	onSearchFocus: function() {
 		var val = ( this.ui.searchInput.val() || '' ).trim();
-		if ( val.length >= 2 ) {
+		if ( val.length >= MIN_SEARCH_CHARS ) {
 			this._doSearch( val );
 		}
 	},
@@ -114,7 +139,7 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 	onSearchInput: _.debounce( function() {
 		var val = ( this.ui.searchInput.val() || '' ).trim();
 
-		if ( val.length < 2 ) {
+		if ( val.length < MIN_SEARCH_CHARS ) {
 			this._closeDropdown();
 
 			// Treat as custom URL on blur/change
@@ -122,7 +147,8 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 				type: 'custom',
 				id: '',
 				url: val,
-				label: ''
+				label: '',
+				type_label: ''
 			} );
 			return;
 		}
@@ -133,7 +159,8 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 				type: 'custom',
 				id: '',
 				url: val,
-				label: ''
+				label: '',
+				type_label: ''
 			} );
 		}
 
@@ -158,7 +185,8 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 					type: 'custom',
 					id: '',
 					url: val,
-					label: ''
+					label: '',
+					type_label: ''
 				} );
 			}
 		}
@@ -180,14 +208,11 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 		// Check cache
 		var cacheKey = term.toLowerCase();
 		if ( _searchCache[ cacheKey ] ) {
-			self._renderDropdown( _searchCache[ cacheKey ], term );
+			self._renderDropdown( _searchCache[ cacheKey ] );
 			return;
 		}
 
-		// Show loading
-		this.ui.dropdown.html( '<div class="elementor-control-url-dropdown-loading">...</div>' ).show();
-		this._dropdownOpen = true;
-		this._bindOutsideClick();
+		this._showDropdownState( 'loading' );
 
 		this._searchXhr = elementor.ajax.send( 'SearchEntities', {
 			data: {
@@ -196,7 +221,7 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 			success: function( data ) {
 				self._searchXhr = null;
 				_searchCache[ cacheKey ] = data || [];
-				self._renderDropdown( data || [], term );
+				self._renderDropdown( data || [] );
 			},
 			error: function() {
 				self._searchXhr = null;
@@ -205,18 +230,26 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 		} );
 	},
 
-	_renderDropdown: function( results, term ) {
-		var $dropdown = this.ui.dropdown;
-		$dropdown.empty();
+	_showDropdownState: function( state ) {
+		this.ui.dropdownResults.empty();
+		this.ui.dropdownLoading.prop( 'hidden', state !== 'loading' );
+		this.ui.dropdownEmpty.prop( 'hidden', state !== 'empty' );
+		this.ui.dropdown.prop( 'hidden', false );
+		this._dropdownOpen = true;
+		this._bindOutsideClick();
+	},
 
+	_renderDropdown: function( results ) {
 		if ( ! results.length ) {
-			var noResult = this.ui.searchInput.data( 'no-result' ) || 'No results';
-			$dropdown.html( '<div class="elementor-control-url-dropdown-empty">' + noResult + '</div>' );
-			$dropdown.show();
-			this._dropdownOpen = true;
-			this._bindOutsideClick();
+			this._showDropdownState( 'empty' );
 			return;
 		}
+
+		this.ui.dropdownLoading.prop( 'hidden', true );
+		this.ui.dropdownEmpty.prop( 'hidden', true );
+
+		var $results = this.ui.dropdownResults;
+		$results.empty();
 
 		var fragment = document.createDocumentFragment();
 
@@ -226,22 +259,26 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 			div.setAttribute( 'data-type', item.type );
 			div.setAttribute( 'data-id', item.id );
 			div.setAttribute( 'data-label', item.name );
-
-			var typeSpan = document.createElement( 'span' );
-			typeSpan.className = 'elementor-control-url-dropdown-item-type';
-			typeSpan.textContent = item.type_label;
-			div.appendChild( typeSpan );
+			div.setAttribute( 'data-type-label', item.type_label || '' );
+			if ( item.url ) {
+				div.setAttribute( 'data-url', item.url );
+			}
 
 			var nameSpan = document.createElement( 'span' );
 			nameSpan.className = 'elementor-control-url-dropdown-item-name';
 			nameSpan.textContent = item.name;
 			div.appendChild( nameSpan );
 
+			var typeSpan = document.createElement( 'span' );
+			typeSpan.className = 'elementor-control-url-dropdown-item-type';
+			typeSpan.textContent = item.type_label;
+			div.appendChild( typeSpan );
+
 			fragment.appendChild( div );
 		} );
 
-		$dropdown[0].appendChild( fragment );
-		$dropdown.show();
+		$results[0].appendChild( fragment );
+		this.ui.dropdown.prop( 'hidden', false );
 		this._dropdownOpen = true;
 		this._bindOutsideClick();
 	},
@@ -251,12 +288,15 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 		var type = $item.attr( 'data-type' );
 		var id = $item.attr( 'data-id' );
 		var label = $item.attr( 'data-label' );
+		var typeLabel = $item.attr( 'data-type-label' ) || '';
+		var url = $item.attr( 'data-url' ) || '';
 
 		this.setValue( {
 			type: type,
 			id: id,
-			url: '',
-			label: label
+			url: url,
+			label: label,
+			type_label: typeLabel
 		} );
 
 		this._showEntityPreview( type, label );
@@ -264,7 +304,10 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 	},
 
 	_closeDropdown: function() {
-		this.ui.dropdown.hide().empty();
+		this.ui.dropdown.prop( 'hidden', true );
+		this.ui.dropdownResults.empty();
+		this.ui.dropdownLoading.prop( 'hidden', true );
+		this.ui.dropdownEmpty.prop( 'hidden', true );
 		this._dropdownOpen = false;
 		this._unbindOutsideClick();
 	},
@@ -292,21 +335,59 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 	},
 
 	// ──────────────────────────────────────
-	// External & Media (keep existing behavior)
+	// Inline options (target / nofollow / custom attrs / custom id)
+	// ──────────────────────────────────────
+
+	_syncOptionsUi: function() {
+		var self = this;
+		this.ui.optionInputs.each( function() {
+			var $input = Backbone.$( this );
+			var key = $input.attr( 'data-option' );
+			var val = self.getControlValue( key );
+			if ( $input.attr( 'type' ) === 'checkbox' ) {
+				$input.prop( 'checked', !! val );
+			} else {
+				$input.val( val || '' );
+			}
+		} );
+		this._updateOptionsButtonState();
+	},
+
+	_updateOptionsButtonState: function() {
+		var hasValue = !! ( this.getControlValue( 'is_external' )
+			|| this.getControlValue( 'nofollow' )
+			|| this.getControlValue( 'custom_attributes' ) );
+		this.ui.btnOptions.toggleClass( 'active', hasValue );
+	},
+
+	onOptionsToggle: function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+		this._optionsOpen = ! this._optionsOpen;
+		this.ui.optionsPanel.prop( 'hidden', ! this._optionsOpen );
+		this.ui.btnOptions.toggleClass( 'is-open', this._optionsOpen );
+	},
+
+	onOptionCheckboxChange: function( e ) {
+		var $input = Backbone.$( e.currentTarget );
+		var key = $input.attr( 'data-option' );
+		this.setValue( key, $input.is( ':checked' ) ? 'yes' : '' );
+		this._updateOptionsButtonState();
+	},
+
+	onOptionTextInput: _.debounce( function( e ) {
+		var $input = Backbone.$( e.currentTarget );
+		var key = $input.attr( 'data-option' );
+		this.setValue( key, $input.val() );
+		this._updateOptionsButtonState();
+	}, 200 ),
+
+	// ──────────────────────────────────────
+	// Media (keep existing behavior)
 	// ──────────────────────────────────────
 
 	openFrame: function() {
 		openPsFileManager( 'elementor-control-url-field-' + this.model.cid, 2 );
-	},
-
-	onExternalClicked: function( e ) {
-		e.preventDefault();
-		this.ui.btnExternal.toggleClass( 'active' );
-		this.setValue( 'is_external', this.isExternal() );
-	},
-
-	isExternal: function() {
-		return this.ui.btnExternal.hasClass( 'active' );
 	},
 
 	// ──────────────────────────────────────
@@ -340,7 +421,8 @@ ControlUrlItemView = ControlMultipleBaseItemView.extend( {
 					type: 'custom',
 					id: '',
 					url: val,
-					label: ''
+					label: '',
+					type_label: ''
 				} );
 			}
 			return;

@@ -4,6 +4,7 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\IconHelper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Manager\ControlManager;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -329,9 +330,8 @@ class Icon extends WidgetBase
             $this->addRenderAttribute('icon-wrapper', 'href', $instance['link']['url']);
             $icon_tag = 'a';
 
-            if (!empty($instance['link']['is_external'])) {
-                $this->addRenderAttribute('icon-wrapper', 'target', '_blank');
-                $this->addRenderAttribute('icon-wrapper', 'rel', 'noopener noreferrer');
+            foreach (LinkAttributesHelper::getAttributesArray($instance['link']) as $attrKey => $attrValue) {
+                $this->addRenderAttribute('icon-wrapper', $attrKey, $attrValue);
             }
         }
 

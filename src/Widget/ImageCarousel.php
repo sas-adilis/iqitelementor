@@ -3,6 +3,7 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Border;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 use IqitElementor\Core\Utils;
@@ -503,9 +504,9 @@ class ImageCarousel extends WidgetBase
             }
 
             if (!empty($item['link']['url'])) {
-                $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+                $linkAttrs = LinkAttributesHelper::getAttributesHtml($item['link']);
 
-                $image_html = sprintf('<a href="%s"%s>%s</a>', $item['link']['url'], $target, $image_html);
+                $image_html = sprintf('<a href="%s"%s>%s</a>', $item['link']['url'], $linkAttrs, $image_html);
             }
 
             $slides[] = '<div class="swiper-slide"><div class="swiper-slide-inner">' . $image_html . '</div></div>';

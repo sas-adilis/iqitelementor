@@ -2,8 +2,8 @@
 namespace IqitElementor\Control;
 
 use IqitElementor\Base\ControlBaseMultiple;
-use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\SmartLinkHelper;
+use IqitElementor\Helper\Translater;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
     throw new \RuntimeException('iqitelementor: ELEMENTOR_ABSPATH not defined — module not loaded properly');
@@ -23,7 +23,10 @@ class URL extends ControlBaseMultiple
             'id' => '',
             'url' => '',
             'is_external' => '',
+            'nofollow' => '',
+            'custom_attributes' => '',
             'label' => '',
+            'type_label' => '',
         ];
     }
 
@@ -59,18 +62,25 @@ class URL extends ControlBaseMultiple
     public function contentTemplate(): void
     {
         $searchText = Translater::get()->l('Search page or enter URL...');
+        $optionsText = Translater::get()->l('Link options');
         $newTabText = Translater::get()->l('Open in new tab');
+        $nofollowText = Translater::get()->l('Add nofollow');
+        $attrsText = Translater::get()->l('Custom attributes');
+        $attrsPlaceholder = Translater::get()->l('key|value, key|value');
         $mediaText = Translater::get()->l('Media link');
         $noResultText = Translater::get()->l('No results');
+        $typeLabelsJson = htmlspecialchars(json_encode(SmartLinkHelper::getTypeLabels()), ENT_QUOTES, 'UTF-8');
         ?>
-        <div class="elementor-control-field elementor-control-url-external-{{{ data.show_external ? 'show' : 'hide' }}}">
+        <div class="elementor-control-field" data-type-labels="<?php echo $typeLabelsJson; ?>">
             <label class="elementor-control-title">{{{ data.label }}}</label>
             <div class="elementor-control-input-wrapper elementor-control-url-wrapper">
 
-                <div class="elementor-control-url-entity-preview" style="display:none;">
-                    <span class="elementor-control-url-entity-type"></span>
-                    <span class="elementor-control-url-entity-label"></span>
-                    <button class="elementor-control-url-entity-clear" type="button">&times;</button>
+                <div class="elementor-control-url-entity-preview" hidden>
+                    <span class="elementor-control-url-entity-badge">
+                        <button class="elementor-control-url-entity-clear" type="button">&times;</button>
+                        <span class="elementor-control-url-entity-label"></span>
+                        <span class="elementor-control-url-entity-type"></span>
+                    </span>
                 </div>
 
                 <div class="elementor-control-url-input-wrap">
@@ -79,22 +89,49 @@ class URL extends ControlBaseMultiple
                            data-setting="url"
                            placeholder="<?php echo $searchText; ?>"
                            autocomplete="off"
-                           id="elementor-control-url-field-{{ data._cid }}"
-                           data-no-result="<?php echo $noResultText; ?>" />
-                    <div class="elementor-control-url-dropdown" style="display:none;"></div>
+                           id="elementor-control-url-field-{{ data._cid }}" />
+                    <div class="elementor-control-url-dropdown" hidden>
+                        <div class="elementor-control-url-dropdown-loading" hidden>...</div>
+                        <div class="elementor-control-url-dropdown-empty" hidden><?php echo $noResultText; ?></div>
+                        <div class="elementor-control-url-dropdown-results"></div>
+                    </div>
                 </div>
 
-                <button class="elementor-control-url-target tooltip-target"
-                        data-tooltip="<?php echo $newTabText; ?>"
-                        title="<?php echo $newTabText; ?>">
-                    <span class="elementor-control-url-external"><i class="fa fa-external-link"></i></span>
+                <button class="elementor-control-url-options tooltip-target"
+                        type="button"
+                        data-tooltip="<?php echo $optionsText; ?>"
+                        title="<?php echo $optionsText; ?>">
+                    <span class="elementor-control-url-external"><i class="fa fa-cog"></i></span>
                 </button>
 
                 <button class="elementor-control-url-media tooltip-target"
+                        type="button"
                         data-tooltip="<?php echo $mediaText; ?>"
                         title="<?php echo $mediaText; ?>">
                     <span class="elementor-control-url-external"><i class="fa fa-paperclip"></i></span>
                 </button>
+            </div>
+
+            <div class="elementor-control-url-options-inline" hidden>
+                <div class="elementor-control-url-option-row">
+                    <label>
+                        <input type="checkbox" class="elementor-control-url-option" data-option="is_external" />
+                        <span><?php echo $newTabText; ?></span>
+                    </label>
+                </div>
+                <div class="elementor-control-url-option-row">
+                    <label>
+                        <input type="checkbox" class="elementor-control-url-option" data-option="nofollow" />
+                        <span><?php echo $nofollowText; ?></span>
+                    </label>
+                </div>
+                <div class="elementor-control-url-option-row">
+                    <label class="elementor-control-url-option-label"><?php echo $attrsText; ?></label>
+                    <input type="text"
+                           class="elementor-control-url-option elementor-control-url-option-text"
+                           data-option="custom_attributes"
+                           placeholder="<?php echo $attrsPlaceholder; ?>" />
+                </div>
             </div>
         </div>
         <# if ( data.description ) { #>

@@ -8,7 +8,7 @@
     {assign var='button_tag' value=$button.button_tag}
 {/if}
 <div class="{if !empty($wrapper_classes)}{$wrapper_classes}{/if}">
-    <{$button_tag} class="{if !empty($button_classes)}{$button_classes}{/if}"{if !empty($button_link.url)} href="{$button_link.url}"{if !empty($button_link.is_external) && $button_link.is_external} target="_blank"{/if}{if !empty($button_link.nofollow) && $button_link.nofollow} rel="nofollow"{/if}{/if}>
+    <{$button_tag} class="{if !empty($button_classes)}{$button_classes}{/if}"{if !empty($button_link.url)} href="{$button_link.url}"{if !empty($button_link.attributes)}{$button_link.attributes nofilter}{/if}{/if}>
         {if !empty($button_icon_html) && $button_icon_align === 'left'}
             <span class="elementor-btn-icon elementor-align-icon-left">{$button_icon_html nofilter}</span>
         {/if}

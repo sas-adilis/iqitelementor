@@ -6,6 +6,7 @@ use IqitElementor\Control\Group\Typography as GroupTypography;
 use IqitElementor\Helper\Helper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\IconHelper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Manager\ControlManager;
 
 if (!defined('ELEMENTOR_ABSPATH')) {
@@ -231,9 +232,9 @@ class IconList extends WidgetBase
                 <li class="elementor-icon-list-item">
                     <?php
                     if (!empty($item['link']['url'])) {
-                        $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+                        $linkAttrs = LinkAttributesHelper::getAttributesHtml($item['link']);
 
-                        echo '<a href="' . $item['link']['url'] . '"' . $target . '>';
+                        echo '<a href="' . $item['link']['url'] . '"' . $linkAttrs . '>';
                     }
 
                     if ($item['icon']) { ?>

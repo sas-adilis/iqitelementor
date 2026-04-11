@@ -4,6 +4,7 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Typography as GroupTypography;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 use IqitElementor\Core\Utils;
@@ -432,11 +433,8 @@ class ImageBox extends WidgetBase
             $image_html = '<img ' . $lazyload_tag . ' ' . $image_width . ' ' . $image_height . ' ' . $this->getRenderAttributeString('image') . '>';
 
             if (!empty($instance['link']['url'])) {
-                $target = '';
-                if (!empty($instance['link']['is_external'])) {
-                    $target = ' target="_blank" rel="noopener noreferrer"';
-                }
-                $image_html = sprintf('<a href="%s"%s>%s</a>', $instance['link']['url'], $target, $image_html);
+                $linkAttrs = LinkAttributesHelper::getAttributesHtml($instance['link']);
+                $image_html = sprintf('<a href="%s"%s>%s</a>', $instance['link']['url'], $linkAttrs, $image_html);
             }
 
             $html .= '<figure class="elementor-image-box-img">' . $image_html . '</figure>';
@@ -449,13 +447,8 @@ class ImageBox extends WidgetBase
                 $title_html = $instance['title_text'];
 
                 if (!empty($instance['link']['url'])) {
-                    $target = '';
-
-                    if (!empty($instance['link']['is_external'])) {
-                        $target = ' target="_blank" rel="noopener noreferrer"';
-                    }
-
-                    $title_html = sprintf('<a href="%s"%s>%s</a>', $instance['link']['url'], $target, $title_html);
+                    $linkAttrs = LinkAttributesHelper::getAttributesHtml($instance['link']);
+                    $title_html = sprintf('<a href="%s"%s>%s</a>', $instance['link']['url'], $linkAttrs, $title_html);
                 }
 
                 $html .= sprintf('<%1$s class="elementor-image-box-title">%2$s</%1$s>', $instance['title_size'], $title_html);

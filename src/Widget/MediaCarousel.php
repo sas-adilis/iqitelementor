@@ -4,6 +4,7 @@ namespace IqitElementor\Widget;
 
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 use IqitElementor\Traits\CarouselTrait;
@@ -430,14 +431,10 @@ class MediaCarousel extends WidgetBase
         $slides = [];
         if (!empty($optionsSource['slides'])) {
             foreach ($optionsSource['slides'] as $slide) {
-                $linkUrl = '';
-                $linkTarget = '_self';
-                if (!empty($slide['link']['url'])) {
-                    $linkUrl = $slide['link']['url'];
-                }
-                if (!empty($slide['link']['is_external'])) {
-                    $linkTarget = '_blank';
-                }
+                $linkUrl = !empty($slide['link']['url']) ? $slide['link']['url'] : '';
+                $linkAttributes = !empty($slide['link'])
+                    ? LinkAttributesHelper::getAttributesHtml($slide['link'])
+                    : '';
 
                 $slides[] = [
                     'image' => !empty($slide['image']['url'])
@@ -448,7 +445,7 @@ class MediaCarousel extends WidgetBase
                     'title' => isset($slide['title']) ? $slide['title'] : '',
                     'content' => isset($slide['content']) ? $slide['content'] : '',
                     'link_url' => $linkUrl,
-                    'link_target' => $linkTarget,
+                    'link_attributes' => $linkAttributes,
                     'link_text' => isset($slide['link_text']) ? $slide['link_text'] : '',
                 ];
             }

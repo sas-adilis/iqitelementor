@@ -1329,6 +1329,21 @@ $_MODULE['<{iqitelementor}prestashop>url_61a863f9cd94ff0f62f2bf1706aec8ef'] = 'L
 $_MODULE['<{iqitelementor}prestashop>url_c49c29bb6656c1f25f2cfac84f83b5ba'] = 'Aucun résultat';
 $_MODULE['<{iqitelementor}prestashop>url_3a39eb38e879f66d1c57dedd478272da'] = 'Ouvrir dans un nouvel onglet';
 $_MODULE['<{iqitelementor}prestashop>url_6c01e564ad72c09c5a1f78f04a034367'] = 'Rechercher une page ou saisir une URL...';
+$_MODULE['<{iqitelementor}prestashop>url_192d035ffb07b34f98ade39b20944c49'] = 'Options du lien';
+$_MODULE['<{iqitelementor}prestashop>url_ebbb5896554d13cc4f2e46a9e44eb51e'] = 'Ajouter nofollow';
+$_MODULE['<{iqitelementor}prestashop>url_fd3cf2b76c9a0550aed39fc089190ab3'] = 'Attributs personnalisés';
+$_MODULE['<{iqitelementor}prestashop>url_be1dc8de162ca095e5c27ab6ee7d4280'] = 'clé|valeur, clé|valeur';
+$_MODULE['<{iqitelementor}prestashop>url_af3a625e5563c2d2c988c9f80d342c41'] = 'ID personnalisé';
+
+// --- Source: smartlinkhelper (Helper/SmartLinkHelper.php) ---
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_3adbdb3ac060038aa0e6e6c138ef9873'] = 'Catégorie';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_622f3c75de9f3481ffc58c1f292c1c2b'] = 'Page CMS';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_ac37b115bc4e914c9ab63bd4a1c1746a'] = 'Catégorie CMS';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_1be6f9eb563f3bf85c78b4219bf09de9'] = 'Marque';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_ec136b444eede3bc85639fac0dd06229'] = 'Fournisseur';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_193cfc9be3b995831c6af2fea6650e60'] = 'Page';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_b9dfe86b6188e504d64f3369d29350d5'] = 'Article de blog';
+$_MODULE['<{iqitelementor}prestashop>smartlinkhelper_7416236d20c0980683f49608a18a1a07'] = 'Catégorie de blog';
 
 // --- Source: video (Widget/Video.php) ---
 $_MODULE['<{iqitelementor}prestashop>video_a63706eecfa33f67b315f978392ad7ae'] = 'Alignement';

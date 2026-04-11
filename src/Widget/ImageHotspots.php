@@ -3,6 +3,7 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\BoxShadow;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\IconHelper;
 use IqitElementor\Manager\ControlManager;
@@ -342,7 +343,7 @@ class ImageHotspots extends WidgetBase
 				     if ($item['type'] == 'custom') {
 				         $tooltipText = htmlspecialchars($item['text_content']);
 				         $tooltipLink = $item['link']['url'];
-				         $tooltipLinkTarget = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+				         $tooltipLinkTarget = LinkAttributesHelper::getAttributesHtml($item['link']);
 				     } else {
 				         $product = Helper::getProduct($item['products_ids']);
 				         if (!empty($product['name'])) {

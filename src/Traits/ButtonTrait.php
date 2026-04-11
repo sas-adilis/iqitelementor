@@ -2,6 +2,7 @@
 
 namespace IqitElementor\Traits;
 
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\IconHelper;
 use IqitElementor\Manager\ControlManager;
@@ -451,8 +452,7 @@ trait ButtonTrait
             'button_classes' => implode(' ', $button_classes),
             'button_link' => [
                 'url' => $settings['button_link']['url'] ?? null,
-                'is_external' => $settings['button_link']['is_external'] ?? null,
-                'nofollow' => $settings['button_link']['nofollow'] ?? null,
+                'attributes' => LinkAttributesHelper::getAttributesHtml($settings['button_link'] ?? null),
             ]
         ];
     }

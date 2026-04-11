@@ -4,6 +4,7 @@ namespace IqitElementor\Widget;
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Border;
 use IqitElementor\Helper\Helper;
+use IqitElementor\Helper\LinkAttributesHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Helper\IconHelper;
 use IqitElementor\Manager\ControlManager;
@@ -308,9 +309,9 @@ class SocialIcons extends WidgetBase
             <?php foreach ($instance['social_icon_list'] as $item) {
                 $iconData = IconHelper::decodeIconValue($item['social']);
                 $social = preg_replace('/^(fa-brands\s+fa-|bi\s+bi-|ph\s+ph-)/', '', $iconData['value']);
-                $target = $item['link']['is_external'] ? ' target="_blank" rel="noopener noreferrer"' : '';
+                $linkAttrs = LinkAttributesHelper::getAttributesHtml($item['link']);
                 ?>
-                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo Helper::escAttr($social); ?>" href="<?php echo Helper::escAttr($item['link']['url']); ?>"<?php echo $target; ?>>
+                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo Helper::escAttr($social); ?>" href="<?php echo Helper::escAttr($item['link']['url']); ?>"<?php echo $linkAttrs; ?>>
                     <?php echo IconHelper::renderIcon($item['social']); ?>
                 </a>
             <?php } ?>

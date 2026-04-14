@@ -2,6 +2,7 @@
 
 namespace IqitElementor\Renderer;
 
+use IqitElementor\Cache\RenderCache;
 use IqitElementor\Contract\ContentRendererInterface;
 use IqitElementor\Core\Plugin;
 use IqitElementor\Helper\OutputHelper;
@@ -17,12 +18,18 @@ abstract class AbstractContentRenderer implements ContentRendererInterface
     }
 
     /**
-     * Render an already-decoded Elementor layout array through the frontend engine.
+     * Render an already-decoded Elementor layout array through the frontend
+     * engine, wrapped in the content-addressed cache keyed by the raw JSON.
+     *
+     * @param string $rawJson Raw JSON string (used as cache key).
+     * @param array<mixed, mixed> $decoded JSON-decoded layout.
      */
-    protected function renderFrontend(array $layoutData): string
+    protected function renderFrontend(string $rawJson, array $decoded): string
     {
-        return OutputHelper::capture(function () use ($layoutData) {
-            Plugin::instance()->getFrontend($layoutData);
+        return RenderCache::remember($rawJson, function () use ($decoded) {
+            return OutputHelper::capture(function () use ($decoded) {
+                Plugin::instance()->getFrontend($decoded);
+            });
         });
     }
 
@@ -36,8 +43,9 @@ abstract class AbstractContentRenderer implements ContentRendererInterface
         $rawData = $previewMode && !empty($layout->autosave_content)
             ? (string) $layout->autosave_content
             : (string) $layout->data;
-        $layoutData = (array) json_decode($rawData, true);
 
-        return $this->renderFrontend($layoutData);
+        $decoded = (array) json_decode($rawData, true);
+
+        return $this->renderFrontend($rawData, $decoded);
     }
 }

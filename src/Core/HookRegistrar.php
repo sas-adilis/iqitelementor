@@ -19,28 +19,33 @@ class HookRegistrar
     public static function getHookList(): array
     {
         return [
+            // Display
             'displayHome',
+            'displayHeader',
             'displayBackOfficeHeader',
             'displayManufacturerElementor',
-            'actionObjectCmsUpdateBefore',
-            'actionObjectCmsUpdateAfter',
-            'actionObjectSimpleBlogPostUpdateAfter',
-            'actionObjectSimpleBlogPostAddAfter',
-            'actionObjectCmsDeleteAfter',
-            'actionObjectProductDeleteAfter',
             'displayCMSDisputeInformation',
             'displayProductElementor',
             'displayCategoryElementor',
-            'actionObjectManufacturerUpdateAfter',
-            'actionObjectManufacturerDeleteAfter',
-            'actionObjectManufacturerAddAfter',
-            'actionObjectProductUpdateAfter',
-            'actionObjectProductAddAfter',
-            'actionObjectCategoryDeleteAfter',
-            'displayHeader',
+
+            // Dispatch
+            'actionDispatcher',
             'moduleRoutes',
-            'isJustElementor',
+
+            // CMS purifier dance (saving Elementor JSON through CMS content)
+            'actionObjectCmsUpdateBefore',
+            'actionObjectCmsUpdateAfter',
+
+            // DB cleanup on entity deletion (Elementor layouts live in dedicated tables)
+            'actionObjectProductDeleteAfter',
+            'actionObjectManufacturerDeleteAfter',
+            'actionObjectCategoryDeleteAfter',
+
+            // Product duplication helper
             'actionProductAdd',
+
+            // Misc
+            'isJustElementor',
             'actionCmsPageGridDefinitionModifier',
             'actionCmsPageGridDataModifier',
             'actionAdminSimpleBlogPostsListingFieldsModifier',

@@ -29,6 +29,20 @@ abstract class WidgetBase extends ElementBase
         return 'font';
     }
 
+    /**
+     * Restrict a widget to one or more editor page types (e.g. `['store']`).
+     *
+     * Empty array (default) means the widget is available on every page type.
+     * Rendering is never affected — the filter only controls visibility in
+     * the editor panel so irrelevant widgets don't clutter the palette.
+     *
+     * @return string[]
+     */
+    public function getSupportedPageTypes(): array
+    {
+        return [];
+    }
+
     public function parseTextEditor(string $content, array $instance = []): string
     {
         return $content;

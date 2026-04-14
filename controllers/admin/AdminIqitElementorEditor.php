@@ -2,6 +2,7 @@
 
 use IqitElementor\Core\Plugin;
 use IqitElementor\Core\Responsive;
+use IqitElementor\Editor\EditorTargetRegistry;
 use IqitElementor\Enum\EntityType;
 use IqitElementor\Helper\Helper;
 use IqitElementor\Helper\IconHelper;
@@ -47,84 +48,19 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         $languages = $this->context->controller->getLanguages();
         $elementorData = '';
+        $editedPage = null;
+        $editedPageLink = null;
 
-        switch ($pageType) {
-            case 'landing':
-                $editedPage = new IqitElementorLanding($pageId, $idLang);
-                $editedPageLink = $this->context->link->getAdminLink('AdminIqitElementor') . '&id_page=' . $pageId . '&updateiqit_elementor_landing';
-                $elementorData = json_decode($editedPage->data, true);
-                break;
-            case 'cms':
-                $editedPage = new CMS($pageId, $idLang);
-                $editedPageLink = $this->context->link->getAdminLink('AdminCmsContent') . '&id_cms=' . $pageId . '&updatecms';
-
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $editedPage->content);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $elementorData = $content;
-                }
-                break;
-            case 'blog':
-                $editedPage = new SimpleBlogPost($pageId, $idLang);
-                $editedPageLink = $this->context->link->getAdminLink('AdminSimpleBlogPosts') . '&id_simpleblog_post=' . $pageId . '&updatesimpleblog_post';
-
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $editedPage->content);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $elementorData = $content;
-                }
-                break;
-            case 'category':
-                $id = IqitElementorCategory::getIdByCategory($pageId);
-
-                if ($id) {
-                    $editedPage = new IqitElementorCategory($id, $idLang);
-                } else {
-                    $editedPage = new IqitElementorCategory();
-                }
-
-                $editedPageLink = $this->context->link->getAdminLink('AdminCategories') . '&id_category=' . $pageId . '&updatecategory=1';
-                $elementorData = json_decode($editedPage->data, true);
-                break;
-            case 'content':
-                if ($contentType == 'brand') {
-                    $hookId = Hook::getIdByName('displayManufacturerElementor');
-                    $id = IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
-
-                    if ($id) {
-                        $editedPage = new IqitElementorContent($id, $idLang);
-                    } else {
-                        $editedPage = new IqitElementorContent();
-                    }
-
-                    $editedPageLink = $this->context->link->getAdminLink('AdminManufacturers') . '&id_manufacturer=' . $pageId . '&updatemanufacturer=1';
-                    $elementorData = json_decode($editedPage->data, true);
-                } else {
-                    $editedPage = new IqitElementorContent($pageId, $idLang);
-                    $editedPageLink = $this->context->link->getAdminLink('AdminIqitElementorContent') . '&id_elementor=' . $pageId . '&updateiqit_elementor_content';
-                    $elementorData = json_decode($editedPage->data, true);
-                }
-                break;
-            case 'product':
-                $id = IqitElementorProduct::getIdByProduct($pageId);
-
-                if ($id) {
-                    $editedPage = new IqitElementorProduct($id, $idLang);
-                } else {
-                    $editedPage = new IqitElementorProduct();
-                }
-
-                $editedPageLink = $this->context->link->getAdminLink('AdminProducts') . '&id_product=' . $pageId . '&addproduct=1';
-                $elementorData = json_decode($editedPage->data, true);
-                break;
+        $target = EditorTargetRegistry::get((string) $pageType);
+        if ($target !== null) {
+            $loaded = $target->loadEditorContent($pageId, (string) $contentType, $idLang);
+            $editedPage = $loaded['entity'] ?? null;
+            $editedPageLink = $loaded['editLink'] ?? null;
+            $elementorData = $loaded['data'] ?? '';
         }
 
-        if (!isset($editedPageLink)) {
-            // redirect to dashboard if something wrong
+        if (!$editedPageLink) {
+            // Unknown page type or target failed to resolve — back to dashboard.
             Tools::redirectAdmin($this->context->link->getAdminLink('AdminDashboard'));
         }
 
@@ -150,7 +86,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'elements_categories' => Plugin::instance()->elementsManager->getCategories(),
                 'controls' => Plugin::instance()->controlsManager->getControlsData(),
                 'elements' => Plugin::instance()->elementsManager->getRegisterElementsData(),
-                'widgets' => Plugin::instance()->widgetsManager->getRegisteredWidgetsData(),
+                'widgets' => Plugin::instance()->widgetsManager->getRegisteredWidgetsData((string) $pageType),
                 'schemes' => [
                     'items' => [
                         'typography' => [
@@ -473,104 +409,9 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $revisionEntityType = $pageType;
         $revisionEntityId = $pageId;
 
-        switch ($pageType) {
-            case 'landing':
-                $landing = new IqitElementorLanding($pageId, $idLang);
-                $landing->data = $data;
-                $landing->update();
-                $this->module->clearHomeCache();
-                $revisionEntityId = (int) $landing->id;
-                break;
-            case 'cms':
-                if ($data == '[]') {
-                    $data = '';
-                }
-                $cms = new CMS($pageId);
-                $cms->content[$idLang] = $data;
-                $cms->update();
-                break;
-            case 'blog':
-                $blogPost = new SimpleBlogPost($pageId);
-                $blogPost->content[$idLang] = $data;
-                $blogPost->update();
-                break;
-            case 'category':
-                $id = IqitElementorCategory::getIdByCategory($pageId);
-                if ($id) {
-                    $category = new IqitElementorCategory($id);
-                    $category->data[$idLang] = $data;
-                    $category->update();
-                    $revisionEntityId = (int) $category->id;
-                } else {
-                    $category = new IqitElementorCategory(null);
-                    $category->id_category = (int) $pageId;
-                    $category->data = '';
-                    $add = $category->add();
-
-                    if ($add) {
-                        $categoryNew = new IqitElementorCategory($category->id, $idLang);
-                        $categoryNew->data = $data;
-                        $categoryNew->update();
-                    }
-                    $revisionEntityId = (int) $category->id;
-                }
-                $this->module->clearCategoryCache($pageId);
-                break;
-            case 'content':
-                if ($contentType == 'brand') {
-                    $hookId = Hook::getIdByName('displayManufacturerElementor');
-                    $id = IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
-                    if ($id) {
-                        $landing = new IqitElementorContent($id);
-                        $landing->data[$idLang] = $data;
-                        $landing->update();
-                        $revisionEntityId = (int) $landing->id;
-                    } else {
-                        $landing = new IqitElementorContent(null);
-                        $landing->data = '';
-                        $landing->id_object = (int) $pageId;
-                        $landing->hook = $hookId;
-                        $landing->active = 1;
-                        $landing->title = 'brand-' . $pageId;
-                        $add = $landing->add();
-
-                        if ($add) {
-                            $landingNew = new IqitElementorContent($landing->id, $idLang);
-                            $landingNew->data = $data;
-                            $landingNew->update();
-                        }
-                        $revisionEntityId = (int) $landing->id;
-                    }
-                } else {
-                    $landing = new IqitElementorContent($pageId);
-                    $landing->data[$idLang] = $data;
-                    $landing->update();
-                    $revisionEntityId = (int) $landing->id;
-                }
-                $this->module->clearHookCache($landing->hook);
-                break;
-            case 'product':
-                $id = IqitElementorProduct::getIdByProduct($pageId);
-                if ($id) {
-                    $product = new IqitElementorProduct($id);
-                    $product->data[$idLang] = $data;
-                    $product->update();
-                    $revisionEntityId = (int) $product->id;
-                } else {
-                    $product = new IqitElementorProduct(null);
-                    $product->data = '';
-                    $product->id_product = (int) $pageId;
-                    $add = $product->add();
-
-                    if ($add) {
-                        $productNew = new IqitElementorProduct($product->id, $idLang);
-                        $productNew->data = $data;
-                        $productNew->update();
-                    }
-                    $revisionEntityId = (int) $product->id;
-                }
-                $this->module->clearProductCache($pageId);
-                break;
+        $target = EditorTargetRegistry::get((string) $pageType);
+        if ($target !== null) {
+            $revisionEntityId = $target->saveContent($pageId, (string) $contentType, $idLang, $data);
         }
 
         // Save revision and clear autosave on manual save
@@ -821,47 +662,13 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         $frontUrl = '';
 
-        switch ($pageType) {
-            case 'landing':
-                $landing = new \IqitElementorLanding($pageId, $idLang);
-                if (\Validate::isLoadedObject($landing)) {
-                    if ($landing->isHomepage()) {
-                        $frontUrl = $this->context->link->getPageLink('index', true, $idLang, $previewParams);
-                    } else {
-                        $frontUrl = $landing->getLink($idLang);
-                        $frontUrl .= (strpos($frontUrl, '?') !== false ? '&' : '?')
-                            . http_build_query($previewParams);
-                    }
-                }
-                break;
-            case 'category':
-                $frontUrl = $this->context->link->getCategoryLink($pageId, null, $idLang);
-                $frontUrl .= (strpos($frontUrl, '?') !== false ? '&' : '?')
-                    . http_build_query($previewParams);
-                break;
-            case 'product':
-                $frontUrl = $this->context->link->getProductLink($pageId, null, null, null, $idLang);
-                $frontUrl .= (strpos($frontUrl, '?') !== false ? '&' : '?')
-                    . http_build_query($previewParams);
-                break;
-            case 'cms':
-                $frontUrl = $this->context->link->getCMSLink($pageId, null, null, $idLang);
-                $frontUrl .= (strpos($frontUrl, '?') !== false ? '&' : '?')
-                    . http_build_query($previewParams);
-                break;
-            case 'content':
-                if ($contentType === 'brand') {
-                    $frontUrl = $this->context->link->getManufacturerLink($pageId, null, $idLang);
-                } else {
-                    // Generic hook content — open homepage as fallback
-                    $frontUrl = $this->context->link->getPageLink('index', true, $idLang);
-                }
-                $frontUrl .= (strpos($frontUrl, '?') !== false ? '&' : '?')
-                    . http_build_query($previewParams);
-                break;
-            default:
-                $frontUrl = $this->context->link->getPageLink('index', true, $idLang, $previewParams);
-                break;
+        $target = EditorTargetRegistry::get((string) $pageType);
+        if ($target !== null) {
+            $frontUrl = $target->getPreviewUrl($pageId, (string) $contentType, $idLang, $previewParams);
+        }
+
+        if ($frontUrl === '') {
+            $frontUrl = $this->context->link->getPageLink('index', true, $idLang, $previewParams);
         }
 
         exit(json_encode([
@@ -877,68 +684,12 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $pageId = (int) Tools::getValue('page_id');
         $pageType = Tools::getValue('page_type');
         $contentType = Tools::getValue('content_type');
-        $idLang = Tools::getValue('id_lang');
-        $data = '';
+        $idLang = (int) Tools::getValue('id_lang');
+        $data = null;
 
-        switch ($pageType) {
-            case 'landing':
-                $source = new IqitElementorLanding($pageId, $idLang);
-                $data = json_decode($source->data, true);
-                break;
-            case 'cms':
-                $source = new CMS($pageId, $idLang);
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $source->content);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $data = $content;
-                }
-                break;
-            case 'blog':
-                $source = new SimpleBlogPost($pageId, $idLang);
-                $strippedCms = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $source->content);
-                $strippedCms = str_replace(["\r", "\n"], '', $strippedCms);
-                $content = json_decode($strippedCms, true);
-
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $data = $content;
-                }
-                break;
-            case 'category':
-                $id = IqitElementorCategory::getIdByCategory($pageId);
-                if ($id) {
-                    $source = new IqitElementorCategory($id, $idLang);
-                    $data = json_decode($source->data, true);
-                } else {
-                    $data = json_decode('', true);
-                }
-                break;
-            case 'content':
-                if ($contentType == 'brand') {
-                    $hookId = Hook::getIdByName('displayManufacturerElementor');
-                    $id = IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
-
-                    if ($id) {
-                        $source = new IqitElementorContent($id, $idLang);
-                        $data = json_decode($source->data, true);
-                    } else {
-                        $data = json_decode('', true);
-                    }
-                } else {
-                    $source = new IqitElementorContent($pageId, $idLang);
-                    $data = json_decode($source->data, true);
-                }
-                break;
-            case 'product':
-                $id = IqitElementorProduct::getIdByProduct($pageId);
-                if ($id) {
-                    $source = new IqitElementorProduct($id, $idLang);
-                    $data = json_decode($source->data, true);
-                } else {
-                    $data = json_decode('', true);
-                }
-                break;
+        $target = EditorTargetRegistry::get((string) $pageType);
+        if ($target !== null) {
+            $data = $target->loadLanguageContent($pageId, (string) $contentType, $idLang);
         }
 
         $return = [
@@ -1579,31 +1330,21 @@ class AdminIqitElementorEditorController extends ModuleAdminController
     }
 
     /**
-     * Resolve the native table primary key from the editor's pageId.
+     * Resolve the native revisions table primary key from the editor's pageId.
      *
-     * For landing and content (non-brand), pageId already matches the PK.
-     * For category, product and content-brand, the pageId is the foreign key
-     * (id_category, id_product, manufacturer id) and must be resolved.
+     * Delegated to the matching EditorTargetInterface when one is registered
+     * for `$entityType`. Types with no registered target (e.g. 'template')
+     * fall back to using the pageId as-is.
      *
      * @return int Resolved entity ID, or 0 if not found
      */
     private function resolveEntityId(string $entityType, int $pageId): int
     {
-        switch ($entityType) {
-            case 'landing':
-                return $pageId;
-            case 'template':
-                return $pageId;
-            case 'content':
-                return $pageId;
-            case 'category':
-                $id = IqitElementorCategory::getIdByCategory($pageId);
-                return $id ? (int) $id : 0;
-            case 'product':
-                $id = IqitElementorProduct::getIdByProduct($pageId);
-                return $id ? (int) $id : 0;
-            default:
-                return $pageId;
+        $target = EditorTargetRegistry::get($entityType);
+        if ($target !== null) {
+            return $target->resolveRevisionEntityId($pageId, (string) Tools::getValue('content_type'));
         }
+
+        return $pageId;
     }
 }

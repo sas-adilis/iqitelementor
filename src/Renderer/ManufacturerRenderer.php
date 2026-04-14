@@ -14,13 +14,6 @@ class ManufacturerRenderer extends AbstractContentRenderer
         return 'generated_content_cms.tpl';
     }
 
-    public function buildCacheId(string $hookName, array $configuration): string
-    {
-        $manufacturerId = (int) $configuration['manufacturerId'];
-
-        return 'iqitelementor|' . $hookName . '|' . $manufacturerId;
-    }
-
     public function render(string $hookName, array $configuration, bool $previewMode): array
     {
         $content = '';

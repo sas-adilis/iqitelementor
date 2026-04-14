@@ -23,69 +23,24 @@
 *  International Registered Trademark & Property of PrestaShop SA
 *}
 
+{*
+  The CMS, product, brand and blog "Edit with Elementor" buttons used to be
+  rendered here as inline <script type="text/template"> blocks and then
+  injected by views/js/backoffice.js via hardcoded jQuery selectors.
+
+  They are now produced by IqitElementor\BackOffice\BuiltInButtonProvider and
+  injected by views/js/bo-button-injector.js, which lets any module (including
+  iqitelementor_addons and any future addon) register its own placements
+  through the EditorButtonRegistry + actionIqitElementorRegisterBoButtons hook.
+
+  The Category template is still rendered below as-is because it carries the
+  "Show elementor content only" switcher in addition to the button, which is
+  more than a simple button placement can express.
+*}
+
 <script type="text/javascript">
     var elementorPageType = '{$pageType}';
 </script>
-
-<script type="text/template" id="tmpl-btn-edit-with-elementor">
-    <div class="form-group row">
-        <label class="form-control-label"></label>
-        <div class="col-sm">
-            {if $urlElementor }
-                <a href="{$urlElementor}" class="m-b-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Edit with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-            {else}
-                <div class="alert alert-info"> <p class="alert-text">{l s=' Save page first to enable page builder' mod='iqitelementor'}</p></div>
-            {/if}
-
-            {if $onlyElementor}
-                <p><br />
-                <i>{l s='If you want to return to standard text editor go to elementor page builder first, remove all widgets and save.' mod='iqitelementor'}</i>
-                </p>
-            {/if}
-
-        </div>
-    </div>
-</script>
-
-<script type="text/template" id="tmpl-btn-edit-with-elementor-product">
-    <div>
-
-            {if $urlElementor }
-                <a target="_blank" href="{$urlElementor}" class="m-b-2 mb-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Add extendend content with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-            {else}
-                <span class="m-b-2 mb-2" style="display: inline-block; background: #eaebec"> {l s=' Save product first to enable page builder' mod='iqitelementor'}</span>
-            {/if}
-    </div>
-</script>
-
-<script type="text/template" id="tmpl-btn-edit-with-elementor-brand">
-    <div>
-
-        {if $urlElementor }
-            <a target="_blank" href="{$urlElementor}" class="m-b-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Add extendend content with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-        {else}
-            {l s=' Save brand first to enable page builder' mod='iqitelementor'}
-        {/if}
-    </div>
-</script>
-
-<script type="text/template" id="tmpl-btn-edit-with-elementor-blog">
-    <div>
-
-        {if $urlElementor }
-            <a  href="{$urlElementor}" class="m-b-2 m-r-1 btn pointer btn-edit-with-elementor"><i class="icon-external-link"></i> {l s='Edit with Elementor - Visual Page Builder' mod='iqitelementor'}</a>
-        {else}
-            {l s=' Save post first to enable page builder' mod='iqitelementor'}
-        {/if}
-
-        {if $onlyElementor}
-            <p><br />
-                <i>{l s='If you want to return to standard text editor go to elementor page builder first, remove all widgets and save.' mod='iqitelementor'}</i>
-            </p>
-        {/if}
-    </div>
-</script>
-
 
 <script type="text/template" id="tmpl-btn-edit-with-elementor-category">
     <div style="margin-bottom: 20px;">
@@ -105,8 +60,6 @@
             <label class="form-control-label"><span>{l s='Show elementor content only' mod='iqitelementor'}</span></label>
             <div class="col-sm">
 
-
-
                 <div class="input-group">
                     <span class="ps-switch">
                         <input id="justElementor_off" class="ps-switch" name="justElementor" value="0"  {if !$justElementorCategory}checked="checked"{/if} type="radio"><label for="justElementor_off">{l s='No' mod='iqitelementor'}</label>
@@ -115,10 +68,6 @@
                     </span>
                 </div>
                 <input name="idPageElementor" value="{$idPage}"  type="hidden">
-
-
-
-
 
                 <div class="col-lg-12">
                     <div class="help-block">

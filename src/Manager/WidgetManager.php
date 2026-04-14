@@ -108,10 +108,14 @@ class WidgetManager
         return $widgets[$id];
     }
 
-    public function getRegisteredWidgetsData(): array
+    public function getRegisteredWidgetsData(string $pageType = ''): array
     {
         $data = [];
         foreach ($this->getRegisteredWidgets() as $widget) {
+            $supported = $widget->getSupportedPageTypes();
+            if (!empty($supported) && ($pageType === '' || !in_array($pageType, $supported, true))) {
+                continue;
+            }
             $data[$widget->getId()] = $widget->getData();
         }
 

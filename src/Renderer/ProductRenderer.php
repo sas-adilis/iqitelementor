@@ -14,13 +14,6 @@ class ProductRenderer extends AbstractContentRenderer
         return 'generated_content.tpl';
     }
 
-    public function buildCacheId(string $hookName, array $configuration): string
-    {
-        $productId = (int) $configuration['smarty']->tpl_vars['product']->value['id'];
-
-        return 'iqitelementor|' . $hookName . '|' . $productId;
-    }
-
     public function render(string $hookName, array $configuration, bool $previewMode): array
     {
         $content = '';

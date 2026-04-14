@@ -17,7 +17,15 @@
                 {/if}
                 <div class="media-card__body">
                     {if !empty($slide.title)}
-                        <h4 class="media-card__title">{$slide.title|escape:'htmlall':'UTF-8'}</h4>
+                        <div class="media-card__title">
+                            {if !empty($slide.link_url)}
+                            <a href="{$slide.link_url|escape:'htmlall':'UTF-8'}"{if !empty($slide.link_attributes)}{$slide.link_attributes nofilter}{/if}>
+                            {/if}
+                            {$slide.title|escape:'htmlall':'UTF-8'}
+                            {if !empty($slide.link_url)}
+                            </a>
+                            {/if}
+                        </div>
                     {/if}
                     {if !empty($slide.content)}
                         <div class="media-card__content">{$slide.content|escape:'htmlall':'UTF-8'}</div>

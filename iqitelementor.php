@@ -13,6 +13,10 @@
 
 use IqitElementor\BackOffice\EditorContext;
 use IqitElementor\BackOffice\GridIntegration;
+use IqitElementor\Cache\RenderCache;
+use IqitElementor\Core\Plugin;
+use IqitElementor\Editor\EditorTargetRegistry;
+use IqitElementor\Helper\OutputHelper;
 use IqitElementor\Contract\ContentRendererInterface;
 use IqitElementor\Core\HookRegistrar;
 use IqitElementor\Helper\Helper;
@@ -56,7 +60,7 @@ class IqitElementor extends Module implements WidgetInterface
     {
         $this->name = 'iqitelementor';
         $this->tab = 'front_office_features';
-        $this->version = '1.4.3';
+        $this->version = '1.4.4';
         $this->author = 'IQIT-COMMERCE.COM';
         $this->bootstrap = true;
         $this->controllers = ['preview', 'widget', 'landing'];
@@ -102,41 +106,57 @@ class IqitElementor extends Module implements WidgetInterface
     {
         $this->context->controller->addCSS($this->_path . 'views/css/backoffice.css');
 
+        $controllerName = $this->context->controller->controller_name ?? '';
+        $idLang = (int) $this->context->language->id;
+
+        // Ask every registered EditorTarget (built-in + third-party) which
+        // "Edit with Elementor" buttons it wants on the current admin page.
+        // Each target owns its own pageId resolution and URL building.
+        $placements = EditorTargetRegistry::collectBoButtons($controllerName, $idLang);
+        if (!empty($placements)) {
+            Media::addJsDef([
+                'iqitElementorBoPlacements' => $placements,
+            ]);
+            $this->context->controller->addJS($this->_path . 'views/js/bo-button-injector.js');
+        }
+
+        // Legacy EditorContext is still used for:
+        //   - the category inline template (button + justElementor switcher)
+        //   - the hideEditor / categoryLayout behaviours inside backoffice.js
+        // The rest of the BO button injection moved to EditorTargetRegistry.
         $editorCtx = $this->getEditorContext();
-        $boCtx = $editorCtx->buildContext($this->context->controller->controller_name ?? '');
+        $boCtx = $editorCtx->buildContext($controllerName);
 
         if (empty($boCtx['enabled'])) {
             return;
         }
 
-        $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
-
-        $url = $editorCtx->buildEditorUrl(
-            (string)$boCtx['pageType'],
-            (string)$boCtx['contentType'],
-            (int)$boCtx['newContent'],
-            (int)$boCtx['idPage'],
-            (int)$this->context->language->id
+        $editorUrl = $editorCtx->buildEditorUrl(
+            (string) $boCtx['pageType'],
+            (string) $boCtx['contentType'],
+            (int) $boCtx['newContent'],
+            (int) $boCtx['idPage'],
+            $idLang
         );
 
-        $this->context->smarty->assign([
-            'urlElementor' => $url,
-        ]);
+        $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
 
         Media::addJsDef([
-            'onlyElementor' => (array)$boCtx['onlyElementor'],
+            'onlyElementor' => (array) $boCtx['onlyElementor'],
             'elementorAjaxUrl' => $this->context->link->getAdminLink('AdminIqitElementor') . '&ajax=1',
         ]);
 
         $this->context->smarty->assign([
-            'onlyElementor' => (array)$boCtx['onlyElementor'],
-            'pageType' => (string)$boCtx['pageType'],
-            'justElementorCategory' => (bool)$boCtx['justElementorCategory'],
-            'idPage' => (int)$boCtx['idPage'],
+            'urlElementor' => $editorUrl,
+            'onlyElementor' => (array) $boCtx['onlyElementor'],
+            'pageType' => (string) $boCtx['pageType'],
+            'justElementorCategory' => (bool) $boCtx['justElementorCategory'],
+            'idPage' => (int) $boCtx['idPage'],
         ]);
 
         return $this->fetch(_PS_MODULE_DIR_ . '/' . $this->name . '/views/templates/hook/backoffice_header.tpl');
     }
+
     public function hookActionCmsPageGridDefinitionModifier(array $params): void
     {
         $this->getGridIntegration()->addCmsGridColumn($params);
@@ -206,6 +226,30 @@ class IqitElementor extends Module implements WidgetInterface
                 ],
             ],
         ];
+    }
+
+    /**
+     * Registers the `{iqit_render content=$foo}` Smarty function as soon as
+     * the front controller is dispatched, so templates (theme or any module)
+     * can turn Elementor JSON fields into rendered HTML with content-addressed
+     * caching. Hooked on actionDispatcher rather than displayHeader so the
+     * plugin is available even on templates that don't call {hook h='displayHeader'}.
+     *
+     * @param array $params
+     */
+    public function hookActionDispatcher($params)
+    {
+        if (!isset($this->context->smarty) || !is_object($this->context->smarty)) {
+            return;
+        }
+
+        // Smarty throws on double registration — guard against hook re-entry.
+        $registered = $this->context->smarty->registered_plugins ?? [];
+        if (isset($registered['function']['iqit_render'])) {
+            return;
+        }
+
+        $this->context->smarty->registerPlugin('function', 'iqit_render', [$this, 'smartyRenderElementor']);
     }
 
     public function hookDisplayHeader()
@@ -582,31 +626,21 @@ class IqitElementor extends Module implements WidgetInterface
             $hookName = $configuration['hook'];
         }
 
-        $isPreview = $this->isPreviewMode();
         $renderer = $this->resolveContentRenderer((string) $hookName);
-
         $templateFile = $renderer ? $renderer->getTemplateFile() : 'generated_content.tpl';
-        $cacheId = $renderer ? $renderer->buildCacheId((string) $hookName, $configuration) : (string) $hookName;
-
-        if (!empty($this->context->customer->id)) {
-            $cacheId .= '|' . $this->context->customer->id;
-        }
-
         $templatePath = 'module:' . $this->name . '/views/templates/hook/' . $templateFile;
 
-        if ($isPreview || !$this->isCached($templatePath, $this->getCacheId($cacheId))) {
-            $vars = $this->getWidgetVariables($hookName, $configuration);
-            if (!$vars['content']) {
-                return;
-            }
-            $this->smarty->assign($vars);
+        // No outer Smarty cache: the actual Elementor rendering is already
+        // content-addressed and cached inside AbstractContentRenderer via
+        // IqitElementor\Cache\RenderCache. The template wrapping is cheap
+        // enough to run every time.
+        $vars = $this->getWidgetVariables($hookName, $configuration);
+        if (empty($vars['content'])) {
+            return;
         }
+        $this->smarty->assign($vars);
 
-        if ($isPreview) {
-            return $this->fetch($templatePath);
-        }
-
-        return $this->fetch($templatePath, $this->getCacheId($cacheId));
+        return $this->fetch($templatePath);
     }
 
     /**
@@ -737,106 +771,46 @@ class IqitElementor extends Module implements WidgetInterface
         return true;
     }
 
-    public function clearHomeCache(): void
-    {
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cacheId = 'iqitelementor|displayHome';
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function clearHookCache($idHook): void
-    {
-        $hookName = Hook::getNameById($idHook);
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_content.tpl';
-        $cacheId = 'iqitelementor|' . $hookName;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function clearProductCache($idProduct): void
-    {
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cacheId = 'iqitelementor|displayProductElementor|' . (int)$idProduct;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function clearCategoryCache($idCategory): void
-    {
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cacheId = 'iqitelementor|displayCategoryElementor|' . (int)$idCategory;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function hookActionObjectCmsDeleteAfter($params)
-    {
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content.tpl';
-        $cmsId = (int)$params['object']->id_cms;
-        $cacheId = 'iqitelementor|displayCMSDisputeInformation|' . $cmsId;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function hookActionObjectCmsUpdateAfter($params)
-    {
-        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER_TMP');
-        Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
-
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
-        $cmsId = (int)$params['object']->id_cms;
-        $cacheId = 'iqitelementor|displayCMSDisputeInformation|' . $cmsId;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function hookIsJustElementor($params)
-    {
-        return IqitElementorCategory::isJustElementor((int)$params['categoryId']);
-    }
-
-    public function hookActionObjectSimpleBlogPostUpdateAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
-
-        $templateFile = 'module:' . $this->name . '/views/templates/hook/generated_content_cms.tpl';
-        $postId = (int)$params['object']->id_simpleblog_post;
-        $cacheId = 'iqitelementor|displayBlogElementor|' . $postId;
-        $this->_clearCache($templateFile, $cacheId);
-    }
-
-    public function hookActionObjectSimpleBlogPostAddAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
-    }
-
+    /**
+     * Flag the HTML purifier OFF while a CMS page is saving, so Elementor
+     * JSON content isn't purified out of the CMS `content` field.
+     */
     public function hookActionObjectCmsUpdateBefore($params)
     {
-        $pur = (int)Configuration::get('PS_USE_HTMLPURIFIER');
+        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER');
         Configuration::updateValue('PS_USE_HTMLPURIFIER_TMP', $pur);
         Configuration::updateValue('PS_USE_HTMLPURIFIER', 0);
     }
 
+    /**
+     * Restore the HTML purifier setting saved by hookActionObjectCmsUpdateBefore.
+     */
+    public function hookActionObjectCmsUpdateAfter($params)
+    {
+        $pur = (int) Configuration::get('PS_USE_HTMLPURIFIER_TMP');
+        Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
+    }
+
+    public function hookIsJustElementor($params)
+    {
+        return IqitElementorCategory::isJustElementor((int) $params['categoryId']);
+    }
+
+    /**
+     * Drop the Elementor layout row associated with a deleted product.
+     */
     public function hookActionObjectProductDeleteAfter($params)
     {
         if (!isset($params['object']->id)) {
             return;
         }
-        $this->clearProductCache((int)$params['object']->id);
 
         IqitElementorProduct::deleteElement($params['object']->id);
-
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
     }
 
-    public function hookActionObjectManufacturerUpdateAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
-    }
-
+    /**
+     * Drop the Elementor content row associated with a deleted manufacturer.
+     */
     public function hookActionObjectManufacturerDeleteAfter($params)
     {
         if (!isset($params['object']->id)) {
@@ -849,41 +823,18 @@ class IqitElementor extends Module implements WidgetInterface
         if ($idElementor) {
             IqitElementorContent::deleteElement($idElementor);
         }
-
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
     }
 
-    public function hookActionObjectManufacturerAddAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
-    }
-
-    public function hookActionObjectProductUpdateAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
-    }
-
+    /**
+     * Drop the Elementor layout row associated with a deleted category.
+     */
     public function hookActionObjectCategoryDeleteAfter($params)
     {
         if (!isset($params['object']->id)) {
             return;
         }
-        $this->clearCategoryCache((int)$params['object']->id);
 
         IqitElementorCategory::deleteElement($params['object']->id);
-    }
-
-    public function hookActionObjectProductAddAfter($params)
-    {
-        if (Configuration::get('iqit_elementor_cache')) {
-            $this->clearHomeCache();
-        }
     }
 
     public function hookActionProductAdd($params)
@@ -900,6 +851,59 @@ class IqitElementor extends Module implements WidgetInterface
                 $elementor->add();
             }
         }
+    }
+
+    /**
+     * Smarty function: `{iqit_render content=$foo}`.
+     *
+     * Renders Elementor JSON content into HTML. Any field storing Elementor
+     * JSON can be passed through this function from a template, regardless
+     * of where the value comes from (Store, CMS, custom module, …) — no
+     * pageType, no pageId, no target lookup needed.
+     *
+     * Caching strategy: content-addressed. The cache key is an md5 of the
+     * raw input, so:
+     *   - same content → same key → cache hit → ~free
+     *   - changed content → new key → cache miss → re-render once
+     * Invalidation is implicit: there is nothing to invalidate. Stale files
+     * for old content versions are never read again; they can be cleaned up
+     * with a periodic `rm -rf _PS_CACHE_DIR_/iqitelementor/render/` or after
+     * an Elementor widget change that requires a full re-render.
+     *
+     * Content that is not valid Elementor JSON is returned as-is (so the
+     * function is safe to use on any description field — if the merchant
+     * hasn't built a layout yet, the plain text still shows through).
+     *
+     * @param array<string, mixed> $params
+     * @return string
+     */
+    public function smartyRenderElementor(array $params, ?\Smarty_Internal_Template $smarty = null): string
+    {
+        $content = $params['content'] ?? '';
+        if (is_array($content)) {
+            // Multilang arrays sometimes land here — pick the current language.
+            $idLang = (int) $this->context->language->id;
+            $content = $content[$idLang] ?? reset($content);
+        }
+        $content = (string) $content;
+        if ($content === '') {
+            return '';
+        }
+
+        // Short-circuit: if the content is not Elementor JSON, return it
+        // untouched so the function is safe on any description field.
+        $stripped = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', $content);
+        $stripped = str_replace(["\r", "\n"], '', (string) $stripped);
+        $decoded = json_decode($stripped, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded) || empty($decoded)) {
+            return $content;
+        }
+
+        return RenderCache::remember($stripped, function () use ($decoded) {
+            return OutputHelper::capture(function () use ($decoded) {
+                Plugin::instance()->getFrontend($decoded);
+            });
+        });
     }
 
 }

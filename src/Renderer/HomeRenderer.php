@@ -14,11 +14,6 @@ class HomeRenderer extends AbstractContentRenderer
         return 'generated_content.tpl';
     }
 
-    public function buildCacheId(string $hookName, array $configuration): string
-    {
-        return 'iqitelementor|' . $hookName;
-    }
-
     public function render(string $hookName, array $configuration, bool $previewMode): array
     {
         $content = '';

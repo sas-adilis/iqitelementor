@@ -13,9 +13,39 @@ class EditorContext
     /** @var \Context */
     private $context;
 
+    /**
+     * Additional editable targets registered by third-party modules
+     * through the `actionIqitElementorRegisterEditableTargets` hook
+     * or via the static `registerTarget()` method.
+     *
+     * Keys are admin controller class names (same as the hard-coded defaults),
+     * values follow the same shape as entries returned by `getControllersConfig()`.
+     *
+     * @var array<string, array<string, mixed>>
+     */
+    private static $additionalTargets = [];
+
     public function __construct(\Context $context)
     {
         $this->context = $context;
+    }
+
+    /**
+     * Register an Elementor-editable target for a given admin controller.
+     *
+     * Intended to be called from a module hooked on
+     * `actionIqitElementorRegisterEditableTargets`, so that external modules
+     * can open the Elementor editor on screens unknown to iqitelementor core
+     * (new entities, custom admin controllers, etc.).
+     *
+     * Re-registering the same controller name replaces the previous entry.
+     *
+     * @param string $controllerName Admin controller class name (e.g. 'AdminStores')
+     * @param array<string, mixed> $config Same structure as entries in getControllersConfig()
+     */
+    public static function registerTarget(string $controllerName, array $config): void
+    {
+        self::$additionalTargets[$controllerName] = $config;
     }
 
     /**
@@ -93,13 +123,19 @@ class EditorContext
      * Declare which BO controllers support Elementor.
      *
      * To add a new screen:
-     * - Add an entry in this array (controller_name)
+     * - Add an entry in the defaults array below (controller_name)
      * - Define pageType / contentType
      * - Specify the id source (Symfony attrs or GET param)
+     *
+     * Third-party modules can also inject additional targets without
+     * touching this file by hooking on `actionIqitElementorRegisterEditableTargets`
+     * and calling `EditorContext::registerTarget()`.
+     *
+     * @return array<string, array<string, mixed>>
      */
     private function getControllersConfig(): array
     {
-        return [
+        $defaults = [
             'AdminCmsContent' => [
                 'pageType' => 'cms',
                 'contentType' => 'default',
@@ -138,6 +174,17 @@ class EditorContext
                 'when_get_any_keys' => ['updateiqitadditionaltabs', 'addiqitadditionaltabs'],
             ],
         ];
+
+        // Give a chance to external modules to inject their own editable targets.
+        // Listeners are expected to call EditorContext::registerTarget($controllerName, $config).
+        \Hook::exec('actionIqitElementorRegisterEditableTargets', []);
+
+        if (!empty(self::$additionalTargets)) {
+            // External targets override defaults when they share the same controller name.
+            return array_merge($defaults, self::$additionalTargets);
+        }
+
+        return $defaults;
     }
 
     /**

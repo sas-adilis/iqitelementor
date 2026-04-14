@@ -14,13 +14,6 @@ class CategoryRenderer extends AbstractContentRenderer
         return 'generated_content.tpl';
     }
 
-    public function buildCacheId(string $hookName, array $configuration): string
-    {
-        $categoryId = (int) $configuration['smarty']->tpl_vars['category']->value['id'];
-
-        return 'iqitelementor|' . $hookName . '|' . $categoryId;
-    }
-
     public function render(string $hookName, array $configuration, bool $previewMode): array
     {
         $content = '';

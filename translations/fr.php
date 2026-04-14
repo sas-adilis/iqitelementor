@@ -3,6 +3,11 @@
 global $_MODULE;
 $_MODULE = [];
 
+// --- Source: adminiqitelementor (views/templates/admin/adminiqitelementor.tpl) ---
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementor_1907bd03c6adcacb7ad68404b14ca18b'] = 'Ajouter une nouvelle section';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementor_e37f4fc0441c524ee5a89453f12178c8'] = 'Ajouter un modèle';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementor_29cbff012ec663fa5a5757f5b04c4212'] = 'Ou glissez un widget ici';
+
 // --- Source: accordion (Widget/Accordion.php) ---
 $_MODULE['<{iqitelementor}prestashop>accordion_4d5aae0b218a0bb62ff4513b66fc34d0'] = 'Accordéon';
 $_MODULE['<{iqitelementor}prestashop>accordion_228e7e4cc19e59ae320bd052cd12aeb3'] = 'Accordéon #1';

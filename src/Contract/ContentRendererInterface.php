@@ -21,12 +21,9 @@ interface ContentRendererInterface
     public function getTemplateFile(): string;
 
     /**
-     * Build the cache identifier for this hook and configuration.
-     */
-    public function buildCacheId(string $hookName, array $configuration): string;
-
-    /**
-     * Render content for the given hook.
+     * Render content for the given hook. Returned HTML is already cached
+     * at the Elementor level via IqitElementor\Cache\RenderCache, no outer
+     * Smarty cache wrapping is needed.
      *
      * @return array{content: string, options: array}
      */

@@ -78,7 +78,13 @@ class Testimonial extends WidgetBase
                             '1' => '1 ' . Translater::get()->l('Star'),
                         ],
                         'default' => '5',
-                    ]
+                    ],
+                    [
+                        'name' => 'review_date',
+                        'label' => Translater::get()->l('Review Date'),
+                        'type' => ControlManager::DATETIME,
+                        'default' => '',
+                    ],
                 ],
                 'title_field' => 'name',
             ]
@@ -93,6 +99,75 @@ class Testimonial extends WidgetBase
                 'label_off' => Translater::get()->l('Hide'),
                 'return_value' => 'yes',
                 'default' => 'yes',
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_show_date',
+            [
+                'label' => Translater::get()->l('Show Date'),
+                'type' => ControlManager::SWITCHER,
+                'label_on' => Translater::get()->l('Show'),
+                'label_off' => Translater::get()->l('Hide'),
+                'return_value' => 'yes',
+                'default' => 'yes',
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_date_format',
+            [
+                'label' => Translater::get()->l('Date Format'),
+                'type' => ControlManager::TEXT,
+                'default' => 'd/m/Y',
+                'description' => Translater::get()->l('PHP date() format. Examples: d/m/Y, Y-m-d, d F Y, j M Y.'),
+                'condition' => [
+                    'testimonial_show_date' => 'yes',
+                ],
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_schema',
+            [
+                'label' => Translater::get()->l('Rich Snippet (Schema.org)'),
+                'type' => ControlManager::SWITCHER,
+                'label_on' => Translater::get()->l('Yes'),
+                'label_off' => Translater::get()->l('No'),
+                'return_value' => 'yes',
+                'default' => '',
+                'description' => Translater::get()->l('Add JSON-LD structured data (AggregateRating + Review) to help Google display rich results for these testimonials.'),
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_schema_item_name',
+            [
+                'label' => Translater::get()->l('Reviewed Item Name'),
+                'type' => ControlManager::TEXT,
+                'default' => '',
+                'description' => Translater::get()->l('Name of the product, service or shop being reviewed. Required for the rich snippet to be valid.'),
+                'condition' => [
+                    'testimonial_schema' => 'yes',
+                ],
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_schema_item_type',
+            [
+                'label' => Translater::get()->l('Reviewed Item Type'),
+                'type' => ControlManager::SELECT,
+                'default' => 'Product',
+                'options' => [
+                    'Product' => 'Product',
+                    'Organization' => 'Organization',
+                    'LocalBusiness' => 'LocalBusiness',
+                    'Service' => 'Service',
+                ],
+                'condition' => [
+                    'testimonial_schema' => 'yes',
+                ],
             ]
         );
 
@@ -139,6 +214,27 @@ class Testimonial extends WidgetBase
             [
                 'label' => Translater::get()->l('Testimonial box'),
                 'tab' => self::TAB_STYLE,
+            ]
+        );
+
+        $this->addControl(
+            'testimonial_gap',
+            [
+                'label' => Translater::get()->l('Content gap'),
+                'type' => ControlManager::SLIDER,
+                'size_units' => ['px', 'em'],
+                'range' => [
+                    'px' => ['min' => 0, 'max' => 100],
+                    'em' => ['min' => 0, 'max' => 10, 'step' => 0.1],
+                ],
+                'default' => [
+                    'unit' => 'px',
+                    'size' => 10,
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-testimonial-wrapper' => 'display: flex; flex-direction: column; gap: {{SIZE}}{{UNIT}};',
+                ],
+                'separator' => 'after',
             ]
         );
 
@@ -429,16 +525,124 @@ class Testimonial extends WidgetBase
         }
 
         $testimonial_alignment = $optionsSource['testimonial_alignment'] ? ' elementor-testimonial-text-align-' . $optionsSource['testimonial_alignment'] : '';
+        $dateFormat = isset($optionsSource['testimonial_date_format']) && $optionsSource['testimonial_date_format'] !== ''
+            ? (string) $optionsSource['testimonial_date_format']
+            : 'd/m/Y';
+
         $testimonials_list = $optionsSource['testimonials_list'];
+        foreach ($testimonials_list as &$tItem) {
+            $rawDate = isset($tItem['review_date']) ? trim((string) $tItem['review_date']) : '';
+            $tItem['review_date_iso'] = '';
+            $tItem['review_date_display'] = '';
+            if ($rawDate === '') {
+                continue;
+            }
+
+            $ts = strtotime($rawDate);
+            if ($ts === false) {
+                foreach (['d/m/Y H:i', 'd/m/Y', 'd-m-Y H:i', 'd-m-Y', 'Y-m-d H:i:s', 'Y-m-d H:i', 'Y-m-d'] as $fmt) {
+                    $parsed = \DateTime::createFromFormat($fmt, $rawDate);
+                    if ($parsed instanceof \DateTime) {
+                        $ts = $parsed->getTimestamp();
+                        break;
+                    }
+                }
+            }
+
+            if ($ts !== false && $ts !== null) {
+                $tItem['review_date_iso'] = date('Y-m-d', $ts);
+                $tItem['review_date_display'] = date($dateFormat, $ts);
+            } else {
+                $tItem['review_date_display'] = $rawDate;
+            }
+        }
+        unset($tItem);
+
+        $schemaEnabled = isset($optionsSource['testimonial_schema']) && 'yes' === $optionsSource['testimonial_schema'];
 
         return array_merge(
             [
                 'testimonial_alignment' => $testimonial_alignment,
                 'testimonials_list' => $testimonials_list,
                 'show_notes' => isset($optionsSource['testimonial_notes']) && 'yes' === $optionsSource['testimonial_notes'],
+                'show_date' => !isset($optionsSource['testimonial_show_date']) || 'yes' === $optionsSource['testimonial_show_date'],
                 'note_color' => $optionsSource['note_color'] ?? '#000000',
+                'schema_json' => $schemaEnabled ? $this->buildSchemaJson($testimonials_list, $optionsSource) : '',
             ],
             $this->buildCarouselOptions($optionsSource)
         );
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $testimonials
+     * @param array<string, mixed> $optionsSource
+     */
+    private function buildSchemaJson(array $testimonials, array $optionsSource): string
+    {
+        $itemName = trim((string) ($optionsSource['testimonial_schema_item_name'] ?? ''));
+        if ($itemName === '') {
+            return '';
+        }
+
+        $itemType = $optionsSource['testimonial_schema_item_type'] ?? 'Product';
+        $reviews = [];
+        $ratingSum = 0;
+        $ratingCount = 0;
+
+        foreach ($testimonials as $item) {
+            $note = isset($item['note']) ? (int) $item['note'] : 0;
+            if ($note <= 0) {
+                continue;
+            }
+            $ratingSum += $note;
+            $ratingCount++;
+
+            $reviewBody = isset($item['content']) ? trim(strip_tags((string) $item['content'])) : '';
+            $authorName = isset($item['name']) ? trim(strip_tags((string) $item['name'])) : '';
+            $reviewDate = isset($item['review_date_iso']) ? (string) $item['review_date_iso'] : '';
+
+            $review = [
+                '@type' => 'Review',
+                'reviewRating' => [
+                    '@type' => 'Rating',
+                    'ratingValue' => $note,
+                    'bestRating' => 5,
+                    'worstRating' => 1,
+                ],
+            ];
+            if ($authorName !== '') {
+                $review['author'] = [
+                    '@type' => 'Person',
+                    'name' => $authorName,
+                ];
+            }
+            if ($reviewBody !== '') {
+                $review['reviewBody'] = $reviewBody;
+            }
+            if ($reviewDate !== '') {
+                $review['datePublished'] = $reviewDate;
+            }
+            $reviews[] = $review;
+        }
+
+        if ($ratingCount === 0) {
+            return '';
+        }
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => $itemType,
+            'name' => $itemName,
+            'aggregateRating' => [
+                '@type' => 'AggregateRating',
+                'ratingValue' => round($ratingSum / $ratingCount, 2),
+                'reviewCount' => $ratingCount,
+                'bestRating' => 5,
+                'worstRating' => 1,
+            ],
+            'review' => $reviews,
+        ];
+
+        return (string) json_encode($schema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }

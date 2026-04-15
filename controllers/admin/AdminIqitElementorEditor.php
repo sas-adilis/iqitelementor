@@ -1,5 +1,6 @@
 <?php
 
+use IqitElementor\Cache\RenderCache;
 use IqitElementor\Core\Plugin;
 use IqitElementor\Core\Responsive;
 use IqitElementor\Editor\EditorTargetRegistry;
@@ -420,6 +421,12 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             $revisionManager->save($revisionEntityType, $revisionEntityId, $data);
             $revisionManager->clearAutosave($revisionEntityType, $revisionEntityId);
         }
+
+        // Content changed → drop the scoped render cache entry for this
+        // (entity, content type, language) so the next front request
+        // re-renders the HTML from the new JSON. Anonymous (content-hashed)
+        // cache entries are self-invalidating and not affected.
+        RenderCache::forget((string) $pageType, $pageId, (string) $contentType, $idLang);
 
         $return = [
             'success' => true,

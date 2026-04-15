@@ -89,6 +89,7 @@ class IqitElementor extends Module implements WidgetInterface
         }
 
         Configuration::updateValue('IQITELEMENTOR_REVISION_LIMIT', 20);
+        Configuration::updateValue('IQITELEMENTOR_RENDER_CACHE', 1);
 
         if ($withFixtures) {
             return $this->installFixtures();
@@ -175,6 +176,7 @@ class IqitElementor extends Module implements WidgetInterface
     public function uninstall()
     {
         Configuration::deleteByName('IQITELEMENTOR_REVISION_LIMIT');
+        Configuration::deleteByName('IQITELEMENTOR_RENDER_CACHE');
 
         return $this->uninstallTab()
             && $this->uninstallSQL()
@@ -470,6 +472,9 @@ class IqitElementor extends Module implements WidgetInterface
                 }
                 Configuration::updateValue('IQITELEMENTOR_REVISION_LIMIT', $revisionLimit);
 
+                Configuration::updateValue('IQITELEMENTOR_RENDER_CACHE', (int) Tools::getValue('IQITELEMENTOR_RENDER_CACHE'));
+                \IqitElementor\Cache\RenderCache::flush();
+
                 $redirect_after = $this->context->link->getAdminLink('AdminModules', true);
                 $redirect_after .= '&conf=4&configure=' . $this->name . '&module_name=' . $this->name;
                 Tools::redirectAdmin($redirect_after);
@@ -504,6 +509,7 @@ class IqitElementor extends Module implements WidgetInterface
                 'IQIT_ELEMENTOR_ICON_LIBRARIES_bi' => in_array('bi', IconHelper::getEnabledLibraries()),
                 'IQIT_ELEMENTOR_ICON_LIBRARIES_ph' => in_array('ph', IconHelper::getEnabledLibraries()),
                 'IQITELEMENTOR_REVISION_LIMIT' => (int)Tools::getValue('IQITELEMENTOR_REVISION_LIMIT', Configuration::get('IQITELEMENTOR_REVISION_LIMIT') !== false ? Configuration::get('IQITELEMENTOR_REVISION_LIMIT') : 20),
+                'IQITELEMENTOR_RENDER_CACHE' => (int)Tools::getValue('IQITELEMENTOR_RENDER_CACHE', Configuration::get('IQITELEMENTOR_RENDER_CACHE') !== false ? Configuration::get('IQITELEMENTOR_RENDER_CACHE') : 1),
             ],
         ];
 
@@ -563,6 +569,26 @@ class IqitElementor extends Module implements WidgetInterface
                             'tab' => 'settings',
                             'class' => 'fixed-width-sm',
                             'required' => true,
+                        ],
+                        [
+                            'type' => 'switch',
+                            'name' => 'IQITELEMENTOR_RENDER_CACHE',
+                            'label' => $this->l('Render cache'),
+                            'desc' => $this->l('Cache the rendered HTML of Elementor content on disk. Disable only for debugging — the cache is flushed automatically when content is saved.'),
+                            'tab' => 'settings',
+                            'is_bool' => true,
+                            'values' => [
+                                [
+                                    'id' => 'IQITELEMENTOR_RENDER_CACHE_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Yes'),
+                                ],
+                                [
+                                    'id' => 'IQITELEMENTOR_RENDER_CACHE_off',
+                                    'value' => 0,
+                                    'label' => $this->l('No'),
+                                ],
+                            ],
                         ],
                         [
                             'type' => 'checkbox',
@@ -899,11 +925,26 @@ class IqitElementor extends Module implements WidgetInterface
             return $content;
         }
 
+        // Optional entity scope for precise cache invalidation on save.
+        // When all four keys are provided the cache uses the scoped path;
+        // otherwise it falls back to the self-invalidating anonymous one.
+        $scope = [];
+        if (isset($params['entity_type'], $params['entity_id'])) {
+            $scope = [
+                'entity_type' => (string) $params['entity_type'],
+                'entity_id' => (int) $params['entity_id'],
+                'content_type' => isset($params['content_type']) ? (string) $params['content_type'] : '',
+                'id_lang' => isset($params['id_lang'])
+                    ? (int) $params['id_lang']
+                    : (int) $this->context->language->id,
+            ];
+        }
+
         return RenderCache::remember($stripped, function () use ($decoded) {
             return OutputHelper::capture(function () use ($decoded) {
                 Plugin::instance()->getFrontend($decoded);
             });
-        });
+        }, $scope);
     }
 
 }

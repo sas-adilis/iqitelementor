@@ -698,12 +698,15 @@ trait CarouselTrait
             $arrowNextHtml = IconHelper::renderIcon($settings['arrow_next_icon'] ?? '');
         }
 
+        $isAutoMode = ($settings['slides_auto_width'] ?? '') === 'yes';
+
         return [
             'arrows_position' => $settings['arrows_position'] ?? $defaults['arrows_position'],
             'arrows_type' => $arrowsType,
             'arrow_prev_html' => $arrowPrevHtml,
             'arrow_next_html' => $arrowNextHtml,
             'dots_position' => $settings['dots_position'] ?? $defaults['dots_position'],
+            'is_auto_mode' => $isAutoMode,
             'carousel_options' => [
                 'autoplay' => ('yes' === ($settings['autoplay'] ?? $defaults['autoplay'])),
                 'slidesToShow' => ($settings['slides_auto_width'] ?? '') === 'yes' ? 'auto' : (float) ($settings['slides_to_show'] ?? $defaults['slides_to_show']),

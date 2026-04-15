@@ -9,6 +9,12 @@
 // "-on" class is present. This keeps the DOM stable while honoring per-
 // breakpoint settings without relying on inline styles.
 //
+// Auto-width mode: slides size themselves from their content.
+// Class set in PHP (CarouselTrait + slider.tpl) when slides_auto_width = yes.
+.swiper-elementor.swiper-elementor-auto .swiper-slide {
+	width: auto;
+}
+
 .swiper-elementor {
 	> .swiper-navigation,
 	> .swiper-pagination,

@@ -1359,6 +1359,10 @@
     padding: 7px 15px;
   }
 }
+.swiper-elementor.swiper-elementor-auto .swiper-slide {
+  width: auto;
+}
+
 .swiper-elementor > .swiper-navigation,
 .swiper-elementor > .swiper-pagination,
 .swiper-elementor > .swiper-scrollbar,

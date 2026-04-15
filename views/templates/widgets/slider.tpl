@@ -2,7 +2,7 @@
 {if !isset($dots_position)}{assign var='dots_position' value='below'}{/if}
 <div class="elementor-{$widget_type}">
     <div class="elementor-{$widget_type}-carousel-wrapper swiper-overflow swiper-arrows-{$arrows_position} swiper-dots-{$dots_position}">
-        <div class="swiper-container swiper swiper-elementor" data-swiper-options='{$carousel_options|@json_encode nofilter}'>
+        <div class="swiper-container swiper swiper-elementor{if !empty($is_auto_mode)} swiper-elementor-auto{/if}" data-swiper-options='{$carousel_options|@json_encode nofilter}'>
             <div class="swiper-wrapper">
                 {block name='slides'}
                 {/block}

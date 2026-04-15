@@ -21,7 +21,7 @@ ControlBaseMultipleItemView = ControlBaseItemView.extend( {
 		var values = this.elementSettingsModel.get( this.model.get( 'name' ) );
 
 		if ( ! Backbone.$.isPlainObject( values ) ) {
-			return {};
+			return key ? '' : {};
 		}
 
 		if ( key ) {

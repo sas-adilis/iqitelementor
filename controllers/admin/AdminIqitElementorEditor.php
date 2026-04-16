@@ -260,10 +260,6 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $this->addJqueryPlugin(['fancybox', 'autocomplete']);
         $this->addJqueryUI(['ui.datepicker']);
 
-        /*$this->addCSS([
-            _PS_JS_DIR_ . 'jquery/plugins/timepicker/jquery-ui-timepicker-addon.css',
-        ]);*/
-
         $this->addCSS([
             __PS_BASE_URI__ . $this->admin_webpath . '/themes/' . $this->bo_theme . '/css/admin-theme.css',
             __PS_BASE_URI__ . $this->admin_webpath . '/themes/' . $this->bo_theme . '/public/theme.css',
@@ -276,7 +272,6 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         ]);
 
         $this->addJS([
-            _PS_JS_DIR_ . 'jquery/plugins/timepicker/jquery-ui-timepicker-addon.js',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/core.min.js?ver=1.11.4',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/widget.min.js?ver=1.11.4',
             _MODULE_DIR_ . 'iqitelementor/views/lib/jquery/ui/mouse.min.js?ver=1.11.4',
@@ -325,14 +320,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'iqitBaseUrl' => Tools::safeOutput($base_url),
                 'iqitElementorColorPalette' => Helper::stringToArrayOfColors(Configuration::get('IQIT_ELEMENT_COLORS')),
             ],
-            'dateTimePickerL10n' => [
-                'currentText' => $this->l('Now'),
-                'closeText' => $this->l('Done'),
-                'timeOnlyTitle' => $this->l('Choose Time'),
-                'timeText' => $this->l('Time'),
-                'hourText' => $this->l('Hour'),
-                'minuteText' => $this->l('Minute'),
-            ]
+            'dateTimePickerL10n' => []
         ]);
 
         Hook::exec('actionAdminControllerSetMedia');

@@ -1267,6 +1267,18 @@ $_MODULE['<{iqitelementor}prestashop>testimonial_5289f1a930358cba4623a7234db5c71
 $_MODULE['<{iqitelementor}prestashop>testimonial_6b1d4a799d56e74f19a38c7af65facf2'] = 'Boîte de témoignage';
 $_MODULE['<{iqitelementor}prestashop>testimonial_8903861290617267b361478ab7f16f31'] = 'Couleur du texte';
 $_MODULE['<{iqitelementor}prestashop>testimonial_603850e072131401265c4fc01027db93'] = 'Typographie';
+$_MODULE['<{iqitelementor}prestashop>testimonial_c72d8b5d794564d1fb6991fbb3c409ac'] = 'Espacement du contenu';
+$_MODULE['<{iqitelementor}prestashop>testimonial_8b6f6d305407f0b686f1974206ad415c'] = 'Format de date';
+$_MODULE['<{iqitelementor}prestashop>testimonial_bafd7322c6e97d25b6299b5d6fe8920b'] = 'Non';
+$_MODULE['<{iqitelementor}prestashop>testimonial_bc88a5da72a4da07ed8fa43aba27a5cd'] = 'Format PHP date(). Exemples : d/m/Y, Y-m-d, d F Y, j M Y.';
+$_MODULE['<{iqitelementor}prestashop>testimonial_43629fb18eed3c436735459e66be4225'] = 'Date de l\'avis';
+$_MODULE['<{iqitelementor}prestashop>testimonial_20eac6d46eba3c7559b0007920edae2a'] = 'Nom de l\'élément évalué';
+$_MODULE['<{iqitelementor}prestashop>testimonial_e9ae3b2b0791d89054a5f8a2258c27a6'] = 'Type de l\'élément évalué';
+$_MODULE['<{iqitelementor}prestashop>testimonial_d2842d1b037f9e9fc83b3190e5cff4bb'] = 'Extrait enrichi (Schema.org)';
+$_MODULE['<{iqitelementor}prestashop>testimonial_0918c848d6e9afa49738f3623b72fef8'] = 'Afficher la date';
+$_MODULE['<{iqitelementor}prestashop>testimonial_93cba07454f06a4a960172bbd6e2a435'] = 'Oui';
+$_MODULE['<{iqitelementor}prestashop>testimonial_b56ab4e8fcc526906b088c58212e990f'] = 'Ajouter des données structurées JSON-LD (AggregateRating + Review) pour aider Google à afficher des résultats enrichis pour ces témoignages.';
+$_MODULE['<{iqitelementor}prestashop>testimonial_6f89b3f09e0dad357718c51b1ceec01d'] = 'Nom du produit, service ou boutique évalué(e). Obligatoire pour que l\'extrait enrichi soit valide.';
 
 // --- Source: texteditor (Widget/TextEditor.php) ---
 $_MODULE['<{iqitelementor}prestashop>texteditor_a63706eecfa33f67b315f978392ad7ae'] = 'Alignement';

@@ -10591,31 +10591,23 @@ ControlDateTimeItemView = ControlBaseItemView.extend( {
     },
 
     onReady: function() {
-        console.log(this.ui.picker);
+        var self = this;
 
-        this.ui.picker.datetimepicker({
+        this.ui.picker.datepicker({
             prevText: '',
             nextText: '',
             dateFormat: 'yy-mm-dd',
-            currentText: dateTimePickerL10n.currentText,
-            closeText: dateTimePickerL10n.closeText,
-            ampm: false,
-            amNames: ['AM', 'A'],
-            pmNames: ['PM', 'P'],
-            timeFormat: 'hh:mm:ss tt',
-            timeSuffix: '',
-            timeOnlyTitle: dateTimePickerL10n.timeOnlyTitle,
-            timeText: dateTimePickerL10n.timeText,
-            hourText: dateTimePickerL10n.hourText,
-            minuteText: dateTimePickerL10n.minuteText,
+            onClose: function() {
+                self.setValue( self.ui.picker.val() );
+            }
         });
     },
 
     onBeforeDestroy: function() {
         var picker = this.ui && this.ui.picker ? this.ui.picker : null;
 
-        if (picker && picker.length && picker.data('datetimepicker')) {
-            picker.datetimepicker('destroy');
+        if (picker && picker.length && picker.data('datepicker')) {
+            picker.datepicker('destroy');
         }
     }
 } );

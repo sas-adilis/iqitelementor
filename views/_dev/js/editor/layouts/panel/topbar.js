@@ -224,7 +224,6 @@ TopBarItemView = Marionette.ItemView.extend( {
 		var options = {
 			revision: 'publish',
 			onSuccess: function() {
-				self.getSaveDialog().show();
 				self.ui.save.removeClass( 'elementor-topbar-save-loading' );
 
 				// Refresh revisions panel if currently displayed

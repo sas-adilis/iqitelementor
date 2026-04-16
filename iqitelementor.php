@@ -646,6 +646,17 @@ class IqitElementor extends Module implements WidgetInterface
         return $widgetInstance->parseOptions($options, $preview);
     }
 
+    /**
+     * Clear the render cache after a hook-bound content is saved or deleted.
+     *
+     * @param int $idHook Hook ID (unused — full flush, because the anonymous
+     *                     cache is content-addressed and cannot be narrowed by hook)
+     */
+    public function clearHookCache($idHook = 0)
+    {
+        RenderCache::flush();
+    }
+
     public function renderWidget($hookName = null, array $configuration = [])
     {
         if ($hookName === null && isset($configuration['hook'])) {

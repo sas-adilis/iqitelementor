@@ -531,7 +531,8 @@ App = Marionette.Application.extend( {
 	saveBuilder: function( options ) {
 		options = _.extend( {
 			revision: 'draft',
-			onSuccess: null
+			onSuccess: null,
+			onError: null
 		}, options );
 
 		NProgress.start();
@@ -558,6 +559,13 @@ App = Marionette.Application.extend( {
 
 				if ( _.isFunction( options.onSuccess ) ) {
 					options.onSuccess.call( this, data );
+				}
+			},
+			error: function( data ) {
+				NProgress.done();
+
+				if ( _.isFunction( options.onError ) ) {
+					options.onError.call( this, data );
 				}
 			}
         } );

@@ -101,7 +101,8 @@ module.exports = function( grunt ) {
 
 						'views/_dev/js/editor/custom/navigator.js',
 						'views/_dev/js/editor/custom/editor-inspect.js',
-						'views/_dev/js/editor/custom/editor-shortcuts.js'
+						'views/_dev/js/editor/custom/editor-shortcuts.js',
+						'views/_dev/js/editor/custom/editor-toast.js'
 					],
 					'views/js/frontend.js': [ 'views/_dev/js/frontend/frontend.js' ],
 					'views/js/backoffice.js': [ 'views/_dev/js/backoffice/backoffice.js' ]

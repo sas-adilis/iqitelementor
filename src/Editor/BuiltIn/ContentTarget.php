@@ -22,15 +22,15 @@ class ContentTarget extends EditorTarget
         }
 
         $pageId = (int) $this->getRequestAttribute('manufacturerId');
-        $t = \Context::getContext()->getTranslator();
+        $module = \Module::getInstanceByName('iqitelementor');
 
         return [[
             'fieldSelector' => '#manufacturer_description',
-            'label' => $t->trans('Add extendend content with Elementor - Visual Page Builder', [], 'Modules.Iqitelementor.Admin'),
+            'label' => $module->l('Add extendend content with Elementor - Visual Page Builder', 'ContentTarget'),
             'pageId' => $pageId,
             'contentType' => 'brand',
             'target' => '_blank',
-            'fallback' => $t->trans(' Save brand first to enable page builder', [], 'Modules.Iqitelementor.Admin'),
+            'fallback' => $module->l(' Save brand first to enable page builder', 'ContentTarget'),
         ]];
     }
 
@@ -66,8 +66,10 @@ class ContentTarget extends EditorTarget
 
             if ($id) {
                 $content = new \IqitElementorContent($id);
+                $content->autosave_content = null;
+                $content->autosave_at = null;
                 $content->data[$idLang] = $data;
-                $content->update();
+                $content->update(true);
             } else {
                 $content = new \IqitElementorContent(null);
                 $content->data = '';
@@ -76,16 +78,20 @@ class ContentTarget extends EditorTarget
                 $content->active = 1;
                 $content->title = 'brand-' . $pageId;
 
-                if ($content->add()) {
+                if ($content->add(true, true)) {
                     $new = new \IqitElementorContent($content->id, $idLang);
+                    $new->autosave_content = null;
+                    $new->autosave_at = null;
                     $new->data = $data;
-                    $new->update();
+                    $new->update(true);
                 }
             }
         } else {
             $content = new \IqitElementorContent($pageId);
+            $content->autosave_content = null;
+            $content->autosave_at = null;
             $content->data[$idLang] = $data;
-            $content->update();
+            $content->update(true);
         }
 
         return (int) $content->id;

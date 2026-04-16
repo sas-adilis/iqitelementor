@@ -76,8 +76,6 @@ PanelFooterItemView = Marionette.ItemView.extend( {
 		var options = {
 			revision: 'publish',
 			onSuccess: function() {
-				self.getDialog().show();
-
 				self.ui.buttonSaveButton.removeClass( 'elementor-btn-state' );
 			}
 		};

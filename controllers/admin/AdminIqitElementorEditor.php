@@ -147,81 +147,81 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 'viewportBreakpoints' => Responsive::getBreakpoints(),
                 'widgetStyles' => $this->loadWidgetStyles(),
                 'i18n' => [
-                    'elementor' => $this->module->getTranslator()->trans('Elementor', [], 'Modules.Iqitelementor.Admin'),
-                    'dialog_confirm_delete' => $this->module->getTranslator()->trans('Are you sure you want to delete this', [], 'Modules.Iqitelementor.Admin') . ' {0}?',
-                    'dialog_user_taken_over' => '{0} ' . $this->module->getTranslator()->trans('has taken over and is currently editing. Do you want to take over this page editing?', [], 'Modules.Iqitelementor.Admin'),
-                    'delete' => $this->module->getTranslator()->trans('Delete', [], 'Modules.Iqitelementor.Admin'),
-                    'cancel' => $this->module->getTranslator()->trans('Cancel', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_element' => $this->module->getTranslator()->trans('Delete', [], 'Modules.Iqitelementor.Admin') . ' {0}',
-                    'take_over' => $this->module->getTranslator()->trans('Take Over', [], 'Modules.Iqitelementor.Admin'),
-                    'go_back' => $this->module->getTranslator()->trans('Go Back', [], 'Modules.Iqitelementor.Admin'),
-                    'saved' => $this->module->getTranslator()->trans('Saved', [], 'Modules.Iqitelementor.Admin'),
-                    'before_unload_alert' => $this->module->getTranslator()->trans('Please note: All unsaved changes will be lost.', [], 'Modules.Iqitelementor.Admin'),
-                    'edit_element' => $this->module->getTranslator()->trans('Edit', [], 'Modules.Iqitelementor.Admin') . ' {0}',
-                    'global_colors' => $this->module->getTranslator()->trans('Global Colors', [], 'Modules.Iqitelementor.Admin'),
-                    'global_fonts' => $this->module->getTranslator()->trans('Global Fonts', [], 'Modules.Iqitelementor.Admin'),
-                    'about_elementor' => $this->module->getTranslator()->trans('About Elementor', [], 'Modules.Iqitelementor.Admin'),
-                    'clear_page' => $this->module->getTranslator()->trans('Delete all content', [], 'Modules.Iqitelementor.Admin'),
-                    'dialog_confirm_clear_page' => $this->module->getTranslator()->trans('Are you shure you want delete all content?', [], 'Modules.Iqitelementor.Admin'),
-                    'changes_lost' => $this->module->getTranslator()->trans('You have unsaved changes!', [], 'Modules.Iqitelementor.Admin'),
-                    'dialog_confirm_changes_lost' => $this->module->getTranslator()->trans('Please return and save, otherwise your changes will be lost.', [], 'Modules.Iqitelementor.Admin'),
-                    'import_language_dialog_title' => $this->module->getTranslator()->trans('Erase content and import', [], 'Modules.Iqitelementor.Admin'),
-                    'import_language_dialog_msg' => $this->module->getTranslator()->trans('Please confirm that you want to erase content of this page and import content of other language', [], 'Modules.Iqitelementor.Admin'),
-                    'inner_section' => $this->module->getTranslator()->trans('Columns', [], 'Modules.Iqitelementor.Admin'),
-                    'dialog_confirm_gallery_delete' => $this->module->getTranslator()->trans('Are you sure you want to reset this gallery?', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_gallery' => $this->module->getTranslator()->trans('Reset Gallery', [], 'Modules.Iqitelementor.Admin'),
-                    'gallery_images_selected' => '{0}' . $this->module->getTranslator()->trans('Images Selected', [], 'Modules.Iqitelementor.Admin'),
-                    'insert_media' => $this->module->getTranslator()->trans('Insert Media', [], 'Modules.Iqitelementor.Admin'),
-                    'preview_el_not_found_header' => $this->module->getTranslator()->trans('Preview not found', [], 'Modules.Iqitelementor.Admin'),
-                    'preview_el_not_found_message' => $this->module->getTranslator()->trans('Make sure you added own ip in Maintenance settings (Backoffice > shop parameters > general > maintenance)', [], 'Modules.Iqitelementor.Admin'),
-                    'learn_more' => $this->module->getTranslator()->trans('Learn more', [], 'Modules.Iqitelementor.Admin'),
-                    'ie_edge_browser' => $this->module->getTranslator()->trans('Builder do not support IE/Edge browsers', [], 'Modules.Iqitelementor.Admin'),
-                    'ie_edge_browser_info' => $this->module->getTranslator()->trans('Please edit your layout in different browser, like Chrome, Firefox, Opera or Safari', [], 'Modules.Iqitelementor.Admin'),
-                    'an_error_occurred' => $this->module->getTranslator()->trans('An error occurred', [], 'Modules.Iqitelementor.Admin'),
-                    'templates_request_error' => $this->module->getTranslator()->trans('The following error occurred when processing the request:', [], 'Modules.Iqitelementor.Admin'),
-                    'save_your_template' => $this->module->getTranslator()->trans('Save Your {0} to Library', [], 'Modules.Iqitelementor.Admin'),
-                    'load_your_template' => $this->module->getTranslator()->trans('Load your template from file', [], 'Modules.Iqitelementor.Admin'),
-                    'page' => $this->module->getTranslator()->trans('Page', [], 'Modules.Iqitelementor.Admin'),
-                    'section' => $this->module->getTranslator()->trans('Section', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_template' => $this->module->getTranslator()->trans('Delete Template', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_template_confirm' => $this->module->getTranslator()->trans('Are you sure you want to delete this template?', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_apply' => $this->module->getTranslator()->trans('Apply', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_label' => $this->module->getTranslator()->trans('revisions', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_error_loading' => $this->module->getTranslator()->trans('Error loading revisions.', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_no_revisions' => $this->module->getTranslator()->trans('No revisions yet.', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_autosave_by' => $this->module->getTranslator()->trans('Autosave by', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_revision' => $this->module->getTranslator()->trans('Revision', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_by' => $this->module->getTranslator()->trans('by', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_seconds_ago' => $this->module->getTranslator()->trans('seconds ago', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_min_ago' => $this->module->getTranslator()->trans('min ago', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_hours_ago' => $this->module->getTranslator()->trans('hours ago', [], 'Modules.Iqitelementor.Admin'),
-                    'revisions_days_ago' => $this->module->getTranslator()->trans('days ago', [], 'Modules.Iqitelementor.Admin'),
-                    'save_style_as' => $this->module->getTranslator()->trans('Save styles as...', [], 'Modules.Iqitelementor.Admin'),
-                    'use_style' => $this->module->getTranslator()->trans('Use style', [], 'Modules.Iqitelementor.Admin'),
-                    'style_saved' => $this->module->getTranslator()->trans('Style saved', [], 'Modules.Iqitelementor.Admin'),
-                    'style_applied' => $this->module->getTranslator()->trans('Style applied', [], 'Modules.Iqitelementor.Admin'),
-                    'style_deleted' => $this->module->getTranslator()->trans('Style deleted', [], 'Modules.Iqitelementor.Admin'),
-                    'style_set_default' => $this->module->getTranslator()->trans('Default updated', [], 'Modules.Iqitelementor.Admin'),
-                    'styles_library' => $this->module->getTranslator()->trans('Styles Library', [], 'Modules.Iqitelementor.Admin'),
-                    'no_styles_yet' => $this->module->getTranslator()->trans('No saved styles yet', [], 'Modules.Iqitelementor.Admin'),
-                    'no_styles_desc' => $this->module->getTranslator()->trans('Right-click any widget and choose "Save styles as..." to save reusable styles.', [], 'Modules.Iqitelementor.Admin'),
-                    'enter_style_name' => $this->module->getTranslator()->trans('Enter style name', [], 'Modules.Iqitelementor.Admin'),
-                    'save_style' => $this->module->getTranslator()->trans('Save style', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_style' => $this->module->getTranslator()->trans('Delete Style', [], 'Modules.Iqitelementor.Admin'),
-                    'delete_style_confirm' => $this->module->getTranslator()->trans('Are you sure you want to delete this style?', [], 'Modules.Iqitelementor.Admin'),
-                    'set_as_default' => $this->module->getTranslator()->trans('Set as default', [], 'Modules.Iqitelementor.Admin'),
-                    'unset_default' => $this->module->getTranslator()->trans('Unset default', [], 'Modules.Iqitelementor.Admin'),
-                    'apply' => $this->module->getTranslator()->trans('Apply', [], 'Modules.Iqitelementor.Admin'),
-                    'no_styles_for_widget' => $this->module->getTranslator()->trans('No saved styles for this widget', [], 'Modules.Iqitelementor.Admin'),
+                    'elementor' => $this->l('Elementor'),
+                    'dialog_confirm_delete' => $this->l('Are you sure you want to delete this') . ' {0}?',
+                    'dialog_user_taken_over' => '{0} ' . $this->l('has taken over and is currently editing. Do you want to take over this page editing?'),
+                    'delete' => $this->l('Delete'),
+                    'cancel' => $this->l('Cancel'),
+                    'delete_element' => $this->l('Delete') . ' {0}',
+                    'take_over' => $this->l('Take Over'),
+                    'go_back' => $this->l('Go Back'),
+                    'saved' => $this->l('Saved'),
+                    'before_unload_alert' => $this->l('Please note: All unsaved changes will be lost.'),
+                    'edit_element' => $this->l('Edit') . ' {0}',
+                    'global_colors' => $this->l('Global Colors'),
+                    'global_fonts' => $this->l('Global Fonts'),
+                    'about_elementor' => $this->l('About Elementor'),
+                    'clear_page' => $this->l('Delete all content'),
+                    'dialog_confirm_clear_page' => $this->l('Are you shure you want delete all content?'),
+                    'changes_lost' => $this->l('You have unsaved changes!'),
+                    'dialog_confirm_changes_lost' => $this->l('Please return and save, otherwise your changes will be lost.'),
+                    'import_language_dialog_title' => $this->l('Erase content and import'),
+                    'import_language_dialog_msg' => $this->l('Please confirm that you want to erase content of this page and import content of other language'),
+                    'inner_section' => $this->l('Columns'),
+                    'dialog_confirm_gallery_delete' => $this->l('Are you sure you want to reset this gallery?'),
+                    'delete_gallery' => $this->l('Reset Gallery'),
+                    'gallery_images_selected' => '{0}' . $this->l('Images Selected'),
+                    'insert_media' => $this->l('Insert Media'),
+                    'preview_el_not_found_header' => $this->l('Preview not found'),
+                    'preview_el_not_found_message' => $this->l('Make sure you added own ip in Maintenance settings (Backoffice > shop parameters > general > maintenance)'),
+                    'learn_more' => $this->l('Learn more'),
+                    'ie_edge_browser' => $this->l('Builder do not support IE/Edge browsers'),
+                    'ie_edge_browser_info' => $this->l('Please edit your layout in different browser, like Chrome, Firefox, Opera or Safari'),
+                    'an_error_occurred' => $this->l('An error occurred'),
+                    'templates_request_error' => $this->l('The following error occurred when processing the request:'),
+                    'save_your_template' => $this->l('Save Your {0} to Library'),
+                    'load_your_template' => $this->l('Load your template from file'),
+                    'page' => $this->l('Page'),
+                    'section' => $this->l('Section'),
+                    'delete_template' => $this->l('Delete Template'),
+                    'delete_template_confirm' => $this->l('Are you sure you want to delete this template?'),
+                    'revisions_apply' => $this->l('Apply'),
+                    'revisions_label' => $this->l('revisions'),
+                    'revisions_error_loading' => $this->l('Error loading revisions.'),
+                    'revisions_no_revisions' => $this->l('No revisions yet.'),
+                    'revisions_autosave_by' => $this->l('Autosave by'),
+                    'revisions_revision' => $this->l('Revision'),
+                    'revisions_by' => $this->l('by'),
+                    'revisions_seconds_ago' => $this->l('seconds ago'),
+                    'revisions_min_ago' => $this->l('min ago'),
+                    'revisions_hours_ago' => $this->l('hours ago'),
+                    'revisions_days_ago' => $this->l('days ago'),
+                    'save_style_as' => $this->l('Save styles as...'),
+                    'use_style' => $this->l('Use style'),
+                    'style_saved' => $this->l('Style saved'),
+                    'style_applied' => $this->l('Style applied'),
+                    'style_deleted' => $this->l('Style deleted'),
+                    'style_set_default' => $this->l('Default updated'),
+                    'styles_library' => $this->l('Styles Library'),
+                    'no_styles_yet' => $this->l('No saved styles yet'),
+                    'no_styles_desc' => $this->l('Right-click any widget and choose "Save styles as..." to save reusable styles.'),
+                    'enter_style_name' => $this->l('Enter style name'),
+                    'save_style' => $this->l('Save style'),
+                    'delete_style' => $this->l('Delete Style'),
+                    'delete_style_confirm' => $this->l('Are you sure you want to delete this style?'),
+                    'set_as_default' => $this->l('Set as default'),
+                    'unset_default' => $this->l('Unset default'),
+                    'apply' => $this->l('Apply'),
+                    'no_styles_for_widget' => $this->l('No saved styles for this widget'),
                 ],
             ]]);
 
         Media::addJsDef(
             ['wpColorPickerL10n' => [
-                'clear' => $this->module->getTranslator()->trans('Clear', [], 'Modules.Iqitelementor.Admin'),
-                'defaultString' => $this->module->getTranslator()->trans('Default', [], 'Modules.Iqitelementor.Admin'),
-                'pick' => $this->module->getTranslator()->trans('Pick a color', [], 'Modules.Iqitelementor.Admin'),
-                'current' => $this->module->getTranslator()->trans('Current color', [], 'Modules.Iqitelementor.Admin'),
+                'clear' => $this->l('Clear'),
+                'defaultString' => $this->l('Default'),
+                'pick' => $this->l('Pick a color'),
+                'current' => $this->l('Current color'),
             ]]);
 
         $this->context->smarty->assign([
@@ -386,37 +386,47 @@ class AdminIqitElementorEditorController extends ModuleAdminController
     {
         header('Content-Type: application/json');
 
-        $pageId = (int) Tools::getValue('page_id');
-        $pageType = Tools::getValue('page_type');
-        $contentType = Tools::getValue('content_type');
-        $newContent = Tools::getValue('new_content');
-        $data = $this->getJsonValue('data');
-        $idLang = (int) Tools::getValue('id_lang');
+        try {
+            $pageId = (int) Tools::getValue('page_id');
+            $pageType = Tools::getValue('page_type');
+            $contentType = Tools::getValue('content_type');
+            $newContent = Tools::getValue('new_content');
+            $data = $this->getJsonValue('data');
+            $idLang = (int) Tools::getValue('id_lang');
 
-        $revisionEntityType = $pageType;
-        $revisionEntityId = $pageId;
+            $revisionEntityType = $pageType;
+            $revisionEntityId = $pageId;
 
-        $target = EditorTargetRegistry::get((string) $pageType);
-        if ($target !== null) {
-            $revisionEntityId = $target->saveContent($pageId, (string) $contentType, $idLang, $data);
+            $target = EditorTargetRegistry::get((string) $pageType);
+            if ($target !== null) {
+                $revisionEntityId = $target->saveContent($pageId, (string) $contentType, $idLang, $data);
+            }
+
+            // Save revision and clear autosave on manual save
+            if ($revisionEntityId && $data) {
+                $revisionManager = new RevisionManager();
+                $revisionManager->save($revisionEntityType, $revisionEntityId, $data);
+                $revisionManager->clearAutosave($revisionEntityType, $revisionEntityId);
+            }
+
+            // Content changed → drop the scoped render cache entry for this
+            // (entity, content type, language) so the next front request
+            // re-renders the HTML from the new JSON. Anonymous (content-hashed)
+            // cache entries are self-invalidating and not affected.
+            RenderCache::forget((string) $pageType, $pageId, (string) $contentType, $idLang);
+
+            $return = [
+                'success' => true,
+            ];
+        } catch (\Exception $e) {
+            $return = [
+                'success' => false,
+                'data' => [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getFile() . ':' . $e->getLine(),
+                ],
+            ];
         }
-
-        // Save revision and clear autosave on manual save
-        if ($revisionEntityId && $data) {
-            $revisionManager = new RevisionManager();
-            $revisionManager->save($revisionEntityType, $revisionEntityId, $data);
-            $revisionManager->clearAutosave($revisionEntityType, $revisionEntityId);
-        }
-
-        // Content changed → drop the scoped render cache entry for this
-        // (entity, content type, language) so the next front request
-        // re-renders the HTML from the new JSON. Anonymous (content-hashed)
-        // cache entries are self-invalidating and not affected.
-        RenderCache::forget((string) $pageType, $pageId, (string) $contentType, $idLang);
-
-        $return = [
-            'success' => true,
-        ];
 
         exit(json_encode($return));
     }
@@ -797,7 +807,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $return = [
             'error' => true,
             'data' => [
-                'message' => $this->module->getTranslator()->trans('Problem with file', [], 'Modules.Iqitelementor.Admin'),
+                'message' => $this->l('Problem with file'),
             ],
         ];
 
@@ -1200,7 +1210,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         $error = [
             'error' => true,
-            'data' => ['message' => $this->module->getTranslator()->trans('Problem with file', [], 'Modules.Iqitelementor.Admin')],
+            'data' => ['message' => $this->l('Problem with file')],
         ];
 
         if (!isset($_FILES['file'], $_FILES['file']['tmp_name'])) {
@@ -1339,5 +1349,10 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         }
 
         return $pageId;
+    }
+
+    protected function l($string, $specific = false, $class = null, $addslashes = false, $htmlentities = true)
+    {
+        return $this->module->l($string, 'AdminIqitElementorEditor');
     }
 }

@@ -62,6 +62,8 @@ class ProductTarget extends EditorTarget
 
         if ($id) {
             $product = new \IqitElementorProduct($id);
+            $product->autosave_content = null;
+            $product->autosave_at = null;
             $product->data[$idLang] = $data;
             $product->update();
         } else {
@@ -71,6 +73,8 @@ class ProductTarget extends EditorTarget
 
             if ($product->add()) {
                 $new = new \IqitElementorProduct($product->id, $idLang);
+                $new->autosave_content = null;
+                $new->autosave_at = null;
                 $new->data = $data;
                 $new->update();
             }

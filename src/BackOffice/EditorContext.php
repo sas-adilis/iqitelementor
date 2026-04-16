@@ -155,8 +155,8 @@ class EditorContext
                 'just_elementor_category' => true,
             ],
             'AdminManufacturers' => [
-                'pageType' => 'content',
-                'contentType' => 'brand',
+                'pageType' => 'manufacturer',
+                'contentType' => 'default',
                 'id_attr_keys' => ['manufacturerId'],
             ],
             'AdminProducts' => [

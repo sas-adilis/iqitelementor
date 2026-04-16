@@ -60,7 +60,7 @@ class IqitElementor extends Module implements WidgetInterface
     {
         $this->name = 'iqitelementor';
         $this->tab = 'front_office_features';
-        $this->version = '1.4.4';
+        $this->version = '1.4.5';
         $this->author = 'IQIT-COMMERCE.COM';
         $this->bootstrap = true;
         $this->controllers = ['preview', 'widget', 'landing'];
@@ -846,21 +846,9 @@ class IqitElementor extends Module implements WidgetInterface
     }
 
     /**
-     * Drop the Elementor content row associated with a deleted manufacturer.
+     * No cleanup needed for manufacturer delete — Elementor content is stored
+     * directly in manufacturer_lang.description and deleted natively by PS.
      */
-    public function hookActionObjectManufacturerDeleteAfter($params)
-    {
-        if (!isset($params['object']->id)) {
-            return;
-        }
-
-        $hookId = Hook::getIdByName('displayManufacturerElementor');
-        $idElementor = IqitElementorContent::getIdByObjectAndHook($hookId, $params['object']->id);
-
-        if ($idElementor) {
-            IqitElementorContent::deleteElement($idElementor);
-        }
-    }
 
     /**
      * Drop the Elementor layout row associated with a deleted category.

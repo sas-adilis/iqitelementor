@@ -15,10 +15,7 @@ class AdminIqitElementorContentController extends ModuleAdminController
         $this->className = 'IqitElementorContent';
         $this->table = 'iqit_elementor_content';
 
-        $hookId = Hook::getIdByName('displayManufacturerElementor');
-
         $this->_select = '"" as elementor_link';
-        $this->_where = 'AND a.`hook` != ' . (int) $hookId;
 
         $this->addRowAction('edit');
         $this->addRowAction('delete');

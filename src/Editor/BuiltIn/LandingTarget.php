@@ -33,6 +33,8 @@ class LandingTarget extends EditorTarget
     public function saveContent(int $pageId, string $contentType, int $idLang, $data): int
     {
         $landing = new \IqitElementorLanding($pageId, $idLang);
+        $landing->autosave_content = null;
+        $landing->autosave_at = null;
         $landing->data = $data;
         $landing->update();
 

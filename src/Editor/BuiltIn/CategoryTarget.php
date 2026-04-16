@@ -41,6 +41,8 @@ class CategoryTarget extends EditorTarget
 
         if ($id) {
             $category = new \IqitElementorCategory($id);
+            $category->autosave_content = null;
+            $category->autosave_at = null;
             $category->data[$idLang] = $data;
             $category->update();
         } else {
@@ -50,6 +52,8 @@ class CategoryTarget extends EditorTarget
 
             if ($category->add()) {
                 $new = new \IqitElementorCategory($category->id, $idLang);
+                $new->autosave_content = null;
+                $new->autosave_at = null;
                 $new->data = $data;
                 $new->update();
             }

@@ -7,6 +7,7 @@ use IqitElementor\Editor\BuiltIn\CategoryTarget;
 use IqitElementor\Editor\BuiltIn\CmsTarget;
 use IqitElementor\Editor\BuiltIn\ContentTarget;
 use IqitElementor\Editor\BuiltIn\LandingTarget;
+use IqitElementor\Editor\BuiltIn\ManufacturerTarget;
 use IqitElementor\Editor\BuiltIn\ProductTarget;
 
 /**
@@ -126,6 +127,7 @@ class EditorTargetRegistry
         self::register(new BlogTarget());
         self::register(new CategoryTarget());
         self::register(new ContentTarget());
+        self::register(new ManufacturerTarget());
         self::register(new ProductTarget());
 
         if (class_exists('\\Hook')) {

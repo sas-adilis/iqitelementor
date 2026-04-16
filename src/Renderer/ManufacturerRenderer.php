@@ -16,20 +16,23 @@ class ManufacturerRenderer extends AbstractContentRenderer
 
     public function render(string $hookName, array $configuration, bool $previewMode): array
     {
-        $content = '';
-        $manufacturerId = (int) $configuration['manufacturerId'];
-        $idShop = (int) $this->context->shop->id;
-        $hookId = (int) \Hook::getIdByName($hookName);
-        $id = \IqitElementorContent::getIdByObjectAndHook($hookId, $manufacturerId, $idShop);
+        $description = '';
 
-        if ($id) {
-            $layout = new \IqitElementorContent($id, $this->context->language->id, $idShop);
-
-            if (\Validate::isLoadedObject($layout)) {
-                $content = $this->resolveAndRender($layout, $previewMode);
-            }
+        if (isset($configuration['smarty']->tpl_vars['manufacturer'])) {
+            $description = $configuration['smarty']->tpl_vars['manufacturer']->value['description'];
         }
 
-        return ['content' => $content, 'options' => ['elementor' => false]];
+        $stripped = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', (string) $description);
+        $stripped = str_replace(["\r\n", "\n", "\r"], '', $stripped);
+
+        $decoded = json_decode($stripped, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            $content = $this->renderFrontend($stripped, (array) $decoded);
+
+            return ['content' => $content, 'options' => ['elementor' => true]];
+        }
+
+        return ['content' => $description, 'options' => ['elementor' => false]];
     }
 }

@@ -283,10 +283,63 @@ class CallToAction extends WidgetBase
                 'size_units' => ['px', 'vh'],
                 'selectors' => [
                     '{{WRAPPER}} .elementor-cta-bg-wrapper' => 'height: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-cta-bg-wrapper img.elementor-cta-bg' => 'height: 100%; object-fit: cover;',
+                    '{{WRAPPER}} .elementor-cta-bg-wrapper img.elementor-cta-bg' => 'height: 100%;',
                 ],
                 'condition' => [
                     'skin' => 'classic',
+                    'bg_image[url]!' => '',
+                ],
+                'tab' => self::TAB_STYLE,
+                'section' => 'section_style_box',
+            ]
+        );
+
+        $this->addResponsiveControl(
+            'image_fit',
+            [
+                'label' => Translater::get()->l('Object Fit'),
+                'type' => ControlManager::SELECT,
+                'options' => [
+                    'cover' => Translater::get()->l('Cover'),
+                    'contain' => Translater::get()->l('Contain'),
+                    'fill' => Translater::get()->l('Fill'),
+                    'none' => Translater::get()->l('None'),
+                    'scale-down' => Translater::get()->l('Scale Down'),
+                ],
+                'default' => 'cover',
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-cta-bg-wrapper img.elementor-cta-bg' => 'object-fit: {{VALUE}};',
+                ],
+                'condition' => [
+                    'bg_image[url]!' => '',
+                ],
+                'tab' => self::TAB_STYLE,
+                'section' => 'section_style_box',
+            ]
+        );
+
+        $this->addResponsiveControl(
+            'image_position',
+            [
+                'label' => Translater::get()->l('Object Position'),
+                'type' => ControlManager::SELECT,
+                'options' => [
+                    'center center' => Translater::get()->l('Center Center'),
+                    'center left' => Translater::get()->l('Center Left'),
+                    'center right' => Translater::get()->l('Center Right'),
+                    'top center' => Translater::get()->l('Top Center'),
+                    'top left' => Translater::get()->l('Top Left'),
+                    'top right' => Translater::get()->l('Top Right'),
+                    'bottom center' => Translater::get()->l('Bottom Center'),
+                    'bottom left' => Translater::get()->l('Bottom Left'),
+                    'bottom right' => Translater::get()->l('Bottom Right'),
+                ],
+                'default' => 'center center',
+                'description' => Translater::get()->l('Select which part of the image stays visible when it\'s cropped (cover)'),
+                'selectors' => [
+                    '{{WRAPPER}} .elementor-cta-bg-wrapper img.elementor-cta-bg' => 'object-position: {{VALUE}};',
+                ],
+                'condition' => [
                     'bg_image[url]!' => '',
                 ],
                 'tab' => self::TAB_STYLE,

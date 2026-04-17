@@ -30,16 +30,26 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorLanding extends ObjectModel
 {
+    /** @var int */
     public $id;
+    /** @var int */
     public $id_iqit_elementor_landing;
+    /** @var int */
     public $id_shop;
+    /** @var string */
     public $title;
+    /** @var int */
     public $active = 1;
     // Lang fields
+    /** @var string|array */
     public $text;
+    /** @var string|array */
     public $data;
+    /** @var string|array */
     public $meta_title;
+    /** @var string|array */
     public $meta_description;
+    /** @var string|array */
     public $link_rewrite;
     // Autosave
     /** @var string|null */

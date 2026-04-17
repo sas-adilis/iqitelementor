@@ -36,10 +36,7 @@ class Section extends ElementBase
         return 'columns';
     }
 
-    /**
-     * @return array
-     */
-    public static function getPresets(?int $columns_count = null, ?int $preset_index = null)
+    public static function getPresets(?int $columns_count = null, ?int $preset_index = null): array
     {
         if (!self::$presets) {
             self::initPresets();

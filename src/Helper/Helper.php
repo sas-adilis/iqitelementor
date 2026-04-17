@@ -19,12 +19,15 @@ use PrestaShop\PrestaShop\Adapter\Product\ProductColorsRetriever;
 
 class Helper
 {
-    public static function escAttr($text): string
+    public static function escAttr(string $text): string
     {
         return \Tools::safeOutput($text);
     }
 
-    public static function getProduct($id)
+    /**
+     * @return array|null
+     */
+    public static function getProduct(int $id)
     {
         $productSource = self::getProductsByIds($id);
 
@@ -36,6 +39,8 @@ class Helper
 
             return $product;
         }
+
+        return null;
     }
 
     public static function renderIqitElementorWidget(string $name, array $options): string
@@ -52,6 +57,10 @@ class Helper
         return $module->renderIqitElementorWidget($name, $options, true);
     }
 
+    /**
+     * @param array|object|string $args
+     * @param array|string $defaults
+     */
     public static function parseArgs($args, $defaults = ''): array
     {
         if (is_object($args)) {
@@ -170,14 +179,17 @@ class Helper
         }
     }
 
+    /**
+     * @param mixed $ids
+     * @return array|false|null
+     */
     public static function getProductsByIds($ids)
     {
-
         if (!is_array($ids)) {
-            return;
+            return null;
         }
         if (empty($ids)) {
-            return;
+            return null;
         }
 
         $context = \Context::getContext();
@@ -211,6 +223,9 @@ class Helper
         return $products;
     }
 
+    /**
+     * @return array|false
+     */
     public static function getProductsInfoByIds(array $ids, int $id_lang, \Context $context, bool $active = true)
     {
         $product_ids = join(',', array_map('intval', $ids));

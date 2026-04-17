@@ -17,7 +17,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
  */
 class Plugin
 {
-    /** @var Plugin */
+    /** @var self|null */
     private static $instance;
 
     /** @var ControlManager */
@@ -68,10 +68,7 @@ class Plugin
         ];
     }
 
-    /**
-     * @param array|null $data
-     */
-    public function getFrontend($data): void
+    public function getFrontend(?array $data): void
     {
         $this->frontend = new Frontend($data);
     }

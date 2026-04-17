@@ -54,7 +54,7 @@ class CmsTarget extends EditorTarget
         return (int) $cms->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $source = new \CMS($pageId, $idLang);
 

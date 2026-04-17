@@ -61,18 +61,12 @@ class Media extends ControlBaseMultiple
         ];
     }
 
-    /**
-     * @param array $instance
-     */
-    public static function getImageTitle($instance): string
+    public static function getImageTitle(array $instance): string
     {
         return 'imagetitle';
     }
 
-    /**
-     * @param array $instance
-     */
-    public static function getImageAlt($instance): string
+    public static function getImageAlt(array $instance): string
     {
         return 'imagealt';
     }

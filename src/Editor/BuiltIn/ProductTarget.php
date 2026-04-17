@@ -83,7 +83,7 @@ class ProductTarget extends EditorTarget
         return (int) $product->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $id = \IqitElementorProduct::getIdByProduct($pageId);
         if (!$id) {

@@ -63,12 +63,7 @@ class ImageSize extends GroupControlBase
         return $controls;
     }
 
-    /**
-     * @param int $attachment_id
-     * @param string $group_name
-     * @param array $instance
-     */
-    public static function getAttachmentImageSrc($attachment_id, $group_name, $instance): string
+    public static function getAttachmentImageSrc(int $attachment_id, string $group_name, array $instance): string
     {
         return '';
     }

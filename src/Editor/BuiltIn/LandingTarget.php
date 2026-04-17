@@ -41,7 +41,7 @@ class LandingTarget extends EditorTarget
         return (int) $landing->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $source = new \IqitElementorLanding($pageId, $idLang);
 

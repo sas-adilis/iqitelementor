@@ -17,9 +17,13 @@ class Brands extends WidgetBase
 {
     use CarouselTrait;
 
+    /** @var \Context */
     public $context;
 
+    /** @var int */
     public $status = 1;
+
+    /** @var bool */
     public $editMode = false;
 
     public function __construct($data = [], $args = null)

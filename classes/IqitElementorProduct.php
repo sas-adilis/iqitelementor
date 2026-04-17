@@ -30,11 +30,16 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorProduct extends ObjectModel
 {
+    /** @var int */
     public $id;
+    /** @var int */
     public $id_elementor;
+    /** @var int */
     public $id_product;
+    /** @var int */
     public $id_shop;
     // Lang fields
+    /** @var string|array */
     public $data;
     /** @var string|null */
     public $autosave_content;
@@ -65,10 +70,15 @@ class IqitElementorProduct extends ObjectModel
         parent::__construct($id, $id_lang, $id_shop);
     }
 
+    /**
+     * @param int $idProduct
+     * @param int|null $id_shop
+     * @return string|false|null
+     */
     public static function getIdByProduct($idProduct, $id_shop = null)
     {
         if (!Validate::isUnsignedInt($idProduct)) {
-            return;
+            return null;
         }
 
         if ($id_shop) {

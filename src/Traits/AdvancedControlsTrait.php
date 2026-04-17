@@ -19,7 +19,7 @@ trait AdvancedControlsTrait
     /**
      * Liste noire des attributs non autorisés
      *
-     * @var array
+     * @var string[]
      */
     private static $attributes_blacklist = [
         'id',

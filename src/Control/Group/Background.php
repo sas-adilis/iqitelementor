@@ -182,6 +182,7 @@ class Background extends GroupControlBase
             $controls['image'] = [
                 'label' => Translater::get()->l('Image', 'Background Control'),
                 'type' => ControlManager::MEDIA,
+                'responsive' => true,
                 'title' => Translater::get()->l('Background Image', 'Background Control'),
                 'selectors' => [
                     $args['selector'] => 'background-image: url("{{URL}}");',

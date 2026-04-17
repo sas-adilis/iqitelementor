@@ -30,15 +30,23 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorContent extends ObjectModel
 {
+    /** @var int */
     public $id;
+    /** @var int */
     public $id_shop;
+    /** @var int */
     public $id_elementor;
+    /** @var int */
     public $id_object;
+    /** @var string */
     public $title;
+    /** @var string */
     public $hook;
+    /** @var int */
     public $active;
 
     // Lang fields
+    /** @var string|array */
     public $data;
     /** @var string|null */
     public $autosave_content;
@@ -105,6 +113,10 @@ class IqitElementorContent extends ObjectModel
         return $hooks;
     }
 
+    /**
+     * @param int $id_hook
+     * @return string|false
+     */
     public static function getCountByIdHook($id_hook)
     {
         $sql = 'SELECT COUNT(*) FROM ' . _DB_PREFIX_ . 'iqit_elementor_content
@@ -115,6 +127,11 @@ class IqitElementorContent extends ObjectModel
 
     /**
      * @throws PrestaShopDatabaseException
+     */
+    /**
+     * @param int $hook
+     * @param int|null $id_shop
+     * @return array|false
      */
     public static function getByHook($hook, $id_shop = null)
     {
@@ -131,10 +148,16 @@ class IqitElementorContent extends ObjectModel
         return Db::getInstance()->executeS($sql);
     }
 
+    /**
+     * @param int $hook
+     * @param int $idObject
+     * @param int|null $id_shop
+     * @return string|false|null
+     */
     public static function getIdByObjectAndHook($hook, $idObject, $id_shop = null)
     {
         if (!Validate::isUnsignedInt($hook)) {
-            return;
+            return null;
         }
 
         if ($id_shop) {

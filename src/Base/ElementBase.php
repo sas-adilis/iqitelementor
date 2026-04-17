@@ -474,10 +474,7 @@ abstract class ElementBase
         return array_values($this->controls);
     }
 
-    /**
-     * @return array|null
-     */
-    public function getControl(string $id)
+    public function getControl(string $id): ?array
     {
         return $this->controls[$id] ?? null;
     }
@@ -627,10 +624,7 @@ abstract class ElementBase
         $this->afterRegisterControls();
     }
 
-    /**
-     * @return array|null
-     */
-    public function getCurrentTab()
+    public function getCurrentTab(): ?array
     {
         return $this->current_tab;
     }
@@ -730,10 +724,7 @@ abstract class ElementBase
         );
     }
 
-    /**
-     * @return array|null
-     */
-    public function getCurrentPopover()
+    public function getCurrentPopover(): ?array
     {
         return $this->current_popover;
     }

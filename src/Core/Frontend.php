@@ -178,7 +178,7 @@ class Frontend
         $control_obj = Plugin::instance()->controlsManager->getControl($control['type']);
         $parsed_value = (string) $control_obj->getStyleValue($placeholder, $value);
 
-        if ($control['name'] === 'background_image') {
+        if (preg_match('/background_image(_tablet|_mobile)?$/', $control['name'])) {
             $parsed_value = Helper::getImage($parsed_value);
         }
 
@@ -411,8 +411,8 @@ class Frontend
             throw new Exception('Cannot resolve placeholder');
         }
 
-        // Handle background image special case
-        if ($parser_control['name'] === 'background_image') {
+        // Handle background image special case (including responsive variants)
+        if (preg_match('/background_image(_tablet|_mobile)?$/', $parser_control['name'])) {
             $parsed_value = Helper::getImage($parsed_value);
         }
 

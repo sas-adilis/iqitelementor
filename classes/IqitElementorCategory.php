@@ -30,13 +30,19 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorCategory extends ObjectModel
 {
+    /** @var int */
     public $id;
+    /** @var int */
     public $id_shop;
+    /** @var int */
     public $id_elementor;
+    /** @var int */
     public $id_category;
+    /** @var int */
     public $just_elementor;
 
     // Lang fields
+    /** @var string|array */
     public $data;
     /** @var string|null */
     public $autosave_content;
@@ -82,10 +88,15 @@ class IqitElementorCategory extends ObjectModel
         return $return;
     }
 
+    /**
+     * @param int $idCategory
+     * @param int|null $id_shop
+     * @return string|false|null
+     */
     public static function getIdByCategory($idCategory, $id_shop = null)
     {
         if (!Validate::isUnsignedInt($idCategory)) {
-            return;
+            return null;
         }
 
         if ($id_shop) {
@@ -110,13 +121,18 @@ class IqitElementorCategory extends ObjectModel
         return (bool) Db::getInstance()->getValue($sql);
     }
 
+    /**
+     * @param int $idCategory
+     * @param int $justElementor
+     * @return bool|null
+     */
     public static function setJustElementor($idCategory, $justElementor)
     {
         if (!Validate::isUnsignedInt($idCategory)) {
-            return;
+            return null;
         }
         if (!Validate::isUnsignedInt($justElementor)) {
-            return;
+            return null;
         }
 
         $id = IqitElementorCategory::getIdByCategory($idCategory);

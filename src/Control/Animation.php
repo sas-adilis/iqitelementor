@@ -10,6 +10,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Animation extends ControlBase
 {
+    /** @var array|null */
     private static $_animations;
 
     public function getType(): string

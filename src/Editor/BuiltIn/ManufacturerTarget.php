@@ -59,7 +59,7 @@ class ManufacturerTarget extends EditorTarget
         return (int) $manufacturer->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $source = new \Manufacturer($pageId, $idLang);
 

@@ -16,7 +16,10 @@ class ProductCarousel extends WidgetBase
 {
     use CarouselTrait;
 
+    /** @var \Context */
     public $context;
+
+    /** @var bool */
     public $editMode = false;
 
     public function __construct($data = [], $args = null)

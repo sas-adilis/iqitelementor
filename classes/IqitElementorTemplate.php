@@ -30,9 +30,13 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorTemplate extends ObjectModel
 {
+    /** @var int */
     public $id;
+    /** @var int */
     public $id_template;
+    /** @var string */
     public $title;
+    /** @var string */
     public $data;
     /** @var string|null */
     public $autosave_content;
@@ -54,6 +58,9 @@ class IqitElementorTemplate extends ObjectModel
         ],
     ];
 
+    /**
+     * @return array|false
+     */
     public static function getTemplates()
     {
         $sql = 'SELECT `id_template`, `title`  FROM ' . _DB_PREFIX_ . 'iqit_elementor_template';

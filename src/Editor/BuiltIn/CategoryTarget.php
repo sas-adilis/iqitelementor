@@ -62,7 +62,7 @@ class CategoryTarget extends EditorTarget
         return (int) $category->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $id = \IqitElementorCategory::getIdByCategory($pageId);
         if (!$id) {

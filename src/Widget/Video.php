@@ -12,6 +12,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Video extends WidgetBase
 {
+    /** @var array */
     protected $currentInstance = [];
 
     public function getId(): string

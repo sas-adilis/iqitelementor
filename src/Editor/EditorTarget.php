@@ -103,10 +103,7 @@ abstract class EditorTarget
      */
     abstract public function saveContent(int $pageId, string $contentType, int $idLang, $data): int;
 
-    /**
-     * @return array|null
-     */
-    abstract public function loadLanguageContent(int $pageId, string $contentType, int $idLang);
+    abstract public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array;
 
     /**
      * @param array<string, string|int> $previewParams

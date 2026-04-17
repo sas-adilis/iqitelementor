@@ -11,6 +11,7 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 
 class Typography extends GroupControlBase
 {
+    /** @var array|null */
     private static $_fields;
 
     public static function getType(): string
@@ -21,8 +22,6 @@ class Typography extends GroupControlBase
     /**
      * Get default options for typography group control.
      * Enables the popover with custom settings.
-     *
-     * @return array
      */
     protected function getDefaultOptions(): array
     {

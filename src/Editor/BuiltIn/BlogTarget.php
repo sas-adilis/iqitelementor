@@ -50,7 +50,7 @@ class BlogTarget extends EditorTarget
         return (int) $post->id;
     }
 
-    public function loadLanguageContent(int $pageId, string $contentType, int $idLang)
+    public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
         $source = new \SimpleBlogPost($pageId, $idLang);
 

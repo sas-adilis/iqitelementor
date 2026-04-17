@@ -15,6 +15,7 @@ class Countdown extends WidgetBase
      */
     protected $context;
 
+    /** @var array */
     protected $defaultCountdownLabels = [];
 
     public function __construct($data = [], $args = null)

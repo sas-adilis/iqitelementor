@@ -35,8 +35,6 @@ class TextShadow extends GroupControlBase
     /**
      * Get default options for text shadow group control.
      * Enables the popover with custom settings.
-     *
-     * @return array
      */
     protected function getDefaultOptions(): array
     {

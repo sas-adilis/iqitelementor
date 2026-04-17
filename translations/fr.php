@@ -1657,3 +1657,13 @@ $_MODULE['<{iqitelementor}prestashop>simpleblog-posts-carousel_cb5feb1b731463772
 $_MODULE['<{iqitelementor}prestashop>simpleblog-posts-carousel_603850e072131401265c4fc01027db93'] = 'Typographie';
 $_MODULE['<{iqitelementor}prestashop>simpleblog-posts-carousel_6ca8bf4766b9dc7b1ea8b69562faac3f'] = 'Extrait';
 $_MODULE['<{iqitelementor}prestashop>simpleblog-posts-carousel_cb059ea6f03450d0f2fd5405340038f4'] = 'Méta (date, catégorie)';
+
+// --- Source: categories (Seven's) ---
+$_MODULE['<{iqitelementor}prestashop>brand-logo-image_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>store-hours_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>team-carousel_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>stores-carousel_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>links-buttons-carousel_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>store-map_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>brands-buttons-carousel_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";
+$_MODULE['<{iqitelementor}prestashop>loyalty-status-carousel_9226ed1603c57a314e84f775f1b00acc'] = "Seven's";

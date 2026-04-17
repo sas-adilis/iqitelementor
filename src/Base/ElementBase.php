@@ -103,7 +103,7 @@ abstract class ElementBase
      */
     public function getCategories(): array
     {
-        return ['basic'];
+        return [Translater::get()->l('Elements', 'elementor')];
     }
 
     private static function getAvailableTabsControls(): array

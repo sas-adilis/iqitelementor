@@ -20,11 +20,6 @@ class Spacer extends WidgetBase
         return Translater::get()->l('Spacer');
     }
 
-    public function getCategories(): array
-    {
-        return ['basic'];
-    }
-
     public function getIcon(): string
     {
         return 'spacer';

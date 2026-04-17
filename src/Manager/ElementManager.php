@@ -3,6 +3,7 @@
 namespace IqitElementor\Manager;
 
 use IqitElementor\Base\ElementBase;
+use IqitElementor\Core\Plugin;
 use IqitElementor\Helper\Helper;
 use IqitElementor\Helper\Translater;
 
@@ -27,20 +28,17 @@ class ElementManager
 
     public function getCategories(): array
     {
-        return [
-            'basic' => [
-                'title' => Translater::get()->l('Elements'),
-                'icon' => 'font',
-            ],
-            'prestashop' => [
-                'title' => Translater::get()->l('Prestashop'),
-                'icon' => 'wordpress',
-            ],
-            'custom' => [
-                'title' => Translater::get()->l('Custom'),
-                'icon' => 'wordpress',
-            ],
-        ];
+        $categories = [];
+
+        foreach (Plugin::instance()->widgetsManager->getRegisteredWidgets() as $widget) {
+            foreach ($widget->getCategories() as $title) {
+                if (!isset($categories[$title])) {
+                    $categories[$title] = ['title' => $title];
+                }
+            }
+        }
+
+        return $categories;
     }
 
     public function registerElement(string $element_class): bool

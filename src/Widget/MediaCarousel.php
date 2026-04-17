@@ -33,11 +33,6 @@ class MediaCarousel extends WidgetBase
         return 'slider-push';
     }
 
-    public function getCategories(): array
-    {
-        return ['prestashop'];
-    }
-
     protected function registerControls(): void
     {
         // ===== CONTENT: Slides =====

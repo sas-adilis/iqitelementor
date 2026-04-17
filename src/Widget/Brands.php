@@ -58,12 +58,9 @@ class Brands extends WidgetBase
         return 'carousel';
     }
 
-    /**
-     * Catégories Elementor dans lesquelles apparaît le widget
-     */
     public function getCategories(): array
     {
-        return ['prestashop'];
+        return [Translater::get()->l('Prestashop', 'elementor')];
     }
 
     /**

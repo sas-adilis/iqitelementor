@@ -48,7 +48,7 @@ class ProductCarousel extends WidgetBase
 
     public function getCategories(): array
     {
-        return ['prestashop'];
+        return [Translater::get()->l('Prestashop', 'elementor')];
     }
 
     protected function registerControls(): void

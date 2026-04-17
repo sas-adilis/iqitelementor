@@ -12,16 +12,16 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 	<div id="elementor-style-library-header-logo-area"></div>
 	<div id="elementor-style-library-header-menu-area"></div>
 	<div id="elementor-style-library-header-items-area">
-		<div id="elementor-style-library-header-close-modal" class="elementor-template-library-header-item" title="<?php echo Translater::get()->l('Close', 'elementor'); ?>">
-			<i class="eicon-close" title="<?php echo Translater::get()->l('Close', 'elementor'); ?>"></i>
-		</div>
+        <div id="elementor-style-library-header-close-modal" class="elementor-template-library-header-item" title="<?php echo Translater::get()->l('Close', 'elementor'); ?>">
+            <i class="eicon-close" title="<?php echo Translater::get()->l('Close', 'elementor'); ?>"></i>
+        </div>
 		<div id="elementor-style-library-header-tools2"></div>
-		<div id="elementor-style-library-header-tools"></div>
+        <div id="elementor-style-library-header-tools"></div>
 	</div>
 </script>
 
 <script type="text/template" id="tmpl-elementor-style-library-header-logo">
-	<i class="fa fa-paint-brush"></i><span><?php echo Translater::get()->l('Styles Library', 'elementor'); ?></span>
+	<span><?php echo Translater::get()->l('Styles Library', 'elementor'); ?></span>
 </script>
 
 <script type="text/template" id="tmpl-elementor-style-library-header-save">
@@ -46,6 +46,9 @@ if (!defined('ELEMENTOR_ABSPATH')) {
 </script>
 
 <script type="text/template" id="tmpl-elementor-style-library-style-item">
+	<div class="elementor-style-library-style-icon">
+		<i class="fa fa-paint-brush"></i>
+	</div>
 	<div class="elementor-style-library-style-info">
 		<span class="elementor-style-library-style-name">{{{ name }}}</span>
 		<span class="elementor-style-library-style-widget-type">{{{ widget_type }}}</span>

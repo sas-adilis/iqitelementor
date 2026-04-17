@@ -4,7 +4,7 @@
  * Bundled at the end of editor.js via Grunt, this IIFE:
  *  - Injects minimal CSS for toast notifications
  *  - Wraps elementor.saveBuilder() to show toasts on success/error
- *  - Suppresses the legacy popup dialog on save
+ *  - Legacy popup dialogs removed from footer.js / topbar.js
  */
 (function () {
     'use strict';
@@ -50,7 +50,7 @@
         return d.innerHTML;
     }
 
-    // -- Monkey-patch saveBuilder & suppress popup ----------------------------
+    // -- Monkey-patch saveBuilder & expose showToast ----------------------------
 
     var patched = false;
 
@@ -61,6 +61,9 @@
 
         patched = true;
         clearInterval(check);
+
+        // Expose globally so other components can use it
+        elementor.showToast = showToast;
 
         var origSaveBuilder = elementor.saveBuilder.bind(elementor);
 
@@ -120,24 +123,6 @@
 
             return promise;
         };
-
-        // Neuter the legacy popup dialogs so they never fire.
-        var noop = { show: function () {} };
-        var panels = [
-            elementor.getPanelView && elementor.getPanelView(),
-            elementor.panel && elementor.panel.currentView
-        ];
-        panels.forEach(function (view) {
-            if (!view) return;
-            var footer = view.footer && view.footer.currentView;
-            if (footer && footer.getDialog) {
-                footer.getDialog = function () { return noop; };
-            }
-            var topbar = view.topbar && view.topbar.currentView;
-            if (topbar && topbar.getSaveDialog) {
-                topbar.getSaveDialog = function () { return noop; };
-            }
-        });
 
     }, 200);
 })();

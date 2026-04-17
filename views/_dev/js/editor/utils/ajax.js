@@ -8,6 +8,7 @@ Ajax = {
 			ajaxParams: {
 				type: 'POST',
 				url: elementor.config.ajaxurl,
+				dataType: 'json',
 				data: {}
 			}
 		};

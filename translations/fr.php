@@ -111,6 +111,10 @@ $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_0568e5e8aa7c811dd4
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_ca250fc97801e7d0604610ddf129eaa8'] = 'il y a quelques min';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_f329a0dab82282e50e3aea9260e95d53'] = 'il y a quelques heures';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_7a1af30a5ce889031cbc2472766159e3'] = 'il y a quelques jours';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_7dce122004969d56ae2e0245cb754d35'] = 'Éditer';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_ed75712b0eb1913c28a3872731ffd48d'] = 'Dupliquer';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_5fb63579fc981698f97d55bfecb213ea'] = 'Copier';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_488cab58b1bd393cc7b3a016404fdb86'] = 'Coller les styles';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_6aebc3c87a6a9f3fdb8fc35d8f24a5cf'] = 'Enregistrer les styles sous...';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_f2f7bd42ed561d46919debab192b22fe'] = 'Utiliser le style';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_772b3664cfaf40bbcb2b5bb8d39b1c80'] = 'Style enregistré';
@@ -127,11 +131,36 @@ $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_e1d66b68244d755b67
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_ffee71a61dfb978efbca62128a312bc1'] = 'Définir par défaut';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_d0f945784bd4d328bc5ac0cc3aa58830'] = 'Retirer le défaut';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_b4be8cdaf3ce29057164868d685b221a'] = 'Aucun style enregistré pour ce widget';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_6d164c0ae2415ae79473fc3a5b1cbbec'] = 'Remplacer le style existant ?';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_1cea9b3af7b90378a7a151029e093447'] = 'Un style avec ce nom existe déjà. Voulez-vous le remplacer ?';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_0ebe6df8a3ac338e0512acc741823fdb'] = 'Remplacer';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_dc30bc0c7914db5918da4263fce93ad2'] = 'Effacer';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_7a1920d61156abc05a60135aefe8bc67'] = 'Par défaut';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_e02ff1e53f1ff32f14bea8960ac06574'] = 'Choisir une couleur';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_d743c7b61a7c525dafef44b5e6c440ea'] = 'Couleur actuelle';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_4d99a137bbe9e22dcbada508e6a64060'] = 'Problème avec le fichier';
+
+// --- Source: styles (views/templates/editor/styles.php) ---
+$_MODULE['<{iqitelementor}prestashop>styles_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
+$_MODULE['<{iqitelementor}prestashop>styles_8580172034fd50a0385959bf4c9bd91e'] = 'Bibliothèque de styles';
+$_MODULE['<{iqitelementor}prestashop>styles_7e5cbaae0685343d4ed947ad37de48b1'] = 'Enregistrer le style';
+$_MODULE['<{iqitelementor}prestashop>styles_85a62283930ef73d9bd507bc762c2235'] = 'Importer un style';
+$_MODULE['<{iqitelementor}prestashop>styles_b1c94ca2fbc3e78fc30069c8d0f01680'] = 'Tous';
+$_MODULE['<{iqitelementor}prestashop>styles_70aa023056496b7ba8b3e68c919e1627'] = 'Tous les types de widgets';
+$_MODULE['<{iqitelementor}prestashop>styles_7a1920d61156abc05a60135aefe8bc67'] = 'Par défaut';
+$_MODULE['<{iqitelementor}prestashop>styles_ffee71a61dfb978efbca62128a312bc1'] = 'Définir par défaut';
+$_MODULE['<{iqitelementor}prestashop>styles_0095a9fa74d1713e43e370a7d7846224'] = 'Exporter';
+$_MODULE['<{iqitelementor}prestashop>styles_f2a6c498fb90ee345d997f888fce3b18'] = 'Supprimer';
+$_MODULE['<{iqitelementor}prestashop>styles_029b42fbc05664dd4b757f7ab0438156'] = 'Enregistrer le style du widget';
+$_MODULE['<{iqitelementor}prestashop>styles_305875892461ae5eb4a67a281a30a7bf'] = 'Enregistrer les paramètres actuels du widget comme style réutilisable.';
+$_MODULE['<{iqitelementor}prestashop>styles_417b93edad0988e90bc2be20a33e7fe4'] = 'Nom du style';
+$_MODULE['<{iqitelementor}prestashop>styles_c9cc8cce247e49bae79f15173ce97354'] = 'Enregistrer';
+$_MODULE['<{iqitelementor}prestashop>styles_61151ba9ad444f6771fd5131ac7f2844'] = 'Importer un fichier .json de style depuis votre ordinateur';
+$_MODULE['<{iqitelementor}prestashop>styles_88dc2539f9f7172b53f13a51aa39be27'] = 'Sélectionner un fichier .json de style';
+$_MODULE['<{iqitelementor}prestashop>styles_72d6d7a1885885bb55a565fd1070581a'] = 'Importer';
+$_MODULE['<{iqitelementor}prestashop>styles_e4d239a8c00fb0a00532c78d92b1e3e0'] = 'Aucun style enregistré';
+$_MODULE['<{iqitelementor}prestashop>styles_ce333cb85b9fa7134e1c7a28b877fd80'] = 'Faites un clic droit sur n\'importe quel widget et choisissez « Enregistrer les styles sous... » pour sauvegarder des styles réutilisables.';
+$_MODULE['<{iqitelementor}prestashop>styles_16bfbf9c462762cf1cba4134ec53c504'] = 'Chargement';
 
 // --- Source: contenttarget (Editor/BuiltIn/ContentTarget.php) ---
 $_MODULE['<{iqitelementor}prestashop>contenttarget_47076493334af7a737834c995ef8ccb3'] = 'Ajouter du contenu avec Elementor - Constructeur de pages visuel';

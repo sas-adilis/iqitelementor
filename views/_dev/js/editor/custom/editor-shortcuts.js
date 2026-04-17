@@ -15,10 +15,49 @@
 		return isS && (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey;
 	}
 
-	function triggerSave(e) {
+	function isEscapeKey(e) {
+		return (e.key === 'Escape' || e.keyCode === 27);
+	}
+
+	function closeOpenModals() {
+		if (typeof elementor === 'undefined') {
+			return false;
+		}
+
+		var closed = false;
+
+		if (elementor.templates && elementor.templates.getModal) {
+			var tplModal = elementor.templates.getModal();
+			if (tplModal && tplModal.isVisible && tplModal.isVisible()) {
+				tplModal.hide();
+				closed = true;
+			}
+		}
+
+		if (elementor.styleLibrary && elementor.styleLibrary.getModal) {
+			var styleModal = elementor.styleLibrary.getModal();
+			if (styleModal && styleModal.isVisible && styleModal.isVisible()) {
+				styleModal.hide();
+				closed = true;
+			}
+		}
+
+		return closed;
+	}
+
+	function handleKeydown(e) {
+		if (isEscapeKey(e)) {
+			if (closeOpenModals()) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+			return;
+		}
+
 		if (!isSaveShortcut(e)) {
 			return;
 		}
+
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -36,19 +75,6 @@
 			onSuccess: function () {
 				if ($saveBtn.length) {
 					$saveBtn.removeClass('elementor-btn-state');
-				}
-				if (elementor.dialogsManager) {
-					var dialog = elementor.dialogsManager.createWidget('popup', {
-						hide: { delay: 1500 }
-					});
-					dialog.setMessage(
-						'<div class="elementor-dialog-message">' +
-						'<i class="fa fa-check-circle"></i>' +
-						'<div class="elementor-dialog-message-text">' +
-						elementor.translate('saved') +
-						'</div></div>'
-					);
-					dialog.show();
 				}
 			},
 			onError: function () {
@@ -71,14 +97,14 @@
 			if (!iframeDoc) {
 				return;
 			}
-			$(iframeDoc).off('keydown.iqitSaveShortcut').on('keydown.iqitSaveShortcut', triggerSave);
+			$(iframeDoc).off('keydown.iqitShortcut').on('keydown.iqitShortcut', handleKeydown);
 		}
 
 		attach();
-		$preview.off('load.iqitSaveShortcut').on('load.iqitSaveShortcut', attach);
+		$preview.off('load.iqitShortcut').on('load.iqitShortcut', attach);
 	}
 
-	$(document).on('keydown.iqitSaveShortcut', triggerSave);
+	$(document).on('keydown.iqitShortcut', handleKeydown);
 
 	$(function () {
 		if (typeof elementor === 'undefined') {

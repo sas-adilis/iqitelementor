@@ -173,6 +173,8 @@ WidgetView = BaseElementView.extend( {
 			var widgetType = this.model.get( 'widgetType' );
 
 			// "Save styles as..."
+			var styleFilter = require( 'elementor-utils/style-filter' );
+
 			actions.push( {
 				name: 'save_style_as',
 				icon: '<i class="fa fa-floppy-o"></i>',
@@ -180,9 +182,10 @@ WidgetView = BaseElementView.extend( {
 				title: elementor.translate ? elementor.translate( 'save_style_as' ) : 'Save styles as...',
 				callback: function() {
 					var settingsModel = widgetView.model.get( 'settings' );
-					var settings = settingsModel && typeof settingsModel.toJSON === 'function'
+					var allSettings = settingsModel && typeof settingsModel.toJSON === 'function'
 						? settingsModel.toJSON()
 						: {};
+					var settings = styleFilter.filterStyleSettings( widgetType, allSettings );
 
 					elementor.styleLibrary.startModal( function() {
 						elementor.styleLibrary.showSaveStyleView( widgetType, settings );
@@ -190,31 +193,44 @@ WidgetView = BaseElementView.extend( {
 				}
 			} );
 
-			// "Use style" — list available styles for this widget type
+			// "Apply style" — submenu with available styles for this widget type
 			var widgetStyles = elementor.styleLibrary.getStylesForWidget( widgetType );
 
 			if ( widgetStyles.length ) {
-				widgetStyles.forEach( function( styleModel, index ) {
+				var styleChildren = [];
+
+				// Default first, then alphabetical
+				widgetStyles.sort( function( a, b ) {
+					var aDefault = a.get( 'is_default' ) ? 1 : 0;
+					var bDefault = b.get( 'is_default' ) ? 1 : 0;
+					if ( aDefault !== bDefault ) {
+						return bDefault - aDefault;
+					}
+					return ( a.get( 'name' ) || '' ).localeCompare( b.get( 'name' ) || '' );
+				} );
+
+				widgetStyles.forEach( function( styleModel ) {
 					var styleName = styleModel.get( 'name' );
 					var isDefault = styleModel.get( 'is_default' );
 
-					actions.push( {
+					styleChildren.push( {
 						name: 'use_style_' + styleModel.get( 'id_widget_style' ),
 						icon: isDefault
 							? '<i class="fa fa-star"></i>'
 							: '<i class="fa fa-paint-brush"></i>',
 						title: styleName,
+						className: isDefault ? 'iqit-context-submenu-default' : '',
 						callback: function() {
 							elementor.styleLibrary.applyStyle( styleModel, widgetView.model );
 						}
 					} );
 				} );
-			} else {
+
 				actions.push( {
-					name: 'no_styles',
+					name: 'apply_style',
 					icon: '<i class="fa fa-paint-brush"></i>',
-					title: elementor.translate ? elementor.translate( 'no_styles_for_widget' ) : 'No saved styles',
-					callback: function() {}
+					title: elementor.translate ? elementor.translate( 'use_style' ) : 'Apply style',
+					children: styleChildren
 				} );
 			}
 

@@ -18,13 +18,13 @@
   margin-top: 5px;
 }
 
-.elementor *, .elementor *:before, .elementor *:after {
-  box-sizing: border-box;
-}
 .elementor {
   -webkit-hyphens: manual;
       -ms-hyphens: manual;
           hyphens: manual;
+}
+.elementor *, .elementor *:before, .elementor *:after {
+  box-sizing: border-box;
 }
 .elementor a {
   box-shadow: none;
@@ -1387,9 +1387,6 @@
   display: block;
 }
 
-.elementor-swiper-button.has-custom-icon::after {
-  display: none;
-}
 .elementor-swiper-button.has-custom-icon {
   display: -webkit-inline-box;
   display: -webkit-inline-flex;
@@ -1403,6 +1400,9 @@
   -webkit-justify-content: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+.elementor-swiper-button.has-custom-icon::after {
+  display: none;
 }
 .elementor-swiper-button.has-custom-icon svg {
   width: 1em;
@@ -1787,6 +1787,14 @@ body.elementor-page .elementor-widget-menu-anchor {
    ========================================================================== */
 .elementor-toc {
   border: 0 solid #ddd;
+  /* Toggle buttons */
+  /* Body */
+  /* Spinner (shown before JS builds the list) */
+  /* List */
+  /* Bullets marker via pseudo-element */
+  /* Active state */
+  /* No headings message */
+  /* Collapse subitems: nested lists hidden until parent is active */
 }
 .elementor-toc__header {
   display: -webkit-box;
@@ -1812,9 +1820,6 @@ body.elementor-page .elementor-widget-menu-anchor {
           flex: 1 1 auto;
   font-size: 1.1em;
   line-height: 1.3;
-}
-.elementor-toc {
-  /* Toggle buttons */
 }
 .elementor-toc__toggle-button {
   cursor: pointer;
@@ -1842,9 +1847,6 @@ body.elementor-page .elementor-widget-menu-anchor {
   display: -ms-inline-flexbox;
   display: inline-flex;
 }
-.elementor-toc {
-  /* Body */
-}
 .elementor-toc__body {
   padding: 10px;
   -webkit-transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
@@ -1857,9 +1859,6 @@ body.elementor-page .elementor-widget-menu-anchor {
   padding-bottom: 0;
   opacity: 0;
   overflow: hidden;
-}
-.elementor-toc {
-  /* Spinner (shown before JS builds the list) */
 }
 .elementor-toc__spinner-container {
   display: -webkit-box;
@@ -1880,9 +1879,6 @@ body.elementor-page .elementor-widget-menu-anchor {
   font-size: 20px;
   -webkit-animation: spin 1s linear infinite;
           animation: spin 1s linear infinite;
-}
-.elementor-toc {
-  /* List */
 }
 .elementor-toc__list-wrapper {
   list-style: none;
@@ -1909,31 +1905,19 @@ body.elementor-page .elementor-widget-menu-anchor {
 .elementor-toc__list-item-text:hover {
   text-decoration: underline;
 }
-.elementor-toc {
-  /* Bullets marker via pseudo-element */
-}
 .elementor-toc--marker-bullets .elementor-toc__list-item-text::before {
   content: "•"; /* bullet • */
   display: inline-block;
   margin-right: 0.5em;
   font-size: 0.8em;
 }
-.elementor-toc {
-  /* Active state */
-}
 .elementor-toc__list-item--active > .elementor-toc__list-item-text {
   font-weight: 600;
-}
-.elementor-toc {
-  /* No headings message */
 }
 .elementor-toc__no-headings {
   padding: 10px 0;
   color: #999;
   font-style: italic;
-}
-.elementor-toc {
-  /* Collapse subitems: nested lists hidden until parent is active */
 }
 .elementor-toc--collapse-subitems .elementor-toc__list-wrapper .elementor-toc__list-wrapper {
   display: none;
@@ -1966,20 +1950,6 @@ body.elementor-page .elementor-widget-menu-anchor {
 .animated {
   -webkit-animation-duration: 1.055s;
           animation-duration: 1.055s;
-}
-.animated.animated-slow {
-  -webkit-animation-duration: 2s;
-          animation-duration: 2s;
-}
-.animated.animated-fast {
-  -webkit-animation-duration: 0.75s;
-          animation-duration: 0.75s;
-}
-.animated.infinite {
-  -webkit-animation-iteration-count: infinite;
-          animation-iteration-count: infinite;
-}
-.animated {
   /*
   &.hinge {
   	animation-duration: 2s;
@@ -1992,6 +1962,18 @@ body.elementor-page .elementor-widget-menu-anchor {
   	animation-duration: .75s;
   }
   */
+}
+.animated.animated-slow {
+  -webkit-animation-duration: 2s;
+          animation-duration: 2s;
+}
+.animated.animated-fast {
+  -webkit-animation-duration: 0.75s;
+          animation-duration: 0.75s;
+}
+.animated.infinite {
+  -webkit-animation-iteration-count: infinite;
+          animation-iteration-count: infinite;
 }
 
 .elementor-bg-transform-zoom-in:hover .elementor-bg {

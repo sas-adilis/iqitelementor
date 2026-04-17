@@ -8,7 +8,8 @@ var ContextMenuView = Marionette.ItemView.extend( {
     },
 
     events: {
-        'click .iqit-context-menu-item': 'onItemClick'
+        'click .iqit-context-menu-item:not(.iqit-context-menu-has-children)': 'onItemClick',
+        'click .iqit-context-submenu-item': 'onSubItemClick'
     },
 
     initialize: function() {
@@ -73,7 +74,6 @@ var ContextMenuView = Marionette.ItemView.extend( {
             return;
         }
 
-
         this.context.groups.forEach( function( group ) {
             ( group.actions || [] ).forEach( function( action ) {
 
@@ -90,7 +90,36 @@ var ContextMenuView = Marionette.ItemView.extend( {
                 var text = action.title || action.name;
                 var iconHtml = action.icon ? '<span class="iqit-context-menu-icon">' + action.icon + '</span>' : '';
 
-                $item.html(iconHtml + '<span class="iqit-context-menu-label">' + text + '</span>');
+                // Sous-menu
+                if ( action.children && action.children.length ) {
+                    $item.addClass( 'iqit-context-menu-has-children' );
+                    $item.html(
+                        iconHtml +
+                        '<span class="iqit-context-menu-label">' + text + '</span>' +
+                        '<span class="iqit-context-menu-arrow"><i class="fa fa-caret-right"></i></span>'
+                    );
+
+                    var $submenu = Backbone.$( '<ul class="iqit-context-submenu"></ul>' );
+
+                    action.children.forEach( function( child ) {
+                        var childIcon = child.icon ? '<span class="iqit-context-menu-icon">' + child.icon + '</span>' : '';
+                        var childClass = 'iqit-context-submenu-item';
+                        if ( child.className ) {
+                            childClass += ' ' + child.className;
+                        }
+
+                        var $childItem = Backbone.$( '<li class="' + childClass + '" />' )
+                            .attr( 'data-action', child.name )
+                            .data( 'actionData', child )
+                            .html( childIcon + '<span class="iqit-context-menu-label">' + ( child.title || child.name ) + '</span>' );
+
+                        $submenu.append( $childItem );
+                    } );
+
+                    $item.append( $submenu );
+                } else {
+                    $item.html(iconHtml + '<span class="iqit-context-menu-label">' + text + '</span>');
+                }
 
                 $list.append( $item );
             } );
@@ -101,7 +130,21 @@ var ContextMenuView = Marionette.ItemView.extend( {
     onItemClick: function( event ) {
         event.stopPropagation();
 
-        var $item   = this.$( event.currentTarget ),
+        var $item   = Backbone.$( event.currentTarget ),
+            action  = $item.data( 'actionData' ),
+            context = this.context;
+
+        if ( action && 'function' === typeof action.callback ) {
+            action.callback( context );
+        }
+
+        this.hide();
+    },
+
+    onSubItemClick: function( event ) {
+        event.stopPropagation();
+
+        var $item   = Backbone.$( event.currentTarget ),
             action  = $item.data( 'actionData' ),
             context = this.context;
 

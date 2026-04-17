@@ -139,6 +139,7 @@ TemplateLibraryManager = function() {
 	};
 
 	this.startModal = function( onModalReady ) {
+		elementor.styleLibrary.getModal().hide();
 		self.getModal().show();
 
 		self.setTemplatesSource( 'local' );

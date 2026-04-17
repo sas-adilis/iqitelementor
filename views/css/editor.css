@@ -183,6 +183,16 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   }
 }
 
+.elementor-loading-title {
+  color: #fff;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 30px;
+  letter-spacing: 7px;
+  font-size: 10px;
+  -webkit-animation: load-title 1.5s linear infinite;
+          animation: load-title 1.5s linear infinite;
+}
 @-webkit-keyframes load-title {
   0% {
     opacity: 1;
@@ -194,7 +204,6 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
     opacity: 1;
   }
 }
-
 @keyframes load-title {
   0% {
     opacity: 1;
@@ -205,16 +214,6 @@ body.elementor-editor-preview #elementor-mode-switcher-preview .fa:before {
   100% {
     opacity: 1;
   }
-}
-.elementor-loading-title {
-  color: #fff;
-  text-align: center;
-  text-transform: uppercase;
-  margin-top: 30px;
-  letter-spacing: 7px;
-  font-size: 10px;
-  -webkit-animation: load-title 1.5s linear infinite;
-          animation: load-title 1.5s linear infinite;
 }
 
 .select2-dropdown {
@@ -571,6 +570,13 @@ select {
 #elementor-panel {
   font-family: Roboto, Arial, Helvetica, Verdana, sans-serif;
   font-size: 13px;
+  background-color: #e6e9ec;
+  position: fixed;
+  width: 280px;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  overflow: visible;
 }
 #elementor-panel ::selection {
   background: #5bc0de;
@@ -615,15 +621,6 @@ select {
 }
 #elementor-panel :focus {
   outline: 0;
-}
-#elementor-panel {
-  background-color: #e6e9ec;
-  position: fixed;
-  width: 280px;
-  height: 100%;
-  top: 0;
-  bottom: 0;
-  overflow: visible;
 }
 #elementor-panel > .ui-resizable-e, #elementor-panel > .ui-resizable-w {
   position: absolute;
@@ -713,22 +710,22 @@ select {
 #elementor-panel .panel-alert.panel-alert-info {
   color: #31708f;
   background-color: #d9edf7;
-  border-color: rgb(187.5086956522, 223.0304347826, 240.7913043478);
+  border-color: #bcdff1;
 }
 #elementor-panel .panel-alert.panel-alert-success {
   color: #3c763d;
   background-color: #dff0d8;
-  border-color: rgb(201.8444444444, 230.0833333333, 190.2166666667);
+  border-color: #cae6be;
 }
 #elementor-panel .panel-alert.panel-alert-warning {
   color: #8a6d3b;
   background-color: #fcf8e3;
-  border-color: rgb(248.5451612903, 239.9387096774, 194.7548387097);
+  border-color: #f9f0c3;
 }
 #elementor-panel .panel-alert.panel-alert-danger {
   color: #a94442;
   background-color: #f2dede;
-  border-color: rgb(231.9108695652, 196.3891304348, 196.3891304348);
+  border-color: #e8c4c4;
 }
 #elementor-panel #elementor-panel-header {
   display: table;
@@ -1091,6 +1088,42 @@ select {
   font-size: 16px;
   display: block;
   margin-bottom: 6px;
+}
+#elementor-panel #elementor-panel-page-editor {
+  /*.elementor-control-type-text_shadow {
+  	padding-block: 15px 40px;
+
+  	.elementor-control-input-wrapper {
+  		overflow: hidden;
+  	}
+
+  	.elementor-text-shadow-slider {
+  		margin-top: 10px;
+  	}
+
+  	&:before,
+  	&:after {
+  		content: "";
+  		height: 15px;
+  		position: absolute;
+  		left: 0;
+  		width: 100%;
+  		pointer-events: none;
+  	}
+
+  	&:before {
+  		top: 0;
+  		background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
+  		border-top: 1px solid $editor-lightest;
+  	}
+
+  	&:after {
+  		bottom: 15px;
+  		background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
+  		border-bottom: 1px solid $editor-lightest;
+  	}
+  }
+  */
 }
 #elementor-panel #elementor-panel-page-editor .elementor-controls > .elementor-section-wrapper:not(.elementor-active-tab) {
   display: none;
@@ -2187,42 +2220,6 @@ body:not(.elementor-device-mobile) #elementor-panel #elementor-panel-page-editor
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-box_shadow .elementor-box-shadow-slider {
   margin-top: 10px;
 }
-#elementor-panel #elementor-panel-page-editor {
-  /*.elementor-control-type-text_shadow {
-  	padding-block: 15px 40px;
-
-  	.elementor-control-input-wrapper {
-  		overflow: hidden;
-  	}
-
-  	.elementor-text-shadow-slider {
-  		margin-top: 10px;
-  	}
-
-  	&:before,
-  	&:after {
-  		content: "";
-  		height: 15px;
-  		position: absolute;
-  		left: 0;
-  		width: 100%;
-  		pointer-events: none;
-  	}
-
-  	&:before {
-  		top: 0;
-  		background: linear-gradient(to top, transparent, rgba(0, 0, 0, 0.1));
-  		border-top: 1px solid $editor-lightest;
-  	}
-
-  	&:after {
-  		bottom: 15px;
-  		background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1));
-  		border-bottom: 1px solid $editor-lightest;
-  	}
-  }
-  */
-}
 #elementor-panel #elementor-panel-page-editor .elementor-control-type-text_shadow {
   padding: 0;
 }
@@ -3134,6 +3131,56 @@ body.elementor-editor-preview #elementor-mode-switcher {
   margin: 4px 0;
 }
 
+.iqit-context-menu-has-children {
+  position: relative;
+}
+.iqit-context-menu-has-children .iqit-context-menu-arrow {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 10px;
+  color: rgba(0, 0, 0, 0.3);
+}
+.iqit-context-menu-has-children .iqit-context-submenu {
+  display: none;
+  position: absolute;
+  top: -4px;
+  left: 100%;
+  list-style: none;
+  margin: 0;
+  padding: 4px 0;
+  min-width: 140px;
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+.iqit-context-menu-has-children:hover > .iqit-context-submenu {
+  display: block;
+}
+
+.iqit-context-submenu-item {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 6px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-transition: background-color 0.1s ease;
+  transition: background-color 0.1s ease;
+  gap: 1rem;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.iqit-context-submenu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.iqit-context-submenu-item.iqit-context-submenu-default {
+  color: #9b0a46;
+  font-weight: 600;
+}
+
 #elementor-navigator {
   position: fixed;
   top: 80px;
@@ -3975,7 +4022,7 @@ body.elementor-editor-preview #elementor-preview {
 }
 .dialog-options-widget .dialog-buttons-wrapper > button:hover,
 .dialog-confirm-widget .dialog-buttons-wrapper > button:hover {
-  background-color: rgb(244.4886363636, 245.75, 247.0113636364);
+  background-color: #f4f6f7;
 }
 
 .dialog-options-widget, .dialog-confirm-widget, .dialog-alert-widget {
@@ -4305,7 +4352,7 @@ body.elementor-editor-preview #elementor-preview {
   transition: background-color 0.3s linear;
 }
 .elementor-template-library-template-local:hover {
-  background-color: rgb(249.925, 250.65, 251.375);
+  background-color: #fafbfb;
 }
 .elementor-template-library-template-local:not(:hover) .elementor-template-library-template-controls {
   visibility: hidden;
@@ -4368,19 +4415,20 @@ body.elementor-editor-preview #elementor-preview {
 }
 
 .elementor-template-library-blank-title {
-  font-size: 30px;
-  margin-top: 55px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 35px;
 }
 
 .elementor-template-library-blank-excerpt {
-  font-size: 18px;
+  font-size: 13px;
   color: #a4afb7;
-  margin-top: 20px;
-  font-weight: 300;
+  margin-top: 12px;
+  font-weight: 400;
 }
 
 #elementor-template-library-save-template-form, #elementor-template-library-load-template-form {
-  margin-top: 55px;
+  margin-top: 30px;
   display: -webkit-box;
   display: -webkit-flex;
   display: -ms-flexbox;
@@ -4395,18 +4443,18 @@ body.elementor-editor-preview #elementor-preview {
           justify-content: center;
 }
 #elementor-template-library-save-template-form > *, #elementor-template-library-load-template-form > * {
-  height: 60px;
-  font-size: 18px;
+  height: 42px;
+  font-size: 13px;
 }
 
 #elementor-template-library-save-template-name {
-  width: 460px;
+  width: 350px;
   background-color: #fff;
-  font-weight: 300;
+  font-weight: 400;
   color: #a4afb7;
-  padding-left: 25px;
+  padding-left: 15px;
   border-radius: 3px 0 0 3px;
-  border: none;
+  border: 1px solid #d5dadf;
 }
 #elementor-template-library-save-template-name:focus {
   border: 1px solid #e6e9ec;
@@ -4426,7 +4474,7 @@ body.elementor-editor-preview #elementor-preview {
   cursor: pointer;
 }
 #elementor-template-library-load-wrapper > #elementor-template-library-load-btn-file {
-  height: 60px;
+  height: 42px;
   width: 100%;
   border: none;
   cursor: pointer;
@@ -4439,7 +4487,7 @@ body.elementor-editor-preview #elementor-preview {
 }
 
 #elementor-template-library-save-template-submit, #elementor-template-library-load-template-submit {
-  width: 150px;
+  width: 120px;
   border-radius: 0 3px 3px 0;
   font-weight: 500;
 }
@@ -4471,8 +4519,8 @@ body.elementor-editor-preview #elementor-preview {
 }
 
 #elementor-template-library-templates-empty-icon {
-  font-size: 96px;
-  margin-top: 40px;
+  font-size: 56px;
+  margin-top: 30px;
   color: #d5dadf;
 }
 
@@ -4509,59 +4557,80 @@ body.elementor-editor-preview #elementor-preview {
 }
 
 #elementor-style-library-header {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+#elementor-style-library-header > * {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+#elementor-style-library-header-logo-area {
+  width: 35%;
+  text-align: left;
+  padding-left: 15px;
+}
+#elementor-style-library-header-logo-area > * {
+  float: left;
+}
+#elementor-style-library-header-logo-area > * > * {
+  vertical-align: middle;
+}
+
+#elementor-style-library-header-logo {
+  font-size: 15px;
+  text-transform: uppercase;
+  color: #495157;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#elementor-style-library-header-menu-area {
+  text-align: center;
+}
+
+#elementor-style-library-header-items-area {
+  width: 35%;
+}
+#elementor-style-library-header-items-area > * {
+  float: right;
+}
+
+#elementor-style-library-header-tools > * {
+  float: right;
+}
+
+#elementor-style-library-header-close-modal,
+#elementor-style-library-header-tools > *,
+#elementor-style-library-header-tools2 > * {
+  position: relative;
+  border-left: 1px solid #e6e9ec;
   height: 50px;
-  padding: 0 15px;
-}
-#elementor-style-library-header #elementor-style-library-header-logo-area {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
+  width: 56px;
+  box-sizing: content-box;
   cursor: pointer;
+  -webkit-transition: color 0.5s;
+  transition: color 0.5s;
 }
-#elementor-style-library-header #elementor-style-library-header-logo-area i {
-  margin-right: 8px;
-  font-size: 16px;
-  color: #9b0a46;
+#elementor-style-library-header-close-modal:not(:hover),
+#elementor-style-library-header-tools > *:not(:hover),
+#elementor-style-library-header-tools2 > *:not(:hover) {
+  color: #a4afb7;
 }
-#elementor-style-library-header #elementor-style-library-header-logo-area span {
-  font-weight: 600;
-  font-size: 14px;
+#elementor-style-library-header-close-modal > *,
+#elementor-style-library-header-tools > * > *,
+#elementor-style-library-header-tools2 > * > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+          transform: translateX(-50%) translateY(-50%);
 }
-#elementor-style-library-header #elementor-style-library-header-items-area {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-#elementor-style-library-header #elementor-style-library-header-items-area .elementor-template-library-header-item {
-  cursor: pointer;
-  padding: 8px 12px;
-  -webkit-transition: color 0.3s;
-  transition: color 0.3s;
-}
-#elementor-style-library-header #elementor-style-library-header-items-area .elementor-template-library-header-item:hover {
-  color: #9b0a46;
+#elementor-style-library-header-close-modal > i,
+#elementor-style-library-header-tools > * > i,
+#elementor-style-library-header-tools2 > * > i {
+  font-size: 18px;
 }
 
 #elementor-style-library-filter {
@@ -4573,7 +4642,12 @@ body.elementor-editor-preview #elementor-preview {
   border: 1px solid #d5dadf;
   border-radius: 3px;
   font-size: 13px;
+  line-height: 1.4;
   background: #fff;
+  appearance: auto;
+  -webkit-appearance: menulist;
+  color: #6d7882;
+  height: auto;
 }
 #elementor-style-library-filter select:focus {
   border-color: #9b0a46;
@@ -4581,109 +4655,71 @@ body.elementor-editor-preview #elementor-preview {
 }
 
 #elementor-style-library-styles-container {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 1px;
+  margin: 15px 0;
+  overflow: hidden;
 }
 
 .elementor-style-library-style-item {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  padding: 15px 20px;
-  background: #fff;
-  border-bottom: 1px solid #e6e9ec;
-  -webkit-transition: background 0.2s;
-  transition: background 0.2s;
+  background-color: #fff;
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  height: 50px;
+  border-bottom: 1px solid #d5dadf;
+  -webkit-transition: background-color 0.3s linear;
+  transition: background-color 0.3s linear;
+}
+.elementor-style-library-style-item > * {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: start;
 }
 .elementor-style-library-style-item:hover {
-  background: #f9fafb;
+  background-color: #fafbfb;
 }
-.elementor-style-library-style-item:hover .elementor-style-library-style-controls {
-  opacity: 1;
+.elementor-style-library-style-item:not(:hover) .elementor-style-library-style-controls {
+  visibility: hidden;
+}
+
+.elementor-style-library-style-icon {
+  text-align: center;
+  width: 6%;
+  color: #a4afb7;
 }
 
 .elementor-style-library-style-info {
-  -webkit-box-flex: 1;
-  -webkit-flex: 1;
-      -ms-flex: 1;
-          flex: 1;
-  min-width: 0;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: baseline;
-  -webkit-align-items: baseline;
-      -ms-flex-align: baseline;
-          align-items: baseline;
-  gap: 8px;
+  width: 52%;
 }
 
 .elementor-style-library-style-name {
-  font-weight: 600;
   font-size: 13px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-weight: 500;
 }
 
 .elementor-style-library-style-widget-type {
   font-size: 11px;
   color: #a4afb7;
-  white-space: nowrap;
+  padding-left: 8px;
 }
 
 .elementor-style-library-style-controls {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 12px;
-  -webkit-flex-shrink: 0;
-      -ms-flex-negative: 0;
-          flex-shrink: 0;
-  opacity: 0.5;
-  -webkit-transition: opacity 0.2s;
-  transition: opacity 0.2s;
+  width: 42%;
+  direction: rtl;
+  padding-right: 18px;
+}
+.elementor-style-library-style-controls > * {
+  direction: ltr;
 }
 .elementor-style-library-style-controls > div {
+  display: inline-block;
+  margin-left: 15px;
   cursor: pointer;
-  padding: 5px;
-  color: #6d7882;
-  -webkit-transition: color 0.2s;
-  transition: color 0.2s;
-  font-size: 13px;
+  font-weight: 500;
+  -webkit-transition: color 0.5s;
+  transition: color 0.5s;
 }
-.elementor-style-library-style-controls > div:hover {
-  color: #9b0a46;
-}
-.elementor-style-library-style-controls .elementor-style-library-style-default-toggle {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-      -ms-flex-align: center;
-          align-items: center;
-  gap: 4px;
+.elementor-style-library-style-controls > div:not(:hover) {
+  color: #a4afb7;
 }
 .elementor-style-library-style-controls .elementor-style-library-style-default-toggle:hover {
   color: #9b0a46;
@@ -4701,39 +4737,46 @@ body.elementor-editor-preview #elementor-preview {
 
 #elementor-style-library-save-style {
   text-align: center;
-  padding: 60px 30px;
-}
-#elementor-style-library-save-style .elementor-template-library-blank-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-#elementor-style-library-save-style .elementor-template-library-blank-excerpt {
-  font-size: 13px;
-  color: #6d7882;
-  margin-bottom: 30px;
 }
 #elementor-style-library-save-style form {
-  max-width: 400px;
-  margin: 0 auto;
+  margin-top: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
-#elementor-style-library-save-style input[type=text],
-#elementor-style-library-save-style input[name=name] {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d5dadf;
-  border-radius: 3px;
-  margin-bottom: 15px;
+#elementor-style-library-save-style form > * {
+  height: 42px;
   font-size: 13px;
 }
-#elementor-style-library-save-style input[type=text]:focus,
+#elementor-style-library-save-style input[name=name] {
+  width: 350px;
+  background-color: #fff;
+  font-weight: 400;
+  color: #a4afb7;
+  padding-left: 15px;
+  border-radius: 3px 0 0 3px;
+  border: 1px solid #d5dadf;
+}
 #elementor-style-library-save-style input[name=name]:focus {
-  border-color: #9b0a46;
-  outline: none;
+  border: 1px solid #e6e9ec;
 }
 #elementor-style-library-save-style .elementor-btn-success, #elementor-style-library-save-style #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-style-library-save-style .elementor-btn {
+  width: 120px;
+  border-radius: 0 3px 3px 0;
+  font-weight: 500;
   text-transform: uppercase;
-  padding: 10px 30px;
+}
+#elementor-style-library-save-style .elementor-btn-success:hover, #elementor-style-library-save-style #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn:hover, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-style-library-save-style .elementor-btn:hover {
+  box-shadow: none;
 }
 #elementor-style-library-save-style .elementor-btn-success .elementor-state-icon, #elementor-style-library-save-style #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn .elementor-state-icon, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-style-library-save-style .elementor-btn .elementor-state-icon {
   padding-right: 5px;
@@ -4741,61 +4784,71 @@ body.elementor-editor-preview #elementor-preview {
 
 #elementor-style-library-load-style {
   text-align: center;
-  padding: 60px 30px;
-}
-#elementor-style-library-load-style .elementor-template-library-blank-title {
-  font-size: 22px;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-#elementor-style-library-load-style .elementor-template-library-blank-excerpt {
-  font-size: 13px;
-  color: #6d7882;
-  margin-bottom: 30px;
 }
 #elementor-style-library-load-style form {
-  max-width: 400px;
-  margin: 0 auto;
+  margin-top: 30px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+#elementor-style-library-load-style form > * {
+  height: 42px;
+  font-size: 13px;
 }
 #elementor-style-library-load-style #elementor-style-library-load-wrapper {
-  margin-bottom: 15px;
+  width: 250px;
+  overflow: hidden;
   position: relative;
 }
-#elementor-style-library-load-style #elementor-style-library-load-wrapper input[type=file] {
+#elementor-style-library-load-style #elementor-style-library-load-wrapper > #elementor-style-library-load-style-file {
   position: absolute;
-  width: 100%;
-  height: 100%;
   top: 0;
-  left: 0;
+  right: 0;
   opacity: 0;
+  height: 100%;
   cursor: pointer;
 }
-#elementor-style-library-load-style #elementor-style-library-load-wrapper button {
+#elementor-style-library-load-style #elementor-style-library-load-wrapper > #elementor-style-library-load-btn-file {
+  height: 42px;
   width: 100%;
-  padding: 10px;
-  border: 2px dashed #d5dadf;
-  border-radius: 3px;
-  background: #fff;
+  border: none;
   cursor: pointer;
-  -webkit-transition: border-color 0.3s;
-  transition: border-color 0.3s;
+  background: #fff;
+  display: block;
 }
-#elementor-style-library-load-style #elementor-style-library-load-wrapper button:hover {
-  border-color: #9b0a46;
+#elementor-style-library-load-style #elementor-style-library-load-wrapper:hover > #elementor-style-library-load-btn-file {
+  background-color: #fcfcfc;
 }
 #elementor-style-library-load-style .elementor-btn-success, #elementor-style-library-load-style #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-style-library-load-style .elementor-btn {
+  width: 120px;
+  border-radius: 0 3px 3px 0;
+  font-weight: 500;
   text-transform: uppercase;
-  padding: 10px 30px;
+}
+#elementor-style-library-load-style .elementor-btn-success:hover, #elementor-style-library-load-style #elementor-panel #elementor-panel-footer-save.elementor-save-active .elementor-btn:hover, #elementor-panel #elementor-panel-footer-save.elementor-save-active #elementor-style-library-load-style .elementor-btn:hover {
+  box-shadow: none;
 }
 
 #elementor-style-library-styles-empty {
   text-align: center;
-  padding: 80px 30px;
 }
 #elementor-style-library-styles-empty #elementor-style-library-styles-empty-icon {
-  font-size: 40px;
+  font-size: 56px;
+  margin-top: 30px;
   color: #d5dadf;
-  margin-bottom: 20px;
+}
+
+#elementor-style-library-styles #elementor-style-library-styles-container {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }
 
 #iqit-toast-container {

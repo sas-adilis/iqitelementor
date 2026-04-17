@@ -35,42 +35,10 @@ TopBarItemView = Marionette.ItemView.extend( {
 	},
 
 	initialize: function() {
-		this._initSaveDialog();
 		this._initAutosave();
 
 		this.listenTo( elementor.channels.editor, 'editor:changed', this.onEditorChanged );
 		this.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
-	},
-
-	_initSaveDialog: function() {
-		var dialog;
-
-		this.getSaveDialog = function() {
-			if ( ! dialog ) {
-				var $ = Backbone.$,
-					$dialogMessage = $( '<div>', {
-						'class': 'elementor-dialog-message'
-					} ),
-					$messageIcon = $( '<i>', {
-						'class': 'fa fa-check-circle'
-					} ),
-					$messageText = $( '<div>', {
-						'class': 'elementor-dialog-message-text'
-					} ).text( elementor.translate( 'saved' ) );
-
-				$dialogMessage.append( $messageIcon, $messageText );
-
-				dialog = elementor.dialogsManager.createWidget( 'popup', {
-					hide: {
-						delay: 1500
-					}
-				} );
-
-				dialog.setMessage( $dialogMessage );
-			}
-
-			return dialog;
-		};
 	},
 
 	_initAutosave: function() {

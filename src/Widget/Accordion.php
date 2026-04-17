@@ -44,6 +44,7 @@ class Accordion extends WidgetBase
     {
         $this->registerContentControls();
         $this->registerOptionsControls();
+        $this->registerStyleIconControls();
         $this->registerStyleTitleControls();
         $this->registerStyleContentControls();
         $this->registerStyleBorderControls();
@@ -136,6 +137,7 @@ class Accordion extends WidgetBase
                     1 => Translater::get()->l('Yes'),
                     0 => Translater::get()->l('No'),
                 ],
+                'style_transfer' => true,
             ]
         );
 
@@ -150,6 +152,26 @@ class Accordion extends WidgetBase
                     '' => Translater::get()->l('No'),
                 ],
                 'description' => Translater::get()->l('If enabled it will add FAQ rich snippet schema data for google'),
+                'style_transfer' => true,
+            ]
+        );
+
+        $this->endControlsSection();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | STYLE - ICON SECTION
+    |--------------------------------------------------------------------------
+    */
+
+    private function registerStyleIconControls(): void
+    {
+        $this->startControlsSection(
+            'section_style_icon',
+            [
+                'label' => Translater::get()->l('Icon'),
+                'tab' => self::TAB_STYLE,
             ]
         );
 

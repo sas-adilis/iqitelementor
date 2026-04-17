@@ -376,37 +376,38 @@
 }
 
 .elementor-template-library-blank-title {
-	font-size: 30px;
-	margin-top: 55px;
+	font-size: 20px;
+	font-weight: 600;
+	margin-top: 35px;
 }
 
 .elementor-template-library-blank-excerpt {
-	font-size: 18px;
+	font-size: 13px;
 	color: $editor-light;
-	margin-top: 20px;
-	font-weight: 300;
+	margin-top: 12px;
+	font-weight: 400;
 }
 
 #elementor-template-library-save-template-form, #elementor-template-library-load-template-form {
-	margin-top: 55px;
+	margin-top: 30px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 
 	> * {
-		height: 60px;
-		font-size: 18px;
+		height: 42px;
+		font-size: 13px;
 	}
 }
 
 #elementor-template-library-save-template-name {
-	width: 460px;
+	width: 350px;
 	background-color: #fff;
-	font-weight: 300;
+	font-weight: 400;
 	color: $editor-light;
-	@include padding-start(25px);
+	@include padding-start(15px);
 	border-radius: getValueByDirection(3px 0 0 3px, 0 3px 3px 0);
-	border: none;
+	border: 1px solid $editor-lightest;
 
 	&:focus {
 		border: 1px solid $editor-background;
@@ -426,7 +427,7 @@
     cursor: pointer;
   }
   > #elementor-template-library-load-btn-file {
-    height: 60px;
+    height: 42px;
     width: 100%;
     border: none;
     cursor: pointer;
@@ -442,7 +443,7 @@
 
 
 #elementor-template-library-save-template-submit, #elementor-template-library-load-template-submit {
-	width: 150px;
+	width: 120px;
 	border-radius: getValueByDirection(0 3px 3px 0, 3px 0 0 3px);
 	font-weight: 500;
 
@@ -478,8 +479,8 @@
 }
 
 #elementor-template-library-templates-empty-icon {
-	font-size: 96px;
-	margin-top: 40px;
+	font-size: 56px;
+	margin-top: 30px;
 	color: $editor-lightest;
 }
 

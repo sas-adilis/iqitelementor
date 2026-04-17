@@ -45,6 +45,18 @@ StyleLibraryManager = function() {
 		} ) || null;
 	};
 
+	/**
+	 * Find a style by widget type and name (case-insensitive).
+	 */
+	this.findStyleByName = function( widgetType, name ) {
+		ensureCollection();
+		var lowerName = name.toLowerCase();
+		return stylesCollection.find( function( model ) {
+			return model.get( 'widget_type' ) === widgetType &&
+				( model.get( 'name' ) || '' ).toLowerCase() === lowerName;
+		} ) || null;
+	};
+
 	// ------------------------------------------------------------------
 	//  Modal management
 	// ------------------------------------------------------------------
@@ -68,6 +80,7 @@ StyleLibraryManager = function() {
 	};
 
 	this.startModal = function( onReady ) {
+		elementor.templates.getModal().hide();
 		self.getModal().show();
 
 		if ( ! layout ) {
@@ -109,12 +122,23 @@ StyleLibraryManager = function() {
 		} );
 	};
 
-	this.saveStyle = function( widgetType, name, settings, callback ) {
+	this.saveStyle = function( widgetType, name, settings, callback, errorCallback, replaceId ) {
+		var sendData = {
+			widget_type: widgetType,
+			name: name,
+			settings: JSON.stringify( settings )
+		};
+
+		if ( replaceId ) {
+			sendData.replace_id = replaceId;
+		}
+
 		elementor.ajax.send( 'SaveWidgetStyle', {
-			data: {
-				widget_type: widgetType,
-				name: name,
-				settings: JSON.stringify( settings )
+			data: sendData,
+			error: function() {
+				if ( errorCallback ) {
+					errorCallback();
+				}
 			},
 			success: function( data ) {
 				if ( ! stylesCollection ) {
@@ -130,16 +154,26 @@ StyleLibraryManager = function() {
 					export_link: data.export_link || ''
 				};
 
-				var newModel = stylesCollection.add( styleData );
+				// If replacing, remove old model from collection and cache
+				if ( replaceId ) {
+					var oldModel = stylesCollection.find( function( m ) {
+						return m.get( 'id_widget_style' ) == replaceId;
+					} );
+					if ( oldModel ) {
+						stylesCollection.remove( oldModel, { silent: true } );
+					}
+					self._removeFromConfigCache( replaceId );
+				}
 
-				// Also update the config cache
+				stylesCollection.add( styleData );
+
 				if ( ! elementor.config.widgetStyles ) {
 					elementor.config.widgetStyles = [];
 				}
 				elementor.config.widgetStyles.push( styleData );
 
 				if ( callback ) {
-					callback( newModel );
+					callback();
 				}
 			}
 		} );
@@ -176,7 +210,11 @@ StyleLibraryManager = function() {
 					self._removeFromConfigCache( styleModel.get( 'id_widget_style' ) );
 
 					stylesCollection.remove( styleModel, { silent: true } );
+					elementor.showToast( elementor.translate( 'style_deleted' ), 'success' );
 					self.showStyles();
+				},
+				error: function() {
+					elementor.showToast( elementor.translate( 'an_error_occurred' ), 'error' );
 				}
 			} );
 		};
@@ -208,10 +246,15 @@ StyleLibraryManager = function() {
 				// Update config cache
 				self._syncConfigCache();
 
+				elementor.showToast( elementor.translate( 'saved' ), 'success' );
+
 				// Re-render if modal is open
 				if ( layout ) {
 					self.showStyles();
 				}
+			},
+			error: function() {
+				elementor.showToast( elementor.translate( 'an_error_occurred' ), 'error' );
 			}
 		} );
 	};
@@ -231,12 +274,13 @@ StyleLibraryManager = function() {
 			return;
 		}
 
-		// Merge style settings onto the target widget
+		// Only apply style-related keys (saved styles already filtered at save time,
+		// but double-check here for older saved styles)
 		Object.keys( settings ).forEach( function( key ) {
-			// Skip system keys
 			if ( key === 'widgetType' || key === 'elType' || key === 'isInner' ) {
 				return;
 			}
+
 			targetSettings.set( key, settings[ key ] );
 		} );
 	};

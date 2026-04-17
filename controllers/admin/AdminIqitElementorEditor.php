@@ -196,6 +196,11 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'revisions_min_ago' => $this->l('min ago'),
                     'revisions_hours_ago' => $this->l('hours ago'),
                     'revisions_days_ago' => $this->l('days ago'),
+                    'Edit' => $this->l('Edit'),
+                    'Duplicate' => $this->l('Duplicate'),
+                    'Copy' => $this->l('Copy'),
+                    'Paste styles' => $this->l('Paste styles'),
+                    'Delete' => $this->l('Delete'),
                     'save_style_as' => $this->l('Save styles as...'),
                     'use_style' => $this->l('Use style'),
                     'style_saved' => $this->l('Style saved'),
@@ -213,6 +218,9 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'unset_default' => $this->l('Unset default'),
                     'apply' => $this->l('Apply'),
                     'no_styles_for_widget' => $this->l('No saved styles for this widget'),
+                    'style_replace_title' => $this->l('Replace existing style?'),
+                    'style_replace_confirm' => $this->l('A style with this name already exists. Do you want to replace it?'),
+                    'style_replace_yes' => $this->l('Replace'),
                 ],
             ]]);
 
@@ -1049,6 +1057,8 @@ class AdminIqitElementorEditorController extends ModuleAdminController
      */
     public function ajaxProcessGetWidgetStyles(): void
     {
+        header('Content-Type: application/json');
+
         exit(json_encode(['success' => true, 'data' => $this->loadWidgetStyles()]));
     }
 
@@ -1058,9 +1068,12 @@ class AdminIqitElementorEditorController extends ModuleAdminController
      */
     public function ajaxProcessSaveWidgetStyle(): void
     {
+        header('Content-Type: application/json');
+
         $widgetType = Tools::getValue('widget_type');
         $name = Tools::getValue('name');
         $settings = Tools::getValue('settings');
+        $replaceId = (int) Tools::getValue('replace_id');
 
         if (!$widgetType || !$name || !$settings) {
             exit(json_encode(['success' => false, 'data' => 'Missing parameters']));
@@ -1068,6 +1081,32 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         $idShop = (int) $this->context->shop->id;
         $now = date('Y-m-d H:i:s');
+
+        // Replace existing style
+        if ($replaceId) {
+            $result = Db::getInstance()->update('iqit_elementor_widget_style', [
+                'name' => pSQL($name),
+                'settings' => pSQL($settings, true),
+                'date_upd' => $now,
+            ], '`id_widget_style` = ' . $replaceId . ' AND `id_shop` = ' . $idShop);
+
+            $row = Db::getInstance()->getRow(
+                'SELECT `is_default` FROM `' . _DB_PREFIX_ . 'iqit_elementor_widget_style`'
+                . ' WHERE `id_widget_style` = ' . $replaceId
+            );
+
+            exit(json_encode([
+                'success' => (bool) $result,
+                'data' => [
+                    'id_widget_style' => $replaceId,
+                    'widget_type' => $widgetType,
+                    'name' => $name,
+                    'is_default' => $row ? (int) $row['is_default'] : 0,
+                    'export_link' => $this->context->link->getAdminLink($this->name, true)
+                        . '&ajax=1&action=ExportWidgetStyle&id_widget_style=' . $replaceId,
+                ],
+            ]));
+        }
 
         // Check if this is the first style for this widget type → auto-default
         $existing = Db::getInstance()->getValue(
@@ -1107,6 +1146,8 @@ class AdminIqitElementorEditorController extends ModuleAdminController
      */
     public function ajaxProcessDeleteWidgetStyle(): void
     {
+        header('Content-Type: application/json');
+
         $id = (int) Tools::getValue('id_widget_style');
 
         if (!$id) {
@@ -1129,6 +1170,8 @@ class AdminIqitElementorEditorController extends ModuleAdminController
      */
     public function ajaxProcessSetWidgetStyleDefault(): void
     {
+        header('Content-Type: application/json');
+
         $id = (int) Tools::getValue('id_widget_style');
 
         if (!$id) {

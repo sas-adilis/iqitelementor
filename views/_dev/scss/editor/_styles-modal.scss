@@ -37,42 +37,81 @@
 
 // Header — same structure as template-library
 #elementor-style-library-header {
-	display: flex;
-	align-items: center;
-	height: 50px;
-	padding: 0 15px;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
 
-	#elementor-style-library-header-logo-area {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		cursor: pointer;
+	> * {
+		display: table-cell;
+		vertical-align: middle;
+	}
+}
 
-		i {
-			@include margin-end(8px);
-			font-size: 16px;
-			color: $editor-accent;
-		}
+#elementor-style-library-header-logo-area {
+	width: 35%;
+	text-align: $start;
+	@include padding-start(15px);
 
-		span {
-			font-weight: 600;
-			font-size: 14px;
+	> * {
+		float: $start;
+
+		> * {
+			vertical-align: middle;
 		}
 	}
+}
 
-	#elementor-style-library-header-items-area {
-		display: flex;
-		align-items: center;
+#elementor-style-library-header-logo {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: $editor-darkest;
+	font-weight: bold;
+	cursor: pointer;
+}
 
-		.elementor-template-library-header-item {
-			cursor: pointer;
-			padding: 8px 12px;
-			transition: color .3s;
+#elementor-style-library-header-menu-area {
+	text-align: center;
+}
 
-			&:hover {
-				color: $editor-accent;
-			}
-		}
+#elementor-style-library-header-items-area {
+	width: 35%;
+
+	> * {
+		float: $end;
+	}
+}
+
+#elementor-style-library-header-tools {
+
+	> * {
+		float: $end;
+	}
+}
+
+#elementor-style-library-header-close-modal,
+#elementor-style-library-header-tools > *,
+#elementor-style-library-header-tools2 > * {
+	position: relative;
+	@include border-start(1px solid $editor-background);
+	height: 50px;
+	width: 56px;
+	box-sizing: content-box;
+	cursor: pointer;
+	transition: color .5s;
+
+	&:not(:hover) {
+		color: $editor-light;
+	}
+
+	> * {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translateX(-50%) translateY(-50%);
+	}
+
+	> i {
+		font-size: 18px;
 	}
 }
 
@@ -86,7 +125,12 @@
 		border: 1px solid #d5dadf;
 		border-radius: 3px;
 		font-size: 13px;
+		line-height: 1.4;
 		background: #fff;
+		appearance: auto;
+		-webkit-appearance: menulist;
+		color: #6d7882;
+		height: auto;
 
 		&:focus {
 			border-color: $editor-accent;
@@ -97,75 +141,79 @@
 
 // Style items — same pattern as template items
 #elementor-style-library-styles-container {
-	display: flex;
-	flex-direction: column;
-	gap: 1px;
+	margin: 15px 0	;
+	overflow: hidden;
 }
 
 .elementor-style-library-style-item {
-	display: flex;
-	align-items: center;
-	padding: 15px 20px;
-	background: #fff;
-	border-bottom: 1px solid #e6e9ec;
-	transition: background .2s;
+	background-color: #fff;
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+	height: 50px;
+	border-bottom: 1px solid $editor-lightest;
+	transition: background-color .3s linear;
+
+	> * {
+		display: table-cell;
+		vertical-align: middle;
+		text-align: start;
+	}
 
 	&:hover {
-		background: #f9fafb;
+		background-color: lighten($editor-background-light, 3%);
+	}
 
+	&:not(:hover) {
 		.elementor-style-library-style-controls {
-			opacity: 1;
+			visibility: hidden;
 		}
 	}
 }
 
+.elementor-style-library-style-icon {
+	text-align: center;
+	width: 6%;
+	color: $editor-light;
+}
+
 .elementor-style-library-style-info {
-	flex: 1;
-	min-width: 0;
-	display: flex;
-	align-items: baseline;
-	gap: 8px;
+	width: 52%;
 }
 
 .elementor-style-library-style-name {
-	font-weight: 600;
 	font-size: 13px;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+	font-weight: 500;
 }
 
 .elementor-style-library-style-widget-type {
 	font-size: 11px;
-	color: #a4afb7;
-	white-space: nowrap;
+	color: $editor-light;
+	@include padding-start(8px);
 }
 
 .elementor-style-library-style-controls {
-	display: flex;
-	align-items: center;
-	gap: 12px;
-	flex-shrink: 0;
-	opacity: 0.5;
-	transition: opacity .2s;
+	width: 42%;
+	direction: getInverseDirection();
+	padding-right: 18px;
+
+	> * {
+		direction: $direction;
+	}
 
 	> div {
+		display: inline-block;
+		@include margin-start(15px);
 		cursor: pointer;
-		padding: 5px;
-		color: #6d7882;
-		transition: color .2s;
-		font-size: 13px;
+		font-weight: 500;
+		transition: color .5s;
 
-		&:hover {
-			color: $editor-accent;
+		&:not(:hover) {
+			color: $editor-light;
 		}
 	}
 
 	.elementor-style-library-style-default-toggle {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-
 		&:hover {
 			color: $editor-accent;
 		}
@@ -190,43 +238,42 @@
 // Save form
 #elementor-style-library-save-style {
 	text-align: center;
-	padding: 60px 30px;
-
-	.elementor-template-library-blank-title {
-		font-size: 22px;
-		font-weight: 600;
-		margin-bottom: 10px;
-	}
-
-	.elementor-template-library-blank-excerpt {
-		font-size: 13px;
-		color: #6d7882;
-		margin-bottom: 30px;
-	}
 
 	form {
-		max-width: 400px;
-		margin: 0 auto;
+		margin-top: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		> * {
+			height: 42px;
+			font-size: 13px;
+		}
 	}
 
-	input[type="text"],
 	input[name="name"] {
-		width: 100%;
-		padding: 10px 12px;
-		border: 1px solid #d5dadf;
-		border-radius: 3px;
-		margin-bottom: 15px;
-		font-size: 13px;
+		width: 350px;
+		background-color: #fff;
+		font-weight: 400;
+		color: $editor-light;
+		@include padding-start(15px);
+		border-radius: getValueByDirection(3px 0 0 3px, 0 3px 3px 0);
+		border: 1px solid $editor-lightest;
 
 		&:focus {
-			border-color: $editor-accent;
-			outline: none;
+			border: 1px solid $editor-background;
 		}
 	}
 
 	.elementor-btn-success {
+		width: 120px;
+		border-radius: getValueByDirection(0 3px 3px 0, 3px 0 0 3px);
+		font-weight: 500;
 		text-transform: uppercase;
-		padding: 10px 30px;
+
+		&:hover {
+			box-shadow: none;
+		}
 
 		.elementor-state-icon {
 			@include padding-end(5px);
@@ -237,68 +284,70 @@
 // Load/Import form — same as template load
 #elementor-style-library-load-style {
 	text-align: center;
-	padding: 60px 30px;
-
-	.elementor-template-library-blank-title {
-		font-size: 22px;
-		font-weight: 600;
-		margin-bottom: 10px;
-	}
-
-	.elementor-template-library-blank-excerpt {
-		font-size: 13px;
-		color: #6d7882;
-		margin-bottom: 30px;
-	}
 
 	form {
-		max-width: 400px;
-		margin: 0 auto;
+		margin-top: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+
+		> * {
+			height: 42px;
+			font-size: 13px;
+		}
 	}
 
 	#elementor-style-library-load-wrapper {
-		margin-bottom: 15px;
+		width: 250px;
+		overflow: hidden;
 		position: relative;
 
-		input[type="file"] {
+		> #elementor-style-library-load-style-file {
 			position: absolute;
-			width: 100%;
-			height: 100%;
 			top: 0;
-			left: 0;
+			right: 0;
 			opacity: 0;
+			height: 100%;
 			cursor: pointer;
 		}
 
-		button {
+		> #elementor-style-library-load-btn-file {
+			height: 42px;
 			width: 100%;
-			padding: 10px;
-			border: 2px dashed #d5dadf;
-			border-radius: 3px;
-			background: #fff;
+			border: none;
 			cursor: pointer;
-			transition: border-color .3s;
+			background: #fff;
+			display: block;
+		}
 
-			&:hover {
-				border-color: $editor-accent;
-			}
+		&:hover > #elementor-style-library-load-btn-file {
+			background-color: #fcfcfc;
 		}
 	}
 
 	.elementor-btn-success {
+		width: 120px;
+		border-radius: getValueByDirection(0 3px 3px 0, 3px 0 0 3px);
+		font-weight: 500;
 		text-transform: uppercase;
-		padding: 10px 30px;
+
+		&:hover {
+			box-shadow: none;
+		}
 	}
 }
 
 // Empty state
 #elementor-style-library-styles-empty {
 	text-align: center;
-	padding: 80px 30px;
 
 	#elementor-style-library-styles-empty-icon {
-		font-size: 40px;
-		color: #d5dadf;
-		margin-bottom: 20px;
+		font-size: 56px;
+		margin-top: 30px;
+		color: $editor-lightest;
 	}
+}
+
+#elementor-style-library-styles #elementor-style-library-styles-container {
+	box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
 }

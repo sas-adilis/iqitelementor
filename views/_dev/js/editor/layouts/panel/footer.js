@@ -33,41 +33,8 @@ PanelFooterItemView = Marionette.ItemView.extend( {
 	},
 
 	initialize: function() {
-		this._initDialog();
-
 		this.listenTo( elementor.channels.editor, 'editor:changed', this.onEditorChanged )
 			.listenTo( elementor.channels.deviceMode, 'change', this.onDeviceModeChange );
-	},
-
-	_initDialog: function() {
-		var dialog;
-
-		this.getDialog = function() {
-			if ( ! dialog ) {
-				var $ = Backbone.$,
-					$dialogMessage = $( '<div>', {
-						'class': 'elementor-dialog-message'
-					} ),
-					$messageIcon = $( '<i>', {
-						'class': 'fa fa-check-circle'
-					} ),
-					$messageText = $( '<div>', {
-						'class': 'elementor-dialog-message-text'
-					} ).text( elementor.translate( 'saved' ) );
-
-				$dialogMessage.append( $messageIcon, $messageText );
-
-				dialog = elementor.dialogsManager.createWidget( 'popup', {
-					hide: {
-						delay: 1500
-					}
-				} );
-
-				dialog.setMessage( $dialogMessage );
-			}
-
-			return dialog;
-		};
 	},
 
 	_publishBuilder: function() {

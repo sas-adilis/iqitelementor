@@ -37,11 +37,40 @@ StyleLibrarySaveView = Marionette.ItemView.extend( {
 			return;
 		}
 
+		// Check if a style with same name + widget type already exists
+		var existing = elementor.styleLibrary.findStyleByName( widgetType, name );
+
+		if ( existing ) {
+			var dialog = elementor.dialogsManager.createWidget( 'confirm', {
+				headerMessage: elementor.translate( 'style_replace_title' ),
+				message: elementor.translate( 'style_replace_confirm' ),
+				strings: {
+					confirm: elementor.translate( 'style_replace_yes' ),
+					cancel: elementor.translate( 'cancel' )
+				},
+				onConfirm: function() {
+					self._doSave( widgetType, name, settings, existing.get( 'id_widget_style' ) );
+				}
+			} );
+			dialog.show();
+		} else {
+			self._doSave( widgetType, name, settings );
+		}
+	},
+
+	_doSave: function( widgetType, name, settings, replaceId ) {
+		var self = this;
+
 		self.ui.submitButton.addClass( 'elementor-btn-state' );
 
 		elementor.styleLibrary.saveStyle( widgetType, name, settings, function() {
+			self.ui.submitButton.removeClass( 'elementor-btn-state' );
+			elementor.showToast( elementor.translate( 'style_saved' ), 'success' );
 			elementor.styleLibrary.showStyles();
-		} );
+		}, function() {
+			self.ui.submitButton.removeClass( 'elementor-btn-state' );
+			elementor.showToast( elementor.translate( 'an_error_occurred' ), 'error' );
+		}, replaceId );
 	}
 } );
 

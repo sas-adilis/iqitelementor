@@ -390,7 +390,7 @@ abstract class ElementBase
             'controls' => $this->getControls(),
             'tabs_controls' => $this->getTabsControls(),
             'categories' => $this->getCategories(),
-            'keywords' => $this->getKeywords(),
+            'keywords' => implode(' ', (array) $this->getKeywords()),
             'icon' => $this->getIcon(),
         ];
     }

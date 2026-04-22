@@ -137,8 +137,15 @@ class ProductHelper
 
         $sql->groupBy('p.id_product');
 
+        // 'position' n'a pas de sens sur un classement de meilleures ventes et
+        // casserait la requête (product_shop.position n'existe pas) : on le
+        // remappe vers le tri par quantité vendue, qui EST la position réelle.
+        if ($orderBy === 'position') {
+            $orderBy = 'quantity';
+        }
+
         $orderBy = $this->sanitizeOrderBy($orderBy, [
-            'quantity', 'date_add', 'name', 'price', 'position',
+            'quantity', 'date_add', 'name', 'price',
         ], 'quantity');
         $orderDir = strtoupper($orderDir) === 'ASC' ? 'ASC' : 'DESC';
 

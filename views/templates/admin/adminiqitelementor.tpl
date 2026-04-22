@@ -35,6 +35,9 @@
       <link href="{$css_uri|escape:'html':'UTF-8'}" rel="stylesheet" type="text/css"/>
     {/foreach}
   {/if}
+  {if isset($elementorContainerWidth) && $elementorContainerWidth}
+    <style>.elementor-section.elementor-section-boxed > .elementor-container{literal}{{/literal}max-width:{$elementorContainerWidth|intval}px;{literal}}{/literal}</style>
+  {/if}
 </head>
 <body class="elementor-editor-active">
 {$pluginContent}

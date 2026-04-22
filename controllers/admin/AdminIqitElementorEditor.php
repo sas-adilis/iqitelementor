@@ -241,6 +241,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $this->context->smarty->assign([
             'baseDir' => __PS_BASE_URI__ . basename(_PS_ADMIN_DIR_) . '/',
             'pluginContent' => $output,
+            'elementorContainerWidth' => Helper::absint(Helper::getOption('elementor_container_width')),
         ]);
 
         header('Content-Type: text/html; charset=utf-8');

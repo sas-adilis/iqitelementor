@@ -189,9 +189,6 @@ class Brands extends WidgetBase
                 'label' => Translater::get()->l('View'),
                 'type' => 'select',
                 'default' => 'grid',
-                'condition' => [
-                    'view!' => 'default',
-                ],
                 'section' => 'section_pswidget_options',
                 'options' => [
                     'carousel' => Translater::get()->l('Carousel'),
@@ -266,9 +263,15 @@ class Brands extends WidgetBase
             ]
         );
 
-        $this->registerCarouselControls('section_carousel_options', [
-            'view' => 'carousel',
-        ]);
+        $this->registerCarouselControls(
+            'section_carousel_options',
+            ['view' => 'carousel'],
+            [
+                'slides_to_show' => 4,
+                'slides_to_show_tablet' => 3,
+                'slides_to_show_mobile' => 2,
+            ]
+        );
 
         $this->addControl(
             'section_carousel_styles',
@@ -276,6 +279,9 @@ class Brands extends WidgetBase
                 'label' => Translater::get()->l('Carousel'),
                 'type' => 'section',
                 'tab' => 'style',
+                'condition' => [
+                    'view' => 'carousel',
+                ],
             ]
         );
 
@@ -284,87 +290,106 @@ class Brands extends WidgetBase
         ]);
     }
 
+    public function getTemplatePath(): string
+    {
+        return 'module:iqitelementor/views/templates/widgets/brands.tpl';
+    }
+
     public function parseOptions(array $optionsSource, bool $preview = false): array
     {
-        $selectedBrands = $optionsSource['brand_list'];
-        $brandsType = $optionsSource['brand_select'];
-        $imageFormat = $optionsSource['image_format'];
+        $brandsType = (int) ($optionsSource['brand_select'] ?? 0);
+        $imageFormat = $optionsSource['image_format'] ?? 'small_default';
+        $view = $optionsSource['view'] ?? 'grid';
+        $selectedBrands = $optionsSource['brand_list'] ?? [];
+        if (!is_array($selectedBrands)) {
+            $selectedBrands = [];
+        }
+
         $imageType = \ImageType::getByNameNType($imageFormat, 'manufacturers');
         if (empty($imageType)) {
-            throw new \PrestaShopException('Image type not found: ' . $imageFormat);
+            // Fallback silencieux pour éviter un 500 si le format configuré n'existe plus
+            $imageType = ['width' => null, 'height' => null];
         }
 
         $brands = [];
-
         $widgetOptions = [];
+        $link = \Context::getContext()->link;
 
-        if ($brandsType == 0) {
-            $allBrands = \Manufacturer::getManufacturers();
-            foreach ($allBrands as $brand) {
-                $fileExist = file_exists(_PS_MANU_IMG_DIR_ . $brand['id_manufacturer'] . '-' . $imageFormat . '.jpg');
-                if ($fileExist) {
-                    $brands[$brand['id_manufacturer']]['name'] = $brand['name'];
-                    $brands[$brand['id_manufacturer']]['link'] = \Context::getContext()->link->getManufacturerLink(
-                        $brand['id_manufacturer'],
-                        $brand['link_rewrite']
-                    );
-                    $brands[$brand['id_manufacturer']]['id'] = $brand['id_manufacturer'];
-                    $brands[$brand['id_manufacturer']]['image'] = [
-                        'url' => \Context::getContext()->link->getManufacturerImageLink($brand['id_manufacturer'], $imageFormat),
-                        'width' => $imageType['width'] ?? null,
-                        'height' => $imageType['height'] ?? null,
-                    ];
-                }
+        if ($brandsType === 0) {
+            $allBrands = \Manufacturer::getManufacturers(
+                false,
+                (int) $this->context->language->id,
+                true
+            );
+            if (!is_array($allBrands)) {
+                $allBrands = [];
             }
 
-            if ($optionsSource['brand_order'] == 1) {
+            foreach ($allBrands as $brand) {
+                if (!file_exists(_PS_MANU_IMG_DIR_ . $brand['id_manufacturer'] . '-' . $imageFormat . '.jpg')) {
+                    continue;
+                }
+
+                $brands[$brand['id_manufacturer']] = [
+                    'name' => $brand['name'],
+                    'link' => $link->getManufacturerLink(
+                        (int) $brand['id_manufacturer'],
+                        $brand['link_rewrite']
+                    ),
+                    'id' => (int) $brand['id_manufacturer'],
+                    'image' => [
+                        'url' => $link->getManufacturerImageLink((int) $brand['id_manufacturer'], $imageFormat),
+                        'width' => $imageType['width'] ?? null,
+                        'height' => $imageType['height'] ?? null,
+                    ],
+                ];
+            }
+
+            if ((int) ($optionsSource['brand_order'] ?? 0) === 1) {
                 uasort($brands, function ($a, $b) {
                     return strcmp($a['name'], $b['name']);
                 });
             }
         }
 
-        if ($brandsType == 1) {
+        if ($brandsType === 1) {
             foreach ($selectedBrands as $brandID) {
-                $brand = new \Manufacturer((int)$brandID);
+                $brand = new \Manufacturer((int) $brandID);
 
-                if (!Validate::isLoadedObject($brand)) {
+                if (!\Validate::isLoadedObject($brand)) {
                     continue;
                 }
 
-                $fileExist = file_exists(
-                    _PS_MANU_IMG_DIR_ . $brand->id . '-'
-                    . $imageFormat . '.jpg'
-                );
-                if ($fileExist) {
-                    $brands[$brand->id]['name'] = $brand->name;
-                    $brands[$brand->id]['link'] = \Context::getContext()->link->getManufacturerLink(
-                        (int)$brand->id,
-                        $brand->link_rewrite
-                    );
-                    $brands[$brand->id]['id'] = $brand->id;
-                    $brands[$brand->id]['image'] = [
-                        'url' => \Context::getContext()->link->getManufacturerImageLink($brand->id, $imageFormat),
+                if (!file_exists(_PS_MANU_IMG_DIR_ . $brand->id . '-' . $imageFormat . '.jpg')) {
+                    continue;
+                }
+
+                $brands[$brand->id] = [
+                    'name' => $brand->name,
+                    'link' => $link->getManufacturerLink((int) $brand->id, $brand->link_rewrite),
+                    'id' => (int) $brand->id,
+                    'image' => [
+                        'url' => $link->getManufacturerImageLink((int) $brand->id, $imageFormat),
                         'width' => $imageType['width'] ?? null,
                         'height' => $imageType['height'] ?? null,
-                    ];
-                }
+                    ],
+                ];
             }
         }
 
         $widgetOptions['brands'] = $brands;
+        $widgetOptions['view'] = $view;
+        $widgetOptions['alignment'] = $optionsSource['alignment'] ?? '';
+        $widgetOptions['image_format'] = $imageFormat;
 
-        if ($optionsSource['view'] == 'grid') {
-            $widgetOptions['view'] = 'grid';
+        if ($view === 'grid') {
             $widgetOptions['columns'] = [
-                'desktop' => $this->calculateGrid($optionsSource['columns']),
-                'tablet' => $this->calculateGrid($optionsSource['columns_tablet']),
-                'mobile' => $this->calculateGrid($optionsSource['columns_mobile']),
+                'desktop' => $this->calculateGrid((int) ($optionsSource['columns'] ?? 3)),
+                'tablet' => $this->calculateGrid((int) ($optionsSource['columns_tablet'] ?? 3)),
+                'mobile' => $this->calculateGrid((int) ($optionsSource['columns_mobile'] ?? 2)),
             ];
-            $widgetOptions['itemsPerColumn'] = Helper::absint($optionsSource['items_per_column']);
-        }
-
-        if ($optionsSource['view'] == 'carousel') {
+            $widgetOptions['itemsPerColumn'] = Helper::absint($optionsSource['items_per_column'] ?? 2);
+        } else {
             $widgetOptions = array_merge(
                 $widgetOptions,
                 $this->buildCarouselOptions($optionsSource)

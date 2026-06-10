@@ -139,6 +139,10 @@ $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_7a1920d61156abc05a
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_e02ff1e53f1ff32f14bea8960ac06574'] = 'Choisir une couleur';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_d743c7b61a7c525dafef44b5e6c440ea'] = 'Couleur actuelle';
 $_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_4d99a137bbe9e22dcbada508e6a64060'] = 'Problème avec le fichier';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_b1b903a4e0fd8328de08269a34d7ba3a'] = 'Modifier la section';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_23bd150cc37fb504a0ced157e441cfda'] = 'Modifier la colonne';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_bd2bfff06bf165201f51c06fe59ff21b'] = 'Ajouter une colonne après';
+$_MODULE['<{iqitelementor}prestashop>adminiqitelementoreditor_0bec922eda645e0ac505d942505b9be9'] = 'Enregistrer comme modèle';
 
 // --- Source: styles (views/templates/editor/styles.php) ---
 $_MODULE['<{iqitelementor}prestashop>styles_d3d2e617335f08df83599665eef8a418'] = 'Fermer';
@@ -1463,6 +1467,47 @@ $_MODULE['<{iqitelementor}prestashop>smartlinkhelper_ec136b444eede3bc85639fac0dd
 $_MODULE['<{iqitelementor}prestashop>smartlinkhelper_193cfc9be3b995831c6af2fea6650e60'] = 'Page';
 $_MODULE['<{iqitelementor}prestashop>smartlinkhelper_b9dfe86b6188e504d64f3369d29350d5'] = 'Article de blog';
 $_MODULE['<{iqitelementor}prestashop>smartlinkhelper_7416236d20c0980683f49608a18a1a07'] = 'Catégorie de blog';
+
+// --- Source: table (Widget/Table.php) ---
+$_MODULE['<{iqitelementor}prestashop>table_51c45b795d5d18a3e4e0c37e8b20a141'] = 'Tableau';
+$_MODULE['<{iqitelementor}prestashop>table_2ccd8838806990957a0b299bc2e9183e'] = 'Position de l\'en-tête';
+$_MODULE['<{iqitelementor}prestashop>table_6adf97f83acf6453d4a6a4b1070f3754'] = 'Aucun';
+$_MODULE['<{iqitelementor}prestashop>table_a4ffdcf0dc1f31b9acaf295d75b51d00'] = 'Haut';
+$_MODULE['<{iqitelementor}prestashop>table_2ad9d63b69c4a10a5cc9cad923133bc4'] = 'Bas';
+$_MODULE['<{iqitelementor}prestashop>table_945d5e233cf7d6240f6b783b36a374ff'] = 'Gauche';
+$_MODULE['<{iqitelementor}prestashop>table_92b09c7c48c520c3c55e497875da437c'] = 'Droite';
+$_MODULE['<{iqitelementor}prestashop>table_168b82d33f8073018c50a4f658a02559'] = 'Colonnes';
+$_MODULE['<{iqitelementor}prestashop>table_bf50d5e661106d0abe925af3c2e6f7e7'] = 'En-tête';
+$_MODULE['<{iqitelementor}prestashop>table_1976d7f704de389d9fe064e08ea35b2d'] = 'Colonne';
+$_MODULE['<{iqitelementor}prestashop>table_6a3f28afb7b16ff5066adea6630290b1'] = 'Largeur (%)';
+$_MODULE['<{iqitelementor}prestashop>table_dea284936b0a69ce3487762bfb60b461'] = 'Laisser vide pour une largeur automatique.';
+$_MODULE['<{iqitelementor}prestashop>table_6f6cb72d544962fa333e2e34ce64f719'] = 'Taille';
+$_MODULE['<{iqitelementor}prestashop>table_d96414f5cfbd621bb6368bb260d5240c'] = 'Tour de taille';
+$_MODULE['<{iqitelementor}prestashop>table_afd1f8cbbb370b39328936b736cebf8f'] = 'Entrejambe';
+$_MODULE['<{iqitelementor}prestashop>table_530f488f7a9800411efc6926ab189708'] = 'Lignes';
+$_MODULE['<{iqitelementor}prestashop>table_56284b76007b9f31cdec47174c4de6af'] = 'Cellules';
+$_MODULE['<{iqitelementor}prestashop>table_ddee53fe484d4ec03d621f731b8051c5'] = 'Séparez les cellules avec le caractère "|". Exemple : XS | 75 | 82';
+$_MODULE['<{iqitelementor}prestashop>table_db52ba31e6e34d6d6dcb6af21093a7a1'] = 'En-tête de ligne';
+$_MODULE['<{iqitelementor}prestashop>table_672d294b30d4ee038bea3d46fd381afc'] = 'Utilisé uniquement lorsque la position de l\'en-tête est Gauche ou Droite.';
+$_MODULE['<{iqitelementor}prestashop>table_4467c46a4d7150d5fb2079bd0fde510c'] = 'Défilement horizontal';
+$_MODULE['<{iqitelementor}prestashop>table_014696319aa2fc20ca3ad6f3f479d433'] = 'Encapsule le tableau dans un conteneur défilable horizontalement.';
+$_MODULE['<{iqitelementor}prestashop>table_4351cfebe4b61d8aa5efa1d020710005'] = 'Affichage';
+$_MODULE['<{iqitelementor}prestashop>table_ea1739bd430aa843f6dc9282f4cf8d55'] = 'Alignement du texte';
+$_MODULE['<{iqitelementor}prestashop>table_4f1f6016fc9f3f2353c0cc7c67b292bd'] = 'Centre';
+$_MODULE['<{iqitelementor}prestashop>table_749435519641db6b66add307d32ab38d'] = 'Marge interne des cellules';
+$_MODULE['<{iqitelementor}prestashop>table_3703b869eed043f3c494608799347a89'] = 'Bordure des lignes';
+$_MODULE['<{iqitelementor}prestashop>table_6846b9bdcce2b38da97fb3e3c7dfa85d'] = 'Bordure de la dernière ligne';
+$_MODULE['<{iqitelementor}prestashop>table_4886419a8457bfc60abeef6e72d30c4d'] = 'Affiche la bordure inférieure sur la dernière ligne.';
+$_MODULE['<{iqitelementor}prestashop>table_8f6a821bbb62444c3446426070ee5018'] = 'Couleur de la bordure des lignes';
+$_MODULE['<{iqitelementor}prestashop>table_195d0dfe8b01404ed260dcc59fc80126'] = 'Épaisseur de la bordure des lignes';
+$_MODULE['<{iqitelementor}prestashop>table_8903861290617267b361478ab7f16f31'] = 'Couleur du texte';
+$_MODULE['<{iqitelementor}prestashop>table_7b613cd47917f5917e8b4ef73f8dcbf2'] = 'Lignes rayées';
+$_MODULE['<{iqitelementor}prestashop>table_12b2271434a9a56e470516edc4ce04fe'] = 'Couleur des bandes';
+$_MODULE['<{iqitelementor}prestashop>table_6fe40da740405e7bb6c3f2480a566eeb'] = 'Couleur du texte de l\'en-tête';
+$_MODULE['<{iqitelementor}prestashop>table_2736ffc2a8cc65938202c1d9e463bc66'] = 'Arrière-plan de l\'en-tête';
+$_MODULE['<{iqitelementor}prestashop>table_3c8f81378d46ec0fb9c636e1c9e92312'] = 'Bordure de l\'en-tête';
+$_MODULE['<{iqitelementor}prestashop>table_8598a27c9a350a92c586f60fbaf78191'] = 'Couleur de la bordure d\'en-tête';
+$_MODULE['<{iqitelementor}prestashop>table_51b1447cfbc0a2f919cd253f6e023f12'] = 'Épaisseur de la bordure d\'en-tête';
 
 // --- Source: video (Widget/Video.php) ---
 $_MODULE['<{iqitelementor}prestashop>video_a63706eecfa33f67b315f978392ad7ae'] = 'Alignement';

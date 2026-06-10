@@ -78,6 +78,7 @@ CREATE TABLE IF NOT EXISTS `PREFIXiqit_elementor_category_shop` (
 CREATE TABLE IF NOT EXISTS `PREFIXiqit_elementor_content` (
   `id_elementor` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `id_object` int(10) UNSIGNED NOT NULL DEFAULT 0,
+  `object_type` varchar(64) NOT NULL DEFAULT '',
   `title` varchar(255) NOT NULL DEFAULT '',
   `hook` varchar(255) NOT NULL DEFAULT '',
   `active` tinyint(1) unsigned NOT NULL,

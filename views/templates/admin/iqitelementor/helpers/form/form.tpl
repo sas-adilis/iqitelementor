@@ -49,21 +49,30 @@
         (function() {
             var hookSelect = document.getElementById('hook');
             var customField = document.querySelector('.custom-hook-field');
-            if (!hookSelect || !customField) return;
+            var widgetField = document.querySelector('.widget-tag-field');
+            if (!hookSelect) return;
 
-            function toggleCustomField() {
-                if (hookSelect.value === 'custom') {
-                    customField.style.display = '';
-                } else {
-                    customField.style.display = 'none';
+            function toggle() {
+                var v = hookSelect.value;
+                if (customField) {
+                    customField.style.display = (v === 'custom') ? '' : 'none';
+                }
+                if (widgetField) {
+                    widgetField.style.display = (v === 'widget') ? '' : 'none';
                 }
             }
 
-            toggleCustomField();
-            hookSelect.addEventListener('change', toggleCustomField);
-
+            toggle();
+            hookSelect.addEventListener('change', toggle);
             // Also handle chosen plugin refresh
-            $(hookSelect).on('change', toggleCustomField);
+            $(hookSelect).on('change', toggle);
+
+            // Click-to-select the widget tag for easy copy
+            var widgetInput = document.querySelector('.widget-tag-input');
+            if (widgetInput) {
+                widgetInput.addEventListener('focus', function() { this.select(); });
+                widgetInput.addEventListener('click', function() { this.select(); });
+            }
         })();
     </script>
 {/block}

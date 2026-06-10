@@ -97,6 +97,9 @@ class AdminIqitElementorContentController extends ModuleAdminController
         parent::initContent();
     }
 
+    /** @var int|null Hook ID before save, captured for edit so we can detect a hook change. */
+    private $previousHookId;
+
     public function postProcess()
     {
         if (Tools::isSubmit('submit' . $this->className)) {
@@ -110,27 +113,94 @@ class AdminIqitElementorContentController extends ModuleAdminController
                 }
             }
 
+            // Capture the previous hook ID before processSave overwrites it,
+            // so afterUpdate() can detect a hook change and unregister the old one.
             if (Tools::getValue('submitEdit' . $this->className)) {
                 if (Validate::isLoadedObject($object = $this->loadObject())) {
-                    $this->module->clearHookCache($object->hook);
+                    $this->previousHookId = (int) $object->hook;
+                    $this->module->clearHookCache((int) $object->hook);
                 }
             }
+
             $returnObject = $this->processSave();
             if (!$returnObject) {
                 return false;
             }
-            $idHook = (int) $returnObject->hook;
-            $hook_name = Hook::getNameById($idHook);
-            if (!Hook::isModuleRegisteredOnHook($this->module, $hook_name, $this->context->shop->id)) {
-                Hook::registerHook($this->module, $hook_name);
+
+            $this->ensureModuleHookedOn((int) $returnObject->hook);
+
+            // Hook changed on edit: drop the module from the previous hook if
+            // no other content is still bound to it, otherwise we'd keep
+            // executing on a hook that has nothing to render.
+            if ($this->previousHookId
+                && $this->previousHookId !== (int) $returnObject->hook
+                && IqitElementorContent::getCountByIdHook($this->previousHookId) === 0
+            ) {
+                try {
+                    $previousHookName = Hook::getNameById($this->previousHookId);
+                    if ($previousHookName) {
+                        Hook::unregisterHook($this->module, $previousHookName);
+                    }
+                } catch (\Exception $e) {
+                    // Hook deleted in the meantime — nothing to unregister.
+                }
+                $this->flushHookExecCaches();
             }
 
-            $this->module->clearHookCache($idHook);
+            $this->module->clearHookCache((int) $returnObject->hook);
 
             Tools::redirectAdmin($this->context->link->getAdminLink('Admin' . $this->name) . '&id_elementor=' . $returnObject->id . '&updateiqit_elementor_content');
         }
 
         return parent::postProcess();
+    }
+
+    /**
+     * Register the module on the given hook (if not already) and invalidate
+     * PrestaShop's hook caches so the new wiring takes effect on the next
+     * front request without waiting for cache expiration.
+     */
+    private function ensureModuleHookedOn(int $idHook): void
+    {
+        if ($idHook <= 0) {
+            return;
+        }
+
+        try {
+            $hookName = Hook::getNameById($idHook);
+        } catch (\Exception $e) {
+            return;
+        }
+
+        if (!$hookName) {
+            return;
+        }
+
+        // Widget sentinel: the content is rendered via {widget} from a
+        // template, so the module must not be greffed on this virtual hook.
+        if ($hookName === IqitElementorContent::WIDGET_HOOK_NAME) {
+            return;
+        }
+
+        // The instance method is the canonical PS API and handles "already
+        // registered" gracefully (skips duplicate inserts per shop).
+        $this->module->registerHook($hookName);
+
+        $this->flushHookExecCaches();
+    }
+
+    /**
+     * Clean the PrestaShop hook caches that gate front execution. Without
+     * this, a freshly-registered hook stays invisible until the static cache
+     * is dropped (next process / cache TTL).
+     */
+    private function flushHookExecCaches(): void
+    {
+        Cache::clean('hook_module_list');
+        Cache::clean(Hook::MODULE_LIST_BY_HOOK_KEY . '*');
+        Cache::clean('hook_idsbyname');
+        Cache::clean('hook_idsbyname_withalias');
+        Cache::clean('active_hooks');
     }
 
     /**
@@ -141,8 +211,10 @@ class AdminIqitElementorContentController extends ModuleAdminController
     {
         parent::copyFromPost($object, $table);
 
-        // Resolve custom hook name to a hook ID
-        if ($object->hook === 'custom') {
+        // Resolve "widget" sentinel and "custom" hook to a real hook ID
+        if ($object->hook === 'widget') {
+            $object->hook = (int) $this->resolveWidgetSentinelHookId();
+        } elseif ($object->hook === 'custom') {
             $customHookName = trim(Tools::getValue('custom_hook_name'));
             $idHook = Hook::getIdByName($customHookName);
             if (!$idHook) {
@@ -164,7 +236,15 @@ class AdminIqitElementorContentController extends ModuleAdminController
     {
         if (Validate::isLoadedObject($object = $this->loadObject())) {
             if (IqitElementorContent::getCountByIdHook((int) $object->hook) <= 1) {
-                Hook::unregisterHook($this->module, Hook::getNameById((int) $object->hook));
+                try {
+                    $hookName = Hook::getNameById((int) $object->hook);
+                    if ($hookName) {
+                        Hook::unregisterHook($this->module, $hookName);
+                        $this->flushHookExecCaches();
+                    }
+                } catch (\Exception $e) {
+                    // Hook missing — nothing to unregister.
+                }
             }
             $this->module->clearHookCache($object->hook);
         }
@@ -217,6 +297,15 @@ class AdminIqitElementorContentController extends ModuleAdminController
                     'name' => 'custom_hook_name',
                     'desc' => $this->module->getTranslator()->trans('Enter the name of the hook (e.g. displayMyCustomHook)', [], 'Modules.Iqitelementor.Admin'),
                     'form_group_class' => 'custom-hook-field',
+                ],
+                [
+                    'type' => 'text',
+                    'label' => $this->module->getTranslator()->trans('Widget tag', [], 'Modules.Iqitelementor.Admin'),
+                    'name' => 'widget_tag',
+                    'desc' => $this->module->getTranslator()->trans('Copy/paste this Smarty tag into any template to render this layout. Save the layout first to get an ID.', [], 'Modules.Iqitelementor.Admin'),
+                    'form_group_class' => 'widget-tag-field',
+                    'readonly' => true,
+                    'class' => 'widget-tag-input',
                 ],
                 [
                     'type' => 'switch',
@@ -275,13 +364,29 @@ class AdminIqitElementorContentController extends ModuleAdminController
         $helper->fields_value = (array) $landing;
         $helper->fields_value['id_shop'] = $this->context->shop->id;
         $helper->fields_value['custom_hook_name'] = '';
+        $helper->fields_value['widget_tag'] = $landing->id
+            ? '{widget name="iqitelementor" id_content=' . (int) $landing->id . '}'
+            : '';
 
-        // If the current hook is not in the selectable list, treat it as custom
+        // If the current hook is the widget sentinel, pre-select "widget" in
+        // the dropdown. Otherwise, if the hook isn't in the selectable list,
+        // treat it as custom and surface its name.
         if ($landing->id && $landing->hook) {
-            $selectableIds = array_column(IqitElementorContent::getSelectableHooks(), 'id');
-            if (!in_array($landing->hook, $selectableIds)) {
-                $helper->fields_value['hook'] = 'custom';
-                $helper->fields_value['custom_hook_name'] = Hook::getNameById((int) $landing->hook);
+            $currentHookName = '';
+            try {
+                $currentHookName = Hook::getNameById((int) $landing->hook);
+            } catch (\Exception $e) {
+                $currentHookName = '';
+            }
+
+            if ($currentHookName === IqitElementorContent::WIDGET_HOOK_NAME) {
+                $helper->fields_value['hook'] = 'widget';
+            } else {
+                $selectableIds = array_column(IqitElementorContent::getSelectableHooks(), 'id');
+                if (!in_array($landing->hook, $selectableIds)) {
+                    $helper->fields_value['hook'] = 'custom';
+                    $helper->fields_value['custom_hook_name'] = $currentHookName;
+                }
             }
         }
 
@@ -315,11 +420,36 @@ class AdminIqitElementorContentController extends ModuleAdminController
         $hooks = IqitElementorContent::getSelectableHooks();
 
         $hooks[] = [
+            'id' => 'widget',
+            'name' => '— ' . $this->module->getTranslator()->trans('Widget (no hook, render with {widget} tag)', [], 'Modules.Iqitelementor.Admin') . ' —',
+        ];
+
+        $hooks[] = [
             'id' => 'custom',
             'name' => '— ' . $this->module->getTranslator()->trans('Custom hook', [], 'Modules.Iqitelementor.Admin') . ' —',
         ];
 
         return $hooks;
+    }
+
+    /**
+     * Resolve the sentinel hook ID for "widget" mode, creating the row in
+     * ps_hook on first use so the FK in ps_iqit_elementor_content remains
+     * valid. Module is never registered on this hook.
+     */
+    private function resolveWidgetSentinelHookId(): int
+    {
+        $idHook = (int) Hook::getIdByName(IqitElementorContent::WIDGET_HOOK_NAME);
+        if ($idHook) {
+            return $idHook;
+        }
+
+        $hookObj = new Hook();
+        $hookObj->name = IqitElementorContent::WIDGET_HOOK_NAME;
+        $hookObj->title = 'Iqitelementor virtual widget hook';
+        $hookObj->add();
+
+        return (int) $hookObj->id;
     }
 
     /**

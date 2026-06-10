@@ -4,7 +4,6 @@ namespace IqitElementor\Widget;
 
 use IqitElementor\Base\WidgetBase;
 use IqitElementor\Control\Group\Typography as GroupTypography;
-use IqitElementor\Helper\IconHelper;
 use IqitElementor\Helper\Translater;
 use IqitElementor\Manager\ControlManager;
 
@@ -44,7 +43,6 @@ class TableOfContents extends WidgetBase
     protected function registerControls(): void
     {
         $this->registerContentControls();
-        $this->registerAdditionalOptionsControls();
         $this->registerStyleBoxControls();
         $this->registerStyleHeaderControls();
         $this->registerStyleListControls();
@@ -93,34 +91,6 @@ class TableOfContents extends WidgetBase
         );
 
         $this->addControl(
-            'headings_by_tags',
-            [
-                'label' => Translater::get()->l('Headings By Tags'),
-                'type' => ControlManager::CHECKBOX_LIST,
-                'default' => ['h2'],
-                'options' => [
-                    'h2' => 'H2',
-                    'h3' => 'H3',
-                    'h4' => 'H4',
-                    'h5' => 'H5',
-                    'h6' => 'H6',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'container',
-            [
-                'label' => Translater::get()->l('Container'),
-                'type' => ControlManager::TEXT,
-                'default' => '',
-                'placeholder' => '.my-container',
-                'description' => Translater::get()->l('This control limits the table of contents to heading elements under a specific container'),
-                'label_block' => true,
-            ]
-        );
-
-        $this->addControl(
             'marker_view',
             [
                 'label' => Translater::get()->l('Marker View'),
@@ -129,106 +99,8 @@ class TableOfContents extends WidgetBase
                 'options' => [
                     'bullets' => Translater::get()->l('Bullets'),
                     'numbers' => Translater::get()->l('Numbers'),
+                    'scrollbar' => Translater::get()->l('Scrollbar'),
                 ],
-            ]
-        );
-
-        $this->addControl(
-            'no_headings_message',
-            [
-                'label' => Translater::get()->l('No Headings Found Message'),
-                'type' => ControlManager::TEXT,
-                'default' => 'No headings were found on this page.',
-                'label_block' => true,
-            ]
-        );
-
-        $this->endControlsSection();
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | CONTENT — Additional Options
-    |--------------------------------------------------------------------------
-    */
-
-    private function registerAdditionalOptionsControls(): void
-    {
-        $this->startControlsSection(
-            'section_additional_options',
-            [
-                'label' => Translater::get()->l('Additional Options'),
-            ]
-        );
-
-        $this->addControl(
-            'minimize_box',
-            [
-                'label' => Translater::get()->l('Minimize Box'),
-                'type' => ControlManager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
-
-        $this->addControl(
-            'expand_icon',
-            [
-                'label' => Translater::get()->l('Expand Icon'),
-                'type' => ControlManager::ICON,
-                'default' => 'fa fa-chevron-down',
-                'label_block' => true,
-                'condition' => [
-                    'minimize_box' => 'yes',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'collapse_icon',
-            [
-                'label' => Translater::get()->l('Collapse Icon'),
-                'type' => ControlManager::ICON,
-                'default' => 'fa fa-chevron-up',
-                'label_block' => true,
-                'condition' => [
-                    'minimize_box' => 'yes',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'minimized_on',
-            [
-                'label' => Translater::get()->l('Minimized On'),
-                'type' => ControlManager::SELECT,
-                'default' => 'tablet',
-                'options' => [
-                    'none' => Translater::get()->l('None'),
-                    'mobile' => Translater::get()->l('Mobile (< 768px)'),
-                    'tablet' => Translater::get()->l('Tablet (< 1024px)'),
-                    'desktop' => Translater::get()->l('Always'),
-                ],
-                'condition' => [
-                    'minimize_box' => 'yes',
-                ],
-            ]
-        );
-
-        $this->addControl(
-            'hierarchical_view',
-            [
-                'label' => Translater::get()->l('Hierarchical View'),
-                'type' => ControlManager::SWITCHER,
-                'default' => 'yes',
-            ]
-        );
-
-        $this->addControl(
-            'collapse_subitems',
-            [
-                'label' => Translater::get()->l('Collapse Subitems'),
-                'type' => ControlManager::SWITCHER,
-                'default' => '',
             ]
         );
 
@@ -251,7 +123,7 @@ class TableOfContents extends WidgetBase
             ]
         );
 
-        $this->addControl(
+        $this->addResponsiveControl(
             'background_color',
             [
                 'label' => Translater::get()->l('Background Color'),
@@ -445,18 +317,6 @@ class TableOfContents extends WidgetBase
             [
                 'name' => 'header_typography',
                 'selector' => '{{WRAPPER}} .elementor-toc__header-title',
-            ]
-        );
-
-        $this->addControl(
-            'toggle_button_color',
-            [
-                'label' => Translater::get()->l('Toggle Button Color'),
-                'type' => ControlManager::COLOR,
-                'separator' => 'before',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-toc__toggle-button' => 'color: {{VALUE}};',
-                ],
             ]
         );
 
@@ -730,30 +590,10 @@ class TableOfContents extends WidgetBase
 
     public function parseOptions(array $optionsSource, bool $preview = false): array
     {
-        $headingsByTags = $optionsSource['headings_by_tags'] ?? ['h2'];
-        if (is_string($headingsByTags)) {
-            $headingsByTags = array_filter(explode(',', $headingsByTags));
-        }
-        if (empty($headingsByTags)) {
-            $headingsByTags = ['h2'];
-        }
-
-        $expandIconHtml = IconHelper::renderIcon($optionsSource['expand_icon'] ?? 'fa fa-chevron-down');
-        $collapseIconHtml = IconHelper::renderIcon($optionsSource['collapse_icon'] ?? 'fa fa-chevron-up');
-
         return [
             'title' => $optionsSource['title'] ?? 'Table of Contents',
             'html_tag' => $optionsSource['html_tag'] ?? 'h4',
-            'headings_by_tags' => $headingsByTags,
-            'container' => $optionsSource['container'] ?? '',
             'marker_view' => $optionsSource['marker_view'] ?? 'bullets',
-            'no_headings_message' => $optionsSource['no_headings_message'] ?? 'No headings were found on this page.',
-            'minimize_box' => ($optionsSource['minimize_box'] ?? '') === 'yes',
-            'expand_icon_html' => $expandIconHtml,
-            'collapse_icon_html' => $collapseIconHtml,
-            'minimized_on' => $optionsSource['minimized_on'] ?? 'tablet',
-            'hierarchical_view' => ($optionsSource['hierarchical_view'] ?? '') === 'yes',
-            'collapse_subitems' => ($optionsSource['collapse_subitems'] ?? '') === 'yes',
         ];
     }
 }

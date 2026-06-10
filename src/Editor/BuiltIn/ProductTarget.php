@@ -17,6 +17,10 @@ class ProductTarget extends EditorTarget
             return [];
         }
 
+        if (!\Configuration::get('IQITELEMENTOR_PRODUCT_BUTTON')) {
+            return [];
+        }
+
         $pageId = (int) $this->getRequestAttribute('id');
         if (!$pageId) {
             $pageId = (int) $this->getRequestAttribute('productId');

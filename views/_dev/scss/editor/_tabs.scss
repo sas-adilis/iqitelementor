@@ -1,0 +1,141 @@
+//
+// Tabs container — editor-only overlays, hover & drop cues
+//
+
+.elementor-editor-active {
+	#elementor {
+
+		.elementor-tabs-wrapper {
+			position: relative;
+
+			&:hover,
+			&.elementor-element-editable {
+				outline: 1px dashed $editor-accent;
+			}
+
+			> .elementor-tabs {
+
+				> .elementor-tabs-nav {
+
+					> .elementor-tab-title {
+						// Visible baseline even when the frontend CSS hasn't coloured the tabs yet
+						background-color: $editor-lightest;
+						color: $editor-darker;
+						border: 1px solid rgba(0, 0, 0, 0.1);
+						border-bottom: none;
+						font-family: Arial, Helvetica, sans-serif;
+						font-size: 13px;
+
+						&.elementor-active {
+							background-color: $white;
+							color: $editor-accent;
+							font-weight: 500;
+						}
+					}
+				}
+
+				> .elementor-tabs-content {
+					min-height: 80px;
+					background-color: $white;
+					border: 1px solid rgba(0, 0, 0, 0.1);
+
+					// Each tab panel is a drop zone — give it breathing room
+					> .elementor-tab-content {
+
+						> .elementor-widget-wrap {
+							min-height: 60px;
+							padding: 10px;
+						}
+
+						&.elementor-dragging-on-child {
+							outline: 1px solid $editor-info;
+						}
+					}
+				}
+			}
+		}
+
+		// Tabs — overlay settings (floating top-centre, similar to Section)
+		.elementor-editor-tabs-settings {
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: $first-layer;
+			bottom: 100%;
+			border-radius: 3px 3px 0 0;
+
+			.elementor-editor-element-settings-list {
+				float: $start;
+				background-color: $editor-accent !important;
+
+				.elementor-editor-element-setting {
+
+					@media (min-width: $screen-lg-min) {
+						border-right: 1px solid rgba(0, 0, 0, .2) !important;
+					}
+
+					> a {
+						&:hover {
+							background-color: rgba(0, 0, 0, .2) !important;
+						}
+					}
+				}
+			}
+
+			.elementor-editor-element-trigger {
+				@media(min-width: $screen-lg-min) {
+					> a {
+						cursor: move;
+					}
+				}
+			}
+		}
+
+		// Tab (single panel) — overlay settings (top-right of its pane)
+		.elementor-editor-tab-settings {
+			top: 2px;
+			@include end(2px);
+			z-index: $second-layer;
+
+			.elementor-editor-element-settings-list {
+				background-color: $editor-darkest;
+
+				.elementor-editor-element-setting {
+
+					@media (min-width: $screen-lg-min) {
+						&:not(:last-child) {
+							@include border-end(1px solid $editor-darker);
+						}
+					}
+
+					> a {
+						&:hover {
+							background-color: $editor-darker;
+						}
+					}
+				}
+			}
+		}
+
+		// Active tab pane hover outline
+		.elementor-tab-content {
+
+			&:hover,
+			&.elementor-element-editable {
+				> .elementor-element-overlay {
+					.elementor-editor-tab-settings {
+						display: block;
+					}
+				}
+			}
+
+			&:not(:hover):not(.elementor-element-editable) {
+
+				> .elementor-element-overlay {
+					.elementor-editor-tab-settings-list {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+}

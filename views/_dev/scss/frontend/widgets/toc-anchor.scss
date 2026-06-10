@@ -1,0 +1,43 @@
+.elementor-toc-anchor {
+    display: block;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.elementor-editor-active {
+    .elementor-toc-anchor,
+    .elementor-toc-anchor--editor,
+    .elementor-toc-anchor--placeholder {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        height: auto;
+        overflow: visible;
+        visibility: visible;
+        padding: 6px 10px;
+        border: 1px dashed #b1b1b1;
+        background: #fafafa;
+        color: #555;
+        font-size: 12px;
+        line-height: 1.2;
+        border-radius: 3px;
+
+        i {
+            color: #93003f;
+            margin-right: 4px;
+        }
+    }
+
+    .elementor-toc-anchor__id {
+        color: #999;
+        font-family: monospace;
+        margin-left: 6px;
+    }
+
+    .elementor-toc-anchor--placeholder {
+        border-color: #d9534f;
+        color: #d9534f;
+        font-style: italic;
+    }
+}

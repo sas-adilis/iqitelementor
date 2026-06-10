@@ -1,0 +1,101 @@
+//
+// Tabs container element (elType: tabs)
+//
+
+.elementor-tabs-wrapper {
+    width: 100%;
+
+    > .elementor-tabs {
+        display: flex;
+        flex-direction: column;
+
+        > .elementor-tabs-nav {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-wrap: wrap;
+
+            > .elementor-tab-title {
+                cursor: pointer;
+                padding: 12px 20px;
+                user-select: none;
+                transition: background-color 0.2s ease, color 0.2s ease;
+                border: 1px solid transparent;
+                border-bottom: none;
+
+                i {
+                    margin-right: 6px;
+                }
+
+                &:hover {
+                    opacity: 0.85;
+                }
+
+                &.elementor-active {
+                    position: relative;
+                    z-index: 1;
+                }
+            }
+        }
+
+        > .elementor-tabs-content {
+            flex: 1;
+            min-height: 50px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+
+            > .elementor-tab-content {
+                display: none;
+
+                &.elementor-tab-active {
+                    display: block;
+                }
+            }
+        }
+    }
+
+    // Horizontal layout (default)
+    &.elementor-tabs-view-horizontal {
+        > .elementor-tabs {
+            flex-direction: column;
+
+            > .elementor-tabs-nav {
+                flex-direction: row;
+            }
+        }
+    }
+
+    // Vertical layout
+    &.elementor-tabs-view-vertical {
+        > .elementor-tabs {
+            flex-direction: row;
+
+            > .elementor-tabs-nav {
+                flex-direction: column;
+                flex: 0 0 25%;
+                max-width: 25%;
+
+                > .elementor-tab-title {
+                    border-bottom: 1px solid transparent;
+                    border-right: none;
+                }
+            }
+
+            > .elementor-tabs-content {
+                flex: 1;
+            }
+        }
+
+        @media (max-width: 767px) {
+            > .elementor-tabs {
+                flex-direction: column;
+
+                > .elementor-tabs-nav {
+                    flex-direction: row;
+                    flex: 1 1 auto;
+                    max-width: 100%;
+                }
+            }
+        }
+    }
+}

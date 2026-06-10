@@ -2,6 +2,7 @@
 
 use IqitElementor\Core\Plugin;
 use IqitElementor\Helper\OutputHelper;
+use IqitElementor\Helper\OwnerSignature;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -43,7 +44,7 @@ class IqitElementorPreviewModuleFrontController extends ModuleFrontController
             $templateId = (int)Tools::getValue('template_id');
             $template = new IqitElementorTemplate($templateId);
 
-            $templateData = (array)json_decode($template->data, true);
+            $templateData = OwnerSignature::unwrap((array)json_decode($template->data, true));
             $content = OutputHelper::capture(function () use ($templateData) {
                 Plugin::instance()->getFrontend($templateData);
             });

@@ -5,11 +5,22 @@ namespace IqitElementor\Editor\BuiltIn;
 use IqitElementor\Editor\EditorTarget;
 
 /**
- * Stores Elementor JSON directly in the native manufacturer description field,
- * exactly like CmsTarget stores it in CMS content.
+ * Stores Manufacturer Elementor JSON in the dedicated `iqit_elementor_content`
+ * table (keyed by `id_object = id_manufacturer` and `hook = 'displayManufacturerElementor'`),
+ * NOT in `manufacturer_lang.description`.
+ *
+ * Why a dedicated table: the native description column is `TYPE_HTML` with
+ * `validate => isCleanHtml`, which routes through HTMLPurifier on every
+ * ObjectModel save. And the BO form attaches TinyMCE to the textarea, which
+ * mangles JSON-as-HTML on form submit (`\"` → `\&quot;` inside attribute
+ * values). Both pipelines corrupt the JSON. Using a dedicated, non-HTML
+ * storage column avoids the entire chain — this is the same architecture
+ * the legacy iqitelementor module used.
  */
 class ManufacturerTarget extends EditorTarget
 {
+    private const HOOK_NAME = 'displayManufacturerElementor';
+
     public function getPageType(): string
     {
         return 'manufacturer';
@@ -42,7 +53,7 @@ class ManufacturerTarget extends EditorTarget
         return [
             'entity' => $page,
             'editLink' => $editLink,
-            'data' => $this->decodeEditorJson($page->description),
+            'data' => $this->loadElementorData($pageId, $idLang),
         ];
     }
 
@@ -52,18 +63,45 @@ class ManufacturerTarget extends EditorTarget
             $data = '';
         }
 
-        $manufacturer = new \Manufacturer($pageId);
-        $manufacturer->description[$idLang] = $data;
-        $manufacturer->update();
+        $hookId = $this->getHookId();
+        if (!$hookId) {
+            return $pageId;
+        }
 
-        return (int) $manufacturer->id;
+        $idElementor = (int) \IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
+
+        if ($idElementor) {
+            $content = new \IqitElementorContent($idElementor);
+        } else {
+            $content = new \IqitElementorContent();
+            $content->id_object = $pageId;
+            $content->object_type = 'manufacturer';
+            $content->hook = (string) $hookId;
+            $content->title = '';
+            $content->active = 1;
+        }
+        // Defensive null: ObjectModel validation can trip on TYPE_DATE +
+        // isDate when the property is unset rather than explicitly null.
+        $content->autosave_content = null;
+        $content->autosave_at = null;
+
+        if (!is_array($content->data)) {
+            $content->data = array();
+        }
+        $content->data[$idLang] = (string) $data;
+
+        if ($idElementor) {
+            $content->update();
+        } else {
+            $content->add();
+        }
+
+        return $pageId;
     }
 
     public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
-        $source = new \Manufacturer($pageId, $idLang);
-
-        return $this->decodeEditorJson($source->description);
+        return $this->loadElementorData($pageId, $idLang);
     }
 
     public function getPreviewUrl(int $pageId, string $contentType, int $idLang, array $previewParams): string
@@ -80,19 +118,44 @@ class ManufacturerTarget extends EditorTarget
     }
 
     /**
-     * @param mixed $raw
-     * @return array|null
+     * @return array|null Decoded Elementor data (bare array or wrapped envelope)
+     *                    for the given manufacturer/language, or null if absent.
      */
-    private function decodeEditorJson($raw)
+    private function loadElementorData(int $pageId, int $idLang)
     {
-        $stripped = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', (string) $raw);
-        $stripped = str_replace(["\r", "\n"], '', $stripped);
+        $hookId = $this->getHookId();
+        if (!$hookId) {
+            return null;
+        }
 
-        $decoded = json_decode($stripped, true);
+        $idElementor = (int) \IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
+        if (!$idElementor) {
+            return null;
+        }
+
+        $content = new \IqitElementorContent($idElementor, $idLang);
+        if (!\Validate::isLoadedObject($content)) {
+            return null;
+        }
+
+        $raw = is_array($content->data)
+            ? (isset($content->data[$idLang]) ? (string) $content->data[$idLang] : '')
+            : (string) $content->data;
+
+        if ($raw === '') {
+            return null;
+        }
+
+        $decoded = json_decode($raw, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return null;
         }
 
         return $decoded;
+    }
+
+    private function getHookId(): int
+    {
+        return (int) \Hook::getIdByName(self::HOOK_NAME);
     }
 }

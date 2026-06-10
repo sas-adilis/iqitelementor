@@ -124,29 +124,29 @@ function pasteStyles(targetModel) {
 	});
 
 	const targetSettingsRaw = targetModel.get && targetModel.get('settings');
-	const targetSettings = normalizeSettings(targetSettingsRaw);
 
 	if (!Object.keys(newStyleSettings).length) {
 		// Rien à coller
 		return;
 	}
 
-	// Fusion des settings actuels avec les nouveaux styles
-	const mergedSettings = (typeof _ !== 'undefined' && typeof _.extend === 'function')
-		? _.extend({}, targetSettings, newStyleSettings)
-		: Object.assign({}, targetSettings, newStyleSettings);
-
-	// On met à jour le modèle cible. Selon ton implémentation,
-	// tu peux avoir un setSetting() ou similaire.
+	// On met à jour UNIQUEMENT les clés de style sur le modèle cible.
+	// Itérer sur l'ensemble des settings écraserait les Backbone Collections
+	// des repeaters (columns, rows...) par leur forme JSON brute, ce qui
+	// casse les renders ultérieurs (values[name].each is not a function).
 	if (typeof targetSettingsRaw === 'object' && typeof targetSettingsRaw.set === 'function') {
 		// Si settings est un Backbone Model
-		Object.keys(mergedSettings).forEach((settingKey) => {
-			targetSettingsRaw.set(settingKey, mergedSettings[settingKey]);
+		Object.keys(newStyleSettings).forEach((settingKey) => {
+			targetSettingsRaw.set(settingKey, newStyleSettings[settingKey]);
 		});
 	} else if (typeof targetModel.setSettings === 'function') {
 		// Certaines implémentations exposent une API dédiée
-		targetModel.setSettings(mergedSettings);
+		targetModel.setSettings(newStyleSettings);
 	} else if (typeof targetModel.set === 'function') {
+		const targetSettings = normalizeSettings(targetSettingsRaw);
+		const mergedSettings = (typeof _ !== 'undefined' && typeof _.extend === 'function')
+			? _.extend({}, targetSettings, newStyleSettings)
+			: Object.assign({}, targetSettings, newStyleSettings);
 		// Fallback : on remplace le bloc settings complet
 		targetModel.set('settings', mergedSettings);
 	}

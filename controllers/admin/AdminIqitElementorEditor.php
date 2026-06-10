@@ -7,6 +7,7 @@ use IqitElementor\Editor\EditorTargetRegistry;
 use IqitElementor\Enum\EntityType;
 use IqitElementor\Helper\Helper;
 use IqitElementor\Helper\IconHelper;
+use IqitElementor\Helper\OwnerSignature;
 use IqitElementor\Helper\SmartLinkHelper;
 use IqitElementor\Manager\RevisionManager;
 
@@ -58,6 +59,9 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             $editedPage = $loaded['entity'] ?? null;
             $editedPageLink = $loaded['editLink'] ?? null;
             $elementorData = $loaded['data'] ?? '';
+            if (is_array($elementorData)) {
+                $elementorData = OwnerSignature::unwrap($elementorData);
+            }
         }
 
         if (!$editedPageLink) {
@@ -197,6 +201,10 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'revisions_hours_ago' => $this->l('hours ago'),
                     'revisions_days_ago' => $this->l('days ago'),
                     'Edit' => $this->l('Edit'),
+                    'Edit Section' => $this->l('Edit Section'),
+                    'Edit Column' => $this->l('Edit Column'),
+                    'Add column after' => $this->l('Add column after'),
+                    'Save as Template' => $this->l('Save as Template'),
                     'Duplicate' => $this->l('Duplicate'),
                     'Copy' => $this->l('Copy'),
                     'Paste styles' => $this->l('Paste styles'),
@@ -403,6 +411,8 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             $data = $this->getJsonValue('data');
             $idLang = (int) Tools::getValue('id_lang');
 
+            $data = OwnerSignature::wrapJson((string) $data, (string) $this->module->version);
+
             $revisionEntityType = $pageType;
             $revisionEntityId = $pageId;
 
@@ -455,6 +465,8 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             exit(json_encode(['success' => false, 'error' => 'Missing parameters']));
         }
 
+        $content = OwnerSignature::wrapJson((string) $content, (string) $this->module->version);
+
         // Resolve the native entity ID from the page ID used by the editor
         $entityId = $this->resolveEntityId($entityType, $pageId);
         if (!$entityId) {
@@ -493,7 +505,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
             'success' => true,
             'has_autosave' => $info !== null,
             'autosave_at' => $info !== null ? $info['autosave_at'] : null,
-            'content' => $info !== null ? $info['content'] : null,
+            'content' => $info !== null ? OwnerSignature::unwrapJson((string) $info['content']) : null,
         ]));
     }
 
@@ -602,7 +614,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         exit(json_encode([
             'success' => true,
-            'content' => $content,
+            'content' => OwnerSignature::unwrapJson((string) $content),
         ]));
     }
 
@@ -627,7 +639,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         exit(json_encode([
             'success' => true,
-            'content' => $content,
+            'content' => OwnerSignature::unwrapJson((string) $content),
         ]));
     }
 
@@ -702,6 +714,9 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         $target = EditorTargetRegistry::get((string) $pageType);
         if ($target !== null) {
             $data = $target->loadLanguageContent($pageId, (string) $contentType, $idLang);
+            if (is_array($data)) {
+                $data = OwnerSignature::unwrap($data);
+            }
         }
 
         $return = [
@@ -742,6 +757,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
         header('Content-Type: application/json');
         $title = Tools::getValue('title');
         $data = $this->getJsonValue('data');
+        $data = OwnerSignature::wrapJson((string) $data, (string) $this->module->version);
         $template = new IqitElementorTemplate();
         $template->title = $title;
         $template->data = $data;
@@ -787,7 +803,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
         $return = [
             'success' => true,
-            'data' => json_decode($template->data, true),
+            'data' => OwnerSignature::unwrap(json_decode($template->data, true)),
         ];
 
         exit(json_encode($return));

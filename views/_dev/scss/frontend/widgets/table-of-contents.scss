@@ -20,40 +20,9 @@
         line-height: 1.3;
     }
 
-    /* Toggle buttons */
-    &__toggle-button {
-        cursor: pointer;
-        display: none; /* hidden by default, shown when collapsible */
-        flex: 0 0 auto;
-        font-size: 14px;
-        line-height: 1;
-        padding: 4px 8px;
-    }
-
-    &--collapsible &__toggle-button--collapse {
-        display: inline-flex;
-    }
-
-    &--collapsible#{&}--collapsed &__toggle-button--collapse {
-        display: none;
-    }
-
-    &--collapsible#{&}--collapsed &__toggle-button--expand {
-        display: inline-flex;
-    }
-
     /* Body */
     &__body {
         padding: 10px;
-        transition: max-height .3s ease, opacity .2s ease, padding .3s ease;
-        overflow: hidden;
-    }
-
-    &--collapsed &__body {
-        max-height: 0 !important;
-        padding-top: 0;
-        padding-bottom: 0;
-        opacity: 0;
         overflow: hidden;
     }
 
@@ -109,6 +78,39 @@
         font-size: 0.8em;
     }
 
+    /* Scrollbar marker — vertical track + thicker indicator on active item */
+    &--marker-scrollbar &__list-wrapper {
+        position: relative;
+        padding-left: 16px;
+        border-left: 1px solid currentColor;
+        opacity: 1;
+    }
+
+    &--marker-scrollbar &__list-wrapper &__list-wrapper {
+        border-left: 0;
+        padding-left: 1.2em;
+    }
+
+    &--marker-scrollbar &__list-item {
+        position: relative;
+    }
+
+    &--marker-scrollbar &__list-item::before {
+        content: "";
+        position: absolute;
+        left: -17px;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: transparent;
+        transition: background-color .2s ease;
+        pointer-events: none;
+    }
+
+    &--marker-scrollbar &__list-item--active::before {
+        background-color: currentColor;
+    }
+
     /* Active state */
     &__list-item--active > &__list-item-text {
         font-weight: 600;
@@ -134,4 +136,93 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Mobile : présentation horizontale scrollable de la table des matières */
+@media (max-width: 767.98px) {
+    /* Casse le min-width: auto par défaut du flex-item afin que le scroll
+       horizontal du body puisse s'activer (sinon le widget s'étend à son
+       min-content et le body ne déborde jamais). */
+    .elementor-widget-wrap > .stick-content-inner,
+    .elementor-widget-table-of-contents,
+    .elementor-widget-table-of-contents .elementor-widget-container,
+    .elementor-toc {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .elementor-toc {
+        border: 0;
+
+        &__header {
+            display: none;
+        }
+
+        &__body {
+            padding: 0 0 8px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            min-width: 0;
+            max-width: 100%;
+
+            /* Scrollbar fine façon maquette : track gris clair + thumb noir */
+            scrollbar-width: thin;
+            scrollbar-color: #000 #e5e5e5;
+
+            &::-webkit-scrollbar {
+                height: 2px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: #e5e5e5;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: #000;
+            }
+        }
+
+        &__list-wrapper {
+            display: inline-flex;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            padding: 0 12px !important;
+            margin: 0;
+            border-left: 0 !important;
+            list-style: none !important;
+            min-width: 100%;
+        }
+
+        /* Aplatit les niveaux : pas de sous-listes en mobile */
+        &__list-wrapper &__list-wrapper {
+            display: none !important;
+        }
+
+        &__list-item {
+            position: relative;
+            flex: 0 0 auto;
+            padding: 8px 12px !important;
+
+            &::before {
+                display: none !important;
+            }
+        }
+
+        &__list-item-text {
+            color: #999;
+            font-weight: 400;
+            text-decoration: none !important;
+
+            &::before {
+                display: none !important;
+            }
+        }
+
+        &__list-item--active > &__list-item-text {
+            color: #000;
+            font-weight: 700;
+            text-decoration: none !important;
+        }
+    }
 }

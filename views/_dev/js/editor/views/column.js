@@ -16,6 +16,10 @@ ColumnView = BaseElementView.extend( {
 			return require( 'elementor-views/section' ); // We need to require the section dynamically
 		}
 
+		if ( 'tabs' === model.get( 'elType' ) ) {
+			return require( 'elementor-views/tabs' );
+		}
+
 		return WidgetView;
 	},
 
@@ -86,6 +90,10 @@ ColumnView = BaseElementView.extend( {
 
 		if ( 'section' === elType ) {
 			return ! this.isInner();
+		}
+
+		if ( 'tabs' === elType ) {
+			return true;
 		}
 
 		return 'widget' === elType;
@@ -172,6 +180,11 @@ ColumnView = BaseElementView.extend( {
 				} else if ( 'section' === itemData.elType ) {
 					itemData.elements = [];
 					itemData.isInner = true;
+				} else if ( 'tabs' === itemData.elType ) {
+					itemData.elements = [
+						{ id: elementor.helpers.getUniqueID(), elType: 'tab', settings: { tab_title: 'Tab #1' }, elements: [] },
+						{ id: elementor.helpers.getUniqueID(), elType: 'tab', settings: { tab_title: 'Tab #2' }, elements: [] }
+					];
 				} else {
 					return;
 				}

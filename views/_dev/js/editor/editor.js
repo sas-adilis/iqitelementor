@@ -220,7 +220,8 @@ App = Marionette.Application.extend( {
 				hover_animation: require( 'elementor-views/controls/animation' ),
 				datetime: require( 'elementor-views/controls/datetime'),
 				code: require( 'elementor-views/controls/code' ),
-				popover_toggle: require( 'elementor-views/controls/popover-toggle' )
+				popover_toggle: require( 'elementor-views/controls/popover-toggle' ),
+				checkbox_list: require( 'elementor-views/controls/base-multiple' )
 			};
 
 			this.channels.editor.trigger( 'editor:controls:initialize' );

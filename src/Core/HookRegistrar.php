@@ -27,6 +27,7 @@ class HookRegistrar
             'displayCMSDisputeInformation',
             'displayProductElementor',
             'displayCategoryElementor',
+            'displayBlogElementor',
 
             // Dispatch
             'actionDispatcher',
@@ -77,15 +78,22 @@ class HookRegistrar
     public static function synchronize(\Module $module): bool
     {
         $usedHooks = self::getHookList();
+        $contentHooks = self::getContentHookNames();
         $registered = self::getRegistered((int) $module->id, (int) \Context::getContext()->shop->id);
 
         foreach ($registered as $hook) {
-            if (in_array($hook['name'], $usedHooks)) {
-                $module->registerHook($hook['name']);
+            $name = $hook['name'];
+
+            if (in_array($name, $usedHooks)) {
+                $module->registerHook($name);
+            } elseif (in_array($name, $contentHooks)) {
+                // User-defined hook bound to an IqitElementorContent row —
+                // keep the registration, otherwise the content stops rendering.
             } else {
-                $module->unregisterHook($hook['name']);
+                $module->unregisterHook($name);
             }
-            $key = array_search($hook['name'], $usedHooks);
+
+            $key = array_search($name, $usedHooks);
             if ($key !== false) {
                 unset($usedHooks[$key]);
             }
@@ -96,6 +104,27 @@ class HookRegistrar
         }
 
         return true;
+    }
+
+    /**
+     * Hook names referenced by IqitElementorContent rows, excluding the
+     * widget sentinel (rendered via {widget} tag, never greffed).
+     *
+     * @return string[]
+     */
+    private static function getContentHookNames(): array
+    {
+        $sql = 'SELECT DISTINCT h.name
+            FROM ' . \_DB_PREFIX_ . 'iqit_elementor_content c
+            INNER JOIN ' . \_DB_PREFIX_ . 'hook h ON (h.id_hook = c.hook)
+            WHERE h.name <> "' . \pSQL(\IqitElementorContent::WIDGET_HOOK_NAME) . '"';
+
+        $rows = \Db::getInstance()->executeS($sql);
+        if (!$rows) {
+            return [];
+        }
+
+        return array_column($rows, 'name');
     }
 
     /**

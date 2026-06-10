@@ -517,6 +517,85 @@ html.elementor-html {
   height: 50px;
 }
 
+.elementor-editor-active #elementor .elementor-tabs-wrapper {
+  position: relative;
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper:hover, .elementor-editor-active #elementor .elementor-tabs-wrapper.elementor-element-editable {
+  outline: 1px dashed #9b0a46;
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title {
+  background-color: #d5dadf;
+  color: #556068;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: none;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title.elementor-active {
+  background-color: #ffffff;
+  color: #9b0a46;
+  font-weight: 500;
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content {
+  min-height: 80px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content > .elementor-tab-content > .elementor-widget-wrap {
+  min-height: 60px;
+  padding: 10px;
+}
+.elementor-editor-active #elementor .elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content > .elementor-tab-content.elementor-dragging-on-child {
+  outline: 1px solid #3c90a8;
+}
+.elementor-editor-active #elementor .elementor-editor-tabs-settings {
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  z-index: 1;
+  bottom: 100%;
+  border-radius: 3px 3px 0 0;
+}
+.elementor-editor-active #elementor .elementor-editor-tabs-settings .elementor-editor-element-settings-list {
+  float: right;
+  background-color: #9b0a46 !important;
+}
+@media (min-width: 1024px) {
+  .elementor-editor-active #elementor .elementor-editor-tabs-settings .elementor-editor-element-settings-list .elementor-editor-element-setting {
+    border-right: 1px solid rgba(0, 0, 0, 0.2) !important;
+  }
+}
+.elementor-editor-active #elementor .elementor-editor-tabs-settings .elementor-editor-element-settings-list .elementor-editor-element-setting > a:hover {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+@media (min-width: 1024px) {
+  .elementor-editor-active #elementor .elementor-editor-tabs-settings .elementor-editor-element-trigger > a {
+    cursor: move;
+  }
+}
+.elementor-editor-active #elementor .elementor-editor-tab-settings {
+  top: 2px;
+  left: 2px;
+  z-index: 2;
+}
+.elementor-editor-active #elementor .elementor-editor-tab-settings .elementor-editor-element-settings-list {
+  background-color: #495157;
+}
+@media (min-width: 1024px) {
+  .elementor-editor-active #elementor .elementor-editor-tab-settings .elementor-editor-element-settings-list .elementor-editor-element-setting:not(:last-child) {
+    border-left: 1px solid #556068;
+  }
+}
+.elementor-editor-active #elementor .elementor-editor-tab-settings .elementor-editor-element-settings-list .elementor-editor-element-setting > a:hover {
+  background-color: #556068;
+}
+.elementor-editor-active #elementor .elementor-tab-content:hover > .elementor-element-overlay .elementor-editor-tab-settings, .elementor-editor-active #elementor .elementor-tab-content.elementor-element-editable > .elementor-element-overlay .elementor-editor-tab-settings {
+  display: block;
+}
+.elementor-editor-active #elementor .elementor-tab-content:not(:hover):not(.elementor-element-editable) > .elementor-element-overlay .elementor-editor-tab-settings-list {
+  display: none;
+}
+
 .elementor-editor-preview .elementor-element-overlay,
 .elementor-editor-preview .elementor-editor-widget-settings,
 .elementor-editor-preview .column-title,

@@ -9,6 +9,7 @@ require('elementor-frontend/handlers/accordion');
 require('elementor-frontend/handlers/alert');
 require('elementor-frontend/handlers/counter');
 require('elementor-frontend/handlers/tabs');
+require('elementor-frontend/handlers/tabs-container');
 require('elementor-frontend/handlers/toggle');
 require('elementor-frontend/handlers/progress');
 require('elementor-frontend/handlers/video');

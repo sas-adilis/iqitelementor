@@ -62,12 +62,21 @@ class Column extends ElementBase
         $this->addResponsiveControl(
             'width',
             [
-                'label' => Translater::get()->l('Column Width') . ' (%)',
-                'type' => ControlManager::NUMBER,
-                'min' => 2,
-                'max' => 100,
+                'label' => Translater::get()->l('Column Width'),
+                'type' => ControlManager::SLIDER,
+                'size_units' => ['%', 'px'],
+                'range' => [
+                    '%' => [
+                        'min' => 2,
+                        'max' => 100,
+                    ],
+                    'px' => [
+                        'min' => 50,
+                        'max' => 2000,
+                    ],
+                ],
                 'selectors' => [
-                    '{{WRAPPER}}' => 'width: {{VALUE}}%',
+                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'width_behavior' => '',

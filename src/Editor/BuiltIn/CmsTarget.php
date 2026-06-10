@@ -4,8 +4,20 @@ namespace IqitElementor\Editor\BuiltIn;
 
 use IqitElementor\Editor\EditorTarget;
 
+/**
+ * Stores CMS Elementor JSON in the dedicated `iqit_elementor_content` table
+ * (keyed by `id_object = id_cms` and `hook = 'displayCMSDisputeInformation'`),
+ * NOT in `cms_lang.content`.
+ *
+ * Why a dedicated table: cf. ManufacturerTarget — the native content column
+ * is `TYPE_HTML` with `validate => isCleanHtml`, so any save through the BO
+ * standard form routes through HTMLPurifier and TinyMCE re-serialisation,
+ * both of which corrupt Elementor JSON.
+ */
 class CmsTarget extends EditorTarget
 {
+    private const HOOK_NAME = 'displayCMSDisputeInformation';
+
     public function getPageType(): string
     {
         return 'cms';
@@ -37,7 +49,7 @@ class CmsTarget extends EditorTarget
         return [
             'entity' => $page,
             'editLink' => $editLink,
-            'data' => $this->decodeEditorJson($page->content),
+            'data' => $this->loadElementorData($pageId, $idLang),
         ];
     }
 
@@ -47,18 +59,54 @@ class CmsTarget extends EditorTarget
             $data = '';
         }
 
-        $cms = new \CMS($pageId);
-        $cms->content[$idLang] = $data;
-        $cms->update();
+        $hookId = $this->getHookId();
+        if (!$hookId) {
+            return $pageId;
+        }
 
-        return (int) $cms->id;
+        $idElementor = (int) \IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
+
+        if ($idElementor) {
+            $content = new \IqitElementorContent($idElementor);
+        } else {
+            $content = new \IqitElementorContent();
+            $content->id_object = $pageId;
+            $content->object_type = 'cms';
+            $content->hook = (string) $hookId;
+            $content->title = '';
+            $content->active = 1;
+        }
+        $content->autosave_content = null;
+        $content->autosave_at = null;
+
+        if (!is_array($content->data)) {
+            $content->data = array();
+        }
+        $content->data[$idLang] = (string) $data;
+
+        if ($idElementor) {
+            $content->update();
+        } else {
+            $content->add();
+            // Wire to every shop so the front render can find it.
+            $shopIds = \Shop::getShops(true, null, true);
+            if (!is_array($shopIds) || empty($shopIds)) {
+                $shopIds = array((int) \Configuration::get('PS_SHOP_DEFAULT'));
+            }
+            foreach ($shopIds as $shopId) {
+                \Db::getInstance()->insert('iqit_elementor_content_shop', array(
+                    'id_elementor' => (int) $content->id,
+                    'id_shop' => (int) $shopId,
+                ), false, true, \Db::INSERT_IGNORE);
+            }
+        }
+
+        return $pageId;
     }
 
     public function loadLanguageContent(int $pageId, string $contentType, int $idLang): ?array
     {
-        $source = new \CMS($pageId, $idLang);
-
-        return $this->decodeEditorJson($source->content);
+        return $this->loadElementorData($pageId, $idLang);
     }
 
     public function getPreviewUrl(int $pageId, string $contentType, int $idLang, array $previewParams): string
@@ -75,19 +123,44 @@ class CmsTarget extends EditorTarget
     }
 
     /**
-     * @param mixed $raw
-     * @return array|null
+     * @return array|null Decoded Elementor data (bare array or wrapped envelope)
+     *                    for the given CMS page/language, or null if absent.
      */
-    private function decodeEditorJson($raw)
+    private function loadElementorData(int $pageId, int $idLang)
     {
-        $stripped = preg_replace('/^<p[^>]*>(.*)<\/p[^>]*>/is', '$1', (string) $raw);
-        $stripped = str_replace(["\r", "\n"], '', $stripped);
+        $hookId = $this->getHookId();
+        if (!$hookId) {
+            return null;
+        }
 
-        $decoded = json_decode($stripped, true);
+        $idElementor = (int) \IqitElementorContent::getIdByObjectAndHook($hookId, $pageId);
+        if (!$idElementor) {
+            return null;
+        }
+
+        $content = new \IqitElementorContent($idElementor, $idLang);
+        if (!\Validate::isLoadedObject($content)) {
+            return null;
+        }
+
+        $raw = is_array($content->data)
+            ? (isset($content->data[$idLang]) ? (string) $content->data[$idLang] : '')
+            : (string) $content->data;
+
+        if ($raw === '') {
+            return null;
+        }
+
+        $decoded = json_decode($raw, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
             return null;
         }
 
         return $decoded;
+    }
+
+    private function getHookId(): int
+    {
+        return (int) \Hook::getIdByName(self::HOOK_NAME);
     }
 }

@@ -60,7 +60,7 @@ class IqitElementor extends Module implements WidgetInterface
     {
         $this->name = 'iqitelementor';
         $this->tab = 'front_office_features';
-        $this->version = '1.4.5';
+        $this->version = '1.4.8';
         $this->author = 'IQIT-COMMERCE.COM';
         $this->bootstrap = true;
         $this->controllers = ['preview', 'widget', 'landing'];
@@ -71,7 +71,7 @@ class IqitElementor extends Module implements WidgetInterface
         $this->description = $this->trans('Flexible page builder based on Wordpress Elementor plugin by POJO.me', [], 'Modules.Iqitelementor.Admin');
     }
 
-    public function install($withFixtures = true)
+    public function install($withFixtures = true): bool
     {
         if (Shop::isFeatureActive()) {
             Shop::setContext(Shop::CONTEXT_ALL);
@@ -90,6 +90,7 @@ class IqitElementor extends Module implements WidgetInterface
 
         Configuration::updateValue('IQITELEMENTOR_REVISION_LIMIT', 20);
         Configuration::updateValue('IQITELEMENTOR_RENDER_CACHE', 1);
+        Configuration::updateValue('IQITELEMENTOR_PRODUCT_BUTTON', 1);
 
         if ($withFixtures) {
             return $this->installFixtures();
@@ -98,7 +99,7 @@ class IqitElementor extends Module implements WidgetInterface
         return true;
     }
 
-    public function isUsingNewTranslationSystem()
+    public function isUsingNewTranslationSystem(): bool
     {
         return false;
     }
@@ -177,6 +178,7 @@ class IqitElementor extends Module implements WidgetInterface
     {
         Configuration::deleteByName('IQITELEMENTOR_REVISION_LIMIT');
         Configuration::deleteByName('IQITELEMENTOR_RENDER_CACHE');
+        Configuration::deleteByName('IQITELEMENTOR_PRODUCT_BUTTON');
 
         return $this->uninstallTab()
             && $this->uninstallSQL()
@@ -241,6 +243,8 @@ class IqitElementor extends Module implements WidgetInterface
      */
     public function hookActionDispatcher($params)
     {
+        $this->autoSignCmsPreviewForEmployee($params);
+
         if (!isset($this->context->smarty) || !is_object($this->context->smarty)) {
             return;
         }
@@ -252,6 +256,41 @@ class IqitElementor extends Module implements WidgetInterface
         }
 
         $this->context->smarty->registerPlugin('function', 'iqit_render', [$this, 'smartyRenderElementor']);
+    }
+
+    /**
+     * When a logged-in employee opens a CMS page front URL, inject the
+     * `adtoken` + `id_employee` GET params expected by CmsController::init()
+     * so inactive pages can be previewed without an override.
+     *
+     * Uses PrestaShop's native bypass — we only fill in the parameters that
+     * the BO Preview button forgets to add for CMS pages (unlike products).
+     *
+     * @param array $params
+     */
+    private function autoSignCmsPreviewForEmployee($params): void
+    {
+        $controllerClass = isset($params['controller_class']) ? (string) $params['controller_class'] : '';
+        if ($controllerClass !== 'CmsController') {
+            return;
+        }
+
+        if (!Tools::getValue('id_cms') || Tools::getValue('adtoken')) {
+            return;
+        }
+
+        $idEmployee = (int) (isset($this->context->cookie->id_employee) ? $this->context->cookie->id_employee : 0);
+        if ($idEmployee <= 0) {
+            return;
+        }
+
+        $idTab = (int) Tab::getIdFromClassName('AdminCmsContent');
+        $adtoken = Tools::getAdminToken('AdminCmsContent' . $idTab . $idEmployee);
+
+        $_GET['adtoken'] = $adtoken;
+        $_GET['id_employee'] = $idEmployee;
+        $_REQUEST['adtoken'] = $adtoken;
+        $_REQUEST['id_employee'] = $idEmployee;
     }
 
     public function hookDisplayHeader()
@@ -473,6 +512,7 @@ class IqitElementor extends Module implements WidgetInterface
                 Configuration::updateValue('IQITELEMENTOR_REVISION_LIMIT', $revisionLimit);
 
                 Configuration::updateValue('IQITELEMENTOR_RENDER_CACHE', (int) Tools::getValue('IQITELEMENTOR_RENDER_CACHE'));
+                Configuration::updateValue('IQITELEMENTOR_PRODUCT_BUTTON', (int) Tools::getValue('IQITELEMENTOR_PRODUCT_BUTTON'));
                 \IqitElementor\Cache\RenderCache::flush();
 
                 $redirect_after = $this->context->link->getAdminLink('AdminModules', true);
@@ -510,6 +550,7 @@ class IqitElementor extends Module implements WidgetInterface
                 'IQIT_ELEMENTOR_ICON_LIBRARIES_ph' => in_array('ph', IconHelper::getEnabledLibraries()),
                 'IQITELEMENTOR_REVISION_LIMIT' => (int)Tools::getValue('IQITELEMENTOR_REVISION_LIMIT', Configuration::get('IQITELEMENTOR_REVISION_LIMIT') !== false ? Configuration::get('IQITELEMENTOR_REVISION_LIMIT') : 20),
                 'IQITELEMENTOR_RENDER_CACHE' => (int)Tools::getValue('IQITELEMENTOR_RENDER_CACHE', Configuration::get('IQITELEMENTOR_RENDER_CACHE') !== false ? Configuration::get('IQITELEMENTOR_RENDER_CACHE') : 1),
+                'IQITELEMENTOR_PRODUCT_BUTTON' => (int)Tools::getValue('IQITELEMENTOR_PRODUCT_BUTTON', Configuration::get('IQITELEMENTOR_PRODUCT_BUTTON') !== false ? Configuration::get('IQITELEMENTOR_PRODUCT_BUTTON') : 1),
             ],
         ];
 
@@ -591,6 +632,26 @@ class IqitElementor extends Module implements WidgetInterface
                             ],
                         ],
                         [
+                            'type' => 'switch',
+                            'name' => 'IQITELEMENTOR_PRODUCT_BUTTON',
+                            'label' => $this->l('Show Elementor button on product page'),
+                            'desc' => $this->l('Display the "Edit with Elementor" buttons on the product edit page in the back office.'),
+                            'tab' => 'settings',
+                            'is_bool' => true,
+                            'values' => [
+                                [
+                                    'id' => 'IQITELEMENTOR_PRODUCT_BUTTON_on',
+                                    'value' => 1,
+                                    'label' => $this->l('Yes'),
+                                ],
+                                [
+                                    'id' => 'IQITELEMENTOR_PRODUCT_BUTTON_off',
+                                    'value' => 0,
+                                    'label' => $this->l('No'),
+                                ],
+                            ],
+                        ],
+                        [
                             'type' => 'checkbox',
                             'name' => 'IQIT_ELEMENTOR_ICON_LIBRARIES',
                             'label' => $this->l('Icon libraries'),
@@ -663,6 +724,12 @@ class IqitElementor extends Module implements WidgetInterface
             $hookName = $configuration['hook'];
         }
 
+        // Direct render of a specific IqitElementorContent by id (used by the
+        // {widget name="iqitelementor" id_content=X} tag for hook-less layouts).
+        if (!empty($configuration['id_content'])) {
+            return $this->renderContentById((int) $configuration['id_content']);
+        }
+
         $renderer = $this->resolveContentRenderer((string) $hookName);
         $templateFile = $renderer ? $renderer->getTemplateFile() : 'generated_content.tpl';
         $templatePath = 'module:' . $this->name . '/views/templates/hook/' . $templateFile;
@@ -690,6 +757,14 @@ class IqitElementor extends Module implements WidgetInterface
             $hookName = $configuration['hook'];
         }
 
+        if (!empty($configuration['id_content'])) {
+            return [
+                'content' => $this->renderContentById((int) $configuration['id_content']),
+                'options' => [],
+                'hook' => (string) $hookName,
+            ];
+        }
+
         $renderer = $this->resolveContentRenderer((string) $hookName);
         if (!$renderer) {
             return ['content' => '', 'options' => [], 'hook' => (string) $hookName];
@@ -699,6 +774,28 @@ class IqitElementor extends Module implements WidgetInterface
         $result['hook'] = (string) $hookName;
 
         return $result;
+    }
+
+    /**
+     * Render a single IqitElementorContent layout by its primary key.
+     * Used by the {widget name="iqitelementor" id_content=X} Smarty tag for
+     * layouts saved in "widget" mode (no hook binding).
+     */
+    private function renderContentById(int $idContent): string
+    {
+        if ($idContent <= 0) {
+            return '';
+        }
+
+        $layout = new IqitElementorContent($idContent, $this->context->language->id);
+        if (!Validate::isLoadedObject($layout) || !$layout->active) {
+            return '';
+        }
+
+        // Render through the abstract base so owner-signature unwrap, legacy
+        // detection and render-cache stay active.
+        $renderer = new \IqitElementor\Renderer\HookContentRenderer($this->context);
+        return $renderer->renderSingleLayout($layout, $this->isPreviewMode());
     }
 
     /**

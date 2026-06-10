@@ -7,7 +7,13 @@ helpers = {
 		section: {
 			column: {
 				widget: null,
-				section: null
+				section: null,
+				tabs: {
+					tab: {
+						widget: null,
+						section: null
+					}
+				}
 			}
 		}
 	},

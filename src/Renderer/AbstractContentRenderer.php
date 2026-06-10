@@ -5,7 +5,9 @@ namespace IqitElementor\Renderer;
 use IqitElementor\Cache\RenderCache;
 use IqitElementor\Contract\ContentRendererInterface;
 use IqitElementor\Core\Plugin;
+use IqitElementor\Helper\FormatDetector;
 use IqitElementor\Helper\OutputHelper;
+use IqitElementor\Helper\OwnerSignature;
 
 abstract class AbstractContentRenderer implements ContentRendererInterface
 {
@@ -26,11 +28,31 @@ abstract class AbstractContentRenderer implements ContentRendererInterface
      */
     protected function renderFrontend(string $rawJson, array $decoded): string
     {
-        return RenderCache::remember($rawJson, function () use ($decoded) {
-            return OutputHelper::capture(function () use ($decoded) {
-                Plugin::instance()->getFrontend($decoded);
+        // Owner signature wins: any payload the current module persisted is
+        // unambiguously ours. Fall through to legacy detection only when the
+        // envelope is absent (legacy bare-array layouts).
+        if (!OwnerSignature::hasSignature($decoded) && FormatDetector::isLegacy($decoded)) {
+            return '';
+        }
+
+        $elements = OwnerSignature::unwrap($decoded);
+
+        return RenderCache::remember($rawJson, function () use ($elements) {
+            return OutputHelper::capture(function () use ($elements) {
+                Plugin::instance()->getFrontend($elements);
             });
         });
+    }
+
+    /**
+     * Public entry point to render a single layout object (used by widget-tag
+     * rendering where there's no enclosing hook iteration).
+     *
+     * @param \ObjectModel $layout
+     */
+    public function renderSingleLayout($layout, bool $previewMode): string
+    {
+        return $this->resolveAndRender($layout, $previewMode);
     }
 
     /**

@@ -281,6 +281,7 @@ require('elementor-frontend/handlers/accordion');
 require('elementor-frontend/handlers/alert');
 require('elementor-frontend/handlers/counter');
 require('elementor-frontend/handlers/tabs');
+require('elementor-frontend/handlers/tabs-container');
 require('elementor-frontend/handlers/toggle');
 require('elementor-frontend/handlers/progress');
 require('elementor-frontend/handlers/video');
@@ -370,7 +371,7 @@ window.elementorFrontend = {
     }
 };
 
-},{"elementor-frontend/elements-handler":1,"elementor-frontend/handlers/accordion":3,"elementor-frontend/handlers/alert":4,"elementor-frontend/handlers/counter":5,"elementor-frontend/handlers/global":6,"elementor-frontend/handlers/lottie":7,"elementor-frontend/handlers/prestashop-contactform":8,"elementor-frontend/handlers/prestashop-search":9,"elementor-frontend/handlers/progress":10,"elementor-frontend/handlers/section":11,"elementor-frontend/handlers/swiper":12,"elementor-frontend/handlers/table-of-contents":13,"elementor-frontend/handlers/tabs":14,"elementor-frontend/handlers/toggle":15,"elementor-frontend/handlers/video":16}],3:[function(require,module,exports){
+},{"elementor-frontend/elements-handler":1,"elementor-frontend/handlers/accordion":3,"elementor-frontend/handlers/alert":4,"elementor-frontend/handlers/counter":5,"elementor-frontend/handlers/global":6,"elementor-frontend/handlers/lottie":7,"elementor-frontend/handlers/prestashop-contactform":8,"elementor-frontend/handlers/prestashop-search":9,"elementor-frontend/handlers/progress":10,"elementor-frontend/handlers/section":11,"elementor-frontend/handlers/swiper":12,"elementor-frontend/handlers/table-of-contents":13,"elementor-frontend/handlers/tabs":15,"elementor-frontend/handlers/tabs-container":14,"elementor-frontend/handlers/toggle":16,"elementor-frontend/handlers/video":17}],3:[function(require,module,exports){
 /* global $ */
 
 var ElementsHandler = require('elementor-frontend/elements-handler');
@@ -1245,64 +1246,30 @@ CAROUSEL_SELECTORS.forEach(function (selector) {
 
 var ElementsHandler = require('elementor-frontend/elements-handler');
 
-ElementsHandler.addHandler('.elementor-toc', function () {
-    var $toc = $(this);
-    var el = $toc[0];
+var ANCHOR_SELECTOR = '.elementor-toc-anchor[id][data-toc-title]';
+var TOC_INIT_FLAG = 'data-toc-initialized';
 
-    var headingTags = (el.getAttribute('data-headings') || 'h2').split(',');
-    var containerSelector = el.getAttribute('data-container') || '';
-    var hierarchical = el.getAttribute('data-hierarchical') === '1';
-    var listTag = el.getAttribute('data-list-tag') || 'ul';
-    var noHeadingsMessage = el.getAttribute('data-no-headings-message') || '';
+function initToc(el) {
+    if (!el || el.getAttribute(TOC_INIT_FLAG) === '1') {
+        return;
+    }
+    el.setAttribute(TOC_INIT_FLAG, '1');
 
+    var $toc = $(el);
     var $body = $toc.find('.elementor-toc__body');
     if (!$body.length) {
         return;
     }
 
-    // Scope
-    var scope = containerSelector ? document.querySelector(containerSelector) : document;
-    if (!scope) {
-        scope = document;
+    var trackingNamespace = '.iqitToc' + Math.random().toString(36).slice(2);
+
+    function refresh() {
+        var anchors = buildToc($toc, el, $body);
+        setupActiveTracking($toc, anchors, trackingNamespace);
     }
 
-    // Find headings (exclude those inside the widget itself)
-    var selector = headingTags.join(',');
-    var allHeadings = scope.querySelectorAll(selector);
-    var headings = [];
-    for (var i = 0; i < allHeadings.length; i++) {
-        if (!el.contains(allHeadings[i])) {
-            headings.push(allHeadings[i]);
-        }
-    }
+    refresh();
 
-    if (headings.length === 0) {
-        $body.html(
-            noHeadingsMessage
-                ? '<div class="elementor-toc__no-headings">' + escapeHtml(noHeadingsMessage) + '</div>'
-                : ''
-        );
-        return;
-    }
-
-    // Ensure each heading has an id
-    for (var j = 0; j < headings.length; j++) {
-        if (!headings[j].id) {
-            headings[j].id = 'toc-heading-' + j;
-        }
-    }
-
-    // Build list
-    var html = hierarchical
-        ? buildHierarchicalList(headings, listTag, headingTags)
-        : buildFlatList(headings, listTag);
-
-    $body.html(html);
-
-    // Collapse / Expand
-    setupToggle($toc);
-
-    // Smooth scroll
     $toc.on('click', '.elementor-toc__list-item-text', function (e) {
         e.preventDefault();
         var href = $(this).attr('href');
@@ -1321,130 +1288,159 @@ ElementsHandler.addHandler('.elementor-toc', function () {
         }
     });
 
-    // Active tracking
-    setupActiveTracking($toc, headings);
+    if (typeof MutationObserver === 'undefined') {
+        return;
+    }
+
+    // Rebuild whenever anchors are added/removed/edited elsewhere in the page.
+    // Cheap on the frontend (DOM is static after load) and necessary in the
+    // Elementor editor iframe, where widgets are AJAX-rendered after the
+    // initial scan.
+    var rebuildTimer = null;
+    var observer = new MutationObserver(function (mutations) {
+        if (!document.body.contains(el)) {
+            observer.disconnect();
+            $(window).off(trackingNamespace);
+            return;
+        }
+        var relevant = false;
+        for (var i = 0; i < mutations.length; i++) {
+            var target = mutations[i].target;
+            if (!target || !el.contains(target)) {
+                relevant = true;
+                break;
+            }
+        }
+        if (!relevant) {
+            return;
+        }
+        clearTimeout(rebuildTimer);
+        rebuildTimer = setTimeout(function () {
+            if (!document.body.contains(el)) {
+                observer.disconnect();
+                $(window).off(trackingNamespace);
+                return;
+            }
+            refresh();
+        }, 250);
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ['id', 'data-toc-title']
+    });
+}
+
+ElementsHandler.addHandler('.elementor-toc', function () {
+    initToc(this instanceof Element ? this : this[0]);
 });
 
-/* ------------------------------------------------------------------
- *  List builders
- * ------------------------------------------------------------------ */
+// In the Elementor editor iframe, widgets are inserted via AJAX after
+// DOMContentLoaded — ElementsHandler.addHandler only catches elements present
+// at JS load time, so a late-inserted TOC widget would never get initialized.
+// Run an extra observer to catch them. Idempotent thanks to the init flag.
+(function bootstrapLateTocs() {
+    if (typeof window === 'undefined' || typeof MutationObserver === 'undefined') {
+        return;
+    }
 
-function buildFlatList(headings, tag) {
+    function scan(root) {
+        if (!root) {
+            return;
+        }
+        var nodes = root.querySelectorAll ? root.querySelectorAll('.elementor-toc') : [];
+        for (var i = 0; i < nodes.length; i++) {
+            initToc(nodes[i]);
+        }
+    }
+
+    function start() {
+        if (!document.body) {
+            return;
+        }
+        scan(document);
+
+        var observer = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                var added = mutations[i].addedNodes;
+                if (!added || !added.length) {
+                    continue;
+                }
+                for (var j = 0; j < added.length; j++) {
+                    var node = added[j];
+                    if (node.nodeType !== 1) {
+                        continue;
+                    }
+                    if (node.classList && node.classList.contains('elementor-toc')) {
+                        initToc(node);
+                    }
+                    scan(node);
+                }
+            }
+        });
+
+        observer.observe(document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', start);
+    } else {
+        start();
+    }
+})();
+
+function buildToc($toc, el, $body) {
+    var listTag = el.getAttribute('data-list-tag') || 'ul';
+
+    var raw = document.querySelectorAll(ANCHOR_SELECTOR);
+    var anchors = [];
+    for (var i = 0; i < raw.length; i++) {
+        var node = raw[i];
+        if (el.contains(node)) {
+            continue;
+        }
+        var id = node.getAttribute('id');
+        var title = node.getAttribute('data-toc-title');
+        if (!id || !title) {
+            continue;
+        }
+        anchors.push({ node: node, id: id, title: title });
+    }
+
+    if (anchors.length === 0) {
+        $body.empty();
+        return anchors;
+    }
+
+    $body.html(buildFlatList(anchors, listTag));
+    return anchors;
+}
+
+function buildFlatList(anchors, tag) {
     var html = '<' + tag + ' class="elementor-toc__list-wrapper">';
-    for (var i = 0; i < headings.length; i++) {
-        html += buildListItem(headings[i]) + '</li>';
+    for (var i = 0; i < anchors.length; i++) {
+        html += '<li class="elementor-toc__list-item" data-target-id="' + escapeHtml(anchors[i].id) + '">'
+            + '<a href="#' + escapeHtml(anchors[i].id) + '" class="elementor-toc__list-item-text">'
+            + escapeHtml(anchors[i].title)
+            + '</a>'
+            + '</li>';
     }
     html += '</' + tag + '>';
     return html;
 }
 
-function buildHierarchicalList(headings, tag, allowedTags) {
-    var weightMap = {};
-    var sortedTags = allowedTags.slice().sort();
-    for (var t = 0; t < sortedTags.length; t++) {
-        weightMap[sortedTags[t].toLowerCase()] = t + 1;
-    }
+function setupActiveTracking($toc, anchors, namespace) {
+    var ns = namespace || '.iqitToc';
 
-    var html = '';
-    var stack = [];
+    // Always detach the previous listener so a rebuild doesn't accumulate them
+    // and doesn't keep tracking against a stale anchor list.
+    $(window).off(ns);
 
-    for (var i = 0; i < headings.length; i++) {
-        var tagName = headings[i].tagName.toLowerCase();
-        var level = weightMap[tagName] || 1;
-
-        if (stack.length === 0) {
-            html += '<' + tag + ' class="elementor-toc__list-wrapper">';
-            stack.push(level);
-        } else if (level > stack[stack.length - 1]) {
-            while (stack.length < level) {
-                html += '<' + tag + ' class="elementor-toc__list-wrapper">';
-                stack.push(stack[stack.length - 1] + 1);
-            }
-        } else if (level < stack[stack.length - 1]) {
-            while (stack.length > 0 && stack[stack.length - 1] > level) {
-                html += '</li></' + tag + '>';
-                stack.pop();
-            }
-            html += '</li>';
-        } else {
-            html += '</li>';
-        }
-
-        html += buildListItem(headings[i]);
-    }
-
-    while (stack.length > 0) {
-        html += '</li></' + tag + '>';
-        stack.pop();
-    }
-
-    return html;
-}
-
-function buildListItem(heading) {
-    var text = heading.textContent || heading.innerText || '';
-    return '<li class="elementor-toc__list-item" data-target-id="' + heading.id + '">'
-        + '<a href="#' + heading.id + '" class="elementor-toc__list-item-text">'
-        + escapeHtml(text.trim())
-        + '</a>';
-}
-
-/* ------------------------------------------------------------------
- *  Toggle (collapse / expand)
- * ------------------------------------------------------------------ */
-
-function setupToggle($toc) {
-    var $btnExpand = $toc.find('.elementor-toc__toggle-button--expand');
-    var $btnCollapse = $toc.find('.elementor-toc__toggle-button--collapse');
-
-    if (!$btnExpand.length && !$btnCollapse.length) {
-        return;
-    }
-
-    var el = $toc[0];
-    var minimizedOn = '';
-    if (el.classList.contains('elementor-toc--minimized-on-mobile')) {
-        minimizedOn = 'mobile';
-    } else if (el.classList.contains('elementor-toc--minimized-on-tablet')) {
-        minimizedOn = 'tablet';
-    } else if (el.classList.contains('elementor-toc--minimized-on-desktop')) {
-        minimizedOn = 'desktop';
-    }
-
-    // Initial state based on breakpoint
-    var w = window.innerWidth;
-    var shouldMinimize = false;
-    if (minimizedOn === 'mobile' && w < 768) {
-        shouldMinimize = true;
-    } else if (minimizedOn === 'tablet' && w < 1024) {
-        shouldMinimize = true;
-    } else if (minimizedOn === 'desktop') {
-        shouldMinimize = true;
-    }
-
-    if (shouldMinimize) {
-        $toc.addClass('elementor-toc--collapsed');
-    }
-
-    function toggle() {
-        $toc.toggleClass('elementor-toc--collapsed');
-    }
-
-    $btnExpand.add($btnCollapse).on('click', toggle);
-    $btnExpand.add($btnCollapse).on('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-        }
-    });
-}
-
-/* ------------------------------------------------------------------
- *  Active heading tracking
- * ------------------------------------------------------------------ */
-
-function setupActiveTracking($toc, headings) {
-    if (!headings.length) {
+    if (!anchors.length) {
+        $toc.find('.elementor-toc__list-item').removeClass('elementor-toc__list-item--active');
         return;
     }
 
@@ -1467,8 +1463,8 @@ function setupActiveTracking($toc, headings) {
         var scrollY = window.pageYOffset;
         var activeIndex = -1;
 
-        for (var i = headings.length - 1; i >= 0; i--) {
-            if (headings[i].getBoundingClientRect().top + window.pageYOffset - offset <= scrollY) {
+        for (var i = anchors.length - 1; i >= 0; i--) {
+            if (anchors[i].node.getBoundingClientRect().top + window.pageYOffset - offset <= scrollY) {
                 activeIndex = i;
                 break;
             }
@@ -1477,17 +1473,28 @@ function setupActiveTracking($toc, headings) {
         $items.removeClass('elementor-toc__list-item--active');
 
         if (activeIndex >= 0 && activeIndex < $items.length) {
-            $items.eq(activeIndex).addClass('elementor-toc__list-item--active');
+            var $active = $items.eq(activeIndex);
+            $active.addClass('elementor-toc__list-item--active');
+            scrollActiveIntoView($toc, $active);
         }
     }
 
-    $(window).on('scroll.iqitToc', onScroll);
+    function scrollActiveIntoView($tocEl, $active) {
+        if (window.innerWidth >= 768) {
+            return;
+        }
+        var body = $tocEl.find('.elementor-toc__body').get(0);
+        var item = $active.get(0);
+        if (!body || !item) {
+            return;
+        }
+        var target = item.offsetLeft - (body.clientWidth - item.offsetWidth) / 2;
+        body.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
+
+    $(window).on('scroll' + ns, onScroll);
     updateActive();
 }
-
-/* ------------------------------------------------------------------
- *  Helper
- * ------------------------------------------------------------------ */
 
 function escapeHtml(str) {
     var div = document.createElement('div');
@@ -1496,6 +1503,54 @@ function escapeHtml(str) {
 }
 
 },{"elementor-frontend/elements-handler":1}],14:[function(require,module,exports){
+/* global $ */
+
+var ElementsHandler = require('elementor-frontend/elements-handler');
+
+ElementsHandler.addHandler('[data-element_type="tabs"]', function () {
+    var $wrapper = $(this);
+    var $nav = $wrapper.find('> .elementor-tabs > .elementor-tabs-nav').first();
+    var $content = $wrapper.find('> .elementor-tabs > .elementor-tabs-content').first();
+
+    if (!$nav.length || !$content.length) {
+        return;
+    }
+
+    var $titles = $nav.children('.elementor-tab-title');
+    var $panes = $content.children('.elementor-tab-content');
+
+    function activate(index) {
+        index = parseInt(index, 10) || 0;
+
+        $titles.removeClass('elementor-active').attr('aria-selected', 'false');
+        $panes.removeClass('elementor-tab-active');
+
+        var $title = $titles.filter('[data-tab="' + index + '"]');
+        var $pane = $panes.filter('[data-tab-index="' + index + '"]');
+
+        $title.addClass('elementor-active').attr('aria-selected', 'true');
+        $pane.addClass('elementor-tab-active');
+    }
+
+    // Activate first tab by default (server already marks it active, this is a safety net)
+    if (!$titles.filter('.elementor-active').length) {
+        activate(0);
+    }
+
+    $titles.on('click', function (event) {
+        event.preventDefault();
+        activate(this.dataset.tab);
+    });
+
+    $titles.on('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            activate(this.dataset.tab);
+        }
+    });
+});
+
+},{"elementor-frontend/elements-handler":1}],15:[function(require,module,exports){
 /* global $ */
 
 var ElementsHandler = require('elementor-frontend/elements-handler');
@@ -1526,7 +1581,7 @@ ElementsHandler.addHandler('.elementor-tabs', function () {
     });
 });
 
-},{"elementor-frontend/elements-handler":1}],15:[function(require,module,exports){
+},{"elementor-frontend/elements-handler":1}],16:[function(require,module,exports){
 /* global $ */
 
 var ElementsHandler = require('elementor-frontend/elements-handler');
@@ -1547,7 +1602,7 @@ ElementsHandler.addHandler('.elementor-toggle-title', function () {
     });
 });
 
-},{"elementor-frontend/elements-handler":1}],16:[function(require,module,exports){
+},{"elementor-frontend/elements-handler":1}],17:[function(require,module,exports){
 /* global $, elementorFrontendConfig */
 
 var ElementsHandler = require('elementor-frontend/elements-handler');

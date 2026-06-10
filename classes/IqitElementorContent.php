@@ -30,6 +30,15 @@ if (!defined('_PS_VERSION_')) {
 
 class IqitElementorContent extends ObjectModel
 {
+    /**
+     * Sentinel hook name used when a content is configured as a standalone
+     * widget (not bound to any real PrestaShop hook). Stored in the `hook`
+     * column the same way as a real hook ID, but the module never registers
+     * itself on this sentinel — the content is meant to be rendered via
+     * {widget name="iqitelementor" id_content=X} directly from a template.
+     */
+    public const WIDGET_HOOK_NAME = 'iqitElementorWidget';
+
     /** @var int */
     public $id;
     /** @var int */
@@ -38,6 +47,8 @@ class IqitElementorContent extends ObjectModel
     public $id_elementor;
     /** @var int */
     public $id_object;
+    /** @var string Stable discriminator: "manufacturer" | "cms" | "blog" | "product" | "category" | "content" | "landing" — derived from the hook at write time, used for human-readable filtering and DB inspection */
+    public $object_type;
     /** @var string */
     public $title;
     /** @var string */
@@ -63,6 +74,7 @@ class IqitElementorContent extends ObjectModel
         'multilang_shop' => true,
         'fields' => [
             'id_object' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'],
+            'object_type' => ['type' => self::TYPE_STRING, 'validate' => 'isGenericName', 'size' => 64],
             'title' => ['type' => self::TYPE_STRING, 'validate' => 'isCleanHtml', 'size' => 255],
             'hook' => ['type' => self::TYPE_STRING, 'validate' => 'isHookName', 'required' => true],
             'active' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt'],

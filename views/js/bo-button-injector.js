@@ -1,3 +1,6 @@
+/*! iqitelementor - v1.0.0 - 30-04-2026 */
+/*! iqitelementor - v1.0.0 - 24-04-2026 */
+/*! iqitelementor - v1.0.0 - 24-04-2026 */
 /**
  * iqitelementor — central back-office button injector.
  *
@@ -57,6 +60,7 @@
             target.appendChild(wrapper);
         }
     }
+
 
     function buildButton(def) {
         var targetAttr = def.target

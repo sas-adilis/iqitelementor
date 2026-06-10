@@ -1,0 +1,42 @@
+//
+// Table
+//
+.elementor-widget-table {
+
+	.elementor-table {
+		width: 100%;
+		max-width: 100%;
+		border-collapse: collapse;
+		border-spacing: 0;
+		table-layout: auto;
+
+		th,
+		td {
+			vertical-align: middle;
+			border: 0;
+		}
+
+		tr {
+			border-bottom: 1px solid #ddd;
+		}
+
+		thead tr,
+		tfoot tr {
+			border-bottom: 1px solid #ddd;
+		}
+
+		// Striped rows — applied via .is-striped class
+		&.is-striped {
+
+			tbody tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+		}
+
+		// Side-header layouts: the row header is a <th scope="row">
+		&.header-left tbody th[scope="row"],
+		&.header-right tbody th[scope="row"] {
+			font-weight: bold;
+		}
+	}
+}

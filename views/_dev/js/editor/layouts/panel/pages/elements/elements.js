@@ -25,7 +25,8 @@ PanelElementsLayoutView = Marionette.LayoutView.extend( {
 
 	initElementsCollection: function() {
 		var elementsCollection = new PanelElementsElementsCollection(),
-			sectionConfig = elementor.config.elements.section;
+			sectionConfig = elementor.config.elements.section,
+			tabsConfig = elementor.config.elements.tabs;
 
 		elementsCollection.add( {
 			title: elementor.translate( 'inner_section' ),
@@ -34,6 +35,16 @@ PanelElementsLayoutView = Marionette.LayoutView.extend( {
 			keywords: sectionConfig.keywords,
 			icon: sectionConfig.icon
 		} );
+
+		if ( tabsConfig ) {
+			elementsCollection.add( {
+				title: tabsConfig.title || 'Tabs',
+				elType: 'tabs',
+				categories: tabsConfig.categories,
+				keywords: tabsConfig.keywords,
+				icon: tabsConfig.icon
+			} );
+		}
 
 		// TODO: Change the array from server syntax, and no need each loop for initialize
 		_.each( elementor.config.widgets, function( element, widgetType ) {

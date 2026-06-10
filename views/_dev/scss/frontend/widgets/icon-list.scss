@@ -7,28 +7,37 @@
 		list-style-type: none;
 		margin: 0;
 		padding: 0;
-
 	}
 
 	.elementor-icon-list-item {
 		margin: 0;
 		padding: 0;
+		display: flex;
+		align-items: flex-start;
 
-		a {
-			display: inline;
+		> a {
+			display: flex;
+			align-items: flex-start;
+			width: 100%;
 		}
 	}
 
 	.elementor-icon-list-text {
-		display: inline;
-		vertical-align: middle;
+		flex: 1;
+
+		// Neutralise les <p> que TinyMCE wrappe autour du texte
+		// pour que le rendu reste sur une ligne (sauf wrap réel).
+		p {
+			display: inline;
+			margin: 0;
+		}
 	}
 
 	.elementor-icon-list-icon {
+		flex-shrink: 0;
 		width: 1em;
-		line-height: 1;
-		vertical-align: middle;
-		display: inline-block; // fix issue #620
-		text-align: center; // fix issue #620
+		line-height: inherit;
+		text-align: center;
+		display: inline-block;
 	}
 }

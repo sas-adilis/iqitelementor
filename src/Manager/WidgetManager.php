@@ -53,6 +53,8 @@ class WidgetManager
             'media-carousel' => 'MediaCarousel',
             'product-carousel' => 'ProductCarousel',
             'table-of-contents' => 'TableOfContents',
+            'toc-anchor' => 'TocAnchor',
+            'table' => 'Table',
         ];
 
         $this->registeredWidgets = [];

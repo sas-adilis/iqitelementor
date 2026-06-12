@@ -38,8 +38,6 @@ class IqitElementorCategory extends ObjectModel
     public $id_elementor;
     /** @var int */
     public $id_category;
-    /** @var int */
-    public $just_elementor;
 
     // Lang fields
     /** @var string|array */
@@ -59,7 +57,6 @@ class IqitElementorCategory extends ObjectModel
         'multilang_shop' => true,
         'fields' => [
             'id_category' => ['type' => self::TYPE_INT, 'validate' => 'isUnsignedInt', 'required' => true],
-            'just_elementor' => ['type' => self::TYPE_INT,  'shop' => true],
             // Lang fields
             'data' => ['type' => self::TYPE_HTML,  'lang' => true, 'validate' => 'isJson'],
             'autosave_content' => ['type' => self::TYPE_HTML, 'validate' => 'isJson'],
@@ -108,40 +105,6 @@ class IqitElementorCategory extends ObjectModel
         $return = Db::getInstance()->getValue($sql);
 
         return $return;
-    }
-
-    public static function isJustElementor($idCategory): bool
-    {
-        if (!Validate::isUnsignedInt($idCategory)) {
-            return false;
-        }
-
-        $sql = 'SELECT c.just_elementor FROM ' . _DB_PREFIX_ . 'iqit_elementor_category c WHERE c.id_category = ' . (int) $idCategory;
-
-        return (bool) Db::getInstance()->getValue($sql);
-    }
-
-    /**
-     * @param int $idCategory
-     * @param int $justElementor
-     * @return bool|null
-     */
-    public static function setJustElementor($idCategory, $justElementor)
-    {
-        if (!Validate::isUnsignedInt($idCategory)) {
-            return null;
-        }
-        if (!Validate::isUnsignedInt($justElementor)) {
-            return null;
-        }
-
-        $id = IqitElementorCategory::getIdByCategory($idCategory);
-        $layoutObject = new IqitElementorCategory($id);
-
-        $layoutObject->just_elementor = $justElementor;
-        $layoutObject->update();
-
-        return true;
     }
 
     public static function deleteElement($idCategory): void

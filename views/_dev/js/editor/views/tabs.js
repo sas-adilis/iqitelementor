@@ -62,15 +62,24 @@ TabsView = BaseElementView.extend( {
 		BaseElementView.prototype.initialize.apply( this, arguments );
 
 		this.activeIndex = 0;
+		this._syncing = false;
 
 		this.listenTo( this.collection, 'add remove reset', this.onCollectionChanged );
+
+		var settings = this.model.get( 'settings' );
+		this.listenTo( settings, 'change:panel_tabs', this.onPanelTabsChange );
+
+		var panelTabs = settings.get( 'panel_tabs' );
+		if ( panelTabs && typeof panelTabs.on === 'function' ) {
+			this.listenTo( panelTabs, 'add remove reset change', this.onPanelTabsChange );
+		}
 	},
 
-	addEmptyTab: function() {
+	addEmptyTab: function( settings ) {
 		var newModel = this.addChildModel( {
 			id: elementor.helpers.getUniqueID(),
 			elType: 'tab',
-			settings: {},
+			settings: settings || {},
 			elements: []
 		} );
 
@@ -81,11 +90,117 @@ TabsView = BaseElementView.extend( {
 	},
 
 	_checkIsEmpty: function() {
+		var panelTabs = this.model.get( 'settings' ).get( 'panel_tabs' );
+
+		if ( panelTabs && panelTabs.length ) {
+			this.syncChildrenFromPanel();
+			return;
+		}
+
 		if ( ! this.collection.length ) {
-			// Tabs container must always have at least one tab
 			this.addEmptyTab();
 			this.addEmptyTab();
 		}
+
+		this.seedPanelTabsFromChildren();
+	},
+
+	seedPanelTabsFromChildren: function() {
+		if ( this._syncing ) {
+			return;
+		}
+
+		var rows = [];
+		this.collection.each( function( child ) {
+			var s = child.get( 'settings' );
+			rows.push( {
+				tab_title: ( s && s.get( 'tab_title' ) ) || ''
+			} );
+		} );
+
+		this._syncing = true;
+		var panelTabs = this.model.get( 'settings' ).get( 'panel_tabs' );
+		if ( panelTabs && typeof panelTabs.reset === 'function' ) {
+			panelTabs.reset( rows );
+		} else {
+			this.model.get( 'settings' ).set( 'panel_tabs', rows, { silent: true } );
+		}
+		this._syncing = false;
+	},
+
+	_readRow: function( row ) {
+		if ( ! row ) {
+			return { tab_title: '' };
+		}
+		if ( typeof row.get === 'function' ) {
+			return { tab_title: row.get( 'tab_title' ) || '' };
+		}
+		if ( row.attributes ) {
+			return { tab_title: row.attributes.tab_title || '' };
+		}
+		return { tab_title: row.tab_title || '' };
+	},
+
+	_getPanelRows: function() {
+		var panelTabs = this.model.get( 'settings' ).get( 'panel_tabs' );
+		if ( ! panelTabs ) {
+			return [];
+		}
+		// Backbone collection
+		if ( panelTabs.models && _.isArray( panelTabs.models ) ) {
+			return panelTabs.models;
+		}
+		if ( _.isArray( panelTabs ) ) {
+			return panelTabs;
+		}
+		return [];
+	},
+
+	syncChildrenFromPanel: function() {
+		var rows = this._getPanelRows();
+		var current = this.collection.length;
+		var desired = rows.length;
+
+		this._syncing = true;
+
+		while ( current > desired ) {
+			var last = this.collection.at( current - 1 );
+			if ( last ) {
+				last.destroy();
+			}
+			current--;
+		}
+
+		while ( current < desired ) {
+			this.addChildModel( {
+				id: elementor.helpers.getUniqueID(),
+				elType: 'tab',
+				settings: {},
+				elements: []
+			} );
+			current++;
+		}
+
+		var self = this;
+		_.each( rows, function( row, index ) {
+			var child = self.collection.at( index );
+			if ( ! child ) { return; }
+			var settings = child.get( 'settings' );
+			if ( ! settings ) { return; }
+			var data = self._readRow( row );
+			settings.set( 'tab_title', data.tab_title );
+		} );
+
+		this._syncing = false;
+	},
+
+	onPanelTabsChange: function() {
+		if ( this._syncing ) {
+			return;
+		}
+		this.syncChildrenFromPanel();
+		this.renderNav();
+		this.applyActiveStates();
 	},
 
 	onBeforeRender: function() {
@@ -118,14 +233,15 @@ TabsView = BaseElementView.extend( {
 		}
 
 		var self = this,
-			tabsId = this.model.get( 'id' );
+			tabsId = this.model.get( 'id' ),
+			panelRows = this._getPanelRows();
 
 		$nav.empty();
 
 		this.collection.each( function( tabModel, index ) {
 			var settings = tabModel.get( 'settings' ),
-				title = settings.get( 'tab_title' ) || ( 'Tab #' + ( index + 1 ) ),
-				icon = settings.get( 'tab_icon' ) || '',
+				panelData = self._readRow( panelRows[ index ] ),
+				title = panelData.tab_title || settings.get( 'tab_title' ) || ( 'Tab #' + ( index + 1 ) ),
 				isActive = index === self.activeIndex,
 				$li = Backbone.$( '<li>', {
 					'class': 'elementor-tab-title' + ( isActive ? ' elementor-active' : '' ),
@@ -135,11 +251,6 @@ TabsView = BaseElementView.extend( {
 					'aria-controls': 'elementor-tab-pane-' + tabsId + '-' + index,
 					'aria-selected': isActive ? 'true' : 'false'
 				} );
-
-			if ( icon ) {
-				$li.append( Backbone.$( '<i>', { 'class': icon, 'aria-hidden': 'true' } ) );
-				$li.append( ' ' );
-			}
 
 			$li.append( Backbone.$( '<span>' ).text( title ) );
 

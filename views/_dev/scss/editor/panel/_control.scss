@@ -925,7 +925,7 @@
 
 	}
 
-	.elementor-control-type-autocomplete_posts {
+	.elementor-control-type-autocomplete_items {
 
 		.elementor-control-selected-options{
 			display: none !important;
@@ -941,14 +941,21 @@
 
 		.elementor-post .elementor-repeater-row-handle-sortable{
 			position: absolute;
-			left: 0px;
-			top: 0px;
-			background: #d5dadf;
-			width: 12px;
+			left: 0;
+			top: 0;
+			background: #f1f3f5;
+			width: 22px;
 			text-align: center;
 			height: 100%;
-			color: #fff;
+			color: #9aa4af;
 			cursor: move;
+			border-right: 1px solid #e3e6e9;
+			transition: background .15s ease, color .15s ease;
+		}
+
+		.elementor-post:hover .elementor-repeater-row-handle-sortable{
+			background: #e9ecef;
+			color: #6d7882;
 		}
 
 		.elementor-repeater-row-handle-sortable i{
@@ -960,37 +967,66 @@
 		}
 
 		.elementor-control-selected-preview .elementor-post{
-			border: 1px solid #d5dadf;
-			margin-bottom: 5px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			border: 1px solid #e3e6e9;
+			border-radius: 4px;
+			margin-bottom: 6px;
 			position: relative;
 			background-color: #fff;
-			padding: 3px;
+			padding: 8px 8px 8px 32px;
+			transition: border-color .15s ease, box-shadow .15s ease;
+		}
+
+		.elementor-control-selected-preview .elementor-post:hover{
+			border-color: #c5ccd3;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .08);
 		}
 
 		.elementor-control-selected-preview .elementor-post-remove{
-			padding: 5px 7px;
+			padding: 4px 6px;
 			position: absolute;
-			top: 0px;
-			right: 0px;
+			top: 6px;
+			right: 6px;
 			border: none;
 			background: none;
+			color: #b0b7be;
+			cursor: pointer;
+			line-height: 1;
+			border-radius: 3px;
+			transition: color .15s ease, background .15s ease;
+		}
+
+		.elementor-control-selected-preview .elementor-post-remove:hover{
+			color: #e2483d;
+			background: #fbe9e8;
 		}
 
 		.elementor-control-selected-preview .elementor-post-image{
-			width: 20%;
-			display: inline-block;
-			vertical-align: middle;
+			flex: 0 0 auto;
+			width: 44px;
+			height: 44px;
+			object-fit: cover;
+			border-radius: 3px;
+			border: 1px solid #e3e6e9;
+			background: #f8f9fa;
 		}
 
 		.elementor-control-selected-preview .elementor-post-info{
-			width: 80%;
-			display: inline-block;
-			vertical-align: middle;
+			flex: 1 1 auto;
+			min-width: 0;
+			padding-right: 26px;
+			font-size: 12px;
+			line-height: 1.35;
+			word-break: break-word;
 		}
 
 		.elementor-control-selected-preview .elementor-post-reference{
-			opacity: 0.6;
+			opacity: 0.55;
 			display: block;
+			font-size: 11px;
+			margin-bottom: 2px;
 		}
 
 	}

@@ -168,6 +168,65 @@ class IqitElementorLanding extends ObjectModel
     }
 
     /**
+     * Duplicate this landing page (all languages) into a new, disabled copy.
+     *
+     * The copy is created inactive on purpose: a fresh duplicate must never
+     * silently steal the homepage slot or collide with the original. Its
+     * link_rewrite is regenerated per language to stay unique, and its title
+     * gets a "(copy)" suffix.
+     *
+     * @return IqitElementorLanding|null The new landing page, or null on failure
+     */
+    public function duplicate(): ?self
+    {
+        if (!$this->id) {
+            return null;
+        }
+
+        $idShop = (int) $this->id_shop;
+
+        $copy = new self();
+        $copy->id_shop = $idShop;
+        $copy->active = 0;
+        $copy->title = $this->title . ' (copy)';
+        $copy->data = [];
+        $copy->meta_title = [];
+        $copy->meta_description = [];
+        $copy->link_rewrite = [];
+
+        foreach (Language::getLanguages(false) as $lang) {
+            $idLang = (int) $lang['id_lang'];
+
+            $copy->data[$idLang] = $this->langValue($this->data, $idLang);
+            $copy->meta_title[$idLang] = $this->langValue($this->meta_title, $idLang);
+            $copy->meta_description[$idLang] = $this->langValue($this->meta_description, $idLang);
+
+            $sourceRewrite = $this->langValue($this->link_rewrite, $idLang);
+            if (empty($sourceRewrite)) {
+                $sourceRewrite = Tools::str2url($copy->title);
+            }
+            $copy->link_rewrite[$idLang] = self::getUniqueRewrite($sourceRewrite, $idLang, $idShop);
+        }
+
+        return $copy->add() ? $copy : null;
+    }
+
+    /**
+     * Read a multilang field value for a given language, tolerating the case
+     * where the ObjectModel field is still a flat string instead of an array.
+     *
+     * @param string|array $field
+     */
+    private function langValue($field, int $idLang): string
+    {
+        if (is_array($field)) {
+            return isset($field[$idLang]) ? (string) $field[$idLang] : '';
+        }
+
+        return (string) $field;
+    }
+
+    /**
      * Get the public URL for this landing page.
      */
     public function getLink(?int $idLang = null): string

@@ -203,6 +203,7 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                     'Edit' => $this->l('Edit'),
                     'Edit Section' => $this->l('Edit Section'),
                     'Edit Column' => $this->l('Edit Column'),
+                    'Edit Tabs' => $this->l('Edit Tabs'),
                     'Add column after' => $this->l('Add column after'),
                     'Save as Template' => $this->l('Save as Template'),
                     'Duplicate' => $this->l('Duplicate'),
@@ -955,110 +956,6 @@ class AdminIqitElementorEditorController extends ModuleAdminController
                 array_push($results, $product);
             }
             $results = array_values($results);
-            exit(json_encode($results));
-        } else {
-            exit(json_encode(new stdClass()));
-        }
-    }
-
-    public function ajaxProcessGetPosts(): void
-    {
-        header('Content-Type: application/json');
-
-        $post_ids = Tools::getValue('ids');
-
-        if (!$post_ids) {
-            $return = [
-                'success' => true,
-                'data' => '',
-            ];
-            exit(json_encode($return));
-        }
-        $context = Context::getContext();
-        $post_ids_array = explode(',', $post_ids);
-
-        $posts = SimpleBlogPost::getPosts($context->language->id, 30, null, null, true, 'IN-LIST', false, null, false, false, null, 'IN', $post_ids_array);
-
-        $results = [];
-        foreach ($posts as $item) {
-            $product = [
-                'id' => (int) $item['id_simpleblog_post'],
-                'name' => $item['title'],
-                'ref' => '',
-                'image' => (isset($item['banner_thumb'])) ? $item['banner_thumb'] : '',
-            ];
-            array_push($results, $product);
-        }
-        $results = array_values($results);
-
-        $return = [
-            'success' => true,
-            'data' => $results,
-        ];
-
-        exit(json_encode($return));
-    }
-
-    public function ajaxProcessSearchPosts(): void
-    {
-        $query = Tools::getValue('q', false);
-        if (!$query or $query == '' or Tools::strlen($query) < 1) {
-            exit;
-        }
-        if ($pos = strpos($query, ' (ref:')) {
-            $query = Tools::substr($query, 0, $pos);
-        }
-        $excludeIds = Tools::getValue('excludeIds', false);
-        if ($excludeIds && $excludeIds != 'NaN') {
-            $excludeIds = implode(',', array_map('intval', explode(',', $excludeIds)));
-        } else {
-            $excludeIds = '';
-        }
-
-        $context = Context::getContext();
-        $sql_param_search = pSQL(Search::getSearchParamFromWord($query));
-        $result[] = Db::getInstance()->executeS('
-                  SELECT p.id_simpleblog_post
-                    FROM `' . _DB_PREFIX_ . 'simpleblog_post` p
-                    LEFT JOIN `' . _DB_PREFIX_ . 'simpleblog_post_lang` pl
-                    ON p.`id_simpleblog_post` = pl.`id_simpleblog_post`
-                    LEFT JOIN `' . _DB_PREFIX_ . 'simpleblog_post_shop` ps
-                    ON p.`id_simpleblog_post` = ps.`id_simpleblog_post`
-                    LEFT OUTER JOIN `' . _DB_PREFIX_ . 'simpleblog_post_tag` pt
-                    ON p.`id_simpleblog_post` = pt.`id_simpleblog_post`
-                    LEFT OUTER JOIN `' . _DB_PREFIX_ . 'simpleblog_tag` t
-                    ON pt.`id_simpleblog_tag` = t.`id_simpleblog_tag`
-                    AND t.`id_lang` = ' . (int) $context->language->id . '
-                    WHERE (pl.`title` LIKE \'%' . $sql_param_search . '\'
-                    OR t.`name` LIKE \'%' . $sql_param_search . '\')
-                    AND `active` = 1
-                    AND pl.`id_lang` = ' . (int) $context->language->id . '
-                    AND ps.`id_shop` = ' . (int) $context->shop->id . '
-                    GROUP BY p.`id_simpleblog_post`
-                    ORDER BY p.`date_add` DESC
-                ');
-
-        foreach ($result as $select) {
-            foreach ($select as $post) {
-                $posts[$post['id_simpleblog_post']] = $post['id_simpleblog_post'];
-            }
-        }
-
-        if (!empty($posts)) {
-            $posts = SimpleBlogPost::getPosts($context->language->id, 10, null, null, true, 'sbp.date_add', 'DESC', null, false, false, null, 'IN', $posts);
-
-            $results = [];
-            foreach ($posts as $item) {
-                $product = [
-                    'id' => (int) $item['id_simpleblog_post'],
-                    'name' => $item['title'],
-                    'ref' => '',
-                    'image' => (isset($item['banner_thumb'])) ? $item['banner_thumb'] : '',
-                ];
-                array_push($results, $product);
-            }
-            $results = array_values($results);
-
             exit(json_encode($results));
         } else {
             exit(json_encode(new stdClass()));

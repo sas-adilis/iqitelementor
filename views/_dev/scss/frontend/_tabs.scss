@@ -14,7 +14,19 @@
             margin: 0;
             padding: 0;
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+
+            &::-webkit-scrollbar {
+                height: 4px;
+            }
+            &::-webkit-scrollbar-thumb {
+                background: rgba(0, 0, 0, 0.2);
+                border-radius: 2px;
+            }
 
             > .elementor-tab-title {
                 cursor: pointer;
@@ -23,6 +35,8 @@
                 transition: background-color 0.2s ease, color 0.2s ease;
                 border: 1px solid transparent;
                 border-bottom: none;
+                flex: 0 0 auto;
+                white-space: nowrap;
 
                 i {
                     margin-right: 6px;

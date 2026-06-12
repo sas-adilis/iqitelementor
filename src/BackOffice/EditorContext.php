@@ -51,7 +51,7 @@ class EditorContext
     /**
      * Build the full BO context for a given admin controller.
      *
-     * @return array{enabled: bool, pageType?: string, contentType?: string, newContent?: int, idPage?: int, onlyElementor?: array, justElementorCategory?: bool}
+     * @return array{enabled: bool, pageType?: string, contentType?: string, newContent?: int, idPage?: int, onlyElementor?: array}
      */
     public function buildContext(string $controllerName): array
     {
@@ -86,11 +86,6 @@ class EditorContext
             }
         }
 
-        $justElementorCategory = false;
-        if (!empty($cfg['just_elementor_category']) && $idPage) {
-            $justElementorCategory = (bool) \IqitElementorCategory::isJustElementor((int) $idPage);
-        }
-
         return [
             'enabled' => true,
             'pageType' => $pageType,
@@ -98,7 +93,6 @@ class EditorContext
             'newContent' => $newContent,
             'idPage' => (int) $idPage,
             'onlyElementor' => (array) $onlyElementor,
-            'justElementorCategory' => (bool) $justElementorCategory,
         ];
     }
 
@@ -152,7 +146,6 @@ class EditorContext
                 'pageType' => 'category',
                 'contentType' => 'default',
                 'id_attr_keys' => ['categoryId'],
-                'just_elementor_category' => true,
             ],
             'AdminManufacturers' => [
                 'pageType' => 'manufacturer',

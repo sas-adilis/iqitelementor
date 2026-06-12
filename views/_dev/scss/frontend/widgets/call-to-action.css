@@ -5,8 +5,7 @@
 .elementor-cta {
   position: relative;
   display: flex;
-  overflow: hidden;
-  transition: 0.5s;
+  /*overflow: hidden;*/
 }
 .elementor-cta-content {
   z-index: 2;
@@ -18,21 +17,11 @@
   padding: 35px;
   width: 100%;
   position: relative;
-  transition: 0.5s;
-  color: #fff;
 }
 .elementor-cta .elementor-content-item {
   position: relative;
-  transition: 0.5s;
-  color: #fff;
   width: 100%;
   margin: 0;
-}
-.elementor-cta .elementor-content-item:not(:last-child) {
-  margin-bottom: 15px;
-}
-.elementor-cta .elementor-content-item .elementor-icon {
-  color: #fff;
 }
 .elementor-cta-bg, .elementor-cta-bg-overlay {
   position: absolute;
@@ -81,36 +70,16 @@
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.elementor-btn-default .elementor-cta .elementor-btn:hover {
-  background: transparent;
-  text-decoration: none;
-}
-
 .elementor-cta-skin-classic .elementor-cta {
   flex-wrap: wrap;
 }
 .elementor-cta-skin-classic .elementor-cta-bg-wrapper {
   position: relative;
-  min-height: 200px;
   width: 100%;
 }
 .elementor-cta-skin-classic .elementor-cta-content {
   transition: all 0.4s;
   width: 100%;
-  background-color: #f7f7f7;
-}
-.elementor-cta-skin-classic .elementor-content-item,
-.elementor-cta-skin-classic .elementor-content-item .elementor-icon {
-  color: #55595c;
-  border-color: currentColor;
-}
-.elementor-cta-skin-classic.elementor-btn-default a.elementor-btn:not(#e) {
-  color: #55595c;
-}
-.elementor-cta-skin-classic.elementor-btn-default .elementor-btn {
-  color: #55595c;
-  border: solid 2px currentColor;
-  background: transparent;
 }
 
 .elementor-cta-skin-cover .elementor-cta {
@@ -125,17 +94,9 @@
   transition: all 0.4s;
   width: 100%;
 }
-.elementor-cta-skin-cover .elementor-cta-content {
-  min-height: 280px;
-}
 .elementor-cta-skin-cover .elementor-content-item,
 .elementor-cta-skin-cover .elementor-content-item .elementor-icon {
   color: #fff;
-}
-.elementor-cta-skin-cover.elementor-btn-default .elementor-btn {
-  color: #fff;
-  border: solid 2px #fff;
-  background: transparent;
 }
 
 .elementor-cta-layout-image-above .elementor-cta {
@@ -167,46 +128,6 @@
   flex-direction: row-reverse;
 }
 
-.elementor-ribbon {
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  left: auto;
-  right: 0;
-  transform: rotate(90deg);
-  width: 150px;
-  overflow: hidden;
-  height: 150px;
-}
-.elementor-ribbon-inner {
-  text-align: center;
-  left: 0;
-  width: 200%;
-  transform: translateY(-50%) translateX(-50%) translateX(35px) rotate(-45deg);
-  margin-top: 35px;
-  font-size: 13px;
-  line-height: 2;
-  font-weight: 800;
-  text-transform: uppercase;
-  background: #000;
-  color: #fff;
-}
-.elementor-ribbon.elementor-ribbon-left {
-  transform: rotate(0);
-  left: 0;
-  right: auto;
-}
-.elementor-ribbon.elementor-ribbon-right {
-  transform: rotate(90deg);
-  left: auto;
-  right: 0;
-}
-
-@media (max-device-width: 1024px) {
-  .elementor-cta {
-    cursor: pointer;
-  }
-}
 @media (min-width: 1025px) {
   .elementor-cta-desktop-layout-image-above .elementor-cta {
     flex-wrap: wrap;

@@ -46,7 +46,6 @@ class HookRegistrar
             'actionProductAdd',
 
             // Misc
-            'isJustElementor',
             'actionCmsPageGridDefinitionModifier',
             'actionCmsPageGridDataModifier',
             'actionAdminSimpleBlogPostsListingFieldsModifier',

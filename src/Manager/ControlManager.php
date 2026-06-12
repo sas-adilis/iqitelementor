@@ -6,7 +6,7 @@ use IqitElementor\Base\ControlBase;
 use IqitElementor\Base\GroupControlBase;
 use IqitElementor\Helper\Helper;
 use IqitElementor\Control\Animation;
-use IqitElementor\Control\AutocompletePosts;
+use IqitElementor\Control\AutocompleteItems;
 use IqitElementor\Control\AutocompleteProducts;
 use IqitElementor\Control\BoxShadow;
 use IqitElementor\Control\Checkbox;
@@ -66,7 +66,7 @@ class ControlManager
     public const SELECT_BIG = 'select_big';
     public const SELECT_SORT = 'select_sort';
     public const AUTOCOMPLETE_PRODUCTS = 'autocomplete_products';
-    public const AUTOCOMPLETE_POSTS = 'autocomplete_posts';
+    public const AUTOCOMPLETE_ITEMS = 'autocomplete_items';
     public const MODULES = 'modules';
     public const CHECKBOX = 'checkbox';
     public const SWITCHER = 'switcher';
@@ -125,7 +125,7 @@ class ControlManager
         self::SELECT_BIG => SelectBig::class,
         self::SELECT_SORT => SelectSort::class,
         self::AUTOCOMPLETE_PRODUCTS => AutocompleteProducts::class,
-        self::AUTOCOMPLETE_POSTS => AutocompletePosts::class,
+        self::AUTOCOMPLETE_ITEMS => AutocompleteItems::class,
         self::MODULES => Modules::class,
         self::CHECKBOX => Checkbox::class,
         self::SWITCHER => Switcher::class,

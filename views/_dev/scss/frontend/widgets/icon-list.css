@@ -6,20 +6,27 @@
 .elementor-widget-icon-list .elementor-icon-list-item {
   margin: 0;
   padding: 0;
+  display: flex;
+  align-items: flex-start;
 }
-.elementor-widget-icon-list .elementor-icon-list-item a {
-  display: inline;
+.elementor-widget-icon-list .elementor-icon-list-item > a {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
 }
 .elementor-widget-icon-list .elementor-icon-list-text {
+  flex: 1;
+}
+.elementor-widget-icon-list .elementor-icon-list-text p {
   display: inline;
-  vertical-align: middle;
+  margin: 0;
 }
 .elementor-widget-icon-list .elementor-icon-list-icon {
+  flex-shrink: 0;
   width: 1em;
-  line-height: 1;
-  vertical-align: middle;
-  display: inline-block;
+  line-height: inherit;
   text-align: center;
+  display: inline-block;
 }
 
 /*# sourceMappingURL=icon-list.css.map */

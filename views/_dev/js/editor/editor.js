@@ -202,7 +202,7 @@ App = Marionette.Application.extend( {
 				slider: require( 'elementor-views/controls/slider' ),
 				wysiwyg: require( 'elementor-views/controls/wysiwyg' ),
 				autocomplete_products: require( 'elementor-views/controls/autocomplete-products' ),
-				autocomplete_posts: require( 'elementor-views/controls/autocomplete-posts' ),
+				autocomplete_items: require( 'elementor-views/controls/autocomplete-items' ),
 				choose: require( 'elementor-views/controls/choose' ),
 				url: require( 'elementor-views/controls/url' ),
 				font: require( 'elementor-views/controls/font' ),

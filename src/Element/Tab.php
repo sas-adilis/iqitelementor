@@ -55,18 +55,6 @@ class Tab extends ElementBase
             ]
         );
 
-        $this->addControl(
-            'tab_icon',
-            [
-                'label' => Translater::get()->l('Icon (Font Awesome class)'),
-                'type' => ControlManager::TEXT,
-                'default' => '',
-                'placeholder' => 'fa fa-star',
-                'label_block' => true,
-                'description' => Translater::get()->l('Optional — leave empty for no icon.'),
-            ]
-        );
-
         $this->endControlsSection();
 
         $this->startControlsSection(

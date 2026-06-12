@@ -1,5 +1,11 @@
+.elementor-widget-image .elementor-image figure {
+  overflow: hidden;
+}
 .elementor-widget-image .elementor-image img {
   vertical-align: middle;
+  object-fit: cover;
+  width: auto;
+  height: auto;
 }
 .elementor-widget-image .elementor-image.elementor-image-shape-circle {
   border-radius: 50%;

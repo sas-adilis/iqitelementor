@@ -3,6 +3,7 @@
 namespace IqitElementor\Element;
 
 use IqitElementor\Base\ElementBase;
+use IqitElementor\Control\Group\Border;
 use IqitElementor\Control\Group\Typography;
 use IqitElementor\Core\Plugin;
 use IqitElementor\Helper\Helper;
@@ -69,29 +70,20 @@ class Tabs extends ElementBase
             ]
         );
 
-        $this->addControl(
+        $this->addResponsiveControl(
             'title_align',
             [
                 'label' => Translater::get()->l('Titles Alignment'),
-                'type' => ControlManager::CHOOSE,
+                'type' => ControlManager::SELECT,
                 'default' => 'left',
                 'options' => [
-                    'left' => [
-                        'title' => Translater::get()->l('Left'),
-                        'icon' => 'fa fa-align-left',
-                    ],
-                    'center' => [
-                        'title' => Translater::get()->l('Center'),
-                        'icon' => 'fa fa-align-center',
-                    ],
-                    'right' => [
-                        'title' => Translater::get()->l('Right'),
-                        'icon' => 'fa fa-align-right',
-                    ],
-                    'stretch' => [
-                        'title' => Translater::get()->l('Stretch'),
-                        'icon' => 'fa fa-arrows-h',
-                    ],
+                    'left' => Translater::get()->l('Left'),
+                    'center' => Translater::get()->l('Center'),
+                    'right' => Translater::get()->l('Right'),
+                    'stretch' => Translater::get()->l('Stretch'),
+                    'space-between' => Translater::get()->l('Space Between'),
+                    'space-around' => Translater::get()->l('Space Around'),
+                    'space-evenly' => Translater::get()->l('Space Evenly'),
                 ],
                 'selectors' => [
                     '{{WRAPPER}}.elementor-tabs-view-horizontal .elementor-tabs-nav' => 'justify-content: {{VALUE}};',
@@ -100,10 +92,45 @@ class Tabs extends ElementBase
                     'left' => 'flex-start',
                     'right' => 'flex-end',
                     'center' => 'center',
-                    'stretch' => 'stretch',
+                    'stretch' => 'flex-start',
+                    'space-between' => 'space-between',
+                    'space-around' => 'space-around',
+                    'space-evenly' => 'space-evenly',
                 ],
                 'condition' => [
                     'orientation' => 'horizontal',
+                ],
+            ]
+        );
+
+        // Hidden helper: when stretch is selected, give children flex:1 to actually fill the row.
+        $this->addResponsiveControl(
+            'title_align_stretch_helper',
+            [
+                'type' => ControlManager::HIDDEN,
+                'default' => '1',
+                'selectors' => [
+                    '{{WRAPPER}}.elementor-tabs-view-horizontal .elementor-tabs-nav > .elementor-tab-title' => 'flex: {{VALUE}};',
+                ],
+                'condition' => [
+                    'orientation' => 'horizontal',
+                    'title_align' => 'stretch',
+                ],
+            ]
+        );
+
+        $this->addResponsiveControl(
+            'titles_gap',
+            [
+                'label' => Translater::get()->l('Gap between tabs'),
+                'type' => ControlManager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => ['min' => 0, 'max' => 100, 'step' => 1],
+                ],
+                'default' => ['size' => 0, 'unit' => 'px'],
+                'selectors' => [
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav' => 'gap: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -125,6 +152,29 @@ class Tabs extends ElementBase
             ]
         );
 
+        $this->addControl(
+            'panel_tabs',
+            [
+                'label' => Translater::get()->l('Tabs'),
+                'type' => ControlManager::REPEATER,
+                'separator' => 'before',
+                'default' => [
+                    ['tab_title' => Translater::get()->l('Tab #1')],
+                    ['tab_title' => Translater::get()->l('Tab #2')],
+                ],
+                'fields' => [
+                    [
+                        'name' => 'tab_title',
+                        'label' => Translater::get()->l('Title'),
+                        'type' => ControlManager::TEXT,
+                        'default' => Translater::get()->l('Tab Title'),
+                        'label_block' => true,
+                    ],
+                ],
+                'title_field' => 'tab_title',
+            ]
+        );
+
         $this->endControlsSection();
     }
 
@@ -138,26 +188,24 @@ class Tabs extends ElementBase
             ]
         );
 
-        $this->addControl(
-            'title_color',
+        $this->startControlsTabs('title_style_tabs');
+
+        // Normal Tab
+        $this->startControlsTab(
+            'title_style_normal',
             [
-                'label' => Translater::get()->l('Inactive Color'),
-                'type' => ControlManager::COLOR,
-                'default' => '',
-                'selectors' => [
-                    '{{WRAPPER}} .elementor-tab-title' => 'color: {{VALUE}};',
-                ],
+                'label' => Translater::get()->l('Normal'),
             ]
         );
 
         $this->addControl(
-            'title_active_color',
+            'title_color',
             [
-                'label' => Translater::get()->l('Active Color'),
+                'label' => Translater::get()->l('Color'),
                 'type' => ControlManager::COLOR,
-                'default' => '',
+                'default' => '#556068',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-tab-title.elementor-active' => 'color: {{VALUE}};',
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -165,11 +213,42 @@ class Tabs extends ElementBase
         $this->addControl(
             'title_bg',
             [
-                'label' => Translater::get()->l('Inactive Background'),
+                'label' => Translater::get()->l('Background'),
                 'type' => ControlManager::COLOR,
-                'default' => '',
+                'default' => '#d5dadf',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-tab-title' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $this->addGroupControl(
+            Border::getType(),
+            [
+                'name' => 'title_border',
+                'selector' => '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title',
+                'separator' => 'before',
+            ]
+        );
+
+        $this->endControlsTab();
+
+        // Active Tab
+        $this->startControlsTab(
+            'title_style_active',
+            [
+                'label' => Translater::get()->l('Active'),
+            ]
+        );
+
+        $this->addControl(
+            'title_active_color',
+            [
+                'label' => Translater::get()->l('Color'),
+                'type' => ControlManager::COLOR,
+                'default' => '#9b0a46',
+                'selectors' => [
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title.elementor-active' => 'color: {{VALUE}};',
                 ],
             ]
         );
@@ -177,20 +256,35 @@ class Tabs extends ElementBase
         $this->addControl(
             'title_active_bg',
             [
-                'label' => Translater::get()->l('Active Background'),
+                'label' => Translater::get()->l('Background'),
                 'type' => ControlManager::COLOR,
-                'default' => '',
+                'default' => '#ffffff',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-tab-title.elementor-active' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title.elementor-active' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
 
         $this->addGroupControl(
+            Border::getType(),
+            [
+                'name' => 'title_active_border',
+                'selector' => '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title.elementor-active',
+                'separator' => 'before',
+            ]
+        );
+
+        $this->endControlsTab();
+
+        $this->endControlsTabs();
+
+        $this->addGroupControl(
             Typography::getType(),
             [
+                'label' => Translater::get()->l('Typography'),
                 'name' => 'title_typography',
-                'selector' => '{{WRAPPER}} .elementor-tab-title',
+                'selector' => '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title',
+                'separator' => 'before',
             ]
         );
 
@@ -214,7 +308,7 @@ class Tabs extends ElementBase
                 'type' => ControlManager::COLOR,
                 'default' => '',
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-tabs-content' => 'background-color: {{VALUE}};',
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -226,8 +320,17 @@ class Tabs extends ElementBase
                 'type' => ControlManager::DIMENSIONS,
                 'size_units' => ['px', 'em', '%'],
                 'selectors' => [
-                    '{{WRAPPER}} .elementor-tab-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content > .elementor-tab-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
+            ]
+        );
+
+        $this->addGroupControl(
+            Border::getType(),
+            [
+                'name' => 'content_border',
+                'selector' => '{{WRAPPER}}.elementor-tabs-wrapper.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content',
+                'separator' => 'before',
             ]
         );
 
@@ -385,7 +488,6 @@ class Tabs extends ElementBase
             }
             $tab_instance = $tab_obj->getParseValues(isset($tab_data['settings']) ? $tab_data['settings'] : []);
             $title = isset($tab_instance['tab_title']) ? $tab_instance['tab_title'] : '';
-            $icon = isset($tab_instance['tab_icon']) ? $tab_instance['tab_icon'] : '';
             $active = 0 === $index ? ' elementor-active' : '';
             $pane_id = 'elementor-tab-pane-' . $tabs_id . '-' . $index;
             $title_id = 'elementor-tab-title-' . $tabs_id . '-' . $index;
@@ -396,9 +498,6 @@ class Tabs extends ElementBase
                 aria-controls="<?php echo Helper::escAttr($pane_id); ?>"
                 aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>"
                 data-tab="<?php echo (int) $index; ?>">
-                <?php if (!empty($icon)) { ?>
-                    <i class="<?php echo Helper::escAttr($icon); ?>" aria-hidden="true"></i>
-                <?php } ?>
                 <span><?php echo htmlspecialchars($title, ENT_QUOTES, 'UTF-8'); ?></span>
             </li>
         <?php

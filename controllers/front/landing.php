@@ -2,6 +2,7 @@
 
 use IqitElementor\Core\Plugin;
 use IqitElementor\Helper\OutputHelper;
+use IqitElementor\Helper\OwnerSignature;
 
 if (!defined('_PS_VERSION_')) {
     exit;
@@ -58,7 +59,8 @@ class IqitElementorLandingModuleFrontController extends ModuleFrontController
         $rawData = $this->module->isPreviewMode() && !empty($this->landing->autosave_content)
             ? $this->landing->autosave_content
             : $this->landing->data;
-        $layoutData = (array) json_decode($rawData, true);
+        $decoded = (array) json_decode($rawData, true);
+        $layoutData = OwnerSignature::unwrap($decoded);
         $content = OutputHelper::capture(function () use ($layoutData) {
             Plugin::instance()->getFrontend($layoutData);
         });

@@ -5,17 +5,34 @@ namespace IqitElementor\Editor\BuiltIn;
 use IqitElementor\Editor\EditorTarget;
 
 /**
- * Category back-office integration is handled by the legacy inline template
- * (`tmpl-btn-edit-with-elementor-category` in backoffice_header.tpl) because
- * it also injects the `justElementor` switcher next to the button. The
- * button itself is therefore not declared here — this target only exposes
- * editor dispatch.
+ * Stores Elementor JSON for categories in the dedicated `iqit_elementor_category`
+ * table (lang-keyed via `data`), and exposes the back-office "Edit with Elementor"
+ * button through the same EditorTargetRegistry mechanism used by all other
+ * targets — no special-case template, no extra switcher.
  */
 class CategoryTarget extends EditorTarget
 {
     public function getPageType(): string
     {
         return 'category';
+    }
+
+    public function getBoButtons(string $controllerName, int $idLang): array
+    {
+        if ($controllerName !== 'AdminCategories') {
+            return [];
+        }
+
+        $pageId = (int) $this->getRequestAttribute('categoryId');
+        $module = \Module::getInstanceByName('iqitelementor');
+
+        return [[
+            'fieldSelector' => '[id^="category_description_"]',
+            'label' => $module->l('Edit with Elementor - Visual Page Builder', 'CategoryTarget'),
+            'pageId' => $pageId,
+            'target' => '_blank',
+            'fallback' => $module->l('Save category first to enable page builder for description', 'CategoryTarget'),
+        ]];
     }
 
     public function loadEditorContent(int $pageId, string $contentType, int $idLang): array

@@ -57,6 +57,8 @@ SortableBehavior = Marionette.Behavior.extend( {
 				connectWith: $childViewContainer.selector,
 				cursor: 'move',
 				placeholder: 'elementor-sortable-placeholder',
+				distance: 10,
+				tolerance: 'pointer',
 				cursorAt: {
 					top: 20,
 					left: 25

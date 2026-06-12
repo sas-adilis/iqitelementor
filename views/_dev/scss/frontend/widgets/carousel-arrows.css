@@ -1,0 +1,47 @@
+.swiper-elementor.swiper-elementor-auto .swiper-slide {
+  width: auto;
+}
+
+.swiper-elementor > .swiper-navigation,
+.swiper-elementor > .swiper-pagination,
+.swiper-elementor > .swiper-scrollbar,
+.swiper-elementor > .swiper-bottom > .swiper-navigation,
+.swiper-elementor > .swiper-bottom > .swiper-pagination,
+.swiper-elementor > .swiper-bottom > .swiper-scrollbar {
+  display: none;
+}
+.swiper-elementor.swiper-elementor-nav-on > .swiper-navigation,
+.swiper-elementor.swiper-elementor-nav-on > .swiper-bottom > .swiper-navigation {
+  display: flex;
+}
+.swiper-elementor.swiper-elementor-pag-on > .swiper-pagination,
+.swiper-elementor.swiper-elementor-pag-on > .swiper-bottom > .swiper-pagination {
+  display: block;
+}
+.swiper-elementor.swiper-elementor-scr-on > .swiper-scrollbar,
+.swiper-elementor.swiper-elementor-scr-on > .swiper-bottom > .swiper-scrollbar {
+  display: block;
+}
+
+.elementor-swiper-button.has-custom-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.elementor-swiper-button.has-custom-icon::after {
+  display: none;
+}
+.elementor-swiper-button.has-custom-icon svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+.elementor-swiper-button.has-custom-icon i {
+  font-size: inherit;
+}
+.elementor-swiper-button.has-custom-icon .elementor-icon-svg {
+  display: inline-flex;
+  line-height: 1;
+}
+
+/*# sourceMappingURL=carousel-arrows.css.map */

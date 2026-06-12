@@ -16,6 +16,7 @@ class AdminIqitElementorController extends ModuleAdminController
         $this->table = 'iqit_elementor_landing';
 
         $this->addRowAction('edit');
+        $this->addRowAction('duplicate');
         $this->addRowAction('delete');
         parent::__construct();
 
@@ -159,6 +160,27 @@ class AdminIqitElementorController extends ModuleAdminController
 
         if (Tools::isSubmit('submitOptions' . $this->table)) {
             $this->module->clearHomeCache();
+        }
+
+        if (Tools::getValue('duplicateLanding')) {
+            $id = (int) Tools::getValue('id_iqit_elementor_landing');
+            $landing = new IqitElementorLanding($id);
+
+            if (!Validate::isLoadedObject($landing)) {
+                $this->errors[] = $this->module->getTranslator()->trans('The landing page to duplicate could not be found.', [], 'Modules.Iqitelementor.Admin');
+                return false;
+            }
+
+            $copy = $landing->duplicate();
+            if (!$copy) {
+                $this->errors[] = $this->module->getTranslator()->trans('An error occurred while duplicating the landing page.', [], 'Modules.Iqitelementor.Admin');
+                return false;
+            }
+
+            Tools::redirectAdmin(
+                $this->context->link->getAdminLink('Admin' . $this->name)
+                . '&conf=3'
+            );
         }
 
         return parent::postProcess();
@@ -343,6 +365,30 @@ class AdminIqitElementorController extends ModuleAdminController
         $this->toolbar_title[] = $this->module->getTranslator()->trans('Landing pages', [], 'Modules.Iqitelementor.Admin');
     }
 
+    /**
+     * Render the "Duplicate" row action link.
+     *
+     * Signature imposed by PrestaShop HelperList, which calls
+     * display<Action>Link($token, $id, $name) for every custom row action.
+     *
+     * @param string $token
+     * @param int|string $id
+     * @param string|null $name
+     */
+    public function displayDuplicateLink($token, $id, $name = null): string
+    {
+        $href = $this->context->link->getAdminLink('Admin' . $this->name)
+            . '&id_iqit_elementor_landing=' . (int) $id
+            . '&duplicateLanding=1';
+
+        $label = $this->module->getTranslator()->trans('Duplicate', [], 'Modules.Iqitelementor.Admin');
+
+        return '<a href="' . htmlspecialchars($href, ENT_QUOTES, 'UTF-8') . '" '
+            . 'title="' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8') . '">'
+            . '<i class="icon-copy"></i> ' . htmlspecialchars($label, ENT_QUOTES, 'UTF-8')
+            . '</a>';
+    }
+
     public function renderElementorGridIcon($value, $row)
     {
         $id = isset($row['id_iqit_elementor_landing']) ? (int) $row['id_iqit_elementor_landing'] : 0;
@@ -362,22 +408,6 @@ class AdminIqitElementorController extends ModuleAdminController
             . 'class="elementor-grid-link">'
             . '<img src="' . htmlspecialchars($logoUrl, ENT_QUOTES, 'UTF-8') . '" alt="Elementor" class="elementor-grid-logo" style="width:20px;height:20px;">'
             . '</a>';
-    }
-
-    public function ajaxProcessCategoryLayout(): void
-    {
-        header('Content-Type: application/json');
-        $categoryId = (int) Tools::getValue('categoryId');
-        $justElementor = (int) Tools::getValue('justElementor');
-
-        IqitElementorCategory::setJustElementor($categoryId, $justElementor);
-
-        $return = [
-            'success' => true,
-            'data' => true,
-        ];
-
-        exit(json_encode($return));
     }
 
 }

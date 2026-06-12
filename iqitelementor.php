@@ -17,6 +17,7 @@ use IqitElementor\Cache\RenderCache;
 use IqitElementor\Core\Plugin;
 use IqitElementor\Editor\EditorTargetRegistry;
 use IqitElementor\Helper\OutputHelper;
+use IqitElementor\Helper\OwnerSignature;
 use IqitElementor\Contract\ContentRendererInterface;
 use IqitElementor\Core\HookRegistrar;
 use IqitElementor\Helper\Helper;
@@ -122,10 +123,10 @@ class IqitElementor extends Module implements WidgetInterface
             $this->context->controller->addJS($this->_path . 'views/js/bo-button-injector.js');
         }
 
-        // Legacy EditorContext is still used for:
-        //   - the category inline template (button + justElementor switcher)
-        //   - the hideEditor / categoryLayout behaviours inside backoffice.js
-        // The rest of the BO button injection moved to EditorTargetRegistry.
+        // Legacy EditorContext is still used to feed `backoffice.js`
+        // with the hideEditor behaviour on CMS / blog admin screens
+        // when the entity content is "only Elementor". The rest of the
+        // BO button injection lives in EditorTargetRegistry.
         $editorCtx = $this->getEditorContext();
         $boCtx = $editorCtx->buildContext($controllerName);
 
@@ -133,30 +134,14 @@ class IqitElementor extends Module implements WidgetInterface
             return;
         }
 
-        $editorUrl = $editorCtx->buildEditorUrl(
-            (string) $boCtx['pageType'],
-            (string) $boCtx['contentType'],
-            (int) $boCtx['newContent'],
-            (int) $boCtx['idPage'],
-            $idLang
-        );
-
         $this->context->controller->addJS($this->_path . 'views/js/backoffice.js');
 
         Media::addJsDef([
             'onlyElementor' => (array) $boCtx['onlyElementor'],
-            'elementorAjaxUrl' => $this->context->link->getAdminLink('AdminIqitElementor') . '&ajax=1',
+            'elementorPageType' => (string) $boCtx['pageType'],
         ]);
 
-        $this->context->smarty->assign([
-            'urlElementor' => $editorUrl,
-            'onlyElementor' => (array) $boCtx['onlyElementor'],
-            'pageType' => (string) $boCtx['pageType'],
-            'justElementorCategory' => (bool) $boCtx['justElementorCategory'],
-            'idPage' => (int) $boCtx['idPage'],
-        ]);
-
-        return $this->fetch(_PS_MODULE_DIR_ . '/' . $this->name . '/views/templates/hook/backoffice_header.tpl');
+        return '';
     }
 
     public function hookActionCmsPageGridDefinitionModifier(array $params): void
@@ -718,6 +703,19 @@ class IqitElementor extends Module implements WidgetInterface
         RenderCache::flush();
     }
 
+    /**
+     * Clear the homepage cache after the homepage layout option is changed.
+     *
+     * The rendered Elementor HTML is content-addressed in RenderCache, while
+     * the PrestaShop Smarty cache holds the wrapping index template — both must
+     * be flushed so the newly selected layout shows on the front office.
+     */
+    public function clearHomeCache(): void
+    {
+        RenderCache::flush();
+        Tools::clearSmartyCache();
+    }
+
     public function renderWidget($hookName = null, array $configuration = [])
     {
         if ($hookName === null && isset($configuration['hook'])) {
@@ -925,11 +923,6 @@ class IqitElementor extends Module implements WidgetInterface
         Configuration::updateValue('PS_USE_HTMLPURIFIER', $pur);
     }
 
-    public function hookIsJustElementor($params)
-    {
-        return IqitElementorCategory::isJustElementor((int) $params['categoryId']);
-    }
-
     /**
      * Drop the Elementor layout row associated with a deleted product.
      */
@@ -1018,6 +1011,14 @@ class IqitElementor extends Module implements WidgetInterface
         $stripped = str_replace(["\r", "\n"], '', (string) $stripped);
         $decoded = json_decode($stripped, true);
         if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded) || empty($decoded)) {
+            return $content;
+        }
+
+        // Unwrap the owner-signature envelope when present so the frontend
+        // engine receives the bare elements array. Legacy bare-array payloads
+        // pass through unchanged.
+        $decoded = OwnerSignature::unwrap($decoded);
+        if (empty($decoded)) {
             return $content;
         }
 

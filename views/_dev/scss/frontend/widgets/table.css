@@ -1,0 +1,27 @@
+.elementor-widget-table .elementor-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+}
+.elementor-widget-table .elementor-table th,
+.elementor-widget-table .elementor-table td {
+  vertical-align: middle;
+  border: 0;
+}
+.elementor-widget-table .elementor-table tr {
+  border-bottom: 1px solid #ddd;
+}
+.elementor-widget-table .elementor-table thead tr,
+.elementor-widget-table .elementor-table tfoot tr {
+  border-bottom: 1px solid #ddd;
+}
+.elementor-widget-table .elementor-table.is-striped tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.elementor-widget-table .elementor-table.header-left tbody th[scope=row], .elementor-widget-table .elementor-table.header-right tbody th[scope=row] {
+  font-weight: bold;
+}
+
+/*# sourceMappingURL=table.css.map */

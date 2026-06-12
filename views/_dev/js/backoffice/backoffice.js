@@ -7,24 +7,7 @@ document.addEventListener("DOMContentLoaded", function (event) {
 
         iqitElementorButton = (function () {
 
-            var $wrapperCms = $('form[name="cms_page"]').first().find('.form-wrapper').first();
-                $wrapperProduct = $('#features, #product_description_description'),
-                $wrapperBlog = $('#elementor-btn-blog-wrapper'),
-                $wrapperCategory = $('form[name="category"], form[name="root_category"]').first().find('.form-wrapper').first();
-                $wrapperBrand = $('form[name="manufacturer"]').first().find('#manufacturer_description'),
-                $btnTemplate = $('#tmpl-btn-edit-with-elementor'),
-                $btnTemplateProduct = $('#tmpl-btn-edit-with-elementor-product'),
-                $btnTemplateBlog = $('#tmpl-btn-edit-with-elementor-blog'),
-                $btnTemplateCategory = $('#tmpl-btn-edit-with-elementor-category'),
-                $btnTemplateBrand = $('#tmpl-btn-edit-with-elementor-brand');
-
             function init() {
-                $wrapperCms.prepend($btnTemplate.html());
-                $wrapperProduct.prepend($btnTemplateProduct.html());
-                $wrapperBlog.prepend($btnTemplateBlog.html());
-                $wrapperCategory.prepend($btnTemplateCategory.html());
-                $wrapperBrand.append($btnTemplateBrand.html());
-
                 if (typeof elementorPageType !== 'undefined') {
 
                     if (elementorPageType == 'cms') {
@@ -53,27 +36,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
                         }
                     }
 
-                    if (elementorPageType == 'category') {
-                        var $form = $('form[name="category"], form[name="root_category"]').first();
-                        $form.submit(function (event) {
-                            $.ajax({
-                                type: 'POST',
-                                url: elementorAjaxUrl,
-                                data: {
-                                    action: 'categoryLayout',
-                                    categoryId: $form.find("input[name='idPageElementor']").val(),
-                                    justElementor: $form.find("input[name='justElementor']:checked").val()
-                                },
-                                success: function (resp) {
-                                },
-                                error: function () {
-                                    console.log("error");
-                                }
-                            });
-
-                        });
-
-                    }
                 }
 
             }

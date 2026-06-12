@@ -1,17 +1,20 @@
-/* Error: Undefined mixin.
- *    ,
- * 56 |                 @include padding-end(15px);
- *    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^
- *    '
- *   testimonial.scss 56:5  root stylesheet */
-
-body::before {
-  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
-      "Droid Sans Mono", monospace, monospace;
-  white-space: pre;
-  display: block;
-  padding: 1em;
-  margin-bottom: 1em;
-  border-bottom: 2px solid black;
-  content: "Error: Undefined mixin.\a    \2577 \a 56 \2502                  @include padding-end(15px);\a    \2502                  ^^^^^^^^^^^^^^^^^^^^^^^^^^\a    \2575 \a   testimonial.scss 56:5  root stylesheet";
+.elementor-testimonial-wrapper {
+  overflow: hidden;
+  text-align: center;
 }
+.elementor-testimonial-wrapper .elementor-testimonial-content {
+  margin-bottom: 1.5rem;
+}
+.elementor-testimonial-wrapper .elementor-testimonial-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.elementor-testimonial-wrapper.elementor-testimonial-text-align-left {
+  text-align: left;
+}
+.elementor-testimonial-wrapper.elementor-testimonial-text-align-right {
+  text-align: right;
+}
+
+/*# sourceMappingURL=testimonial.css.map */

@@ -78,7 +78,7 @@ class IconBox extends WidgetBase
             ]
         );
 
-        $this->addControl(
+        $this->addResponsiveControl(
             'position',
             [
                 'label' => Translater::get()->l('Icon Position'),
@@ -98,7 +98,7 @@ class IconBox extends WidgetBase
                         'icon' => 'fa fa-align-right',
                     ],
                 ],
-                'prefix_class' => 'elementor-position-',
+                'prefix_class' => 'elementor-position%s-',
                 'section' => 'section_icon',
                 'toggle' => false,
             ]

@@ -76,7 +76,7 @@ class Column extends ElementBase
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}}' => 'width: {{SIZE}}{{UNIT}} !important;',
                 ],
                 'condition' => [
                     'width_behavior' => '',

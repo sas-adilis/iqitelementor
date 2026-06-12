@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .elementor-video-wrapper {
   position: relative;
   height: 0;
@@ -246,12 +247,14 @@
   position: relative;
   width: 100%;
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
   align-content: flex-start;
 }
 .elementor-widget-wrap > .elementor-widget {
   width: 100%;
+}
+.elementor-widget-wrap > .elementor-widget:not(:last-child) {
+  margin-block-end: 10px;
 }
 
 .elementor-editor-active .elementor-widget-wrap {
@@ -595,8 +598,96 @@
     min-width: 0;
   }
 }
-.elementor-column .elementor-section.elementor-section-full_width {
+.elementor-column .elementor-section {
   width: 100%;
+}
+
+.elementor-tabs-wrapper {
+  width: 100%;
+}
+.elementor-tabs-wrapper > .elementor-tabs {
+  display: flex;
+  flex-direction: column;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav::-webkit-scrollbar {
+  height: 4px;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title {
+  cursor: pointer;
+  padding: 12px 20px;
+  user-select: none;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent;
+  border-bottom: none;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title i {
+  margin-right: 6px;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title:hover {
+  opacity: 0.85;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title.elementor-active {
+  position: relative;
+  z-index: 1;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content {
+  flex: 1;
+  min-height: 50px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content > .elementor-tab-content {
+  display: none;
+}
+.elementor-tabs-wrapper > .elementor-tabs > .elementor-tabs-content > .elementor-tab-content.elementor-tab-active {
+  display: block;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-horizontal > .elementor-tabs {
+  flex-direction: column;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-horizontal > .elementor-tabs > .elementor-tabs-nav {
+  flex-direction: row;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs {
+  flex-direction: row;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs > .elementor-tabs-nav {
+  flex-direction: column;
+  flex: 0 0 25%;
+  max-width: 25%;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs > .elementor-tabs-nav > .elementor-tab-title {
+  border-bottom: 1px solid transparent;
+  border-right: none;
+}
+.elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs > .elementor-tabs-content {
+  flex: 1;
+}
+@media (max-width: 767px) {
+  .elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs {
+    flex-direction: column;
+  }
+  .elementor-tabs-wrapper.elementor-tabs-view-vertical > .elementor-tabs > .elementor-tabs-nav {
+    flex-direction: row;
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
 }
 
 .elementor-screen-only,
@@ -710,7 +801,9 @@
 }
 
 .elementor-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
   text-align: center;
   transition: all 0.5s;
 }
@@ -994,6 +1087,198 @@
   line-height: 2.5;
 }
 
+.elementor-accordion {
+  text-align: right;
+}
+.elementor-accordion .elementor-accordion-item {
+  border: 1px solid #D4D4D4;
+}
+.elementor-accordion .elementor-accordion-item + .elementor-accordion-item {
+  border-top: none;
+}
+.elementor-accordion .elementor-accordion-title {
+  padding: 15px 20px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon {
+  display: inline-block;
+  width: 1.5em;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon.elementor-accordion-icon-right {
+  float: right;
+  text-align: right;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon.elementor-accordion-icon-left {
+  float: left;
+  text-align: left;
+}
+.elementor-accordion .elementor-accordion-title .elementor-accordion-icon .fa:before {
+  content: "\f067";
+}
+.elementor-accordion .elementor-accordion-title.active .elementor-accordion-icon .fa:before {
+  content: "\f068";
+}
+.elementor-accordion .elementor-accordion-content {
+  display: none;
+  padding: 15px 20px;
+  border-top: 1px solid #D4D4D4;
+}
+
+.accordion-custom-icon .accordion-button::after {
+  display: none;
+}
+.accordion-custom-icon .accordion-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.accordion-custom-icon .accordion-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  font-size: 1em;
+  line-height: 1;
+}
+.accordion-custom-icon .accordion-icon svg {
+  width: 1em;
+  height: 1em;
+}
+.accordion-custom-icon .accordion-icon-close {
+  display: none;
+}
+.accordion-custom-icon .accordion-icon-open {
+  display: inline-flex;
+}
+.accordion-custom-icon .accordion-icon-left .accordion-icon {
+  order: -1;
+}
+.accordion-custom-icon .accordion-icon-right .accordion-button {
+  justify-content: space-between;
+}
+.accordion-custom-icon .accordion-icon-right .accordion-icon {
+  order: 1;
+  margin-left: auto;
+}
+.accordion-custom-icon .accordion-button:not(.collapsed) .accordion-icon-open {
+  display: none;
+}
+.accordion-custom-icon .accordion-button:not(.collapsed) .accordion-icon-close {
+  display: inline-flex;
+}
+
+.accordion-style-none .accordion-item {
+  border: none;
+}
+.accordion-style-none .accordion-button {
+  border: none;
+}
+.accordion-style-none .accordion-button:not(.collapsed) {
+  box-shadow: none;
+}
+.accordion-style-none .accordion-body {
+  border-top: none;
+}
+
+.accordion-style-boxed {
+  display: flex;
+  flex-direction: column;
+}
+.accordion-style-boxed .accordion-item {
+  border-style: solid;
+}
+.accordion-style-boxed .accordion-item:not(:first-of-type) {
+  border-top-width: inherit;
+}
+.accordion-style-boxed .accordion-button:not(.collapsed) {
+  border-bottom: 1px solid;
+  border-bottom-color: inherit;
+  box-shadow: none;
+}
+
+.accordion.accordion-style-separator .accordion-item {
+  border: none;
+  border-top-style: solid;
+  border-radius: 0;
+}
+.accordion.accordion-style-separator .accordion-item:first-child {
+  border-top: none !important;
+}
+.accordion.accordion-style-separator .accordion-button {
+  border: none;
+  border-radius: 0;
+}
+.accordion.accordion-style-separator .accordion-button:not(.collapsed) {
+  box-shadow: none;
+}
+.accordion.accordion-style-separator .accordion-body {
+  border-top: none;
+}
+
+.accordion-icon-type-plus_minus .accordion-icon-open,
+.accordion-icon-type-plus_minus .accordion-icon-close {
+  font-size: 1.2em;
+  font-weight: 300;
+}
+
+@media (max-width: 767px) {
+  .elementor-accordion .elementor-accordion-title {
+    padding: 12px 15px;
+  }
+  .elementor-accordion .elementor-accordion-title .elementor-accordion-icon {
+    width: 1.2em;
+  }
+  .elementor-accordion .elementor-accordion-content {
+    padding: 7px 15px;
+  }
+}
+.swiper-elementor.swiper-elementor-auto .swiper-slide {
+  width: auto;
+}
+
+.swiper-elementor > .swiper-navigation,
+.swiper-elementor > .swiper-pagination,
+.swiper-elementor > .swiper-scrollbar,
+.swiper-elementor > .swiper-bottom > .swiper-navigation,
+.swiper-elementor > .swiper-bottom > .swiper-pagination,
+.swiper-elementor > .swiper-bottom > .swiper-scrollbar {
+  display: none;
+}
+.swiper-elementor.swiper-elementor-nav-on > .swiper-navigation,
+.swiper-elementor.swiper-elementor-nav-on > .swiper-bottom > .swiper-navigation {
+  display: flex;
+}
+.swiper-elementor.swiper-elementor-pag-on > .swiper-pagination,
+.swiper-elementor.swiper-elementor-pag-on > .swiper-bottom > .swiper-pagination {
+  display: block;
+}
+.swiper-elementor.swiper-elementor-scr-on > .swiper-scrollbar,
+.swiper-elementor.swiper-elementor-scr-on > .swiper-bottom > .swiper-scrollbar {
+  display: block;
+}
+
+.elementor-swiper-button.has-custom-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.elementor-swiper-button.has-custom-icon::after {
+  display: none;
+}
+.elementor-swiper-button.has-custom-icon svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+.elementor-swiper-button.has-custom-icon i {
+  font-size: inherit;
+}
+.elementor-swiper-button.has-custom-icon .elementor-icon-svg {
+  display: inline-flex;
+  line-height: 1;
+}
+
 .elementor-icon {
   display: inline-block;
   line-height: 1;
@@ -1003,6 +1288,21 @@
   font-size: 50px;
   width: 1em;
   height: 1em;
+}
+.elementor-icon .elementor-icon-svg {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.elementor-icon .elementor-icon-svg svg {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+.elementor-icon .elementor-icon-svg--custom img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
 }
 
 .elementor-view-stacked .elementor-icon {
@@ -1028,20 +1328,27 @@
 .elementor-widget-icon-list .elementor-icon-list-item {
   margin: 0;
   padding: 0;
+  display: flex;
+  align-items: flex-start;
 }
-.elementor-widget-icon-list .elementor-icon-list-item a {
-  display: inline;
+.elementor-widget-icon-list .elementor-icon-list-item > a {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
 }
 .elementor-widget-icon-list .elementor-icon-list-text {
+  flex: 1;
+}
+.elementor-widget-icon-list .elementor-icon-list-text p {
   display: inline;
-  vertical-align: middle;
+  margin: 0;
 }
 .elementor-widget-icon-list .elementor-icon-list-icon {
+  flex-shrink: 0;
   width: 1em;
-  line-height: 1;
-  vertical-align: middle;
-  display: inline-block;
+  line-height: inherit;
   text-align: center;
+  display: inline-block;
 }
 
 .elementor-widget-video.elementor-aspect-ratio-169 .elementor-video-wrapper {
@@ -1270,6 +1577,268 @@ body.elementor-page .elementor-widget-menu-anchor {
 }
 .elementor-search .search-btn {
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+/* ==========================================================================
+   Table of Contents widget
+   ========================================================================== */
+.elementor-toc {
+  border: 0 solid #ddd;
+  /* Body */
+  /* Spinner (shown before JS builds the list) */
+  /* List */
+  /* Bullets marker via pseudo-element */
+  /* Scrollbar marker — vertical track + thicker indicator on active item */
+  /* Active state */
+  /* No headings message */
+  /* Collapse subitems: nested lists hidden until parent is active */
+}
+.elementor-toc__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+  border-bottom: 2px solid #ddd;
+}
+.elementor-toc__header-title {
+  margin: 0;
+  flex: 1 1 auto;
+  font-size: 1.1em;
+  line-height: 1.3;
+}
+.elementor-toc__body {
+  padding: 10px;
+  overflow: hidden;
+}
+.elementor-toc__spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+.elementor-toc__spinner {
+  font-size: 20px;
+  animation: spin 1s linear infinite;
+}
+.elementor-toc__list-wrapper {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.elementor-toc--marker-numbers .elementor-toc__list-wrapper {
+  list-style: decimal;
+  padding-left: 1.5em;
+}
+.elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+  padding-left: 1.2em;
+}
+.elementor-toc__list-item {
+  padding: 3px 0;
+}
+.elementor-toc__list-item-text {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+.elementor-toc__list-item-text:hover {
+  text-decoration: underline;
+}
+.elementor-toc--marker-bullets .elementor-toc__list-item-text::before {
+  content: "•"; /* bullet • */
+  display: inline-block;
+  margin-right: 0.5em;
+  font-size: 0.8em;
+}
+.elementor-toc--marker-scrollbar .elementor-toc__list-wrapper {
+  position: relative;
+  padding-left: 16px;
+  border-left: 1px solid currentColor;
+  opacity: 1;
+}
+.elementor-toc--marker-scrollbar .elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+  border-left: 0;
+  padding-left: 1.2em;
+}
+.elementor-toc--marker-scrollbar .elementor-toc__list-item {
+  position: relative;
+}
+.elementor-toc--marker-scrollbar .elementor-toc__list-item::before {
+  content: "";
+  position: absolute;
+  left: -17px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: transparent;
+  transition: background-color 0.2s ease;
+  pointer-events: none;
+}
+.elementor-toc--marker-scrollbar .elementor-toc__list-item--active::before {
+  background-color: currentColor;
+}
+.elementor-toc__list-item--active > .elementor-toc__list-item-text {
+  font-weight: 600;
+}
+.elementor-toc__no-headings {
+  padding: 10px 0;
+  color: #999;
+  font-style: italic;
+}
+.elementor-toc--collapse-subitems .elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+  display: none;
+}
+.elementor-toc--collapse-subitems .elementor-toc__list-item--active > .elementor-toc__list-wrapper {
+  display: block;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/* Mobile : présentation horizontale scrollable de la table des matières */
+@media (max-width: 767.98px) {
+  /* Casse le min-width: auto par défaut du flex-item afin que le scroll
+     horizontal du body puisse s'activer (sinon le widget s'étend à son
+     min-content et le body ne déborde jamais). */
+  .elementor-widget-wrap > .stick-content-inner,
+  .elementor-widget-table-of-contents,
+  .elementor-widget-table-of-contents .elementor-widget-container,
+  .elementor-toc {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .elementor-toc {
+    border: 0;
+    /* Aplatit les niveaux : pas de sous-listes en mobile */
+  }
+  .elementor-toc__header {
+    display: none;
+  }
+  .elementor-toc__body {
+    padding: 0 0 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    min-width: 0;
+    max-width: 100%;
+    /* Scrollbar fine façon maquette : track gris clair + thumb noir */
+    scrollbar-width: thin;
+    scrollbar-color: #000 #e5e5e5;
+  }
+  .elementor-toc__body::-webkit-scrollbar {
+    height: 2px;
+  }
+  .elementor-toc__body::-webkit-scrollbar-track {
+    background: #e5e5e5;
+  }
+  .elementor-toc__body::-webkit-scrollbar-thumb {
+    background: #000;
+  }
+  .elementor-toc__list-wrapper {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    padding: 0 12px !important;
+    margin: 0;
+    border-left: 0 !important;
+    list-style: none !important;
+    min-width: 100%;
+  }
+  .elementor-toc__list-wrapper .elementor-toc__list-wrapper {
+    display: none !important;
+  }
+  .elementor-toc__list-item {
+    position: relative;
+    flex: 0 0 auto;
+    padding: 8px 12px !important;
+  }
+  .elementor-toc__list-item::before {
+    display: none !important;
+  }
+  .elementor-toc__list-item-text {
+    color: #999;
+    font-weight: 400;
+    text-decoration: none !important;
+  }
+  .elementor-toc__list-item-text::before {
+    display: none !important;
+  }
+  .elementor-toc__list-item--active > .elementor-toc__list-item-text {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none !important;
+  }
+}
+.elementor-toc-anchor {
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.elementor-editor-active .elementor-toc-anchor,
+.elementor-editor-active .elementor-toc-anchor--editor,
+.elementor-editor-active .elementor-toc-anchor--placeholder {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: auto;
+  overflow: visible;
+  visibility: visible;
+  padding: 6px 10px;
+  border: 1px dashed #b1b1b1;
+  background: #fafafa;
+  color: #555;
+  font-size: 12px;
+  line-height: 1.2;
+  border-radius: 3px;
+}
+.elementor-editor-active .elementor-toc-anchor i,
+.elementor-editor-active .elementor-toc-anchor--editor i,
+.elementor-editor-active .elementor-toc-anchor--placeholder i {
+  color: #93003f;
+  margin-right: 4px;
+}
+.elementor-editor-active .elementor-toc-anchor__id {
+  color: #999;
+  font-family: monospace;
+  margin-left: 6px;
+}
+.elementor-editor-active .elementor-toc-anchor--placeholder {
+  border-color: #d9534f;
+  color: #d9534f;
+  font-style: italic;
+}
+
+.elementor-widget-table .elementor-table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: auto;
+}
+.elementor-widget-table .elementor-table th,
+.elementor-widget-table .elementor-table td {
+  vertical-align: middle;
+  border: 0;
+}
+.elementor-widget-table .elementor-table tr {
+  border-bottom: 1px solid #ddd;
+}
+.elementor-widget-table .elementor-table thead tr,
+.elementor-widget-table .elementor-table tfoot tr {
+  border-bottom: 1px solid #ddd;
+}
+.elementor-widget-table .elementor-table.is-striped tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.elementor-widget-table .elementor-table.header-left tbody th[scope=row], .elementor-widget-table .elementor-table.header-right tbody th[scope=row] {
+  font-weight: bold;
 }
 
 .animated {

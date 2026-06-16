@@ -673,8 +673,12 @@ class IqitElementor extends Module implements WidgetInterface
         }
 
         $vars = $this->getIqitElementorWidgetVariables($name, $options, $preview);
+        // Clone the Smarty instance so widget variables stay isolated from the
+        // global scope, but keep the inherited assignments: included theme
+        // templates (e.g. product miniatures) rely on global variables such as
+        // `urls` and `static_token` set by the FrontController. Clearing them
+        // makes those variables null and triggers warnings under PrestaShop 9.
         $smarty = clone $this->context->smarty;
-        $smarty->clearAllAssign();
         $smarty->assign($vars);
 
         return $smarty->fetch($templatePath);

@@ -262,17 +262,19 @@ class AdminIqitElementorEditorController extends ModuleAdminController
 
     public function setMedia($isNewTheme = false)
     {
-        /*$is_177 = (version_compare(_PS_VERSION_, '1.7.7.0', '>=') === true) ? true : false;
-
-        if ($is_177) {
-            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-3.7.1.min.js');
-            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-migrate-3.4.0.min.js');
-        }*/
-
-        $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-3.5.1.min.js');
-        $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-migrate-3.1.0.min.js');
-        $this->addJs(_PS_JS_DIR_ . 'jquery/jquery.browser-0.1.0.min.js');
-        $this->addJs(_PS_JS_DIR_ . 'jquery/jquery.live-polyfill-1.1.2.min.js');
+        if (version_compare(_PS_VERSION_, '9.0.0', '>=') === true) {
+            // PrestaShop 9 upgraded jQuery to the latest version and dropped the legacy
+            // bundled files (jquery-3.5.1, jquery.browser, jquery.live-polyfill) from
+            // _PS_JS_DIR_/jquery/. This controller renders its own header without the
+            // standard back office jQuery, so we load the jQuery bundled with the module.
+            $this->addJs(_MODULE_DIR_ . 'iqitelementor/views/lib/jquery/jquery-3.7.1.min.js');
+            $this->addJs(_MODULE_DIR_ . 'iqitelementor/views/lib/jquery/jquery-migrate-3.4.0.min.js');
+        } else {
+            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-3.5.1.min.js');
+            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery-migrate-3.1.0.min.js');
+            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery.browser-0.1.0.min.js');
+            $this->addJs(_PS_JS_DIR_ . 'jquery/jquery.live-polyfill-1.1.2.min.js');
+        }
 
         $this->addJS(_PS_JS_DIR_ . 'tiny_mce/tinymce.min.js');
         $this->addJqueryPlugin(['fancybox', 'autocomplete']);

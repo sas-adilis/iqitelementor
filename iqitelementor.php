@@ -325,6 +325,23 @@ class IqitElementor extends Module implements WidgetInterface
 
     public function registerCssFiles(): void
     {
+        // Swiper core CSS — must ship alongside the bundled JS (the theme does
+        // not provide it). Without it `.swiper-wrapper` has no `display:flex`
+        // and slides stack vertically. Loaded before frontend.css (lower
+        // priority) so the module's `.swiper-elementor` overrides win. Gated by
+        // the same flag as the JS so disabling Swiper drops both assets.
+        $loadSwiper = Configuration::get('IQIT_ELEMENTOR_LOAD_SWIPER');
+        if ($loadSwiper === false || $loadSwiper) {
+            $this->context->controller->registerStylesheet(
+                'modules-' . $this->name . '-swiper',
+                'modules/' . $this->name . '/views/lib/swiper/swiper-bundle.min.css',
+                [
+                    'media' => 'all',
+                    'priority' => 140,
+                ]
+            );
+        }
+
         // Core Elementor frontend styles
         $this->context->controller->registerStylesheet(
             'modules-' . $this->name . '-style',

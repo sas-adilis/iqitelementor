@@ -62,7 +62,14 @@ var ElementsHandler = {
                 });
             }, {
                 root: null,
-                threshold: 0.1
+                // threshold 0 fires as soon as a single pixel is visible. A
+                // higher value (e.g. 0.1) never triggers for very tall, not-yet-
+                // initialized widgets: an un-inited carousel stacks all its
+                // slides vertically, so the element can be many viewports tall
+                // and its visible ratio always stays below the threshold — the
+                // handler stays pending forever and the widget never boots.
+                threshold: 0,
+                rootMargin: '200px 0px'
             });
 
             ehLog('runHandler: IntersectionObserver observe()', {debugLabel: debugLabel, element: element});

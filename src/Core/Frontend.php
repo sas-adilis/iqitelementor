@@ -68,14 +68,9 @@ class Frontend
         }
 
         $this->data = $data;
-        // @TODO TEMP DEBUG — remove after diagnosis
-        \PrestaShopLogger::addLog('iqitelementor: Frontend BEFORE init, sections=' . count($data), 1);
         $this->init();
-        \PrestaShopLogger::addLog('iqitelementor: Frontend AFTER init, BEFORE printCss', 1);
         $this->printCss();
-        \PrestaShopLogger::addLog('iqitelementor: Frontend applyBuilderInContent start', 1);
         $this->applyBuilderInContent();
-        \PrestaShopLogger::addLog('iqitelementor: Frontend constructor done', 1);
     }
 
     public function init(): void
@@ -85,18 +80,10 @@ class Frontend
 
     public function printCss(): void
     {
-        // @TODO TEMP DEBUG — remove after diagnosis
-        \PrestaShopLogger::addLog('iqitelementor: printCss entered', 1);
-
-        $container_width = Helper::absint(Helper::getOption('elementor_container_width'));
-        \PrestaShopLogger::addLog('iqitelementor: printCss container_width=' . $container_width, 1);
-
-        if (!empty($container_width)) {
-            $this->stylesheet->addRules(
-                '.elementor-section.elementor-section-boxed > .elementor-container',
-                'max-width:' . $container_width . 'px'
-            );
-        }
+        // The boxed sections container max-width is emitted in <head> via
+        // IqitElementor::hookDisplayHeader() so it also applies inside the
+        // editor preview iframe (which renders sections client-side and never
+        // calls printCss()). Do not duplicate it here.
 
         foreach ($this->data as $section) {
             $this->parseStyleItem($section);
@@ -239,12 +226,6 @@ class Frontend
 
     private function parseStyleItem(array $element): void
     {
-        // @TODO TEMP DEBUG — remove after diagnosis
-        $elType = isset($element['elType']) ? $element['elType'] : '?';
-        $widgetType = isset($element['widgetType']) ? $element['widgetType'] : '';
-        $elId = isset($element['id']) ? $element['id'] : '?';
-        \PrestaShopLogger::addLog('iqitelementor: parseStyleItem ' . $elType . ($widgetType ? ':' . $widgetType : '') . ' id=' . $elId, 1);
-
         $element_obj = $this->getElementObject($element);
 
         if (!$element_obj) {
@@ -584,9 +565,6 @@ class Frontend
 
     private function printWidget(array $widget_data): void
     {
-        // @TODO TEMP DEBUG — remove after diagnosis
-        \PrestaShopLogger::addLog('iqitelementor: printWidget start: ' . ($widget_data['widgetType'] ?? 'unknown') . ' id=' . ($widget_data['id'] ?? '?'), 1);
-
         $widget_obj = Plugin::instance()->widgetsManager->getWidget($widget_data['widgetType']);
 
         if (false === $widget_obj) {
@@ -604,6 +582,5 @@ class Frontend
         $instance['id_widget_instance'] = $widget_data['id'];
         $widget_obj->renderContent($instance);
         $widget_obj->afterRender($instance, $widget_data['id'], $widget_data);
-        \PrestaShopLogger::addLog('iqitelementor: printWidget done: ' . ($widget_data['widgetType'] ?? 'unknown'), 1);
     }
 }

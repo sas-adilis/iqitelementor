@@ -291,6 +291,15 @@ class IqitElementor extends Module implements WidgetInterface
                 'isRtl' => (bool)$this->context->language->is_rtl,
                 'ajax_csfr_token_url' => $this->context->link->getModuleLink($this->name, 'Actions', ['process' => 'handleCsfrToken', 'ajax' => 1], true),
             ]]);
+
+        // Boxed sections container max-width. Emitted in <head> rather than only
+        // through the server-side rendered stylesheet so it also applies inside
+        // the editor preview iframe, which renders sections client-side and never
+        // runs Frontend::printCss(). Loaded alongside frontend.css (same hook).
+        $containerWidth = Helper::absint(Helper::getOption('elementor_container_width'));
+        if (!empty($containerWidth)) {
+            return '<style>.elementor-section.elementor-section-boxed > .elementor-container{max-width:' . $containerWidth . 'px}</style>';
+        }
     }
 
     /**
